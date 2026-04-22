@@ -28,6 +28,7 @@ appsettings.*.local.json
 
 # Rider / JetBrains
 # (per-user workspace state — shared .idea files like vcs.xml are committed)
+.idea/
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/shelf/
