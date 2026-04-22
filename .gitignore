@@ -1,0 +1,51 @@
+# .NET build output
+bin/
+obj/
+
+# NuGet
+*.nupkg
+*.snupkg
+project.nuget.cache
+.nuget/
+
+# Test results
+TestResults/
+coverage/
+*.trx
+*.coveragexml
+
+# Publish output
+publish/
+out/
+
+# Secrets & config overrides
+appsettings.local.json
+appsettings.*.local.json
+*.env
+.env
+*.pfx
+*.key
+
+# Rider / JetBrains
+# (per-user workspace state — shared .idea files like vcs.xml are committed)
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/shelf/
+.idea/**/contentModel.xml
+.idea/**/.idea.*.iml
+.idea/**/modules.xml
+.idea/**/dataSources/
+.idea/**/dataSources.local.xml
+.idea/**/httpRequests/
+.idea/**/queries/
+.idea/**/copilot.data.migration.ask2agent.xml
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

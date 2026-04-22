@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="HybridLens.CLI/HybridLens.CLI.csproj" />
+  <Project Path="HybridLens.ContextBuilder/HybridLens.ContextBuilder.csproj" />
+  <Project Path="HybridLens.Core/HybridLens.Core.csproj" />
+  <Project Path="HybridLens.LLM/HybridLens.LLM.csproj" />
+  <Project Path="HybridLens.Pipeline/HybridLens.Pipeline.csproj" />
+  <Project Path="HybridLens.StaticAnalysis/HybridLens.StaticAnalysis.csproj" />
+  <Project Path="HybridLens.Tests/HybridLens.Tests.csproj" />
+</Solution>
