@@ -7,4 +7,22 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.7" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.7" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
+      <PackageReference Include="System.CommandLine" Version="3.0.0-preview.3.26207.106" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HybridLens.Core\HybridLens.Core.csproj" />
+      <ProjectReference Include="..\HybridLens.StaticAnalysis\HybridLens.StaticAnalysis.csproj" />
+    </ItemGroup>
+
 </Project>
