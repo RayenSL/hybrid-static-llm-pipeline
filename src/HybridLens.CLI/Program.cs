@@ -2,6 +2,7 @@ using System.CommandLine;
 using HybridLens.CLI.Commands;
 using HybridLens.Core.Configuration;
 using HybridLens.StaticAnalysis.Workspace;
+using WorkspaceConfig = HybridLens.Core.Configuration.WorkspaceConfig;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,7 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 var services = new ServiceCollection()
+    .AddSingleton(configuration.GetSection("Workspace").Get<WorkspaceConfig>() ?? new WorkspaceConfig())
     .AddSingleton(configuration.GetSection("Detectors").Get<DetectorConfig>() ?? new DetectorConfig())
     .AddSingleton(configuration.GetSection("Context").Get<ContextConfig>() ?? new ContextConfig())
     .AddSingleton(configuration.GetSection("Llm").Get<LlmConfig>() ?? new LlmConfig())
