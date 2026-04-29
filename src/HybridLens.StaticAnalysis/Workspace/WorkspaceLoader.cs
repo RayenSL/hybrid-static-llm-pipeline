@@ -1,3 +1,4 @@
+using HybridLens.Core.Configuration;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Formatting;
@@ -7,6 +8,12 @@ namespace HybridLens.StaticAnalysis.Workspace;
 
 public sealed class WorkspaceLoader : IDisposable
 {
+    private static readonly string[] TestProjectSuffixes =
+    [
+        ".Tests", ".IntegrationTests", ".EndToEndTests", ".EndToEndTestsSharding",
+        ".TestInfrastructure", ".Specs"
+    ];
+
     // Diagnostics that are purely noise — they don't affect whether a project loads
     private static readonly string[] SilentFragments =
     [
@@ -17,6 +24,7 @@ public sealed class WorkspaceLoader : IDisposable
     ];
 
     private readonly MSBuildWorkspace _workspace;
+    private readonly WorkspaceConfig _config;
     private readonly List<string> _warnings = [];
 
     /// <summary>Non-fatal diagnostics collected during the last <see cref="LoadAsync"/> call.</summary>
@@ -33,15 +41,17 @@ public sealed class WorkspaceLoader : IDisposable
         _ = typeof(CSharpFormattingOptions);
     }
 
-    public WorkspaceLoader()
+    public WorkspaceLoader(WorkspaceConfig config)
     {
+        _config = config;
         _workspace = MSBuildWorkspace.Create();
         _workspace.WorkspaceFailed += OnWorkspaceFailed;
     }
 
     /// <summary>
     /// Loads all C# projects from a .sln or .csproj and returns their compilations.
-    /// Projects that fail to load are skipped and recorded in <see cref="Warnings"/>.
+    /// Projects that fail to load or are excluded by config are skipped.
+    /// Skipped projects due to failures are recorded in <see cref="Warnings"/>.
     /// </summary>
     public async Task<IReadOnlyList<Compilation>> LoadAsync(
         string path,
@@ -69,6 +79,9 @@ public sealed class WorkspaceLoader : IDisposable
 
         foreach (var project in solution.Projects)
         {
+            if (!IsIncluded(project.Name))
+                continue;
+
             var compilation = await project.GetCompilationAsync(cancellationToken);
             if (compilation is not null)
                 compilations.Add(compilation);
@@ -82,21 +95,66 @@ public sealed class WorkspaceLoader : IDisposable
         CancellationToken cancellationToken)
     {
         var project = await _workspace.OpenProjectAsync(path, cancellationToken: cancellationToken);
-        var compilation = await project.GetCompilationAsync(cancellationToken);
 
+        if (!IsIncluded(project.Name))
+            return [];
+
+        var compilation = await project.GetCompilationAsync(cancellationToken);
         return compilation is not null ? [compilation] : [];
+    }
+
+    private bool IsIncluded(string projectName)
+    {
+        if (_config.ExcludeTestProjects &&
+            TestProjectSuffixes.Any(suffix => projectName.EndsWith(suffix, StringComparison.OrdinalIgnoreCase)))
+            return false;
+
+        if (_config.ExcludePatterns.Any(pattern => Matches(projectName, pattern)))
+            return false;
+
+        if (_config.IncludePatterns.Count > 0 &&
+            !_config.IncludePatterns.Any(pattern => Matches(projectName, pattern)))
+            return false;
+
+        return true;
+    }
+
+    private static bool Matches(string name, string pattern)
+    {
+        // Translate wildcard pattern (* and ?) into a simple character-by-character match
+        return WildcardMatch(name, pattern, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool WildcardMatch(string input, string pattern, StringComparison comparison)
+    {
+        // dp[i][j] = input[0..i-1] matches pattern[0..j-1]
+        var dp = new bool[input.Length + 1, pattern.Length + 1];
+        dp[0, 0] = true;
+
+        for (var j = 1; j <= pattern.Length; j++)
+            if (pattern[j - 1] == '*')
+                dp[0, j] = dp[0, j - 1];
+
+        for (var i = 1; i <= input.Length; i++)
+        for (var j = 1; j <= pattern.Length; j++)
+        {
+            if (pattern[j - 1] == '*')
+                dp[i, j] = dp[i - 1, j] || dp[i, j - 1];
+            else if (pattern[j - 1] == '?' ||
+                     string.Compare(input, i - 1, pattern, j - 1, 1, comparison) == 0)
+                dp[i, j] = dp[i - 1, j - 1];
+        }
+
+        return dp[input.Length, pattern.Length];
     }
 
     private void OnWorkspaceFailed(object? sender, WorkspaceDiagnosticEventArgs e)
     {
         var message = e.Diagnostic.Message;
 
-        // Completely silent — noise from inaccessible feeds, non-C# projects, etc.
         if (SilentFragments.Any(f => message.Contains(f, StringComparison.OrdinalIgnoreCase)))
             return;
 
-        // Everything else (project config issues, missing SDKs, etc.) is a warning.
-        // The affected project will yield a null compilation and be skipped automatically.
         _warnings.Add($"[{e.Diagnostic.Kind}] {message}");
     }
 
