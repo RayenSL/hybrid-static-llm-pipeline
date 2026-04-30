@@ -11,6 +11,10 @@
       <None Update="appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <!-- git-ignored, only copied when it exists locally -->
+      <None Update="appsettings.local.json" Condition="Exists('appsettings.local.json')">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -23,6 +27,9 @@
     <ItemGroup>
       <ProjectReference Include="..\HybridLens.Core\HybridLens.Core.csproj" />
       <ProjectReference Include="..\HybridLens.StaticAnalysis\HybridLens.StaticAnalysis.csproj" />
+      <ProjectReference Include="..\HybridLens.ContextBuilder\HybridLens.ContextBuilder.csproj" />
+      <ProjectReference Include="..\HybridLens.LLM\HybridLens.LLM.csproj" />
+      <ProjectReference Include="..\HybridLens.Pipeline\HybridLens.Pipeline.csproj" />
     </ItemGroup>
 
 </Project>

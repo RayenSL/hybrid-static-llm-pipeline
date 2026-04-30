@@ -1,8 +1,13 @@
+using HybridLens.Core.Models;
+
 namespace HybridLens.Core.Configuration;
 
 public sealed class ContextConfig
 {
     public ContextStrategy Strategy { get; set; } = ContextStrategy.PerFinding;
+
+    /// <summary>Controls how much context is injected into each LLM prompt.</summary>
+    public ContextLevel Level { get; set; } = ContextLevel.Structural;
 
     /// <summary>Maximum tokens to use for context per LLM request.</summary>
     public int TokenBudget { get; set; } = 2000;

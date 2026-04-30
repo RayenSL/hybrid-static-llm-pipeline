@@ -1,23 +1,32 @@
 using System.CommandLine;
 using HybridLens.CLI.Commands;
+using HybridLens.Core.Abstractions;
 using HybridLens.Core.Configuration;
+using HybridLens.LLM;
+using HybridLens.Pipeline;
 using HybridLens.StaticAnalysis.Workspace;
-using WorkspaceConfig = HybridLens.Core.Configuration.WorkspaceConfig;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(AppContext.BaseDirectory)
     .AddJsonFile("appsettings.json", optional: false)
-    .AddJsonFile("appsettings.local.json", optional: true)   // local overrides, git-ignored
+    .AddJsonFile("appsettings.local.json", optional: true)
     .Build();
 
 var services = new ServiceCollection()
-    .AddSingleton(configuration.GetSection("Workspace").Get<WorkspaceConfig>() ?? new WorkspaceConfig())
-    .AddSingleton(configuration.GetSection("Detectors").Get<DetectorConfig>() ?? new DetectorConfig())
-    .AddSingleton(configuration.GetSection("Context").Get<ContextConfig>() ?? new ContextConfig())
-    .AddSingleton(configuration.GetSection("Llm").Get<LlmConfig>() ?? new LlmConfig())
+    .AddSingleton(configuration.GetSection("Workspace").Get<WorkspaceConfig>()   ?? new WorkspaceConfig())
+    .AddSingleton(configuration.GetSection("Detectors").Get<DetectorConfig>()    ?? new DetectorConfig())
+    .AddSingleton(configuration.GetSection("Context").Get<ContextConfig>()       ?? new ContextConfig())
+    .AddSingleton(configuration.GetSection("Llm").Get<LlmConfig>()               ?? new LlmConfig())
+    .AddSingleton(configuration.GetSection("Pipeline").Get<PipelineConfig>()     ?? new PipelineConfig())
     .AddSingleton<WorkspaceLoader>()
+    .AddSingleton<IContextBuilder, HybridLens.ContextBuilder.ContextBuilder>()
+    .AddSingleton<ILlmAdapterFactory, LlmAdapterFactory>()
+    .AddSingleton<IReadOnlyDictionary<string, ILlmAdapter>>(sp =>
+        sp.GetRequiredService<ILlmAdapterFactory>()
+          .CreateAll(sp.GetRequiredService<LlmConfig>()))
+    .AddSingleton<AnalysisPipeline>()
     .BuildServiceProvider();
 
 var root = new RootCommand("HybridLens — hybrid static + LLM .NET code analyser")
