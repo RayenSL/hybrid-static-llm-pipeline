@@ -13,9 +13,10 @@ public sealed class AnalysisPipeline(
 {
     public async Task<IReadOnlyList<LlmFinding>> RunAsync(
         IReadOnlyList<Finding> findings,
+        Severity minSeverity = Severity.Critical,
         CancellationToken cancellationToken = default)
     {
-        var eligible = Filter(findings);
+        var eligible = Filter(findings, minSeverity);
 
         if (eligible.Count == 0 || adapters.Count == 0)
             return [];
@@ -26,7 +27,7 @@ public sealed class AnalysisPipeline(
             .Select((item, i) => (item.Finding, item.ModelName, item.Adapter, Index: i))
             .ToList();
 
-        var results = new LlmFinding[workItems.Count];
+        var results = new LlmFinding?[workItems.Count];
 
         await Parallel.ForEachAsync(
             workItems,
@@ -37,19 +38,29 @@ public sealed class AnalysisPipeline(
             },
             async (item, ct) =>
             {
-                var request  = contextBuilder.Build(item.Finding, findings, contextConfig);
-                var response = await item.Adapter.CompleteAsync(request, ct);
-                results[item.Index] = ParseResponse(response.Content, item.Finding, item.ModelName);
+                try
+                {
+                    var request  = contextBuilder.Build(item.Finding, findings, contextConfig);
+                    var response = await item.Adapter.CompleteAsync(request, ct);
+                    results[item.Index] = ParseResponse(response.Content, item.Finding, item.ModelName);
+                }
+                catch (OperationCanceledException)
+                {
+                    throw; // let cancellation propagate normally
+                }
+                catch (Exception ex)
+                {
+                    await Console.Error.WriteLineAsync(
+                        $"  [llm-error] {item.ModelName} / {item.Finding.SymbolName}: {ex.Message}");
+                }
             });
 
-        return results;
+        return results.OfType<LlmFinding>().ToList();
     }
 
-    private List<Finding> Filter(IReadOnlyList<Finding> findings)
+    private static List<Finding> Filter(IReadOnlyList<Finding> findings, Severity minSeverity)
     {
-        return pipelineConfig.ProcessWarnings
-            ? findings.ToList()
-            : findings.Where(f => f.Severity == Severity.Critical).ToList();
+        return findings.Where(f => f.Severity >= minSeverity).ToList();
     }
 
     private static LlmFinding ParseResponse(string content, Finding finding, string modelName)

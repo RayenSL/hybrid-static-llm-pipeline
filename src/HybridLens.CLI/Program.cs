@@ -8,11 +8,22 @@ using HybridLens.StaticAnalysis.Workspace;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-var configuration = new ConfigurationBuilder()
+// Pre-scan argv for --config so the file is available before DI is built.
+// System.CommandLine does the real validation later; this is just a path grab.
+var earlyConfigPath = args
+    .SkipWhile(a => !string.Equals(a, "--config", StringComparison.OrdinalIgnoreCase))
+    .Skip(1)
+    .FirstOrDefault();
+
+var configBuilder = new ConfigurationBuilder()
     .SetBasePath(AppContext.BaseDirectory)
-    .AddJsonFile("appsettings.json", optional: false)
-    .AddJsonFile("appsettings.local.json", optional: true)
-    .Build();
+    .AddJsonFile("appsettings.json",       optional: false)
+    .AddJsonFile("appsettings.local.json", optional: true);
+
+if (earlyConfigPath is not null)
+    configBuilder.AddJsonFile(earlyConfigPath, optional: false, reloadOnChange: false);
+
+var configuration = configBuilder.Build();
 
 var services = new ServiceCollection()
     .AddSingleton(configuration.GetSection("Workspace").Get<WorkspaceConfig>()   ?? new WorkspaceConfig())
