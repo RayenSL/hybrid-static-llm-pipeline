@@ -41,6 +41,15 @@ public sealed class ConsoleOutputFormatter : IOutputFormatter
                 writer.WriteLine($"│  Remediation");
                 foreach (var line in lf.Remediation.Split('\n'))
                     writer.WriteLine($"│    {line}");
+
+                if (lf.Finding.Snippet is { Length: > 0 } snippet)
+                {
+                    writer.WriteLine($"│");
+                    writer.WriteLine($"│  Snippet");
+                    foreach (var line in snippet.Split('\n'))
+                        writer.WriteLine($"│    {line.TrimEnd()}");
+                }
+
                 writer.WriteLine($"└{new string('─', 80)}{Environment.NewLine}");
             }
         }
