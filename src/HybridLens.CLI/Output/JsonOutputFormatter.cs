@@ -55,6 +55,7 @@ public sealed class JsonOutputFormatter : IOutputFormatter
                     symbolName = f.SymbolName,
                     filePath   = Path.GetRelativePath(baseDir, f.FilePath),
                     line       = f.Line,
+                    snippet    = f.Snippet,
                     metrics    = f.Metrics.Count > 0 ? f.Metrics : null,
                     llmAnalysis = llmByFinding.TryGetValue(f, out var analyses)
                         ? analyses.Select(lf => new

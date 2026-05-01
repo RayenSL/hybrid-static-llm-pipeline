@@ -97,7 +97,13 @@ public sealed class SarifOutputFormatter : IOutputFormatter
                                 ["uri"]       = relPath,
                                 ["uriBaseId"] = "%SRCROOT%"
                             },
-                            ["region"] = new JsonObject { ["startLine"] = f.Line }
+                            ["region"] = f.Snippet is not null
+                                ? new JsonObject
+                                  {
+                                      ["startLine"] = f.Line,
+                                      ["snippet"]   = new JsonObject { ["text"] = f.Snippet }
+                                  }
+                                : new JsonObject { ["startLine"] = f.Line }
                         }
                     }
                 }

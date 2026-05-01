@@ -129,6 +129,7 @@ public static class AnalyseCommand
             {
                 OutputFormat.Json  => new JsonOutputFormatter(),
                 OutputFormat.Sarif => new SarifOutputFormatter(),
+                OutputFormat.Html  => new HtmlOutputFormatter(),
                 _                  => new ConsoleOutputFormatter()
             };
 
