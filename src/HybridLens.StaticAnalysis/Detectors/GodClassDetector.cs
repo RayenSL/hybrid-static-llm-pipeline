@@ -1,5 +1,6 @@
 using HybridLens.Core.Configuration;
 using HybridLens.Core.Models;
+using HybridLens.Core.QualityAttributes;
 using HybridLens.StaticAnalysis.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -44,6 +45,7 @@ public sealed class GodClassDetector(GodClassConfig config) : IDetector
                     SymbolName = GetFullTypeName(type),
                     Line       = lineSpan.StartLinePosition.Line + 1,
                     Snippet    = type.ToFullString(),
+                    ExpectedQualityAttributes = QualityAttributeMap.ForType(AntiPatternType.GodClass),
                     Metrics    = new Dictionary<string, double>
                     {
                         ["Methods"]              = methods,

@@ -1,5 +1,6 @@
 using HybridLens.Core.Configuration;
 using HybridLens.Core.Models;
+using HybridLens.Core.QualityAttributes;
 using HybridLens.StaticAnalysis.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -40,6 +41,7 @@ public sealed class LongMethodDetector(LongMethodConfig config) : IDetector
                     SymbolName = methodName,
                     Line = lineSpan.StartLinePosition.Line + 1,
                     Snippet = method.ToFullString(),
+                    ExpectedQualityAttributes = QualityAttributeMap.ForType(AntiPatternType.LongMethod),
                     Metrics = new Dictionary<string, double>
                     {
                         ["LinesOfCode"] = loc,
