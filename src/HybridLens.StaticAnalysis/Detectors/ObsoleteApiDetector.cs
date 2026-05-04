@@ -1,5 +1,6 @@
 using HybridLens.Core.Configuration;
 using HybridLens.Core.Models;
+using HybridLens.Core.QualityAttributes;
 using HybridLens.StaticAnalysis.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -56,6 +57,7 @@ public sealed class ObsoleteApiDetector(ObsoleteApiConfig config) : IDetector
                     SymbolName = $"{callerName} → {symbol.ToDisplayString()}",
                     Line       = lineSpan.StartLinePosition.Line + 1,
                     Snippet    = node.ToFullString().Trim(),
+                    ExpectedQualityAttributes = QualityAttributeMap.ForType(AntiPatternType.ObsoleteApiUsage),
                     Metrics    = new Dictionary<string, double>()
                 };
             }

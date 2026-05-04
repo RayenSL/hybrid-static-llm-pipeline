@@ -2,6 +2,10 @@
 bin/
 obj/
 
+# Outputs
+**/output/
+**/runs/
+
 # NuGet
 *.nupkg
 *.snupkg

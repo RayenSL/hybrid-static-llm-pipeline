@@ -1,5 +1,6 @@
 using System.CommandLine;
 using HybridLens.CLI.Output;
+using HybridLens.Core.Abstractions;
 using HybridLens.Core.Configuration;
 using HybridLens.Core.Models;
 using HybridLens.Pipeline;
@@ -51,6 +52,22 @@ public static class AnalyseCommand
             Description = "Run static analysis only; skip the LLM pipeline"
         };
 
+        var contextLevelOption = new Option<ContextLevel?>("--context-level")
+        {
+            Description = "Override the context level used to construct LLM prompts: minimal, structural, relational, full"
+        };
+
+        var runsOption = new Option<int>("--runs")
+        {
+            Description = "Number of repeated LLM runs per (finding × model) — required for thesis variance analysis (default: 1)"
+        };
+
+        var maxFindingsOption = new Option<int>("--max-findings")
+        {
+            Description = "Cap how many findings (after --severity filter) are sent to the LLM. " +
+                          "Selection is deterministic: severity desc, then type, file, line. 0 = no cap (default)."
+        };
+
         var command = new Command("analyse", "Run the HybridLens analysis pipeline on a .NET codebase")
         {
             targetOption,
@@ -58,28 +75,88 @@ public static class AnalyseCommand
             formatOption,
             outputOption,
             severityOption,
-            dryRunOption
+            dryRunOption,
+            contextLevelOption,
+            runsOption,
+            maxFindingsOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
         {
-            var target = parseResult.GetValue(targetOption) ?? PromptForTarget();
-            if (target is null) return ExitFindingsFound;
+            // Interactive when no tokens beyond the command name itself were parsed.
+            // parseResult.Tokens contains all matched tokens (command + options + values).
+            // If only the "analyse" command is present (or even less), the user supplied
+            // no options → enter interactive mode.
+            var suppliedTokenCount = parseResult.Tokens.Count;
+            var interactive = suppliedTokenCount <= 1;
 
-            var format      = parseResult.GetValue(formatOption);
-            var outputFile  = parseResult.GetValue(outputOption);
-            var dryRun      = parseResult.GetValue(dryRunOption);
+            // Diagnostic so we can see what System.CommandLine actually parsed.
+            if (Environment.GetEnvironmentVariable("HYBRIDLENS_DEBUG") == "1")
+            {
+                Console.Error.WriteLine($"[debug] tokens parsed: [{string.Join(", ", parseResult.Tokens.Select(t => t.Value))}]");
+                Console.Error.WriteLine($"[debug] interactive   : {interactive}");
+            }
 
-            // Severity.Info is the enum zero-value; treat it as "not supplied" and default to Critical.
-            var rawSeverity = parseResult.GetValue(severityOption);
-            var minSeverity = rawSeverity == Severity.Info ? Severity.Critical : rawSeverity;
+            FileInfo?     target;
+            OutputFormat  format;
+            FileInfo?     outputFile;
+            bool          dryRun;
+            int           runs;
+            int           maxFindings;
+            ContextLevel? contextLevelOverride;
+            Severity      minSeverity;
+
+            if (interactive)
+            {
+                Console.WriteLine("HybridLens — interactive mode");
+                Console.WriteLine("Press Enter at any prompt to accept the [default].");
+                Console.WriteLine();
+
+                target = PromptForTarget();
+                if (target is null) return ExitFindingsFound;
+
+                dryRun               = PromptYesNo("Dry run (skip LLM pipeline)?", false);
+                minSeverity          = PromptEnum("Minimum severity sent to LLM", Severity.Critical);
+                contextLevelOverride = PromptEnum<ContextLevel>("Context level for prompts", ContextLevel.Structural);
+                runs                 = dryRun ? 1 : PromptInt("Repeated runs per (finding × model)", 1, min: 1);
+                maxFindings          = dryRun ? 0 : PromptInt("Max findings to send to LLM (0 = no cap)", 0, min: 0);
+                format               = PromptEnum("Output format", OutputFormat.Console);
+                outputFile           = format == OutputFormat.Console
+                                        ? null
+                                        : PromptOptionalFile("Write output to file (blank = stdout)");
+                Console.WriteLine();
+            }
+            else
+            {
+                target = parseResult.GetValue(targetOption) ?? PromptForTarget();
+                if (target is null) return ExitFindingsFound;
+
+                format      = parseResult.GetValue(formatOption);
+                outputFile  = parseResult.GetValue(outputOption);
+                dryRun      = parseResult.GetValue(dryRunOption);
+                runs        = parseResult.GetValue(runsOption);
+                if (runs < 1) runs = 1;
+                maxFindings = parseResult.GetValue(maxFindingsOption);
+                if (maxFindings < 0) maxFindings = 0;
+                contextLevelOverride = parseResult.GetValue(contextLevelOption);
+
+                // Severity.Info is the enum zero-value; treat it as "not supplied" and default to Critical.
+                var rawSeverity = parseResult.GetValue(severityOption);
+                minSeverity = rawSeverity == Severity.Info ? Severity.Critical : rawSeverity;
+            }
 
             // For structured formats progress goes to stderr so it doesn't pollute the output stream.
             var progress = format == OutputFormat.Console ? Console.Out : Console.Error;
 
             var loader         = services.GetRequiredService<WorkspaceLoader>();
             var detectorConfig = services.GetRequiredService<DetectorConfig>();
+            var contextConfig  = services.GetRequiredService<ContextConfig>();
             var pipeline       = services.GetRequiredService<AnalysisPipeline>();
+
+            // Apply CLI override BEFORE pipeline runs so contextConfig.Level is correct
+            // when ContextBuilder reads it (and when AnalysisPipeline records it on each RunRecord).
+            if (contextLevelOverride is { } lvl)
+                contextConfig.Level = lvl;
 
             // ── 1. Load workspace ────────────────────────────────────────────
             progress.WriteLine($"Loading: {target.FullName}");
@@ -115,9 +192,36 @@ public static class AnalyseCommand
 
             if (!dryRun)
             {
-                var eligible = findings.Count(f => f.Severity >= minSeverity);
-                progress.WriteLine($"Sending {eligible} finding(s) to LLM...{Environment.NewLine}");
-                llmFindings = await pipeline.RunAsync(findings, minSeverity, cancellationToken);
+                // Apply --severity filter and optional --max-findings cap deterministically.
+                // Order: severity desc → type → file → line, so re-runs with the same cap
+                // hit the exact same subset (essential for thesis reproducibility).
+                var llmInput = findings
+                    .Where(f => f.Severity >= minSeverity)
+                    .OrderByDescending(f => f.Severity)
+                    .ThenBy(f => f.Type.ToString(), StringComparer.Ordinal)
+                    .ThenBy(f => f.FilePath,        StringComparer.Ordinal)
+                    .ThenBy(f => f.Line)
+                    .ToList();
+
+                var totalEligible = llmInput.Count;
+                if (maxFindings > 0 && llmInput.Count > maxFindings)
+                    llmInput = llmInput.Take(maxFindings).ToList();
+
+                var runStorePath = Path.Combine(
+                    "runs",
+                    $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}.jsonl");
+
+                var capNote = (maxFindings > 0 && totalEligible > maxFindings)
+                    ? $" (capped from {totalEligible} via --max-findings)"
+                    : string.Empty;
+
+                progress.WriteLine(
+                    $"Sending {llmInput.Count} finding(s) to LLM{capNote} " +
+                    $"[context: {contextConfig.Level}, runs: {runs}, prompt: {HybridLens.ContextBuilder.PromptTemplate.Version}]");
+                progress.WriteLine($"Run trace: {Path.GetFullPath(runStorePath)}{Environment.NewLine}");
+
+                await using IRunStore runStore = new JsonlRunStore(runStorePath);
+                llmFindings = await pipeline.RunAsync(llmInput, minSeverity, runs, runStore, cancellationToken);
             }
             else
             {
@@ -152,6 +256,67 @@ public static class AnalyseCommand
 
         outputFile.Directory?.Create();
         return new StreamWriter(outputFile.FullName, append: false, System.Text.Encoding.UTF8);
+    }
+
+    // ── Interactive prompts ──────────────────────────────────────────────────
+
+    private static T PromptEnum<T>(string label, T defaultValue) where T : struct, Enum
+    {
+        var names = Enum.GetNames<T>();
+        while (true)
+        {
+            Console.WriteLine($"{label} [{string.Join(" / ", names)}] (default: {defaultValue})");
+            Console.Write("> ");
+            var input = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrEmpty(input))
+                return defaultValue;
+
+            if (Enum.TryParse<T>(input, ignoreCase: true, out var parsed) && Enum.IsDefined(parsed))
+                return parsed;
+
+            Console.Error.WriteLine($"  Invalid value. Expected one of: {string.Join(", ", names)}");
+        }
+    }
+
+    private static int PromptInt(string label, int defaultValue, int min = int.MinValue)
+    {
+        while (true)
+        {
+            Console.Write($"{label} (default: {defaultValue}): ");
+            var input = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrEmpty(input))
+                return defaultValue;
+
+            if (int.TryParse(input, out var value) && value >= min)
+                return value;
+
+            Console.Error.WriteLine($"  Expected an integer >= {min}");
+        }
+    }
+
+    private static bool PromptYesNo(string label, bool defaultValue)
+    {
+        var def = defaultValue ? "Y/n" : "y/N";
+        while (true)
+        {
+            Console.Write($"{label} [{def}]: ");
+            var input = Console.ReadLine()?.Trim().ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(input)) return defaultValue;
+            if (input is "y" or "yes")        return true;
+            if (input is "n" or "no")         return false;
+
+            Console.Error.WriteLine("  Please answer y or n.");
+        }
+    }
+
+    private static FileInfo? PromptOptionalFile(string label)
+    {
+        Console.Write($"{label}: ");
+        var input = Console.ReadLine()?.Trim();
+        return string.IsNullOrEmpty(input) ? null : new FileInfo(input);
     }
 
     private static FileInfo? PromptForTarget()

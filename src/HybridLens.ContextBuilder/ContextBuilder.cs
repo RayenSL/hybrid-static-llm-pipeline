@@ -7,15 +7,6 @@ namespace HybridLens.ContextBuilder;
 
 public sealed class ContextBuilder : IContextBuilder
 {
-    private const string SystemPrompt = """
-        You are a .NET code quality expert. You will be given a code anti-pattern finding.
-        Respond only with a JSON object in this exact format, with no additional text:
-        {
-          "explanation": "<why this is a problem and what its impact is>",
-          "remediation": "<concrete refactoring steps, include a short code example where helpful>"
-        }
-        """;
-
     public LlmRequest Build(Finding finding, IReadOnlyList<Finding> allFindings, ContextConfig config)
     {
         var userPrompt = config.Level switch
@@ -29,8 +20,9 @@ public sealed class ContextBuilder : IContextBuilder
 
         return new LlmRequest
         {
-            SystemPrompt = SystemPrompt,
-            UserPrompt   = userPrompt
+            SystemPrompt  = PromptTemplate.SystemPrompt,
+            UserPrompt    = userPrompt,
+            PromptVersion = PromptTemplate.Version
         };
     }
 

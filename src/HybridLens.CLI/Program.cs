@@ -40,6 +40,13 @@ var services = new ServiceCollection()
     .AddSingleton<AnalysisPipeline>()
     .BuildServiceProvider();
 
+// If invoked with no arguments at all, route to the `analyse` command so its
+// SetAction fires. Whether that run is "interactive" is decided inside the
+// command itself by inspecting which options the user actually supplied —
+// that check is more robust than relying on args.Length here.
+if (args.Length == 0)
+    args = ["analyse"];
+
 var root = new RootCommand("HybridLens — hybrid static + LLM .NET code analyser")
 {
     AnalyseCommand.Build(services)

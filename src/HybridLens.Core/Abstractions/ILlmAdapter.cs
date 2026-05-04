@@ -9,6 +9,8 @@ public sealed record LlmRequest
 {
     public required string SystemPrompt { get; init; }
     public required string UserPrompt { get; init; }
+    /// <summary>Version identifier of the prompt template that produced this request (Req #4).</summary>
+    public required string PromptVersion { get; init; }
 }
 
 public sealed record LlmResponse
