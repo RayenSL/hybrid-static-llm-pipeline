@@ -1,26 +1,25 @@
 # HybridLens — run-trace analysis
 
-This folder contains the Python tooling for the thesis. Two separate concerns
-live here:
+This folder contains the Python tooling for the thesis. Tools by stage:
 
 | Tool | Input | Purpose |
 |---|---|---|
-| `loader.py` + `compare.py` | Raw run-traces (`runs/*.jsonl`) emitted by the C# pipeline | Quick sanity tables, run-to-run variance, cross-model agreement, parse failures |
-| `score_runs.py` | Raw run-traces | Interactive scoring tool — produces `experiments.jsonl` |
-| `analyse_results.py` | Curated, **scored** experiments file (`experiments.jsonl` / `.csv`) | Thesis-ready figures and CSV tables for the evaluation chapter |
+| `loader.py` + `compare.py` | Raw run-traces (`runs/*.jsonl`) | Quick sanity tables, run-to-run variance, cross-model agreement |
+| `select_rating_set.py` | Raw run-traces | Uniform random draw of 1 run per cell + stratified order → `experiments_to_rate.jsonl` (§5.2.5, §B.2.2) |
+| `score_runs.py` | `experiments_to_rate.jsonl` | Apply the rubric (Appendix B): 3-point ordinal × 8 dimensions, multi-label hallucination, mandatory rationales, blinded viewer |
+| `compare_raters.py` | Two `experiments_*.jsonl` files | Cohen's weighted κ + Krippendorff's α for IRR (§B.8) |
+| `analyse_results.py` | `experiments.jsonl` | Proportions per ordinal level, Wilson CIs, Cliff's δ, thesis-ready figures |
 
 End-to-end workflow:
 
 ```
-C# pipeline       →  runs/*.jsonl        (raw outputs)
-score_runs.py     →  experiments.jsonl   (scored — your dependent variables)
-analyse_results.py → output/figures/, output/tables/
+C# pipeline           →  runs/*.jsonl              (raw outputs)
+select_rating_set.py  →  experiments_to_rate.jsonl (1 row per cell, stratified order)
+score_runs.py --rater R1 → experiments.jsonl       (rated by primary rater)
+score_runs.py --rater R2 → experiments_R2.jsonl    (rated by second rater, IRR subset)
+compare_raters.py     →  IRR statistics (Cohen's κ)
+analyse_results.py    →  output/figures/, output/tables/
 ```
-
-The split is intentional: the run-trace contains every raw API call, while
-`experiments.jsonl` is the smaller, hand-prepared file with the dependent
-variables (correctness, completeness, hallucination type, developer-study
-ratings, …) that your thesis actually evaluates.
 
 ## Setup
 
@@ -32,123 +31,168 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## A. Producing `experiments.jsonl` — `score_runs.py`
+## A. Selecting the rated subset — `select_rating_set.py`
 
-Walks through each raw run-trace record and prompts you (the rater) for the
-dependent variables: true-positive flag, six Likert scores, hallucination type.
+Picks **one run per (instance × context × model) cell** by uniform random draw
+with a recorded seed (§5.2.5), then re-orders the result so no two consecutive
+outputs share the same instance, model, or context level (§B.2.2).
 
 ```bash
-# Score everything in one pass
-python score_runs.py --input ../src/runs/*.jsonl --output experiments.jsonl
+# Full primary rating set (390 rows from 1,110 raw runs at 30 instances)
+python select_rating_set.py --input ../src/runs/*.jsonl \
+                            --output experiments_to_rate.jsonl --seed 42
 
-# Stratified subsample (essential for a manageable workload — 800 runs is too many)
-python score_runs.py --input ../src/runs/*.jsonl --output experiments.jsonl \
-                     --sample 60 --seed 42
+# IRR pilot subset (~10 outputs, balanced across context × anti-pattern)
+python select_rating_set.py --input ../src/runs/*.jsonl \
+                            --output experiments_pilot.jsonl --seed 42 --pilot
 
-# Score only one slice of the experiment matrix
-python score_runs.py --input ../src/runs/*.jsonl --output experiments.jsonl \
-                     --filter-model gpt-5-mini --filter-context-level relational
+# IRR stratified subsample (~30% of primary set, stratified by
+# anti-pattern × context × model, per §B.8.1)
+python select_rating_set.py --irr-from experiments_to_rate.jsonl \
+                            --output experiments_irr.jsonl \
+                            --seed 42 --irr-fraction 0.30
 ```
 
-Per row the tool shows: anti-pattern, file/line, model, context level,
-parsed explanation, parsed suggested fix. You then enter:
+Produces `experiments_to_rate.jsonl` plus a `.manifest.json` sidecar recording
+the seed, the lot ID, and the counts per model / context / anti-pattern. The
+manifest is what makes the selection reproducible — keep it under version control.
+
+Each row of the output gets:
+- `presentation_index` — 1..N order
+- `blinding_lot` — short stable lot ID (so second-rater files reference the same lot)
+- `selection_seed` — the seed used
+
+## B. Scoring — `score_runs.py`
+
+Applies the rubric defined in **Appendix B** of the thesis.
+
+```bash
+# Primary rater (default --viewer html opens a blinded browser tab)
+python score_runs.py --input experiments_to_rate.jsonl \
+                     --output experiments.jsonl --rater R1
+
+# Second rater (IRR — points at a smaller subset file produced by select_rating_set.py)
+python score_runs.py --input experiments_irr.jsonl \
+                     --output experiments_R2.jsonl --rater R2
+
+# Pure-console mode (no browser)
+python score_runs.py --input experiments_to_rate.jsonl --rater R1 --viewer console
+```
+
+For each row the rater enters:
 
 | Field | Scale | Notes |
 |---|---|---|
-| `is_true_positive` | y/n | Was the static finding actually a real issue? |
-| `explanation_correctness_score` | 1–5 | |
-| `explanation_completeness_score` | 1–5 | |
-| `explanation_specificity_score` | 1–5 | |
-| `quality_attribute_alignment` | 1–5 | |
-| `repair_correctness_score` | 1–5 | |
-| `repair_actionability_score` | 1–5 | |
-| `hallucination_type` | menu | none / fabricated_api / wrong_logic / irrelevant / contradictory / other |
+| `explanation_correctness` | poor / adequate / good | §B.4.1 |
+| `explanation_groundedness` | poor / adequate / good | §B.4.2 |
+| `explanation_completeness` | poor / adequate / good | §B.4.3 |
+| `explanation_clarity` | poor / adequate / good | §B.4.4 |
+| `repair_correctness` | poor / adequate / good | §B.5.1 |
+| `repair_completeness` | poor / adequate / good | §B.5.2 |
+| `repair_actionability` | poor / adequate / good | §B.5.3 |
+| `repair_semantic_risk` | poor / adequate / good | §B.5.4 — **reverse-coded**: Good = low risk |
+| `hallucination_categories` | multi-select | §B.6 — any-of-7 + none |
+| `attributes_correctly_aligned` | integer | §B.7.2 |
+| `incorrectly_mentioned_attributes` | integer | §B.7.2 |
 
-Commands:
+Input cheat-sheet:
 
 | Input | Effect |
 |---|---|
-| `<Enter>` | Accept default (where shown) |
-| `skip` | Skip this row entirely (no record written) |
-| `quit` | Save what's been scored so far and exit |
+| `p` / `a` / `g` | Poor / Adequate / Good |
+| `p?` / `a?` / `g?` | Same, but marked uncertain (rationale required, `*_uncertain` flag set) |
+| `skip` | Skip the row entirely |
+| `quit` | Save and exit |
+| `<Enter>` | Accept the default (where one is shown) |
 
-The tool is **resumable**: re-running with the same `--output` file skips
-`run_id`s already present. Filters and `--sample` apply before the
-already-scored skip, so you can continue exactly where you left off.
+**Mandatory rationale** is required for any Poor or uncertain rating (§B.3.2).
+The tool will not let you proceed without one. Append `?` to any rating
+(`p?`, `a?`, `g?`) to mark it uncertain — this also triggers the rationale
+prompt and sets the `*_uncertain` boolean on the record.
 
-`success` and `parsing_failed` are derived automatically from the run record's
-`error_status` and `parse_status` — you don't score those.
+**Refusal detection** (§B.3.4): outputs matching common refusal phrases ("I cannot
+help…", "I'm unable to…") are flagged. The tool pre-fills all dimensions as Poor
+with rationale "refusal" and asks you to confirm. Type `override` to score manually.
 
-## B. Thesis evaluation — `analyse_results.py`
+**Blinded HTML viewer**: the rater never sees `context_level`, `model_name`,
+`run_number`, or `prompt_version`. The browser tab shows only what §B.2.1 permits
+(anti-pattern, severity, file:line, symbol, code snippet, parsed explanation /
+quality impact / suggested fix, expected & mentioned attributes).
 
-Operates on the curated experiments file (one row per scored LLM run).
-Generates every figure and table the thesis needs.
+**Resume support**: re-running with the same `--output` and `--rater` skips
+`run_id`s this rater has already scored. Switching `--rater` writes a new pass.
+
+Each record carries the audit fields required by §B.10.1:
+`rater_id`, `rubric_version` (`"1.0"`), `rated_at`, `rating_started_at`,
+`rating_completed_at`, `rating_duration_seconds`, `blinding_lot`.
+
+## C. Inter-rater reliability — `compare_raters.py`
+
+Reports Cohen's weighted κ (linear weights) per ordinal dimension and binary κ
+per hallucination category, with the Landis–Koch interpretation and the §B.8.2
+acceptance threshold (κ ≥ 0.60).
+
+```bash
+python compare_raters.py --r1 experiments.jsonl --r2 experiments_R2.jsonl
+python compare_raters.py --r1 experiments.jsonl --r2 experiments_R2.jsonl \
+                        --output output/irr --threshold 0.60
+```
+
+Outputs:
+
+```
+output/irr/
+  kappa_ordinal.csv          # κ + interpretation + accepted? per dimension
+  kappa_hallucination.csv    # κ per hallucination category
+  disagreements_<dim>.csv    # per-dim list of run_ids where R1 ≠ R2 (with both rationales)
+```
+
+If any dimension falls below the threshold, the script flags it as a §B.9
+trigger ("invoke conflict resolution"). Persistent disagreements are not
+averaged — see §B.9.1.
+
+## D. Thesis evaluation — `analyse_results.py`
+
+Operates on the rated experiments file (one row per rated LLM output).
+Generates the descriptive tables and figures the thesis presents in §5.4.
 
 ```bash
 python analyse_results.py --input experiments.jsonl --output output
-python analyse_results.py --input experiments.csv   --output output
-python analyse_results.py --input experiments.jsonl --output output --only-true-positives
 ```
 
-Outputs (auto-created):
+What it computes (per Methodology §4.5–4.6 + Appendix B):
 
-```
-output/
-  figures/
-    context_explanation_quality.png
-    context_hallucination_rate.png
-    context_repair_actionability.png
-    model_explanation_quality.png
-    model_hallucination_rate.png
-    model_repair_quality.png
-    anti_pattern_explanation_quality.png
-    anti_pattern_hallucination_rate.png
-    developer_condition_comparison.png
-    hallucination_type_distribution.png
-    hallucination_rate_by_model.png
-    hallucination_rate_by_context_level.png
-    quality_alignment_by_model.png
-    quality_alignment_by_context_level.png
-    quality_alignment_by_anti_pattern.png
-    attribute_coverage_by_model.png
-    attribute_coverage_by_context_level.png
-    attribute_coverage_by_anti_pattern.png
-  tables/
-    overview.csv
-    runs_by_model.csv
-    runs_by_anti_pattern.csv
-    runs_by_context_level.csv
-    summary_by_context_level.csv
-    summary_by_model.csv
-    summary_by_anti_pattern.csv
-    summary_by_developer_condition.csv
-    developer_wilcoxon.csv         (only when paired data is detected)
-    hallucination_overall.csv
-    hallucination_type_distribution.csv
-    hallucination_by_model.csv
-    hallucination_by_context_level.csv
-    alignment_by_model.csv
-    alignment_by_context_level.csv
-    alignment_by_anti_pattern.csv
-```
+| Block | Output | What it answers |
+|---|---|---|
+| Overview | `overview.csv`, `n_by_*` | Sample sizes, rater counts, refusal count, rating-time stats |
+| Ordinal proportions | `{dim}_by_{group}.csv` + stacked bar PNG | Poor/Adequate/Good proportion per cell, Wilson 95 % CIs, for each of 8 dimensions × {context_level, model_name, anti_pattern_type} |
+| Hallucinations | `hallucination_overall.csv`, `hallucination_by_context.csv` | Per-category rate with Wilson CIs (multi-label) — RQ1.2 |
+| Quality-attribute | `quality_alignment_by_anti_pattern.csv`, `alignment_rate_by_anti_pattern.csv` | Mean correctly-aligned + incorrect count per anti-pattern — RQ1.3 |
+| H1 baseline | `h1_baseline_vs_hybrid_cliffs_delta.csv` | Paired Cliff's δ comparing `analyser_only` vs each hybrid level, per dimension |
+| H2 long-format | `context_monotonicity_long.csv` | One row per (dim × context × ordinal level) with count + proportion + CIs — input file for the CLMM fitted in R |
 
-The alignment tables include two columns:
+Statistical primitives used internally:
 
-| Column | Definition |
+| Primitive | Where |
 |---|---|
-| `alignment_rate` | Mean of `quality_attribute_alignment` (0/1) — fraction of runs where at least one expected ISO/IEC 25010 attribute was mentioned by the LLM |
-| `attribute_coverage` | Mean of `\|expected ∩ mentioned\| / \|expected\|` — finer-grained: how much of the literature-expected set the LLM actually covers |
+| Wilson 95 % CI | Every proportion (binomial CI; respects 0 and 1) |
+| Cliff's δ | H1 paired comparison (with Romano et al. thresholds: small 0.147 / medium 0.330 / large 0.474) |
+| Holm–Bonferroni | Available as `holm_correct(pvals)` — applied where multiple p-values from the same family are reported |
 
-Robustness: any analysis whose required column is missing prints a warning and
-is skipped — the script never crashes on a partial file. The `--only-true-positives`
-flag restricts quality-score analyses to confirmed positives; the overview and
-hallucination sections always cover the full dataset so failures stay visible.
+Charts use a colour-blind safe traffic light: red for Poor, amber for Adequate,
+green for Good. No seaborn.
 
-If the developer study contains paired observations (same `instance_id` rated
-under both `condition` values), a Wilcoxon signed-rank test is run per metric
-and saved to `developer_wilcoxon.csv`.
+### What deliberately isn't in this script
 
-## C. Raw run-trace analysis — `compare.py`
+* **Cumulative-link mixed-effects models (CLMM)** — fitted in R using
+  `ordinal::clmm`. The `context_monotonicity_long.csv` file is the input to
+  that R workflow. Python's `statsmodels` lacks a robust ordinal mixed-effects
+  implementation.
+* **Cochran's Q** — the matched-instance test for alignment rate across models
+  (§4.6) is straightforward in R but adds an awkward dependency in Python; do
+  it in R against `alignment_rate_by_anti_pattern.csv`.
+
+## E. Raw run-trace analysis — `compare.py`
 
 ```bash
 # Single campaign

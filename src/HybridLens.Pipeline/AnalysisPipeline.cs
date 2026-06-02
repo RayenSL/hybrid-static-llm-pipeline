@@ -36,7 +36,15 @@ public sealed class AnalysisPipeline(
 
         var eligible = Filter(findings, minSeverity);
 
-        if (eligible.Count == 0 || adapters.Count == 0)
+        if (eligible.Count == 0)
+            return [];
+
+        // ── Static-analyser baseline path (H1 in the thesis) ─────────────────
+        // No LLM call, no model loop. One deterministic record per finding.
+        if (contextConfig.Level == ContextLevel.AnalyserOnly)
+            return await RunBaselineAsync(eligible, runStore, cancellationToken);
+
+        if (adapters.Count == 0)
             return [];
 
         // One work item per (finding × model × run-number).
@@ -69,6 +77,71 @@ public sealed class AnalysisPipeline(
             });
 
         return results.OfType<LlmFinding>().ToList();
+    }
+
+    /// <summary>
+    /// Generates one deterministic baseline record per finding for the H1 comparison.
+    /// No LLM is invoked, no model loop runs. The baseline content is identical across
+    /// re-runs of the same Finding, so we ignore the <c>runs</c> parameter here.
+    /// </summary>
+    private async Task<IReadOnlyList<LlmFinding>> RunBaselineAsync(
+        IReadOnlyList<Finding> eligible,
+        IRunStore? runStore,
+        CancellationToken cancellationToken)
+    {
+        var results = new List<LlmFinding>(eligible.Count);
+
+        foreach (var finding in eligible)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var (explanation, qualityImpact, remediation) = AnalyserBaseline.BuildFor(finding);
+            var rawOutput = AnalyserBaseline.ComposeRawOutput(finding);
+            var mentioned = ExtractMentionedAttributes(rawOutput);
+            var alignment = ComputeAlignment(ParseStatus.Ok, finding.ExpectedQualityAttributes, mentioned);
+
+            var llmFinding = new LlmFinding
+            {
+                Finding                    = finding,
+                ModelName                  = AnalyserBaseline.ModelName,
+                Explanation                = explanation,
+                Remediation                = remediation,
+                QualityImpact              = qualityImpact,
+                MentionedQualityAttributes = mentioned,
+                RunNumber                  = 1,
+                ContextLevel               = ContextLevel.AnalyserOnly,
+                PromptVersion              = AnalyserBaseline.PromptVersion
+            };
+
+            var record = BuildRecord(
+                runId:                      Guid.NewGuid().ToString("N"),
+                timestamp:                  DateTimeOffset.UtcNow,
+                runNumber:                  1,
+                finding:                    finding,
+                modelName:                  AnalyserBaseline.ModelName,
+                promptVersion:              AnalyserBaseline.PromptVersion,
+                rawSystem:                  string.Empty,
+                rawUser:                    string.Empty,
+                rawOutput:                  rawOutput,
+                inputTokens:                null,
+                outputTokens:               null,
+                durationMs:                 0,
+                explanation:                explanation,
+                remediation:                remediation,
+                parseStatus:                ParseStatus.Ok,
+                errorStatus:                null,
+                errorMessage:               null,
+                qualityImpact:              qualityImpact,
+                mentionedQualityAttributes: mentioned,
+                qualityAttributeAlignment:  alignment);
+
+            if (runStore is not null)
+                await runStore.AppendAsync(record, cancellationToken);
+
+            results.Add(llmFinding);
+        }
+
+        return results;
     }
 
     private async Task<(LlmFinding? Finding, RunRecord Record)> ExecuteOneAsync(
@@ -226,6 +299,8 @@ public sealed class AnalysisPipeline(
             SymbolName                    = finding.SymbolName,
             Line                          = finding.Line,
             Severity                      = finding.Severity,
+            Snippet                       = finding.Snippet,
+            Metrics                       = finding.Metrics.Count > 0 ? finding.Metrics : null,
             ContextLevel                  = contextConfig.Level,
             ModelName                     = modelName,
             PromptVersion                 = promptVersion,
@@ -296,17 +371,58 @@ public sealed class AnalysisPipeline(
 
     // ── Quality-attribute extraction & alignment (Req: ISO/IEC 25010 mapping) ──
 
-    private static readonly Regex[] AttributePatterns = QualityAttributeMap.KnownAttributes
-        // Match British and American spellings of "analysability"; canonicalise to British in the output.
-        .Select(a => new Regex($@"\b{a}\b", RegexOptions.IgnoreCase | RegexOptions.Compiled))
-        .Concat(new[] { new Regex(@"\bAnalyzability\b", RegexOptions.IgnoreCase | RegexOptions.Compiled) })
-        .ToArray();
+    /// <summary>
+    /// Synonym map per thesis §B.7.3. Each entry maps the canonical (British) ISO/IEC 25010
+    /// attribute to the alternative phrasings raters are instructed to treat as equivalent.
+    /// The lexical scanner uses these so that an LLM saying "maintenance burden" or
+    /// "coupling" still credits Maintainability / Modularity in the auto-alignment metric.
+    /// </summary>
+    private static readonly IReadOnlyDictionary<string, string[]> AttributeSynonyms =
+        new Dictionary<string, string[]>(StringComparer.Ordinal)
+        {
+            [QualityAttributeMap.Maintainability] = new[]
+            {
+                "Maintainability", "maintenance burden", "maintenance cost",
+                "easy to maintain", "hard to maintain", "difficult to maintain"
+            },
+            [QualityAttributeMap.Modifiability] = new[]
+            {
+                "Modifiability", "changeability", "easy to change",
+                "hard to change", "impact of changes"
+            },
+            [QualityAttributeMap.Analysability] = new[]
+            {
+                "Analysability", "Analyzability", "understandability",
+                "readability", "comprehensibility", "cognitive complexity"
+            },
+            [QualityAttributeMap.Testability] = new[]
+            {
+                "Testability", "easy to test", "hard to test",
+                "unit test coverage difficulty", "testing difficulty"
+            },
+            [QualityAttributeMap.Modularity] = new[]
+            {
+                "Modularity", "separation of concerns", "coupling", "cohesion"
+            },
+            [QualityAttributeMap.Security] = new[]
+            {
+                "Security", "vulnerability", "attack surface", "security risk"
+            },
+            [QualityAttributeMap.Reliability] = new[]
+            {
+                "Reliability", "stability", "fault tolerance", "robustness"
+            },
+            [QualityAttributeMap.Compatibility] = new[]
+            {
+                "Compatibility", "interoperability", "deprecation", "version compatibility"
+            }
+        };
 
     /// <summary>
-    /// Lexical scan of the LLM output for any ISO/IEC 25010 attribute name.
-    /// We scan the entire raw output (not just <c>quality_impact</c>) so that prompts
-    /// older than v1.1.0 — or models that put the analysis in <c>explanation</c> — are
-    /// not unfairly penalised. Returns the canonical (British) names, alphabetically.
+    /// Lexical scan of the LLM output for any ISO/IEC 25010 attribute name or
+    /// rubric-approved synonym (§B.7.3). Scans the entire raw output so attributes
+    /// mentioned in any section (explanation, quality_impact, remediation) count.
+    /// Returns canonical (British) names, alphabetically ordered.
     /// </summary>
     private static IReadOnlyList<string> ExtractMentionedAttributes(string? text)
     {
@@ -314,15 +430,19 @@ public sealed class AnalysisPipeline(
             return Array.Empty<string>();
 
         var found = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var attr in QualityAttributeMap.KnownAttributes)
+        foreach (var (canonical, terms) in AttributeSynonyms)
         {
-            // Match British canonical name first.
-            if (Regex.IsMatch(text, $@"\b{attr}\b", RegexOptions.IgnoreCase))
-                found.Add(attr);
+            foreach (var term in terms)
+            {
+                // Word-boundary match. Multi-word terms ("maintenance burden") are matched
+                // case-insensitively with the boundaries on the first and last word only.
+                if (Regex.IsMatch(text, $@"\b{Regex.Escape(term)}\b", RegexOptions.IgnoreCase))
+                {
+                    found.Add(canonical);
+                    break;
+                }
+            }
         }
-        // Accept American "Analyzability" as equivalent to "Analysability".
-        if (Regex.IsMatch(text, @"\bAnalyzability\b", RegexOptions.IgnoreCase))
-            found.Add(QualityAttributeMap.Analysability);
 
         return found.OrderBy(s => s, StringComparer.Ordinal).ToList();
     }

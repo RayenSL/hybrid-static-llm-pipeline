@@ -68,6 +68,14 @@ public static class AnalyseCommand
                           "Selection is deterministic: severity desc, then type, file, line. 0 = no cap (default)."
         };
 
+        var maxFindingsPerTypeOption = new Option<int>("--max-findings-per-type")
+        {
+            Description = "Stratified cap: at most N findings per anti-pattern type are sent to the LLM. " +
+                          "Applied AFTER --severity filter and BEFORE --max-findings. " +
+                          "Selection within each type is deterministic: severity desc, then file, line. " +
+                          "Set to 10 for the thesis sample (30 instances = 10 × 3 types). 0 = no cap (default)."
+        };
+
         var command = new Command("analyse", "Run the HybridLens analysis pipeline on a .NET codebase")
         {
             targetOption,
@@ -78,7 +86,8 @@ public static class AnalyseCommand
             dryRunOption,
             contextLevelOption,
             runsOption,
-            maxFindingsOption
+            maxFindingsOption,
+            maxFindingsPerTypeOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -103,6 +112,7 @@ public static class AnalyseCommand
             bool          dryRun;
             int           runs;
             int           maxFindings;
+            int           maxFindingsPerType;
             ContextLevel? contextLevelOverride;
             Severity      minSeverity;
 
@@ -119,7 +129,8 @@ public static class AnalyseCommand
                 minSeverity          = PromptEnum("Minimum severity sent to LLM", Severity.Critical);
                 contextLevelOverride = PromptEnum<ContextLevel>("Context level for prompts", ContextLevel.Structural);
                 runs                 = dryRun ? 1 : PromptInt("Repeated runs per (finding × model)", 1, min: 1);
-                maxFindings          = dryRun ? 0 : PromptInt("Max findings to send to LLM (0 = no cap)", 0, min: 0);
+                maxFindingsPerType   = dryRun ? 0 : PromptInt("Max findings per anti-pattern type (10 for thesis, 0 = no cap)", 0, min: 0);
+                maxFindings          = dryRun ? 0 : PromptInt("Max findings total (0 = no cap)", 0, min: 0);
                 format               = PromptEnum("Output format", OutputFormat.Console);
                 outputFile           = format == OutputFormat.Console
                                         ? null
@@ -138,6 +149,8 @@ public static class AnalyseCommand
                 if (runs < 1) runs = 1;
                 maxFindings = parseResult.GetValue(maxFindingsOption);
                 if (maxFindings < 0) maxFindings = 0;
+                maxFindingsPerType = parseResult.GetValue(maxFindingsPerTypeOption);
+                if (maxFindingsPerType < 0) maxFindingsPerType = 0;
                 contextLevelOverride = parseResult.GetValue(contextLevelOption);
 
                 // Severity.Info is the enum zero-value; treat it as "not supplied" and default to Critical.
@@ -192,18 +205,30 @@ public static class AnalyseCommand
 
             if (!dryRun)
             {
-                // Apply --severity filter and optional --max-findings cap deterministically.
-                // Order: severity desc → type → file → line, so re-runs with the same cap
-                // hit the exact same subset (essential for thesis reproducibility).
-                var llmInput = findings
+                // Apply --severity filter and optional caps deterministically.
+                // Order within each anti-pattern type: severity desc → file → line, so
+                // re-runs hit the exact same subset (essential for thesis reproducibility).
+                var eligible = findings
                     .Where(f => f.Severity >= minSeverity)
                     .OrderByDescending(f => f.Severity)
                     .ThenBy(f => f.Type.ToString(), StringComparer.Ordinal)
                     .ThenBy(f => f.FilePath,        StringComparer.Ordinal)
                     .ThenBy(f => f.Line)
                     .ToList();
+                var totalEligible = eligible.Count;
 
-                var totalEligible = llmInput.Count;
+                // --max-findings-per-type applies the stratified cap (e.g. 10 per type for the thesis).
+                IEnumerable<Finding> stratified = eligible;
+                if (maxFindingsPerType > 0)
+                {
+                    stratified = eligible
+                        .GroupBy(f => f.Type)
+                        .SelectMany(g => g.Take(maxFindingsPerType));
+                }
+                var llmInput = stratified.ToList();
+                var afterPerType = llmInput.Count;
+
+                // --max-findings is the global cap applied after per-type stratification.
                 if (maxFindings > 0 && llmInput.Count > maxFindings)
                     llmInput = llmInput.Take(maxFindings).ToList();
 
@@ -211,9 +236,11 @@ public static class AnalyseCommand
                     "runs",
                     $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}.jsonl");
 
-                var capNote = (maxFindings > 0 && totalEligible > maxFindings)
-                    ? $" (capped from {totalEligible} via --max-findings)"
-                    : string.Empty;
+                var capNote = "";
+                if (maxFindingsPerType > 0 && afterPerType < totalEligible)
+                    capNote += $" (per-type cap → {afterPerType} from {totalEligible})";
+                if (maxFindings > 0 && llmInput.Count < afterPerType)
+                    capNote += $" (global cap → {llmInput.Count})";
 
                 progress.WriteLine(
                     $"Sending {llmInput.Count} finding(s) to LLM{capNote} " +

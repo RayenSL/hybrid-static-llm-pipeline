@@ -87,6 +87,34 @@ public sealed class ObsoleteApiDetectorTests
         Assert.Contains(findings, f => f.Severity == Severity.Critical);
     }
 
+    // ── [Obsolete] on the containing type → flagged ───────────────────────────
+
+    [Fact]
+    public void Detect_ObsoleteContainingType_ReturnsFinding()
+    {
+        // The method itself is not marked, but its declaring class is. Per §5.1.2 a usage
+        // is obsolete when the symbol OR its containing type carries [Obsolete].
+        const string code = """
+            using System;
+
+            [Obsolete("This whole API is deprecated")]
+            class LegacyApi {
+                public void StillCalled() { }
+            }
+
+            class User {
+                void Caller() { new LegacyApi().StillCalled(); }
+            }
+            """;
+
+        var findings = DefaultDetector
+            .Detect(CompilationHelper.CreateWithReferences(code))
+            .ToList();
+
+        Assert.NotEmpty(findings);
+        Assert.All(findings, f => Assert.Equal(AntiPatternType.ObsoleteApiUsage, f.Type));
+    }
+
     // ── Deprecated namespace prefix ───────────────────────────────────────────
 
     [Fact]
