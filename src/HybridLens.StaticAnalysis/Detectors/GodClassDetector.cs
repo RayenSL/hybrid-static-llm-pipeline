@@ -2,11 +2,20 @@ using HybridLens.Core.Configuration;
 using HybridLens.Core.Models;
 using HybridLens.Core.QualityAttributes;
 using HybridLens.StaticAnalysis.Abstractions;
+using HybridLens.StaticAnalysis.Metrics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HybridLens.StaticAnalysis.Detectors;
 
+/// <summary>
+/// Detects the God Class anti-pattern using the composite detection strategy of
+/// Lanza &amp; Marinescu (2006): a class is flagged iff all three conditions hold
+/// simultaneously —
+/// <c>(ATFD &gt; FEW) ∧ (WMC ≥ VERY_HIGH) ∧ (TCC &lt; 1/3)</c>.
+/// Requires the semantic model to resolve foreign-data access and field cohesion.
+/// Operates on class declarations only (not struct/record/interface).
+/// </summary>
 public sealed class GodClassDetector(GodClassConfig config) : IDetector
 {
     public AntiPatternType Type => AntiPatternType.GodClass;
@@ -15,55 +24,45 @@ public sealed class GodClassDetector(GodClassConfig config) : IDetector
     {
         foreach (var tree in compilation.SyntaxTrees)
         {
-            var root = tree.GetRoot();
+            var model = compilation.GetSemanticModel(tree);
+            var root  = tree.GetRoot();
 
-            foreach (var type in root.DescendantNodes().OfType<TypeDeclarationSyntax>())
+            foreach (var cls in root.DescendantNodes().OfType<ClassDeclarationSyntax>())
             {
-                var methods = type.Members.OfType<MethodDeclarationSyntax>().Count();
-                var fields  = type.Members.OfType<FieldDeclarationSyntax>().Count()
-                            + type.Members.OfType<PropertyDeclarationSyntax>().Count();
-                var loc     = CountLines(type, tree);
+                var m = ClassMetrics.Compute(cls, model);
 
-                var exceedsMethods = methods > config.MaxMethods;
-                var exceedsFields  = fields  > config.MaxFields;
-                var exceedsLoc     = loc     > config.MaxLinesOfCode;
+                var exceedsAtfd = m.Atfd >  config.AtfdFew;
+                var exceedsWmc  = m.Wmc  >= config.WmcVeryHigh;
+                var lowCohesion = m.Tcc  <  config.TccThreshold;
 
-                var violations = (exceedsMethods ? 1 : 0)
-                               + (exceedsFields  ? 1 : 0)
-                               + (exceedsLoc     ? 1 : 0);
-
-                if (violations == 0)
+                // Composite strategy: all three must hold.
+                if (!(exceedsAtfd && exceedsWmc && lowCohesion))
                     continue;
 
-                var lineSpan = tree.GetLineSpan(type.Span);
+                var lineSpan = tree.GetLineSpan(cls.Span);
 
                 yield return new Finding
                 {
-                    Type     = AntiPatternType.GodClass,
-                    Severity = violations >= 2 ? Severity.Critical : Severity.Warning,
+                    Type       = AntiPatternType.GodClass,
+                    Severity   = Severity.Critical, // composite condition is binary — always critical when met
                     FilePath   = tree.FilePath,
-                    SymbolName = GetFullTypeName(type),
+                    SymbolName = GetFullTypeName(cls),
                     Line       = lineSpan.StartLinePosition.Line + 1,
-                    Snippet    = type.ToFullString(),
+                    Snippet    = cls.ToFullString(),
                     ExpectedQualityAttributes = QualityAttributeMap.ForType(AntiPatternType.GodClass),
                     Metrics    = new Dictionary<string, double>
                     {
-                        ["Methods"]              = methods,
-                        ["Fields"]               = fields,
-                        ["LinesOfCode"]          = loc,
-                        ["MaxMethods"]           = config.MaxMethods,
-                        ["MaxFields"]            = config.MaxFields,
-                        ["MaxLinesOfCode"]       = config.MaxLinesOfCode
+                        ["ATFD"]          = m.Atfd,
+                        ["WMC"]           = m.Wmc,
+                        ["TCC"]           = Math.Round(m.Tcc, 4),
+                        ["PublicMethods"] = m.PublicMethodCount,
+                        ["AtfdFew"]       = config.AtfdFew,
+                        ["WmcVeryHigh"]   = config.WmcVeryHigh,
+                        ["TccThreshold"]  = Math.Round(config.TccThreshold, 4)
                     }
                 };
             }
         }
-    }
-
-    private static int CountLines(TypeDeclarationSyntax type, SyntaxTree tree)
-    {
-        var span = tree.GetLineSpan(type.Span);
-        return span.EndLinePosition.Line - span.StartLinePosition.Line + 1;
     }
 
     private static string GetFullTypeName(TypeDeclarationSyntax type)

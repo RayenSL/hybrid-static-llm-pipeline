@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta http-equiv="refresh" content="2">
+<title>Scoring</title><style>
+:root {
+  --bg: #f7f7f8; --fg: #1f2328; --muted: #57606a;
+  --panel: #ffffff; --border: #d0d7de; --accent: #0969da;
+  --code-bg: #0d1117; --code-fg: #e6edf3; --code-hl: #3a2e00;
+  --chip-bg: #ddf4ff; --chip-fg: #0550ae;
+  --good: #1a7f37; --bad: #cf222e; --neutral: #6e7781;
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 24px 32px; font: 14px/1.55 -apple-system,Segoe UI,Roboto,sans-serif;
+       color: var(--fg); background: var(--bg); }
+h1 { margin: 0 0 6px; font-size: 18px; font-weight: 600; word-break: break-all; }
+h2 { margin: 18px 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em;
+     color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+.loc { color: var(--muted); font-family: ui-monospace,Consolas,monospace; font-size: 12px; }
+.chip { display: inline-block; padding: 2px 9px; margin: 0 4px 4px 0; border-radius: 999px;
+        background: var(--chip-bg); color: var(--chip-fg); font-size: 11px; font-weight: 600; }
+.chip.warn { background: #fff8c5; color: #633c01; }
+.chip.crit { background: #ffebe9; color: var(--bad); }
+.banner { display: flex; gap: 18px; padding: 10px 14px; margin: 14px 0 18px;
+          background: var(--panel); border: 1px solid var(--border); border-radius: 6px; }
+.banner > div { flex: 1; }
+.banner .label { font-size: 11px; text-transform: uppercase; color: var(--muted);
+                 letter-spacing: 0.04em; }
+.banner .val { font-family: ui-monospace,Consolas,monospace; font-size: 13px; word-break: break-word; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+         padding: 14px 18px; min-width: 0; }
+pre { margin: 0; white-space: pre-wrap; word-break: break-word; }
+pre.code { background: var(--code-bg); color: var(--code-fg); padding: 14px;
+           border-radius: 6px; font: 12.5px/1.5 ui-monospace,Consolas,monospace;
+           overflow-x: auto; max-height: 600px; }
+pre.code .ln { display: inline-block; width: 3.5ch; color: #6e7681; user-select: none;
+               text-align: right; padding-right: 1ch; border-right: 1px solid #30363d;
+               margin-right: 1ch; }
+pre.code .hl { background: var(--code-hl); }
+.md { background: #fafbfc; border: 1px solid #eaeef2; border-radius: 4px;
+      padding: 10px 14px; white-space: pre-wrap; }
+.hallu-list { background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+              padding: 10px 14px; margin-top: 14px; font-size: 13px; }
+.hallu-list ul { margin: 4px 0 0; padding-left: 0; list-style: none; }
+.hallu-list li { padding: 4px 0; border-bottom: 1px dotted #eaeef2; }
+.hallu-list li:last-child { border-bottom: none; }
+.hallu-list .idx { display: inline-block; min-width: 1.5em; color: var(--accent); font-weight: 700; }
+.hallu-list code { background: #eaeef2; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+.empty { color: var(--muted); font-style: italic; }
+.progress { color: var(--muted); font-size: 12px; }
+.warn { background: #fff8c5; border: 1px solid #d4a72c; border-radius: 6px;
+        padding: 8px 14px; margin: 0 0 12px; font-size: 13px; }
+</style></head>
+<body><div class="progress">Done — 5 run(s) scored.</div></body></html>

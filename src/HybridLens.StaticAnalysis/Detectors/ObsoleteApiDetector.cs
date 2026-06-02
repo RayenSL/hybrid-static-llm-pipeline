@@ -66,10 +66,9 @@ public sealed class ObsoleteApiDetector(ObsoleteApiConfig config) : IDetector
 
     private string? GetObsoleteAttribute(ISymbol symbol)
     {
-        var attr = symbol.GetAttributes()
-            .FirstOrDefault(a => a.AttributeClass?.ToDisplayString()
-                is "System.ObsoleteAttribute");
-
+        // Per thesis §5.1.2: a usage is obsolete if the symbol OR its containing type
+        // carries [Obsolete]. Check the symbol first, then fall back to its declaring type.
+        var attr = FindObsolete(symbol) ?? FindObsolete(symbol.ContainingType);
         if (attr is null)
             return null;
 
@@ -78,12 +77,13 @@ public sealed class ObsoleteApiDetector(ObsoleteApiConfig config) : IDetector
         return message is not null ? $"[Obsolete] {message}" : "[Obsolete]";
     }
 
+    private static AttributeData? FindObsolete(ISymbol? symbol)
+        => symbol?.GetAttributes()
+            .FirstOrDefault(a => a.AttributeClass?.ToDisplayString() is "System.ObsoleteAttribute");
+
     private static bool IsObsoleteError(ISymbol symbol)
     {
-        var attr = symbol.GetAttributes()
-            .FirstOrDefault(a => a.AttributeClass?.ToDisplayString()
-                is "System.ObsoleteAttribute");
-
+        var attr = FindObsolete(symbol) ?? FindObsolete(symbol.ContainingType);
         if (attr is null) return false;
 
         // Second constructor arg is isError (bool)

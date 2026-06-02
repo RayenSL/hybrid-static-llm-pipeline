@@ -23,6 +23,16 @@ public sealed record RunRecord
     public required string           SymbolName       { get; init; }
     public required int              Line             { get; init; }   // code_location
     public required Severity         Severity         { get; init; }
+    /// <summary>The raw code excerpt from the detector — what the rater sees in the blinded viewer.</summary>
+    public          string?          Snippet          { get; init; }
+
+    /// <summary>
+    /// Detector-computed metric values that triggered the detection — the structured
+    /// criterion record promised in thesis §5.1.2 / §5.2.7. For God Class:
+    /// ATFD / WMC / TCC (+ thresholds); for Long Method: CyclomaticComplexity / LinesOfCode.
+    /// Dictionary keys are preserved verbatim (not snake-cased) for direct analysis.
+    /// </summary>
+    public          IReadOnlyDictionary<string, double>? Metrics { get; init; }
 
     // ── Independent variables ────────────────────────────────────────────────
     public required ContextLevel     ContextLevel     { get; init; }

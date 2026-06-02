@@ -2,12 +2,18 @@ using HybridLens.Core.Configuration;
 using HybridLens.Core.Models;
 using HybridLens.Core.QualityAttributes;
 using HybridLens.StaticAnalysis.Abstractions;
+using HybridLens.StaticAnalysis.Metrics;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HybridLens.StaticAnalysis.Detectors;
 
+/// <summary>
+/// Detects the Long Method anti-pattern. Cyclomatic complexity is the primary gate
+/// (McCabe 1976; Watson &amp; McCabe 1996): a method is flagged only when its CC exceeds
+/// the configured bound. Lines-of-code is a secondary signal — it does not flag a method
+/// on its own, but escalates an already-flagged method to Critical severity.
+/// </summary>
 public sealed class LongMethodDetector(LongMethodConfig config) : IDetector
 {
     public AntiPatternType Type => AntiPatternType.LongMethod;
@@ -21,14 +27,14 @@ public sealed class LongMethodDetector(LongMethodConfig config) : IDetector
 
             foreach (var method in root.DescendantNodes().OfType<MethodDeclarationSyntax>())
             {
-                var loc = CountLines(method, tree);
-                var complexity = CountCyclomaticComplexity(method);
+                var complexity = CyclomaticComplexity.Of(method);
 
-                var exceedsLoc = loc > config.MaxLinesOfCode;
-                var exceedsComplexity = complexity > config.MaxCyclomaticComplexity;
-
-                if (!exceedsLoc && !exceedsComplexity)
+                // Primary gate: cyclomatic complexity must exceed the bound.
+                if (complexity <= config.MaxCyclomaticComplexity)
                     continue;
+
+                var loc = CountLines(method, tree);
+                var exceedsLoc = loc > config.MaxLinesOfCode; // secondary signal
 
                 var lineSpan = tree.GetLineSpan(method.Span);
                 var methodName = GetFullMethodName(method);
@@ -36,7 +42,7 @@ public sealed class LongMethodDetector(LongMethodConfig config) : IDetector
                 yield return new Finding
                 {
                     Type = AntiPatternType.LongMethod,
-                    Severity = exceedsLoc && exceedsComplexity ? Severity.Critical : Severity.Warning,
+                    Severity = exceedsLoc ? Severity.Critical : Severity.Warning,
                     FilePath = filePath,
                     SymbolName = methodName,
                     Line = lineSpan.StartLinePosition.Line + 1,
@@ -44,10 +50,10 @@ public sealed class LongMethodDetector(LongMethodConfig config) : IDetector
                     ExpectedQualityAttributes = QualityAttributeMap.ForType(AntiPatternType.LongMethod),
                     Metrics = new Dictionary<string, double>
                     {
-                        ["LinesOfCode"] = loc,
                         ["CyclomaticComplexity"] = complexity,
-                        ["MaxLinesOfCode"] = config.MaxLinesOfCode,
-                        ["MaxCyclomaticComplexity"] = config.MaxCyclomaticComplexity
+                        ["LinesOfCode"] = loc,
+                        ["MaxCyclomaticComplexity"] = config.MaxCyclomaticComplexity,
+                        ["MaxLinesOfCode"] = config.MaxLinesOfCode
                     }
                 };
             }
@@ -58,44 +64,6 @@ public sealed class LongMethodDetector(LongMethodConfig config) : IDetector
     {
         var span = tree.GetLineSpan(method.Span);
         return span.EndLinePosition.Line - span.StartLinePosition.Line + 1;
-    }
-
-    /// <summary>
-    /// Cyclomatic complexity = 1 + number of branching nodes in the method body.
-    /// Each if / else-if / for / foreach / while / do / case / catch / when /
-    /// conditional expression / null-coalescing / logical && or || adds 1.
-    /// </summary>
-    private static int CountCyclomaticComplexity(MethodDeclarationSyntax method)
-    {
-        var complexity = 1;
-
-        foreach (var node in method.DescendantNodes())
-        {
-            complexity += node switch
-            {
-                IfStatementSyntax                                           => 1,
-                ForStatementSyntax                                          => 1,
-                ForEachStatementSyntax                                      => 1,
-                WhileStatementSyntax                                        => 1,
-                DoStatementSyntax                                           => 1,
-                CaseSwitchLabelSyntax                                       => 1,
-                CasePatternSwitchLabelSyntax                                => 1,
-                SwitchExpressionArmSyntax                                   => 1,
-                CatchClauseSyntax                                           => 1,
-                WhenClauseSyntax                                            => 1,
-                ConditionalExpressionSyntax                                 => 1,
-                BinaryExpressionSyntax b when
-                    b.IsKind(SyntaxKind.LogicalAndExpression) ||
-                    b.IsKind(SyntaxKind.LogicalOrExpression)                => 1,
-                AssignmentExpressionSyntax a when
-                    a.IsKind(SyntaxKind.CoalesceAssignmentExpression)       => 1,
-                BinaryExpressionSyntax c when
-                    c.IsKind(SyntaxKind.CoalesceExpression)                 => 1,
-                _                                                           => 0
-            };
-        }
-
-        return complexity;
     }
 
     private static string GetFullMethodName(MethodDeclarationSyntax method)
