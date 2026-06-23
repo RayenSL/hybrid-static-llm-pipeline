@@ -76,6 +76,13 @@ public static class AnalyseCommand
                           "Set to 10 for the thesis sample (30 instances = 10 × 3 types). 0 = no cap (default)."
         };
 
+        var modelOption = new Option<string>("--model")
+        {
+            Description = "Comma-separated model keys from Llm.Models to use for generation (e.g. gpt-5.4). " +
+                          "Default: all configured models. Use this to run a single evaluated model while " +
+                          "keeping the verify-repair applier (e.g. claude-opus-4-8) configured."
+        };
+
         var command = new Command("analyse", "Run the HybridLens analysis pipeline on a .NET codebase")
         {
             targetOption,
@@ -87,7 +94,8 @@ public static class AnalyseCommand
             contextLevelOption,
             runsOption,
             maxFindingsOption,
-            maxFindingsPerTypeOption
+            maxFindingsPerTypeOption,
+            modelOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -115,6 +123,7 @@ public static class AnalyseCommand
             int           maxFindingsPerType;
             ContextLevel? contextLevelOverride;
             Severity      minSeverity;
+            IReadOnlySet<string>? modelFilter = null;
 
             if (interactive)
             {
@@ -156,6 +165,12 @@ public static class AnalyseCommand
                 // Severity.Info is the enum zero-value; treat it as "not supplied" and default to Critical.
                 var rawSeverity = parseResult.GetValue(severityOption);
                 minSeverity = rawSeverity == Severity.Info ? Severity.Critical : rawSeverity;
+
+                var modelRaw = parseResult.GetValue(modelOption);
+                if (!string.IsNullOrWhiteSpace(modelRaw))
+                    modelFilter = new HashSet<string>(
+                        modelRaw.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+                        StringComparer.OrdinalIgnoreCase);
             }
 
             // For structured formats progress goes to stderr so it doesn't pollute the output stream.
@@ -232,6 +247,20 @@ public static class AnalyseCommand
                 if (maxFindings > 0 && llmInput.Count > maxFindings)
                     llmInput = llmInput.Take(maxFindings).ToList();
 
+                // Validate --model against configured models before spending an LLM call.
+                if (modelFilter is { Count: > 0 })
+                {
+                    var configured = services.GetRequiredService<IReadOnlyDictionary<string, ILlmAdapter>>();
+                    var unknown = modelFilter.Where(m => !configured.ContainsKey(m)).ToList();
+                    if (unknown.Count > 0)
+                    {
+                        await Console.Error.WriteLineAsync(
+                            $"error: unknown --model: {string.Join(", ", unknown)}. " +
+                            $"Available: {string.Join(", ", configured.Keys)}");
+                        return 2;
+                    }
+                }
+
                 var runStorePath = Path.Combine(
                     "runs",
                     $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}.jsonl");
@@ -242,13 +271,14 @@ public static class AnalyseCommand
                 if (maxFindings > 0 && llmInput.Count < afterPerType)
                     capNote += $" (global cap → {llmInput.Count})";
 
+                var modelsNote = modelFilter is null ? "all" : string.Join("+", modelFilter);
                 progress.WriteLine(
                     $"Sending {llmInput.Count} finding(s) to LLM{capNote} " +
-                    $"[context: {contextConfig.Level}, runs: {runs}, prompt: {HybridLens.ContextBuilder.PromptTemplate.Version}]");
+                    $"[context: {contextConfig.Level}, runs: {runs}, models: {modelsNote}, prompt: {HybridLens.ContextBuilder.PromptTemplate.Version}]");
                 progress.WriteLine($"Run trace: {Path.GetFullPath(runStorePath)}{Environment.NewLine}");
 
                 await using IRunStore runStore = new JsonlRunStore(runStorePath);
-                llmFindings = await pipeline.RunAsync(llmInput, minSeverity, runs, runStore, cancellationToken);
+                llmFindings = await pipeline.RunAsync(llmInput, minSeverity, runs, runStore, modelFilter, cancellationToken);
             }
             else
             {

@@ -71,7 +71,6 @@ def main(argv: list[str] | None = None) -> int:
         "token_cost":            loader.token_cost(df),
         "output_uniqueness":     loader.output_uniqueness(df, field=args.field),
         "run_variance":          loader.run_variance(df, field=args.field),
-        "cross_model_agreement": loader.cross_model_agreement(df, field=args.field),
         "parse_failures":        loader.parse_failures(df),
     }
 

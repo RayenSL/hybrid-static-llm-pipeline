@@ -4,7 +4,7 @@ This folder contains the Python tooling for the thesis. Tools by stage:
 
 | Tool | Input | Purpose |
 |---|---|---|
-| `loader.py` + `compare.py` | Raw run-traces (`runs/*.jsonl`) | Quick sanity tables, run-to-run variance, cross-model agreement |
+| `loader.py` + `compare.py` | Raw run-traces (`runs/*.jsonl`) | Quick sanity tables, run-to-run variance |
 | `select_rating_set.py` | Raw run-traces | Uniform random draw of 1 run per cell + stratified order → `experiments_to_rate.jsonl` (§5.2.5, §B.2.2) |
 | `score_runs.py` | `experiments_to_rate.jsonl` | Apply the rubric (Appendix B): 3-point ordinal × 8 dimensions, multi-label hallucination, mandatory rationales, blinded viewer |
 | `compare_raters.py` | Two `experiments_*.jsonl` files | Cohen's weighted κ + Krippendorff's α for IRR (§B.8) |
@@ -165,7 +165,7 @@ What it computes (per Methodology §4.5–4.6 + Appendix B):
 | Block | Output | What it answers |
 |---|---|---|
 | Overview | `overview.csv`, `n_by_*` | Sample sizes, rater counts, refusal count, rating-time stats |
-| Ordinal proportions | `{dim}_by_{group}.csv` + stacked bar PNG | Poor/Adequate/Good proportion per cell, Wilson 95 % CIs, for each of 8 dimensions × {context_level, model_name, anti_pattern_type} |
+| Ordinal proportions | `{dim}_by_{group}.csv` + stacked bar PNG | Poor/Adequate/Good proportion per cell, Wilson 95 % CIs, for each of 8 dimensions × {context_level, anti_pattern_type} |
 | Hallucinations | `hallucination_overall.csv`, `hallucination_by_context.csv` | Per-category rate with Wilson CIs (multi-label) — RQ1.2 |
 | Quality-attribute | `quality_alignment_by_anti_pattern.csv`, `alignment_rate_by_anti_pattern.csv` | Mean correctly-aligned + incorrect count per anti-pattern — RQ1.3 |
 | H1 baseline | `h1_baseline_vs_hybrid_cliffs_delta.csv` | Paired Cliff's δ comparing `analyser_only` vs each hybrid level, per dimension |
@@ -188,9 +188,6 @@ green for Good. No seaborn.
   `ordinal::clmm`. The `context_monotonicity_long.csv` file is the input to
   that R workflow. Python's `statsmodels` lacks a robust ordinal mixed-effects
   implementation.
-* **Cochran's Q** — the matched-instance test for alignment rate across models
-  (§4.6) is straightforward in R but adds an awkward dependency in Python; do
-  it in R against `alignment_rate_by_anti_pattern.csv`.
 
 ## E. Raw run-trace analysis — `compare.py`
 
@@ -218,7 +215,6 @@ The CLI prints the following standard tables in order:
 | `token_cost` | Mean & sum of input/output tokens + p95 latency per cell |
 | `output_uniqueness` | Per (finding × model): does context level change the answer? |
 | `run_variance` | Per (finding × model × level): pairwise similarity across runs — Req #5 |
-| `cross_model_agreement` | Per (finding × level × run): do different models converge? |
 | `parse_failures` | First 50 rows where structured-output parsing failed |
 
 ## Library usage (notebooks)

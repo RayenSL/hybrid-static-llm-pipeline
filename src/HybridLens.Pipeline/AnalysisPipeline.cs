@@ -28,6 +28,7 @@ public sealed class AnalysisPipeline(
         Severity minSeverity = Severity.Critical,
         int runs = 1,
         IRunStore? runStore = null,
+        IReadOnlySet<string>? models = null,
         CancellationToken cancellationToken = default)
     {
         if (runs < 1) throw new ArgumentOutOfRangeException(nameof(runs));
@@ -42,12 +43,19 @@ public sealed class AnalysisPipeline(
         if (contextConfig.Level == ContextLevel.AnalyserOnly)
             return await RunBaselineAsync(eligible, runStore, cancellationToken);
 
-        if (adapters.Count == 0)
+        // Restrict generation to the requested models; the others stay configured for
+        // their own roles (e.g. the verify-repair applier). Null/empty filter = all models.
+        var activeAdapters = models is null || models.Count == 0
+            ? adapters
+            : adapters.Where(kv => models.Contains(kv.Key))
+                      .ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.OrdinalIgnoreCase);
+
+        if (activeAdapters.Count == 0)
             return [];
 
         // One work item per (finding × model × run-number).
         var workItems = eligible
-            .SelectMany(f => adapters.SelectMany(a =>
+            .SelectMany(f => activeAdapters.SelectMany(a =>
                 Enumerable.Range(1, runs).Select(r =>
                     (Finding: f, ModelName: a.Key, Adapter: a.Value, RunNumber: r))))
             .Select((item, i) => (item.Finding, item.ModelName, item.Adapter, item.RunNumber, Index: i))

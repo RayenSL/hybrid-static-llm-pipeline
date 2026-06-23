@@ -62,6 +62,17 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
 8. Apply/verify for **both** hybrid and LLM-only repairs; analyser-only = no repair (0 by construction).
 
 ### Phase B — Single-model + corpus wiring
+
+> **Status: implemented (2026-06-23).** Rather than trimming `Llm.Models` (item 9), added a `--model`
+> filter to `analyse` (+ a `models` param on `AnalysisPipeline.RunAsync`) so generation can be pinned to
+> `gpt-5.4` while `claude-opus-4-8` stays configured for the verify-repair applier. Cross-model analysis
+> purged: `loader.cross_model_agreement`, the `analyse_results.py` by-model proportions block + the now-unused
+> `MODEL_ORDER`, the `compare.py` caller, and the `analysis/README.md` mentions (incl. the cross-model
+> Cochran's Q note). Architecture tagging (item 11) was already correct in code — the null was stale Ibis
+> data; live runs tag `hybrid` / `analyser_only` / `llm_only`. Item 12 is an invocation detail
+> (`analyse --model gpt-5.4 --target …\Corpus.sln`). Build green, 39 tests pass. The §4.4.1 "across all
+> three models" sentence → thesis punch-list (Phase F).
+
 9. Config: keep only **gpt-5.4** (Azure) as the evaluated model + **claude-opus-4-8** as the applier. Remove gpt-5.4-mini / DeepSeek / Llama / Mistral from the experiment config.
 10. **Purge cross-model**: remove `loader.cross_model_agreement` and any cross-model outputs in `analyse_results.py`; delete the §4.4.1 "across all three models" robustness path.
 11. Ensure `AnalysisPipeline` **populates `Architecture`** (`analyser_only` / `hybrid` / `llm_only`) — currently null in all data.

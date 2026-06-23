@@ -53,6 +53,18 @@ dotnet run --project src/HybridLens.CLI -- analyse --target path/to/Solution.sln
 dotnet run --project src/HybridLens.CLI -- analyse --target path/to/Project.csproj --config path/to/hybridlens.json
 ```
 
+### Single-model run (controlled experiment)
+
+`analyse` uses every model in `Llm.Models` by default. Use `--model` to pin generation to one
+evaluated model while keeping others (e.g. the verify-repair applier) configured:
+
+```bash
+dotnet run --project src/HybridLens.CLI -- analyse \
+    --target path/to/Corpus.sln --context-level minimal --model gpt-5.4 --runs 3
+```
+
+`--model` accepts a comma-separated list; omit it to use all configured models.
+
 ### Help
 
 ```bash

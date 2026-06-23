@@ -10,7 +10,6 @@ files into a tidy pandas DataFrame and exposes the queries the thesis needs:
     - run_variance        : run-to-run stability of the same condition          (Req #5)
     - token_cost          : input/output token + duration aggregates per cell
     - parse_failures      : rows where structured-output parsing failed
-    - cross_model_agreement : how often models agree on the same finding
 
 Design notes:
     * No plotting here — the module returns DataFrames; users plot in notebooks.
@@ -201,26 +200,6 @@ def parse_failures(df: pd.DataFrame, *, limit: int = 50) -> pd.DataFrame:
         df[df["parse_status"] == "failed"][cols]
         .head(limit)
         .reset_index(drop=True)
-    )
-
-
-# ── Cross-model agreement ─────────────────────────────────────────────────────
-
-def cross_model_agreement(df: pd.DataFrame, *, field: str = "parsed_explanation") -> pd.DataFrame:
-    """How many distinct outputs across models for the same (finding × context × run)?
-
-    `unique_outputs == 1` ⇒ all models agreed verbatim (rare, strong signal).
-    `unique_outputs == n_models` ⇒ full disagreement.
-    """
-    df = df.copy()
-    df["_hash"] = df[field].fillna("").apply(_short_hash)
-    return (
-        df.groupby(["file_path", "symbol_name", "line", "context_level", "run_number"])
-          .agg(
-              unique_outputs=("_hash", "nunique"),
-              models_seen=("model_name", "nunique"),
-          )
-          .reset_index()
     )
 
 

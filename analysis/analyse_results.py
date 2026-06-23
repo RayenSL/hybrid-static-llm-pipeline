@@ -8,7 +8,6 @@ What it produces (per Methodology §4.5–4.6 + Appendix B):
   * Descriptive proportions per ordinal level (poor / adequate / good) with
     Wilson 95% confidence intervals, grouped by:
       - context level   (→ H2a–c)
-      - model           (→ H3 cross-model consistency)
       - anti-pattern    (descriptive)
   * Hallucination-category occurrence rates with Wilson CIs (→ RQ1.2).
   * Quality-attribute alignment & incorrect-mention counts per anti-pattern
@@ -71,7 +70,6 @@ HALLUCINATION_CATEGORIES = [
 ]
 
 CONTEXT_LEVEL_ORDER = ["analyser_only", "minimal", "structural", "relational", "full"]
-MODEL_ORDER = ["static-analyser", "gpt-5.4", "gpt-5.4-mini", "DeepSeek-V4-Pro"]
 
 # Plot config — sober defaults, no seaborn.
 FIG_SIZE = (8, 5)
@@ -650,9 +648,9 @@ def main(argv: list[str] | None = None) -> int:
 
     overview(df, tables_dir)
 
-    # Per-dimension stacked proportions, three groupings (matches the thesis tables).
+    # Per-dimension stacked proportions (matches the thesis tables). A single frontier model
+    # is used (§5.2.2), so there is no by-model grouping — the cross-model breakdown is removed.
     proportions_block(df, "context_level",    CONTEXT_LEVEL_ORDER, tables_dir, figures_dir, rotate=False)
-    proportions_block(df, "model_name",       MODEL_ORDER,         tables_dir, figures_dir, rotate=True)
     proportions_block(df, "anti_pattern_type", [],                 tables_dir, figures_dir, rotate=True)
 
     # Hallucinations.
