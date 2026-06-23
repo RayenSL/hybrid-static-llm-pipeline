@@ -4,6 +4,7 @@ using HybridLens.Core.Abstractions;
 using HybridLens.Core.Configuration;
 using HybridLens.LLM;
 using HybridLens.Pipeline;
+using HybridLens.StaticAnalysis;
 using HybridLens.StaticAnalysis.Workspace;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,7 @@ var services = new ServiceCollection()
     .AddSingleton(configuration.GetSection("Llm").Get<LlmConfig>()               ?? new LlmConfig())
     .AddSingleton(configuration.GetSection("Pipeline").Get<PipelineConfig>()     ?? new PipelineConfig())
     .AddSingleton<WorkspaceLoader>()
+    .AddSingleton<IRepairMeasurer, RoslynRepairMeasurer>()
     .AddSingleton<IContextBuilder, HybridLens.ContextBuilder.ContextBuilder>()
     .AddSingleton<ILlmAdapterFactory, LlmAdapterFactory>()
     .AddSingleton<IReadOnlyDictionary<string, ILlmAdapter>>(sp =>
@@ -49,7 +51,9 @@ if (args.Length == 0)
 
 var root = new RootCommand("HybridLens — hybrid static + LLM .NET code analyser")
 {
-    AnalyseCommand.Build(services)
+    AnalyseCommand.Build(services),
+    LlmOnlyCommand.Build(services),
+    VerifyRepairCommand.Build(services)
 };
 
 return await root.Parse(args).InvokeAsync();

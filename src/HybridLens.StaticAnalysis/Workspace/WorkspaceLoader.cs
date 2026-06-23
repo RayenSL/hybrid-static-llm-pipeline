@@ -11,7 +11,9 @@ public sealed class WorkspaceLoader : IDisposable
     private static readonly string[] TestProjectSuffixes =
     [
         ".Tests", ".IntegrationTests", ".EndToEndTests", ".EndToEndTestsSharding",
-        ".TestInfrastructure", ".Specs"
+        ".TestInfrastructure", ".Specs",
+        // Dutch-named test projects (Ibis codebases)
+        ".IntegratieTests", ".EindeTotEindeTests", ".UnitTests"
     ];
 
     // Diagnostics that are purely noise — they don't affect whether a project loads

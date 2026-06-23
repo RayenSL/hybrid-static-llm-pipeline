@@ -1,10 +1,8 @@
 using System.Diagnostics;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using HybridLens.Core.Abstractions;
 using HybridLens.Core.Configuration;
 using HybridLens.Core.Models;
-using HybridLens.Core.QualityAttributes;
 
 namespace HybridLens.Pipeline;
 
@@ -97,8 +95,9 @@ public sealed class AnalysisPipeline(
 
             var (explanation, qualityImpact, remediation) = AnalyserBaseline.BuildFor(finding);
             var rawOutput = AnalyserBaseline.ComposeRawOutput(finding);
-            var mentioned = ExtractMentionedAttributes(rawOutput);
-            var alignment = ComputeAlignment(ParseStatus.Ok, finding.ExpectedQualityAttributes, mentioned);
+            var mentioned = QualityAttributeExtraction.ExtractMentioned(rawOutput);
+            var alignment = QualityAttributeExtraction.ComputeAlignment(
+                parsedOk: true, finding.ExpectedQualityAttributes, mentioned);
 
             var llmFinding = new LlmFinding
             {
@@ -224,8 +223,9 @@ public sealed class AnalysisPipeline(
         // Quality-attribute extraction & alignment scoring.
         // Scan the full raw output so attributes mentioned in any section (explanation,
         // quality_impact, remediation) count toward the lexical match.
-        var mentioned = ExtractMentionedAttributes(response.Content);
-        var alignment = ComputeAlignment(parsed.Status, finding.ExpectedQualityAttributes, mentioned);
+        var mentioned = QualityAttributeExtraction.ExtractMentioned(response.Content);
+        var alignment = QualityAttributeExtraction.ComputeAlignment(
+            parsed.Status == ParseStatus.Ok, finding.ExpectedQualityAttributes, mentioned);
 
         var llmFinding = new LlmFinding
         {
@@ -304,6 +304,8 @@ public sealed class AnalysisPipeline(
             ContextLevel                  = contextConfig.Level,
             ModelName                     = modelName,
             PromptVersion                 = promptVersion,
+            Architecture                  = contextConfig.Level == ContextLevel.AnalyserOnly
+                                                ? "analyser_only" : "hybrid",
             RawSystemPrompt               = rawSystem,
             RawUserPrompt                 = rawUser,
             RawLlmOutput                  = rawOutput,
@@ -371,94 +373,4 @@ public sealed class AnalysisPipeline(
 
     // ── Quality-attribute extraction & alignment (Req: ISO/IEC 25010 mapping) ──
 
-    /// <summary>
-    /// Synonym map per thesis §B.7.3. Each entry maps the canonical (British) ISO/IEC 25010
-    /// attribute to the alternative phrasings raters are instructed to treat as equivalent.
-    /// The lexical scanner uses these so that an LLM saying "maintenance burden" or
-    /// "coupling" still credits Maintainability / Modularity in the auto-alignment metric.
-    /// </summary>
-    private static readonly IReadOnlyDictionary<string, string[]> AttributeSynonyms =
-        new Dictionary<string, string[]>(StringComparer.Ordinal)
-        {
-            [QualityAttributeMap.Maintainability] = new[]
-            {
-                "Maintainability", "maintenance burden", "maintenance cost",
-                "easy to maintain", "hard to maintain", "difficult to maintain"
-            },
-            [QualityAttributeMap.Modifiability] = new[]
-            {
-                "Modifiability", "changeability", "easy to change",
-                "hard to change", "impact of changes"
-            },
-            [QualityAttributeMap.Analysability] = new[]
-            {
-                "Analysability", "Analyzability", "understandability",
-                "readability", "comprehensibility", "cognitive complexity"
-            },
-            [QualityAttributeMap.Testability] = new[]
-            {
-                "Testability", "easy to test", "hard to test",
-                "unit test coverage difficulty", "testing difficulty"
-            },
-            [QualityAttributeMap.Modularity] = new[]
-            {
-                "Modularity", "separation of concerns", "coupling", "cohesion"
-            },
-            [QualityAttributeMap.Security] = new[]
-            {
-                "Security", "vulnerability", "attack surface", "security risk"
-            },
-            [QualityAttributeMap.Reliability] = new[]
-            {
-                "Reliability", "stability", "fault tolerance", "robustness"
-            },
-            [QualityAttributeMap.Compatibility] = new[]
-            {
-                "Compatibility", "interoperability", "deprecation", "version compatibility"
-            }
-        };
-
-    /// <summary>
-    /// Lexical scan of the LLM output for any ISO/IEC 25010 attribute name or
-    /// rubric-approved synonym (§B.7.3). Scans the entire raw output so attributes
-    /// mentioned in any section (explanation, quality_impact, remediation) count.
-    /// Returns canonical (British) names, alphabetically ordered.
-    /// </summary>
-    private static IReadOnlyList<string> ExtractMentionedAttributes(string? text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-            return Array.Empty<string>();
-
-        var found = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var (canonical, terms) in AttributeSynonyms)
-        {
-            foreach (var term in terms)
-            {
-                // Word-boundary match. Multi-word terms ("maintenance burden") are matched
-                // case-insensitively with the boundaries on the first and last word only.
-                if (Regex.IsMatch(text, $@"\b{Regex.Escape(term)}\b", RegexOptions.IgnoreCase))
-                {
-                    found.Add(canonical);
-                    break;
-                }
-            }
-        }
-
-        return found.OrderBy(s => s, StringComparer.Ordinal).ToList();
-    }
-
-    /// <summary>
-    /// 1 → at least one expected attribute is mentioned;
-    /// 0 → none are mentioned;
-    /// null → parsing failed or no usable LLM output (cannot be evaluated).
-    /// </summary>
-    private static int? ComputeAlignment(
-        ParseStatus parseStatus,
-        IReadOnlyList<string> expected,
-        IReadOnlyList<string> mentioned)
-    {
-        if (parseStatus != ParseStatus.Ok) return null;
-        if (expected.Count == 0)           return null;   // unknown anti-pattern
-        return expected.Any(e => mentioned.Contains(e, StringComparer.OrdinalIgnoreCase)) ? 1 : 0;
-    }
 }

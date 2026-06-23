@@ -60,6 +60,36 @@ dotnet run --project src/HybridLens.CLI -- --help
 dotnet run --project src/HybridLens.CLI -- analyse --help
 ```
 
+### Verify repairs (objective repair outcome)
+
+`verify-repair` takes the repairs an LLM produced (the `parsed_suggested_fix` of each hybrid /
+matched llm-only run), applies each one strict-literally with a non-evaluated Claude-family
+**applier**, rebuilds the corpus, and re-measures the metric that triggered the detection. Each
+candidate is scored on the ladder `unapplicable < build_fails < builds_unresolved < resolved`,
+plus a binary `verified_repair_success` (applies ∧ builds ∧ metric-resolved).
+
+```bash
+dotnet run --project src/HybridLens.CLI -- verify-repair \
+    --from runs/20260101-120000.jsonl \
+    --target path/to/Corpus.sln \
+    --applier claude-opus-4-8 \
+    --out runs/verified.jsonl
+```
+
+The applier must be a Claude-family model **different from the evaluated model** (so it never
+scores code it completed itself). Add it as a model entry in `appsettings.local.json`:
+
+```json
+// appsettings.local.json
+{
+  "Llm": {
+    "Models": {
+      "claude-opus-4-8": { "Provider": "claude", "Model": "claude-opus-4-8", "ApiKey": "sk-ant-..." }
+    }
+  }
+}
+```
+
 ## Configuration
 
 Configuration is loaded in the following order (later sources override earlier ones):

@@ -39,6 +39,21 @@ public sealed record RunRecord
     public required string           ModelName        { get; init; }
     public required string           PromptVersion    { get; init; }
 
+    /// <summary>Architecture arm: "analyser_only", "hybrid", or "llm_only" (§4.4.1).</summary>
+    public          string?          Architecture     { get; init; }
+
+    // ── LLM-only detection fields (null for analyser/hybrid rows) ────────────
+    /// <summary>Symbol the LLM-only model reported for this self-detected finding.</summary>
+    public          string?          LlmReportedSymbol { get; init; }
+    /// <summary>Line the LLM-only model reported.</summary>
+    public          int?             LlmReportedLine   { get; init; }
+    /// <summary>RunId of the known instance this LLM-only finding matched, or null if spurious.</summary>
+    public          string?          MatchedInstanceId { get; init; }
+    /// <summary>True when an LLM-only finding matched no known instance (extra/spurious detection).</summary>
+    public          bool?            IsSpurious        { get; init; }
+    /// <summary>True when the prompt input was likely truncated by the model's context window (§4.8).</summary>
+    public          bool?            ContextTruncated  { get; init; }
+
     // ── Raw artefacts (full audit trail) ─────────────────────────────────────
     public required string           RawSystemPrompt  { get; init; }
     public required string           RawUserPrompt    { get; init; }
@@ -67,6 +82,28 @@ public sealed record RunRecord
     /// <summary>Free-text rater notes; populated by <c>score_runs.py</c> on second-rater review. Always null at write time.</summary>
     public          string?                QualityAttributeNotes          { get; init; }
 
+    // ── Verified-repair outcome (objective; §4.5.1, §4.7.1) ──────────────────
+    // Populated only on verification rows produced by the verify-repair step;
+    // null on every generation row, so the addition is backward-compatible.
+    /// <summary>RunId of the generation row whose repair this row verifies (links back to the hybrid / llm-only run).</summary>
+    public          string?          SourceRunId              { get; init; }
+    /// <summary>Non-evaluated Claude-family model that applied the repair strict-literally (§4.3, §4.7.1).</summary>
+    public          string?          ApplierModel             { get; init; }
+    /// <summary>Frozen applier prompt version (Appendix A.1).</summary>
+    public          string?          ApplierPromptVersion     { get; init; }
+    /// <summary>True/false the applier could apply the repair literally; null when this is not a verification row.</summary>
+    public          bool?            RepairApplicable         { get; init; }
+    /// <summary>Applier's reason when the repair was too vague to apply literally; null otherwise.</summary>
+    public          string?          RepairUnapplicableReason { get; init; }
+    /// <summary>True when the applied solution compiled (the build gate). Null when unapplicable or not a verification row.</summary>
+    public          bool?            BuildPassed              { get; init; }
+    /// <summary>Triggering metric re-measured on the applied source. Null when the build failed, the repair was unapplicable, or the instance resolved away.</summary>
+    public          IReadOnlyDictionary<string, double>? RemeasuredMetrics { get; init; }
+    /// <summary>Ordinal ladder: unapplicable &lt; build_fails &lt; builds_unresolved &lt; resolved (§4.5.1).</summary>
+    public          VerifiedRepairOutcome? VerifiedRepairLadder { get; init; }
+    /// <summary>Binary headline outcome = applies ∧ builds ∧ metric-resolved.</summary>
+    public          bool?            VerifiedRepairSuccess    { get; init; }
+
     // ── Failure & parse status ───────────────────────────────────────────────
     public required ParseStatus      ParseStatus      { get; init; }
     /// <summary>Null on success. Non-null categorises the failure for honest reporting (Req #8).</summary>
@@ -94,4 +131,21 @@ public enum ErrorStatus
     ContextExtractionFailure,
     Cancelled,
     Unknown
+}
+
+/// <summary>
+/// Ordinal verified-repair ladder (§4.5.1). Higher is better; declared in ascending order
+/// so the values sort naturally. The binary headline outcome <c>verified_repair_success</c>
+/// is true only at <see cref="Resolved"/>. Serialised snake_case (e.g. "builds_unresolved").
+/// </summary>
+public enum VerifiedRepairOutcome
+{
+    /// <summary>Applier judged the repair too vague to apply literally.</summary>
+    Unapplicable,
+    /// <summary>Repair applied, but the resulting solution did not compile.</summary>
+    BuildFails,
+    /// <summary>Applied and compiled, but the triggering metric still fires.</summary>
+    BuildsUnresolved,
+    /// <summary>Applied, compiled, and the triggering metric no longer fires.</summary>
+    Resolved
 }

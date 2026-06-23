@@ -27,6 +27,7 @@
     <ItemGroup>
         <ProjectReference Include="..\HybridLens.Core\HybridLens.Core.csproj" />
         <ProjectReference Include="..\HybridLens.StaticAnalysis\HybridLens.StaticAnalysis.csproj" />
+        <ProjectReference Include="..\HybridLens.Pipeline\HybridLens.Pipeline.csproj" />
     </ItemGroup>
 
 </Project>
