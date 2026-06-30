@@ -71,6 +71,11 @@ HALLUCINATION_CATEGORIES = [
 
 CONTEXT_LEVEL_ORDER = ["analyser_only", "minimal", "structural", "relational", "full"]
 
+# Verified-repair ladder (ascending; `resolved` is the only success). Hybrid context
+# levels in order for the H2b trend.
+LADDER_ORDER = ["unapplicable", "build_fails", "builds_unresolved", "resolved"]
+HYBRID_CONTEXT_ORDER = ["minimal", "structural", "relational", "full"]
+
 # Plot config — sober defaults, no seaborn.
 FIG_SIZE = (8, 5)
 DPI = 150
@@ -117,7 +122,7 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
     if "context_level" in df.columns:
         df["context_level"] = df["context_level"].astype(str).str.strip().str.lower()
 
-    # Derive architecture if absent (older rows): analyser_only / hybrid / llm_only.
+    # Derive architecture if absent (older rows): analyser_only / hybrid / agentic.
     if "architecture" not in df.columns:
         def _derive_arch(row):
             if str(row.get("model_name", "")).lower() == "static-analyser": return "analyser_only"
@@ -142,9 +147,16 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
 
     # Booleans. pandas may read these as float (1.0/0.0/NaN) when some rows omit the
     # field, so handle numeric truthiness explicitly (NaN → False).
-    for col in ("is_spurious", "context_truncated", "refusal_detected"):
+    for col in ("context_truncated", "refusal_detected"):
         if col in df.columns:
             df[col] = df[col].map(_to_bool)
+
+    # is_spurious is TRI-STATE and MUST stay so: agentic detection-finding rows carry true/false, while
+    # agentic verified-repair rows (and hybrid/analyser rows) carry null. The agentic analysis separates
+    # finding rows (non-null) from verified-repair rows (null) on exactly this signal — collapsing null→False
+    # would silently fold verified-repair rows into the detection set and corrupt recall/precision + Table 5.5.
+    if "is_spurious" in df.columns:
+        df["is_spurious"] = df["is_spurious"].map(_to_bool_or_na)
 
     # Ensure hallucination_categories is a Python list per row (JSONL gives lists,
     # CSV may give strings).
@@ -159,6 +171,15 @@ def _to_bool(v) -> bool:
     if isinstance(v, (int, float)):
         return False if (isinstance(v, float) and math.isnan(v)) else bool(v)
     return str(v).strip().lower() in ("true", "1", "yes")
+
+
+def _to_bool_or_na(v):
+    """Like _to_bool but PRESERVES null as NaN (float) rather than collapsing it to False — used for the
+    tri-state is_spurious column. NaN keeps .notna()/==True/==False behaving correctly and, unlike pd.NA,
+    is safe inside boolean masks."""
+    if v is None: return float("nan")
+    if isinstance(v, float) and math.isnan(v): return float("nan")
+    return _to_bool(v)
 
 
 def _ensure_list(v) -> list:
@@ -494,32 +515,44 @@ def context_monotonicity_table(df: pd.DataFrame, tables_dir: Path) -> None:
     save_table(pd.DataFrame(rows), tables_dir, "context_monotonicity_long")
 
 
-# ── LLM-only architecture arm (H1b + recall) ─────────────────────────────────
+# ── Agentic architecture arm (H1b + recall) ──────────────────────────────────
+#
+# The agentic run trace carries TWO row types, both architecture == "agentic":
+#   • finding rows      — is_spurious is non-null (True/False); feed recall + precision and the
+#                         H1b explanation rubric;
+#   • verified-repair rows — verified_repair_ladder is non-null, is_spurious is null; feed Table 5.3.
+# The helpers below restrict to finding rows so verified rows never inflate detection counts.
 
 FRONTIER_MODEL = "gpt-5.4"
 
 
-def llm_only_recall(df: pd.DataFrame, tables_dir: Path, figures_dir: Path) -> None:
+def _agentic_findings(df: pd.DataFrame) -> pd.DataFrame:
+    """Agentic detection finding rows only (excludes the per-instance verified-repair rows)."""
+    a = df[df["architecture"] == "agentic"]
+    return a[a["is_spurious"].notna()] if "is_spurious" in a.columns else a.iloc[0:0]
+
+
+def agentic_recall(df: pd.DataFrame, tables_dir: Path, figures_dir: Path) -> None:
     """
-    LLM-only detection recall (§4.5.1): of the known instances, what fraction did the
-    ungrounded LLM-only arm independently recover? Reported per anti-pattern with a
-    Wilson 95% CI. Known set = distinct instances seen by the grounded arms.
+    Agentic detection recall (§4.5.1, Table 5.6): of the known instances, what fraction did the
+    ungrounded agentic arm independently recover from the unannotated file? Reported per anti-pattern
+    with a Wilson 95% CI. Known set = distinct instances seen by the grounded arms.
     """
     if "architecture" not in df.columns or "instance_key" not in df.columns:
-        warnings.warn("llm-only recall: missing architecture/instance_key — skipped")
+        warnings.warn("agentic recall: missing architecture/instance_key — skipped")
         return
-    if "llm_only" not in set(df["architecture"]):
-        warnings.warn("llm-only recall: no llm_only rows — skipped")
+    if "agentic" not in set(df["architecture"]):
+        warnings.warn("agentic recall: no agentic rows — skipped")
         return
 
     # Known instances = those evaluated by the grounded arms (hybrid + analyser).
-    grounded = df[df["architecture"] != "llm_only"]
+    grounded = df[df["architecture"] != "agentic"]
     known = grounded[["anti_pattern_type", "instance_key"]].drop_duplicates()
 
-    llm = df[df["architecture"] == "llm_only"]
+    findings = _agentic_findings(df)
     matched_keys = set(
-        llm.loc[llm.get("is_spurious", False) != True, "matched_instance_id"].dropna()
-    ) if "matched_instance_id" in llm.columns else set()
+        findings.loc[findings["is_spurious"] == False, "matched_instance_id"].dropna()
+    ) if "matched_instance_id" in findings.columns else set()
 
     rows: list[dict] = []
     for ap, grp in known.groupby("anti_pattern_type"):
@@ -541,7 +574,7 @@ def llm_only_recall(df: pd.DataFrame, tables_dir: Path, figures_dir: Path) -> No
                  "ci_lo": round(lo, 4), "ci_hi": round(hi, 4)})
 
     table = pd.DataFrame(rows)
-    save_table(table, tables_dir, "llm_only_recall")
+    save_table(table, tables_dir, "agentic_recall")
 
     plot = table[table["anti_pattern_type"] != "ALL"]
     if not plot.empty:
@@ -552,45 +585,46 @@ def llm_only_recall(df: pd.DataFrame, tables_dir: Path, figures_dir: Path) -> No
                     capsize=4, ecolor="black", linewidth=1)
         ax.set_ylim(0, 1)
         ax.set_ylabel("Recall (95% Wilson CI)")
-        ax.set_title("LLM-only detection recall by anti-pattern")
+        ax.set_title("Agentic detection recall by anti-pattern")
         ax.tick_params(axis="x", labelrotation=20)
-        save_figure(fig, figures_dir, "llm_only_recall")
+        save_figure(fig, figures_dir, "agentic_recall")
 
 
-def llm_only_spurious(df: pd.DataFrame, tables_dir: Path) -> None:
-    """Spurious LLM-only detections (matched no known instance) — descriptive only (§4.5.1)."""
+def agentic_spurious(df: pd.DataFrame, tables_dir: Path) -> None:
+    """Spurious agentic detections (matched no known instance) — precision evidence, descriptive (§4.5.1)."""
     if "architecture" not in df.columns:
         return
-    llm = df[df["architecture"] == "llm_only"]
-    if llm.empty or "is_spurious" not in llm.columns:
+    findings = _agentic_findings(df)
+    if findings.empty or "is_spurious" not in findings.columns:
         return
-    spurious = llm[llm["is_spurious"] == True]
+    spurious = findings[findings["is_spurious"] == True]
     summary = pd.DataFrame([{
-        "llm_only_findings": len(llm),
-        "matched": int((llm["is_spurious"] == False).sum()),
+        "agentic_findings": len(findings),
+        "matched": int((findings["is_spurious"] == False).sum()),
         "spurious": len(spurious),
-        "spurious_rate": round(len(spurious) / len(llm), 4) if len(llm) else float("nan"),
+        "spurious_rate": round(len(spurious) / len(findings), 4) if len(findings) else float("nan"),
     }])
-    save_table(summary, tables_dir, "llm_only_spurious_summary")
+    save_table(summary, tables_dir, "agentic_spurious_summary")
 
     if "hallucination_categories" in spurious.columns and not spurious.empty:
         rows = []
         for cat in HALLUCINATION_CATEGORIES:
             k = int(spurious["hallucination_categories"].apply(lambda s: cat in s).sum())
             rows.append({"category": cat, "count": k})
-        save_table(pd.DataFrame(rows), tables_dir, "llm_only_spurious_hallucinations")
+        save_table(pd.DataFrame(rows), tables_dir, "agentic_spurious_hallucinations")
 
 
-def h1b_hybrid_vs_llmonly(df: pd.DataFrame, tables_dir: Path) -> None:
+def h1b_hybrid_vs_agentic(df: pd.DataFrame, tables_dir: Path) -> None:
     """
-    H1b: hybrid (Minimal, frontier) vs LLM-only, frontier model, on the instances
-    LLM-only recovered. Paired Cliff's δ per quality dimension (δ>0 → hybrid > LLM-only).
+    H1b (Table 5.5): hybrid (Minimal, frontier) vs agentic, frontier model, on the instances the
+    agentic arm recovered (matched finding rows only). Paired Cliff's δ per quality dimension
+    (δ>0 → hybrid > agentic).
     """
     if "architecture" not in df.columns or "instance_key" not in df.columns:
         warnings.warn("H1b: missing architecture/instance_key — skipped")
         return
-    if "llm_only" not in set(df["architecture"]):
-        warnings.warn("H1b: no llm_only rows — skipped")
+    if "agentic" not in set(df["architecture"]):
+        warnings.warn("H1b: no agentic rows — skipped")
         return
 
     df = df.copy()
@@ -601,9 +635,11 @@ def h1b_hybrid_vs_llmonly(df: pd.DataFrame, tables_dir: Path) -> None:
     hybrid = df[(df["architecture"] == "hybrid") &
                 (df["context_level"] == "minimal") &
                 (df["model_name"] == FRONTIER_MODEL)]
-    llm = df[(df["architecture"] == "llm_only") & (df.get("is_spurious", False) != True)]
+    # Recovered instances only: matched agentic finding rows (is_spurious == False excludes both
+    # spurious findings and the per-instance verified-repair rows, which carry is_spurious == null).
+    agentic = df[(df["architecture"] == "agentic") & (df.get("is_spurious", False) == False)]
 
-    common = set(hybrid["instance_key"]) & set(llm["instance_key"])
+    common = set(hybrid["instance_key"]) & set(agentic["instance_key"])
     if not common:
         warnings.warn("H1b: no overlapping recovered instances — skipped")
         return
@@ -614,14 +650,157 @@ def h1b_hybrid_vs_llmonly(df: pd.DataFrame, tables_dir: Path) -> None:
         if col not in df.columns:
             continue
         x = hybrid[hybrid["instance_key"].isin(common)][col].dropna().tolist()
-        y = llm[llm["instance_key"].isin(common)][col].dropna().tolist()
-        delta, label = cliffs_delta(x, y)  # δ>0 → hybrid > llm_only
+        y = agentic[agentic["instance_key"].isin(common)][col].dropna().tolist()
+        delta, label = cliffs_delta(x, y)  # δ>0 → hybrid > agentic
         rows.append({
             "dimension": dim, "n_instances": len(common),
-            "n_hybrid": len(x), "n_llm_only": len(y),
+            "n_hybrid": len(x), "n_agentic": len(y),
             "cliffs_delta": round(delta, 4), "magnitude": label,
         })
-    save_table(pd.DataFrame(rows), tables_dir, "h1b_hybrid_vs_llmonly_cliffs_delta")
+    save_table(pd.DataFrame(rows), tables_dir, "h1b_hybrid_vs_agentic_cliffs_delta")
+
+
+# ── Verified-repair (objective repair outcome, §4.5.1 / Tables 5.3 & 5.7) ─────
+
+def load_verified(pattern: str) -> pd.DataFrame:
+    """Load + clean the verify-repair JSONL(s). Accepts a path or glob. Keeps only rows
+    carrying a verified-repair verdict and normalises the ladder + binary success."""
+    import glob as _glob
+    paths = sorted(_glob.glob(pattern)) or ([pattern] if Path(pattern).exists() else [])
+    frames = [load(Path(p)) for p in paths]
+    frames = [f for f in frames if not f.empty]
+    if not frames:
+        return pd.DataFrame()
+    df = clean(pd.concat(frames, ignore_index=True))
+    if "verified_repair_ladder" not in df.columns:
+        return pd.DataFrame()
+    df = df[df["verified_repair_ladder"].notna()].copy()
+    df["verified_repair_ladder"] = df["verified_repair_ladder"].astype(str).str.strip().str.lower()
+    df["verified_repair_success"] = (
+        df["verified_repair_success"].map(_to_bool) if "verified_repair_success" in df.columns else False
+    )
+    return df
+
+
+def _ladder_counts(sub: pd.DataFrame) -> dict:
+    col = sub["verified_repair_ladder"] if "verified_repair_ladder" in sub.columns else pd.Series(dtype=str)
+    return {lvl: int((col == lvl).sum()) for lvl in LADDER_ORDER}
+
+
+def verified_repair_by_architecture(df: pd.DataFrame, tables_dir: Path) -> None:
+    """Table 5.3: verified-repair success by architecture at Minimal context (frontier model),
+    with the ordinal-ladder breakdown. Analyser-only emits no repair → 0 by construction. The agentic
+    arm is scored on its final edited solution (no separate applier). McNemar contrasts the paired
+    hybrid-vs-agentic binary outcome (H1b); the agentic_recovered column allows restricting that
+    contrast to instances both arms recovered, per the §4.4.1 H1b objective-repair register."""
+    contrast = df[(df["model_name"] == FRONTIER_MODEL) & (df["context_level"] == "minimal")]
+    rows = []
+    for arch in ("analyser_only", "hybrid", "agentic"):
+        adf = contrast[contrast["architecture"] == arch]
+        n = len(adf)
+        k = int(adf["verified_repair_success"].sum()) if n else 0
+        lo, hi = wilson_ci(k, n)
+        rows.append({
+            "architecture": arch,
+            "n": n,
+            "resolved": k,
+            "success_pct": round(100 * k / n, 2) if n else 0.0,
+            "ci_lo_pct": round(100 * lo, 2) if n else float("nan"),
+            "ci_hi_pct": round(100 * hi, 2) if n else float("nan"),
+            **_ladder_counts(adf),
+            "note": "no repair (0 by construction)" if arch == "analyser_only" else "",
+        })
+    save_table(pd.DataFrame(rows), tables_dir, "verified_repair_by_architecture")
+    save_table(mcnemar_paired(contrast, "hybrid", "agentic"),
+               tables_dir, "verified_repair_mcnemar_hybrid_vs_agentic")
+
+
+def mcnemar_paired(df: pd.DataFrame, arch_a: str, arch_b: str) -> pd.DataFrame:
+    """McNemar on the paired binary verified-repair outcome of two architectures, matched per
+    instance_key. Exact binomial on the discordant pairs when they are few; continuity-corrected
+    chi-square otherwise."""
+    if "instance_key" not in df.columns:
+        return pd.DataFrame([{"arch_a": arch_a, "arch_b": arch_b, "note": "no instance_key column"}])
+    a = df[df["architecture"] == arch_a].groupby("instance_key")["verified_repair_success"].max()
+    b = df[df["architecture"] == arch_b].groupby("instance_key")["verified_repair_success"].max()
+    paired = pd.concat([a.rename("a"), b.rename("b")], axis=1).dropna().astype(bool)
+    a_yes_b_no = int((paired["a"] & ~paired["b"]).sum())
+    a_no_b_yes = int((~paired["a"] & paired["b"]).sum())
+    stat, p = _mcnemar_stat(a_yes_b_no, a_no_b_yes)
+    return pd.DataFrame([{
+        "arch_a": arch_a, "arch_b": arch_b, "n_pairs": len(paired),
+        "a_yes_b_no": a_yes_b_no, "a_no_b_yes": a_no_b_yes,
+        "statistic": None if stat != stat else round(stat, 4),
+        "p_value":   None if p != p else round(p, 4),
+    }])
+
+
+def _mcnemar_stat(b: int, c: int) -> tuple[float, float]:
+    n = b + c
+    if n == 0:
+        return (float("nan"), float("nan"))
+    if n < 25:  # exact binomial on the discordant pairs
+        from scipy.stats import binomtest
+        return (float(min(b, c)), float(binomtest(min(b, c), n, 0.5).pvalue))
+    from scipy.stats import chi2
+    stat = (abs(b - c) - 1) ** 2 / n  # continuity-corrected
+    return (float(stat), float(1 - chi2.cdf(stat, 1)))
+
+
+def verified_repair_by_context(df: pd.DataFrame, tables_dir: Path) -> None:
+    """Table 5.7: verified-repair success by context level (hybrid arm, frontier model), with a
+    Cochran–Armitage trend test and a long-format CSV (one row per generation) for the binomial
+    GLMM fitted in R (H2b)."""
+    sub = df[(df["architecture"] == "hybrid") & (df["model_name"] == FRONTIER_MODEL)]
+    rows, long_rows = [], []
+    for ord_i, lvl in enumerate(HYBRID_CONTEXT_ORDER):
+        ldf = sub[sub["context_level"] == lvl]
+        n = len(ldf)
+        k = int(ldf["verified_repair_success"].sum()) if n else 0
+        lo, hi = wilson_ci(k, n)
+        rows.append({
+            "context_level": lvl, "context_ord": ord_i, "n": n, "resolved": k,
+            "success_pct": round(100 * k / n, 2) if n else float("nan"),
+            "ci_lo_pct": round(100 * lo, 2) if n else float("nan"),
+            "ci_hi_pct": round(100 * hi, 2) if n else float("nan"),
+        })
+        for _, r in ldf.iterrows():
+            long_rows.append({
+                "instance_key": r.get("instance_key"),
+                "context_level": lvl, "context_ord": ord_i,
+                "verified_repair_success": int(bool(r["verified_repair_success"])),
+            })
+    by_ctx = pd.DataFrame(rows)
+    save_table(by_ctx, tables_dir, "verified_repair_by_context")
+    save_table(pd.DataFrame(long_rows), tables_dir, "verified_repair_context_long")
+    save_table(cochran_armitage(by_ctx), tables_dir, "verified_repair_context_trend")
+
+
+def cochran_armitage(by_ctx: pd.DataFrame) -> pd.DataFrame:
+    """Cochran–Armitage linear-trend test on the resolved proportion across the ordered context
+    levels (scores = ordinal index). A simpler corroborating check for the R GLMM (H2b)."""
+    valid = by_ctx[by_ctx["n"] > 0]
+    if len(valid) < 2:
+        return pd.DataFrame([{"test": "cochran_armitage", "z": float("nan"),
+                              "p_value": float("nan"), "groups": len(valid),
+                              "note": "need >=2 non-empty levels"}])
+    t   = valid["context_ord"].to_numpy(dtype=float)
+    n_i = valid["n"].to_numpy(dtype=float)
+    x_i = valid["resolved"].to_numpy(dtype=float)
+    N = n_i.sum()
+    p_bar = x_i.sum() / N
+    t_bar = (n_i * t).sum() / N
+    num = (x_i * (t - t_bar)).sum()
+    var = p_bar * (1 - p_bar) * (n_i * (t - t_bar) ** 2).sum()
+    if var <= 0:
+        return pd.DataFrame([{"test": "cochran_armitage", "z": float("nan"),
+                              "p_value": float("nan"), "groups": len(valid),
+                              "note": "degenerate (zero variance)"}])
+    from scipy.stats import norm
+    z = num / math.sqrt(var)
+    p = 2 * (1 - norm.cdf(abs(z)))
+    return pd.DataFrame([{"test": "cochran_armitage", "z": round(z, 4),
+                          "p_value": round(p, 4), "groups": len(valid), "note": ""}])
 
 
 # ── Driver ───────────────────────────────────────────────────────────────────
@@ -634,6 +813,9 @@ def main(argv: list[str] | None = None) -> int:
                         help="Path to experiments.jsonl produced by score_runs.py")
     parser.add_argument("--output", "-o", default=Path("output"), type=Path,
                         help="Output root directory (default: ./output)")
+    parser.add_argument("--verified", type=str, default=None,
+                        help="Path or glob to verify-repair JSONL(s); enables the verified-repair "
+                             "tables (5.3 by architecture, 5.7 by context level).")
     args = parser.parse_args(argv)
 
     if not args.input.exists():
@@ -663,15 +845,25 @@ def main(argv: list[str] | None = None) -> int:
     # row is the headline H1a contrast; the others are the robustness sweep.
     h1_baseline_comparison(df, tables_dir)
 
-    # H1b: hybrid (Minimal, frontier) vs LLM-only on recovered instances.
-    h1b_hybrid_vs_llmonly(df, tables_dir)
+    # H1b: hybrid (Minimal, frontier) vs agentic on recovered instances.
+    h1b_hybrid_vs_agentic(df, tables_dir)
 
-    # LLM-only detection recall + spurious-detection characterisation.
-    llm_only_recall(df, tables_dir, figures_dir)
-    llm_only_spurious(df, tables_dir)
+    # Agentic detection recall + spurious-detection (precision) characterisation.
+    agentic_recall(df, tables_dir, figures_dir)
+    agentic_spurious(df, tables_dir)
 
     # Long-format proportions for the CLMM in R.
     context_monotonicity_table(df, tables_dir)
+
+    # Verified-repair outcomes (objective; Tables 5.3 & 5.7). Optional second input.
+    if args.verified:
+        vdf = load_verified(args.verified)
+        if vdf.empty:
+            print(f"warning: no verified-repair rows matched {args.verified}", file=sys.stderr)
+        else:
+            print(f"loaded {len(vdf)} verified-repair row(s) from {args.verified}")
+            verified_repair_by_architecture(vdf, tables_dir)
+            verified_repair_by_context(vdf, tables_dir)
 
     print(f"\ndone — tables in {tables_dir.resolve()}")
     print(f"       figures in {figures_dir.resolve()}")

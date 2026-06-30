@@ -39,17 +39,20 @@ public sealed record RunRecord
     public required string           ModelName        { get; init; }
     public required string           PromptVersion    { get; init; }
 
-    /// <summary>Architecture arm: "analyser_only", "hybrid", or "llm_only" (§4.4.1).</summary>
+    /// <summary>Architecture arm: "analyser_only", "hybrid", or "agentic" (§4.4.1).</summary>
     public          string?          Architecture     { get; init; }
 
-    // ── LLM-only detection fields (null for analyser/hybrid rows) ────────────
-    /// <summary>Symbol the LLM-only model reported for this self-detected finding.</summary>
+    // ── Agentic / ungrounded detection fields (null for analyser/hybrid rows) ──
+    /// <summary>Symbol the agentic model reported for this self-detected finding.</summary>
     public          string?          LlmReportedSymbol { get; init; }
-    /// <summary>Line the LLM-only model reported.</summary>
+    /// <summary>Line the agentic model reported.</summary>
     public          int?             LlmReportedLine   { get; init; }
-    /// <summary>RunId of the known instance this LLM-only finding matched, or null if spurious.</summary>
+    /// <summary>Anti-pattern type the agent reported (raw). The match is location-based (§4.5.1), so a
+    /// mislabelled type does not prevent a match — this field lets type-mislabelling be measured descriptively.</summary>
+    public          string?          LlmReportedAntiPattern { get; init; }
+    /// <summary>RunId of the known instance this agentic finding matched, or null if spurious.</summary>
     public          string?          MatchedInstanceId { get; init; }
-    /// <summary>True when an LLM-only finding matched no known instance (extra/spurious detection).</summary>
+    /// <summary>True when an agentic finding matched no known instance (extra/spurious detection).</summary>
     public          bool?            IsSpurious        { get; init; }
     /// <summary>True when the prompt input was likely truncated by the model's context window (§4.8).</summary>
     public          bool?            ContextTruncated  { get; init; }
@@ -85,7 +88,7 @@ public sealed record RunRecord
     // ── Verified-repair outcome (objective; §4.5.1, §4.7.1) ──────────────────
     // Populated only on verification rows produced by the verify-repair step;
     // null on every generation row, so the addition is backward-compatible.
-    /// <summary>RunId of the generation row whose repair this row verifies (links back to the hybrid / llm-only run).</summary>
+    /// <summary>RunId of the hybrid generation row whose repair this row verifies (links back to the hybrid run).</summary>
     public          string?          SourceRunId              { get; init; }
     /// <summary>Non-evaluated Claude-family model that applied the repair strict-literally (§4.3, §4.7.1).</summary>
     public          string?          ApplierModel             { get; init; }
@@ -103,6 +106,16 @@ public sealed record RunRecord
     public          VerifiedRepairOutcome? VerifiedRepairLadder { get; init; }
     /// <summary>Binary headline outcome = applies ∧ builds ∧ metric-resolved.</summary>
     public          bool?            VerifiedRepairSuccess    { get; init; }
+
+    // ── Agentic loop fields (§4.4.1, §4.8; null on analyser/hybrid rows) ──────
+    /// <summary>Number of edit→build attempts the agentic trajectory consumed.</summary>
+    public          int?             AgenticIterations        { get; init; }
+    /// <summary>True when the trajectory stopped because the iteration budget was exhausted rather than the agent declaring completion (a distinct outcome, §4.8.1).</summary>
+    public          bool?            AgenticBudgetExhausted   { get; init; }
+    /// <summary>Path to the frozen trajectory artefact (all turns + build results + final source) — reproducibility at the artefact level (§4.8.5).</summary>
+    public          string?          AgenticTrajectoryRef     { get; init; }
+    /// <summary>On an agentic verified-repair row: whether the agent reported a finding matching this seeded instance (lets analysis restrict the paired comparison to recovered cases, §4.4.1 H1b).</summary>
+    public          bool?            AgenticRecovered         { get; init; }
 
     // ── Failure & parse status ───────────────────────────────────────────────
     public required ParseStatus      ParseStatus      { get; init; }

@@ -4,7 +4,7 @@ namespace HybridLens.Pipeline;
 
 /// <summary>
 /// A known anti-pattern instance from the static analyser — the ground truth against
-/// which an LLM-only self-detection is matched (§4.5.1). Reconstructed from the rated
+/// which an agentic self-detection is matched (§4.5.1). Reconstructed from the rated
 /// set (experiments_to_rate.jsonl): the line range is derived from the start line plus
 /// the snippet's line count.
 /// </summary>
@@ -18,7 +18,7 @@ public sealed record KnownInstance
     public required Severity        Severity   { get; init; }
     public          string?         Snippet    { get; init; }
 
-    /// <summary>Stable identifier used to pair LLM-only matches with hybrid rows in analysis.</summary>
+    /// <summary>Stable identifier used to pair agentic matches with hybrid rows in analysis.</summary>
     public string InstanceKey => $"{FilePath}::{SymbolName}::{Line}";
 
     /// <summary>Builds an instance, deriving the end line from the snippet length.</summary>

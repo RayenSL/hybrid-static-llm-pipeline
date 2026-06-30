@@ -52,9 +52,10 @@ public static class AnalyseCommand
             Description = "Run static analysis only; skip the LLM pipeline"
         };
 
-        var contextLevelOption = new Option<ContextLevel?>("--context-level")
+        var contextLevelOption = new Option<string?>("--context-level")
         {
-            Description = "Override the context level used to construct LLM prompts: minimal, structural, relational, full"
+            Description = "Context level: minimal, structural, relational, full, or analyser-only (the baseline arm). " +
+                          "Hyphens/underscores/casing are tolerated."
         };
 
         var runsOption = new Option<int>("--runs")
@@ -80,7 +81,7 @@ public static class AnalyseCommand
         {
             Description = "Comma-separated model keys from Llm.Models to use for generation (e.g. gpt-5.4). " +
                           "Default: all configured models. Use this to run a single evaluated model while " +
-                          "keeping the verify-repair applier (e.g. claude-opus-4-8) configured."
+                          "keeping the verify-repair applier (e.g. DeepSeek-V4-Pro) configured."
         };
 
         var command = new Command("analyse", "Run the HybridLens analysis pipeline on a .NET codebase")
@@ -121,7 +122,7 @@ public static class AnalyseCommand
             int           runs;
             int           maxFindings;
             int           maxFindingsPerType;
-            ContextLevel? contextLevelOverride;
+            ContextLevel? contextLevelOverride = null;
             Severity      minSeverity;
             IReadOnlySet<string>? modelFilter = null;
 
@@ -160,7 +161,17 @@ public static class AnalyseCommand
                 if (maxFindings < 0) maxFindings = 0;
                 maxFindingsPerType = parseResult.GetValue(maxFindingsPerTypeOption);
                 if (maxFindingsPerType < 0) maxFindingsPerType = 0;
-                contextLevelOverride = parseResult.GetValue(contextLevelOption);
+                var ctxRaw = parseResult.GetValue(contextLevelOption);
+                if (!string.IsNullOrWhiteSpace(ctxRaw))
+                {
+                    contextLevelOverride = ParseContextLevel(ctxRaw);
+                    if (contextLevelOverride is null)
+                    {
+                        await Console.Error.WriteLineAsync(
+                            $"error: invalid --context-level '{ctxRaw}'. Use: minimal, structural, relational, full, analyser-only.");
+                        return 2;
+                    }
+                }
 
                 // Severity.Info is the enum zero-value; treat it as "not supplied" and default to Critical.
                 var rawSeverity = parseResult.GetValue(severityOption);
@@ -316,6 +327,22 @@ public static class AnalyseCommand
     }
 
     // ── Interactive prompts ──────────────────────────────────────────────────
+
+    /// <summary>Parses a context-level token, tolerating hyphens/underscores/casing (e.g. "analyser-only" → AnalyserOnly). Null = unrecognised.</summary>
+    private static ContextLevel? ParseContextLevel(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return null;
+        var t = raw.Trim().Replace("-", "").Replace("_", "").ToLowerInvariant();
+        return t switch
+        {
+            "analyseronly" => ContextLevel.AnalyserOnly,
+            "minimal"      => ContextLevel.Minimal,
+            "structural"   => ContextLevel.Structural,
+            "relational"   => ContextLevel.Relational,
+            "full"         => ContextLevel.Full,
+            _              => null
+        };
+    }
 
     private static T PromptEnum<T>(string label, T defaultValue) where T : struct, Enum
     {

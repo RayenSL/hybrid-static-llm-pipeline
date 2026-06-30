@@ -8,18 +8,27 @@ using Microsoft.Extensions.DependencyInjection;
 namespace HybridLens.CLI.Commands;
 
 /// <summary>
-/// The LLM-only architecture arm (§4.4.1). Reads the rated set produced by
-/// select_rating_set.py, derives the distinct source files of the known instances,
-/// and runs the frontier model over each whole file with prompt v1.2.0 (no static
-/// grounding). Self-detections are matched back to the known instances for recall.
+/// The agentic architecture arm (§4.4.1, Appendix E prompt v2.0.0). Reads the rated set produced by
+/// select_rating_set.py, derives the distinct source files of the known instances, and runs an
+/// autonomous detect-and-repair loop over each whole file: the agent edits the source and invokes
+/// the compiler (its only tool) until it declares completion or the iteration budget is exhausted.
+/// Self-detections are matched back to the known instances for recall/precision, and the agent's
+/// FINAL edited solution is scored directly for verified-repair (build gate → detector re-run; no
+/// separate applier). Both arms thus stay ungrounded — the detector is never exposed.
 /// </summary>
-public static class LlmOnlyCommand
+public static class AgenticCommand
 {
     public static Command Build(IServiceProvider services)
     {
         var fromOption = new Option<FileInfo>("--from")
         {
             Description = "experiments_to_rate.jsonl (or any run JSONL) supplying the files + known instances.",
+            Required = true
+        };
+
+        var targetOption = new Option<FileInfo>("--target")
+        {
+            Description = "The corpus solution (Corpus.sln). Required — the agent builds a working copy of it as its only tool.",
             Required = true
         };
 
@@ -30,7 +39,18 @@ public static class LlmOnlyCommand
 
         var runsOption = new Option<int>("--runs")
         {
-            Description = "Runs per file (default: 3)."
+            Description = "Trajectories per file (default: 3)."
+        };
+
+        var budgetOption = new Option<int>("--budget")
+        {
+            Description = "Frozen iteration budget — max edit→build attempts per trajectory (default: 6)."
+        };
+
+        var sweepOption = new Option<bool>("--sweep-corpus")
+        {
+            Description = "Run the agent over EVERY .cs under --target (incl. clean/distractor files) so detections " +
+                          "on non-instances are scoreable as spurious (fuller precision). Default: only files holding a seeded instance."
         };
 
         var maxTokenGuardOption = new Option<int>("--max-input-tokens")
@@ -38,24 +58,40 @@ public static class LlmOnlyCommand
             Description = "Heuristic token cap; files estimated above this are flagged context_truncated (default: 120000)."
         };
 
-        var command = new Command("llm-only",
-            "Run the ungrounded LLM-only arm over the files of the known instances (H1b).")
+        var buildTimeoutOption = new Option<int>("--build-timeout")
         {
-            fromOption, modelOption, runsOption, maxTokenGuardOption
+            Description = "Per-build dotnet build timeout in seconds (default: 180)."
+        };
+
+        var command = new Command("agentic",
+            "Run the ungrounded agentic arm (H1b): an autonomous detect-and-repair loop with the compiler as its only tool.")
+        {
+            fromOption, targetOption, modelOption, runsOption, budgetOption, sweepOption, maxTokenGuardOption, buildTimeoutOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
         {
             var from          = parseResult.GetValue(fromOption)!;
+            var target        = parseResult.GetValue(targetOption)!;
             var model         = parseResult.GetValue(modelOption) is { Length: > 0 } m ? m : "gpt-5.4";
             var runs          = parseResult.GetValue(runsOption);
             if (runs < 1) runs = 3;
+            var budget        = parseResult.GetValue(budgetOption);
+            if (budget < 1) budget = 6;
+            var sweepCorpus   = parseResult.GetValue(sweepOption);
             var maxTokenGuard = parseResult.GetValue(maxTokenGuardOption);
             if (maxTokenGuard <= 0) maxTokenGuard = 120_000;
+            var buildTimeout  = parseResult.GetValue(buildTimeoutOption);
+            if (buildTimeout <= 0) buildTimeout = 180;
 
             if (!from.Exists)
             {
                 await Console.Error.WriteLineAsync($"error: --from file not found: {from.FullName}");
+                return 2;
+            }
+            if (!target.Exists || !target.Extension.Equals(".sln", StringComparison.OrdinalIgnoreCase))
+            {
+                await Console.Error.WriteLineAsync($"error: --target must be an existing .sln: {target.FullName}");
                 return 2;
             }
 
@@ -74,14 +110,32 @@ public static class LlmOnlyCommand
                 return 2;
             }
 
-            var runStorePath = Path.Combine("runs", $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}-llmonly.jsonl");
-            Console.Error.WriteLine($"Run trace: {Path.GetFullPath(runStorePath)}{Environment.NewLine}");
+            // Optional whole-corpus sweep: run the agent on every .cs under --target so detections on
+            // clean/distractor files are scoreable as spurious (precision over non-instances).
+            IReadOnlyList<string>? sweepFiles = null;
+            if (sweepCorpus)
+            {
+                var root = Path.GetDirectoryName(target.FullName)!;
+                sweepFiles = Directory.EnumerateFiles(root, "*.cs", SearchOption.AllDirectories)
+                    .Where(p => !p.Split('\\', '/').Any(seg => seg is "bin" or "obj"))
+                    .ToList();
+                if (sweepFiles.Count == 0)
+                    await Console.Error.WriteLineAsync($"warning: no .cs files under --target ({root}); using instance files only.");
+            }
+
+            var stamp         = DateTimeOffset.UtcNow.ToString("yyyyMMdd-HHmmss");
+            var runStorePath  = Path.Combine("runs", $"{stamp}-agentic.jsonl");
+            var trajectoryDir = Path.Combine("runs", $"{stamp}-agentic-trajectories");
+            Console.Error.WriteLine($"Run trace: {Path.GetFullPath(runStorePath)}");
+            Console.Error.WriteLine($"Trajectories: {Path.GetFullPath(trajectoryDir)}{Environment.NewLine}");
+
+            var measurer = services.GetRequiredService<IRepairMeasurer>();
 
             await using IRunStore runStore = new JsonlRunStore(runStorePath);
-            var runner = new LlmOnlyRunner(adapter, model);
-            await runner.RunAsync(known, runs, runStore, maxTokenGuard, Console.Error, cancellationToken);
+            var runner = new AgenticRunner(adapter, model, measurer, target.FullName, budget, buildTimeout);
+            await runner.RunAsync(known, runs, runStore, maxTokenGuard, trajectoryDir, Console.Error, cancellationToken, sweepFiles);
 
-            Console.Error.WriteLine($"{Environment.NewLine}LLM-only run complete.");
+            Console.Error.WriteLine($"{Environment.NewLine}Agentic run complete.");
             return 0;
         });
 
@@ -110,8 +164,7 @@ public static class LlmOnlyCommand
             {
                 var root = doc.RootElement;
 
-                // Skip rows that are themselves LLM-only or analyser placeholders without a real instance.
-                var typeStr = GetString(root, "anti_pattern_type");
+                var typeStr  = GetString(root, "anti_pattern_type");
                 var filePath = GetString(root, "file_path");
                 var symbol   = GetString(root, "symbol_name");
                 if (typeStr is null || filePath is null || symbol is null) continue;

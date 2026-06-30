@@ -3,7 +3,16 @@
 **Source of truth:** the thesis PDF (`Z:\rayen\Combining_Static_Analysis_..._(14).pdf`, "Version of 23rd June 2026").
 **Goal of this doc:** decisions taken + an executable plan to bring the implementation, data, and thesis text into agreement.
 
-> Read first: the constructed corpus is **already built and faithful** to the thesis (separate repo `Z:\GitHub\hybrid-pipeline-corpus`). The detectors, context levels, and prompts (v1.1.0 hybrid, v1.2.0 LLM-only) in the pipeline **already match** the thesis. The real work is the verified-repair pipeline, re-pointing experiments at the corpus on a single model, and a batch of thesis-text fixes.
+> **⚠ SUPERSEDED for the third arm (2026-06-30).** The newer thesis (version 18) replaced the
+> single-shot **LLM-only** arm with the autonomous **Agentic** arm (§4.4.1, Appendix E prompt
+> **v2.0.0**): a compiler-in-the-loop detect-and-repair agent whose final edited solution is scored
+> directly (no separate applier, §4.7.1). The implementation now matches it — CLI `agentic`,
+> `AgenticRunner`, architecture tag `agentic`. Every "LLM-only / v1.2.0" reference **below** is
+> historical (it describes the version-14 reconciliation); see `agentic-arm-replaces-llm-only` (memory)
+> and the current §3 of [PHASE_C_RUNBOOK.md](PHASE_C_RUNBOOK.md). Lines describing the *current* built
+> state have been updated in place.
+
+> Read first: the constructed corpus is **already built and faithful** to the thesis (separate repo `Z:\GitHub\hybrid-pipeline-corpus`). The detectors, context levels, and prompts (v1.1.0 hybrid; the third arm is now agentic v2.0.0) in the pipeline **already match** the thesis. The real work is the verified-repair pipeline, re-pointing experiments at the corpus on a single model, and a batch of thesis-text fixes.
 
 ---
 
@@ -14,11 +23,11 @@
 | 1 | Output | Decisions + executable work plan (this doc). |
 | 2 | Constructed corpus | Already built & authoritative. No rebuild. |
 | 3 | Verified-repair pipeline | **Build it now** (thesis's primary objective metric). |
-| 4 | Applier model | **claude-opus-4-8** (same family as the corpus generator; non-evaluated). |
+| 4 | Applier model | **DeepSeek-V4-Pro** (Azure; non-evaluated, different family from the evaluated gpt-5.4). Runs on the existing Azure config — no Anthropic key. |
 | 5 | Frontier model | **gpt-5.4** via Azure OpenAI — single model for hybrid *and* LLM-only. |
 | 6 | Multi-model | **Strictly single model.** Drop the 3-model H1a robustness check; purge cross-model code/analysis. |
 | 7 | Dataset | **Discard the Ibis runs** (smoke tests). Corpus is the only dataset. |
-| 8 | Band-verification | Run the **real HybridLens** analyser over the corpus and **report agreement** with `HybridLensMeasure`; keep both. |
+| 8 | Band-verification | **Done (2026-06-23):** HybridLens made authoritative — corpus `measured_metrics` re-derived from the real detector (10 records corrected: 9 GodClass ATFD/WMC + 1 LongMethod CC); band agreement now **30/30**; §4.5.1 "same code" holds. `HybridLensMeasure` retained as a generation-time helper. Corpus repo needs commit + re-tag. |
 | 9 | Thesis edits | **Punch-list only** (PDF; section-referenced edits below). |
 | 10 | Corpus review | **Two-layer** (programmatic + R1). Drop reviewer_r2 from corpus verification. |
 | 11 | Rubric IRR | **Keep R1 + R2** with Cohen's weighted κ on the IRR subset (§4.5 / B.8 unchanged). |
@@ -49,15 +58,17 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
 > and a Long Method instance (`InvoiceRenderer.Render`, CC 15) went applied → built → **resolved**
 > (CC dropped ≤10) — so all four ladder rungs are validated (two live, two via unit tests), incl. the
 > `dotnet build` gate and Roslyn re-measure on real corpus code. Remaining: a faithful run needs the
-> `claude-opus-4-8` applier key in `appsettings.local.json`; and the `analyse_results.py` verified-repair
-> stats (step 6). Note: `analyse` has no `--model` filter yet (ran all 3 configured models) — a Phase B item.
+> Phase C corpus dataset (the applier `DeepSeek-V4-Pro` is already in your Azure config — no Anthropic key needed). The
+> `analyse_results.py` verified-repair stats (**step 6, done 2026-06-23**: Tables 5.3/5.7 with Wilson CIs,
+> McNemar H1b, Cochran–Armitage + GLMM long-format H2b — unit-tested on synthetic data, run via
+> `--verified`) and the `--model` filter (Phase B) are now implemented.
 
-1. **Applier adapter + prompt.** Add a Claude applier (`claude-opus-4-8`) using the frozen **applier prompt v1.0.0** (thesis Appendix A.1). Contract: input = original file + finding + candidate repair; output = `{applicable, reason_if_not, edited_file}`. Strict-literal; no design decisions. Freeze each applier output as an artefact.
+1. **Applier adapter + prompt.** Add an applier (`DeepSeek-V4-Pro`, Azure) using the frozen **applier prompt v1.0.0** (thesis Appendix A.1). Contract: input = original file + finding + candidate repair; output = `{applicable, reason_if_not, edited_file}`. Strict-literal; no design decisions. Freeze each applier output as an artefact.
 2. **Build gate.** Apply `edited_file` into a **working copy** of the corpus (never mutate the frozen corpus), then `dotnet build`. Build failure ⇒ scored as not-resolved.
 3. **Re-measure.** On a green build, re-run the HybridLens detector on the applied file and recompute the triggering condition: GC composite (ATFD/WMC/TCC), LM (CC + LOC), OB (absence of the flagged `[Obsolete]` usage).
 4. **Outcome.** Ordinal ladder `unapplicable < build_fails < builds_unresolved < resolved` (descriptive) + binary `verified_repair_success = applies ∧ builds ∧ metric_resolved` (inferential).
 5. **RunRecord fields** (new): `applier_model`, `applier_prompt_version`, `applicable`, `unapplicable_reason`, `applied_source_ref`, `build_passed`, `remeasured_metrics`, `verified_repair_ladder`, `verified_repair_success`.
-6. **Stats in `analyse_results.py`:** verified-repair % by architecture (Table 5.3) and by context level (Table 5.7) with Wilson CIs; **McNemar** paired hybrid vs LLM-only (H1b); **Cochran–Armitage** + **binomial GLMM** `verified_repair ~ ordered context + (1|instance)` (H2b); ladder distribution descriptive.
+6. **Stats in `analyse_results.py`:** verified-repair % by architecture (Table 5.3) and by context level (Table 5.7) with Wilson CIs; **McNemar** paired hybrid vs agentic (H1b); **Cochran–Armitage** + **binomial GLMM** `verified_repair ~ ordered context + (1|instance)` (H2b); ladder distribution descriptive.
 7. **Gaming guard:** human genuineness spot-check on a stratified 30% of metric-resolved repairs (R1, rubric anchors).
 8. Apply/verify for **both** hybrid and LLM-only repairs; analyser-only = no repair (0 by construction).
 
@@ -65,17 +76,17 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
 
 > **Status: implemented (2026-06-23).** Rather than trimming `Llm.Models` (item 9), added a `--model`
 > filter to `analyse` (+ a `models` param on `AnalysisPipeline.RunAsync`) so generation can be pinned to
-> `gpt-5.4` while `claude-opus-4-8` stays configured for the verify-repair applier. Cross-model analysis
+> `gpt-5.4` while `DeepSeek-V4-Pro` stays configured for the verify-repair applier. Cross-model analysis
 > purged: `loader.cross_model_agreement`, the `analyse_results.py` by-model proportions block + the now-unused
 > `MODEL_ORDER`, the `compare.py` caller, and the `analysis/README.md` mentions (incl. the cross-model
 > Cochran's Q note). Architecture tagging (item 11) was already correct in code — the null was stale Ibis
-> data; live runs tag `hybrid` / `analyser_only` / `llm_only`. Item 12 is an invocation detail
+> data; live runs tag `hybrid` / `analyser_only` / `agentic`. Item 12 is an invocation detail
 > (`analyse --model gpt-5.4 --target …\Corpus.sln`). Build green, 39 tests pass. The §4.4.1 "across all
 > three models" sentence → thesis punch-list (Phase F).
 
-9. Config: keep only **gpt-5.4** (Azure) as the evaluated model + **claude-opus-4-8** as the applier. Remove gpt-5.4-mini / DeepSeek / Llama / Mistral from the experiment config.
+9. Config: **gpt-5.4** (Azure) is the evaluated model; **DeepSeek-V4-Pro** (Azure) is the applier. Generation is restricted to gpt-5.4 via `--model` (gpt-5.4-mini / Llama / Mistral unused); both arms run on the existing Azure config.
 10. **Purge cross-model**: remove `loader.cross_model_agreement` and any cross-model outputs in `analyse_results.py`; delete the §4.4.1 "across all three models" robustness path.
-11. Ensure `AnalysisPipeline` **populates `Architecture`** (`analyser_only` / `hybrid` / `llm_only`) — currently null in all data.
+11. Ensure `AnalysisPipeline` **populates `Architecture`** (`analyser_only` / `hybrid` / `agentic`) — currently null in all data.
 12. Point runs at `Z:\GitHub\hybrid-pipeline-corpus\corpus\Corpus.sln`.
 
 ### Phase C — Regenerate dataset
@@ -83,10 +94,10 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
 14. Run, all on gpt-5.4, `--runs 3`:
     - **Hybrid:** 30 × 4 context levels × 3 = **360** generations (prompt v1.1.0).
     - **Analyser-only:** 30 deterministic diagnostics (also serves the band re-confirmation in step 17).
-    - **LLM-only:** prompt v1.2.0 over corpus files. **Open item:** scope = instance-spanning files (thesis §5.2.5 "3F") **vs** all corpus files incl. clean/distractors (needed to measure precision over distractors — README_HANDOFF says "pointed at `corpus/` ALONE"). Resolve before running (see Open questions).
+    - **LLM-only:** prompt v1.2.0 over the **whole corpus** via `llm-only --target Corpus.sln` — recall over the 30 instances + precision over clean/distractors (resolved 2026-06-23).
 
 ### Phase D — Band agreement + verification
-15. Run analyser-only (real HybridLens) over the corpus; **compare** measured metrics against `ground-truth/_measured/*` (HybridLensMeasure) for all 30; report agreement as a reliability point; update `measured_metrics` if any drift.
+15. **[Done 2026-06-23.]** Ran analyser-only (real HybridLens) over the corpus; `HybridLensMeasure` diverged on GodClass ATFD/WMC + 1 LongMethod CC (10/30; detection unaffected). Re-derived `measured_metrics` from HybridLens (`hybrid-pipeline-corpus/tools/apply_hybridlens_metrics.py`), regenerated INDEX, re-validated → **band agreement 30/30**. Corpus repo: commit + re-tag pending.
 16. Complete **corpus R1 review** (`verification.reviewer_r1`) for all 30 instances; remove `reviewer_r2` from schema/records (two-layer).
 
 ### Phase E — Rating
@@ -100,6 +111,9 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
 ---
 
 ## Thesis text punch-list (PDF; section-referenced)
+
+> **Finalized as [THESIS_PUNCHLIST.md](THESIS_PUNCHLIST.md) (2026-06-23)** — the standalone doc has the full
+> find→replace text with corpus-verified values, plus corpus-repo follow-ups. The table below is the summary.
 
 | Location | Current | Change to |
 |---|---|---|
@@ -121,7 +135,7 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
 
 ## Open questions & assumptions
 
-- **LLM-only file scope** (Phase C, step 14): instance-spanning files only (§5.2.5 "3F") vs **all** corpus files (needed for precision over distractors). Recommend: run over all corpus files; report recall over the 30 instances and precision over clean/distractors. Confirm + update §5.2.5.
+- **LLM-only file scope** — **RESOLVED (2026-06-23):** `llm-only --target Corpus.sln` sweeps every corpus `.cs` (recall over the 30 instances + precision over clean/distractors); detections on non-instances are `is_spurious`. Implemented + unit-tested. Thesis §5.2.5 wording should note the LLM-only sweep covers all corpus files (precision measured over the clean/distractor set), not only the instance-spanning files.
 - **Verified-repair scope across context** (H2b): apply/verify all 360 hybrid generations, or one run per (instance × level)? Assumed: all generations (objective metrics are computed on every generation per §5.2.5).
 - **Spot-check rater** for the gaming guard = R1 (assumed).
 - F (file count) is filled after the re-run.
