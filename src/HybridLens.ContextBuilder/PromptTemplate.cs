@@ -41,43 +41,82 @@ public static class PromptTemplate
         }
         """;
 
-    // ── LLM-only condition (§4.4.1, Appendix E) ──────────────────────────────
+    // ── Agentic condition (§4.4.1, Appendix E, prompt v2.0.0) ────────────────
     //
-    // v1.2.0 differs from the hybrid prompt in three ways: the model must DETECT
-    // occurrences before explaining; it receives NO finding header/metrics/label;
-    // and it sees the WHOLE source file. The response is a JSON ARRAY of located
-    // findings (0, 1, or many), enabling matching against the known instances.
+    // v2.0.0 replaces the single-shot whole-file prompt with an AUTONOMOUS LOOP. It differs
+    // from the hybrid prompt in four ways: the model must DETECT occurrences before repairing;
+    // it receives NO finding header/metrics/label; it sees the WHOLE source file; and it is
+    // granted exactly one tool — a compiler it may invoke repeatedly, observing build results
+    // between calls, until it declares completion or the iteration budget is exhausted. Each
+    // turn is a JSON OBJECT carrying an action, the full edited file, and the located findings.
+    // The detector is never exposed (only the compiler), keeping the arm ungrounded.
 
-    public const string LlmOnlyVersion = "v1.2.0";
+    public const string AgenticVersion = "v2.0.0";
 
-    public const string LlmOnlySystemPrompt = """
-        You are a .NET code quality expert. You will be given a complete C# source file.
-        Identify every occurrence of the following anti-patterns in the file:
+    /// <summary>
+    /// The agentic system prompt (Appendix E.1). Contains the literal token
+    /// <c>{ITERATION_BUDGET}</c>; <see cref="BuildAgenticSystemPrompt"/> substitutes the frozen budget.
+    /// </summary>
+    public const string AgenticSystemPromptTemplate = """
+        You are a .NET code quality expert operating as an autonomous agent. You are given a
+        complete C# source file. Your task is to (1) identify every occurrence of the following
+        anti-patterns in the file, and (2) repair them by editing the source:
+
         - God Class
         - Long Method
         - Obsolete API usage
 
-        For each occurrence you find, report its location and explain its impact on the
-        relevant ISO/IEC 25010 software quality attributes, and suggest a repair. Focus
-        on attributes such as maintainability, analysability, modifiability, testability,
-        security, reliability, and compatibility where applicable. Only mention attributes
-        that are genuinely relevant. If you find no occurrences, return an empty list.
+        You work in a loop. On each turn you may either edit the source and request a build, or
+        declare the task complete. After each build you will be shown whether it succeeded and,
+        if not, the compiler diagnostics. Use this feedback to revise your edits. You have at most
+        {ITERATION_BUDGET} build attempts. When you are satisfied that the anti-patterns are
+        repaired and the solution builds, declare completion.
 
-        Respond ONLY with a JSON array in this exact format, with no additional text:
-        [
-          {
-            "anti_pattern": "<GodClass | LongMethod | ObsoleteApiUsage>",
-            "location": { "symbol": "<class or method name>", "line": <int> },
-            "explanation": "<why this is a problem and what its impact is>",
-            "quality_impact": "Quality impact:\n- Attribute: short explanation\n- ...",
-            "remediation": "<concrete refactoring steps; include a short code example where helpful>"
-          }
-        ]
+        You have exactly one tool: a compiler that builds the current state of the file and returns
+        success or the diagnostic errors. You have no other tools and no access to static-analysis
+        output.
+
+        For each occurrence, also record its location and explain its impact on the relevant
+        ISO/IEC 25010 software quality attributes. Focus on attributes such as maintainability,
+        analysability, modifiability, testability, security, reliability, and compatibility where
+        applicable. Only mention attributes that are genuinely relevant. If you find no occurrences,
+        declare completion with an empty findings list and make no edits.
+
+        Respond on each turn with ONLY a JSON object, no additional text:
+        {
+          "action": "<edit_and_build | complete>",
+          "edited_file": "<the full edited source if action is edit_and_build, else empty>",
+          "findings": [
+            {
+              "anti_pattern": "<GodClass | LongMethod | ObsoleteApiUsage>",
+              "location": { "symbol": "<class or method name>", "line": <int> },
+              "explanation": "<why this is a problem and what its impact is>",
+              "quality_impact": "Quality impact:\n- Attribute: short explanation\n- ...",
+              "remediation": "<what you changed and why>"
+            }
+          ]
+        }
         """;
 
-    /// <summary>Wraps a whole source file as the LLM-only user prompt (Appendix E.2).</summary>
-    public static string BuildLlmOnlyUserPrompt(string relativePath, string fileContent) =>
+    /// <summary>The agentic system prompt with the frozen iteration budget substituted (Appendix E.1).</summary>
+    public static string BuildAgenticSystemPrompt(int iterationBudget) =>
+        AgenticSystemPromptTemplate.Replace("{ITERATION_BUDGET}", iterationBudget.ToString());
+
+    /// <summary>Wraps the whole, unannotated source file as the opening agentic user prompt (Appendix E.2).</summary>
+    public static string BuildAgenticUserPrompt(string relativePath, string fileContent) =>
         $"## Source file: {relativePath}\n```csharp\n{fileContent}\n```";
+
+    /// <summary>
+    /// Build-result feedback fed back as the next user turn after an <c>edit_and_build</c> action.
+    /// On success the agent is invited to declare completion; on failure it is shown the diagnostics.
+    /// </summary>
+    public static string BuildAgenticBuildFeedback(int attempt, int budget, bool ok, string diagnostics)
+        => ok
+            ? $"## Build result (attempt {attempt}/{budget}): SUCCESS\n" +
+              "The solution compiles. If every targeted anti-pattern is now repaired, respond with " +
+              "action \"complete\" and your final findings. Otherwise continue editing."
+            : $"## Build result (attempt {attempt}/{budget}): FAILED\n```\n{diagnostics}\n```\n" +
+              "Revise the edited file to fix these compiler errors, or declare completion.";
 
     // ── Repair applier (objective repair verification, §4.5.1 / §4.7.1, Appendix A.1) ──
     //

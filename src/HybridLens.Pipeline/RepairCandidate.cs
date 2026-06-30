@@ -3,7 +3,7 @@ using HybridLens.Core.Models;
 namespace HybridLens.Pipeline;
 
 /// <summary>
-/// One repair to verify: a generation row (hybrid or llm-only) that produced a remediation,
+/// One hybrid repair to verify: a hybrid generation row that produced a remediation,
 /// reconstructed from a runs JSONL. Carries the generation identity (so the verification row can
 /// be grouped by architecture × context × model) plus the candidate repair text to apply.
 /// </summary>
@@ -19,7 +19,7 @@ public sealed record RepairCandidate
     public required int             Line        { get; init; }
     public required Severity        Severity    { get; init; }
     public          string?         Snippet     { get; init; }
-    /// <summary>Original triggering metrics, carried through for reference. May be null (e.g. llm-only rows).</summary>
+    /// <summary>Original triggering metrics, carried through for reference. May be null.</summary>
     public          IReadOnlyDictionary<string, double>? Metrics { get; init; }
 
     public required ContextLevel    ContextLevel  { get; init; }

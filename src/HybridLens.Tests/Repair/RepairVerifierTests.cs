@@ -170,6 +170,9 @@ public sealed class RepairVerifierTests : IDisposable
             => throws
                 ? throw new InvalidOperationException("applier API unavailable")
                 : Task.FromResult(new LlmResponse { Content = content, InputTokens = 10, OutputTokens = 20 });
+
+        public Task<LlmResponse> CompleteAsync(LlmConversation conversation, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException("the applier is single-shot");
     }
 
     private sealed class FakeMeasurer(bool stillTriggers) : IRepairMeasurer

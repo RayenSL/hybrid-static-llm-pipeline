@@ -6,7 +6,7 @@ namespace HybridLens.Pipeline;
 
 /// <summary>
 /// Lexical extraction of ISO/IEC 25010 quality attributes from LLM output, plus the
-/// 0/1/null alignment metric. Shared by the hybrid pipeline and the LLM-only runner so
+/// 0/1/null alignment metric. Shared by the hybrid pipeline and the agentic runner so
 /// both score attribute mentions identically.
 /// </summary>
 public static class QualityAttributeExtraction

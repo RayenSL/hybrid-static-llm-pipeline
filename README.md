@@ -72,31 +72,55 @@ dotnet run --project src/HybridLens.CLI -- --help
 dotnet run --project src/HybridLens.CLI -- analyse --help
 ```
 
+### Run the agentic arm (ungrounded, H1b)
+
+`agentic` runs the third architecture arm (§4.4.1, prompt v2.0.0). The model gets the *unannotated*
+whole file and must **detect and repair** it through an autonomous loop: each turn it edits the
+source and requests a build (its **only** tool is the compiler), observes the result, and revises,
+until it declares completion or the frozen iteration budget is spent. It never sees the static
+analyser, so the arm stays ungrounded. Self-detections are matched to the known instances for
+recall/precision, and the agent's *final edited solution* is scored directly for verified-repair
+(no separate applier — see below).
+
+```bash
+dotnet run --project src/HybridLens.CLI -- agentic \
+    --from runs/<structural-trace>.jsonl \
+    --target path/to/Corpus.sln \
+    --model gpt-5.4 --runs 3 --budget 6
+```
+
+By default the agent runs over the files holding a seeded instance. Add `--sweep-corpus` to run it
+over every `.cs` (incl. clean/distractor files) so detections on non-instances score as spurious
+(fuller precision). Each trajectory (all turns + build results + final source) is frozen as a JSON
+artefact under `runs/<stamp>-agentic-trajectories/`.
+
 ### Verify repairs (objective repair outcome)
 
-`verify-repair` takes the repairs an LLM produced (the `parsed_suggested_fix` of each hybrid /
-matched llm-only run), applies each one strict-literally with a non-evaluated Claude-family
-**applier**, rebuilds the corpus, and re-measures the metric that triggered the detection. Each
-candidate is scored on the ladder `unapplicable < build_fails < builds_unresolved < resolved`,
-plus a binary `verified_repair_success` (applies ∧ builds ∧ metric-resolved).
+`verify-repair` takes the repairs the **hybrid** arm produced (the `parsed_suggested_fix` of each
+hybrid run), applies each one strict-literally with a non-evaluated **applier**, rebuilds the corpus,
+and re-measures the metric that triggered the detection. Each candidate is scored on the ladder
+`unapplicable < build_fails < builds_unresolved < resolved`, plus a binary `verified_repair_success`
+(applies ∧ builds ∧ metric-resolved). The agentic arm is **not** processed here — the agent edits the
+source itself, so its final solution is scored inside the `agentic` runner (§4.7.1).
 
 ```bash
 dotnet run --project src/HybridLens.CLI -- verify-repair \
     --from runs/20260101-120000.jsonl \
     --target path/to/Corpus.sln \
-    --applier claude-opus-4-8 \
+    --applier DeepSeek-V4-Pro \
     --out runs/verified.jsonl
 ```
 
-The applier must be a Claude-family model **different from the evaluated model** (so it never
-scores code it completed itself). Add it as a model entry in `appsettings.local.json`:
+The applier must be a model **different from the evaluated model** (so it never scores code it
+completed itself). `DeepSeek-V4-Pro` (Azure) is the default and reuses your Azure config — no extra
+provider/key:
 
 ```json
 // appsettings.local.json
 {
   "Llm": {
     "Models": {
-      "claude-opus-4-8": { "Provider": "claude", "Model": "claude-opus-4-8", "ApiKey": "sk-ant-..." }
+      "DeepSeek-V4-Pro": { "Provider": "azure", "Model": "DeepSeek-V4-Pro", "BaseUrl": "https://<your>.openai.azure.com" }
     }
   }
 }
@@ -115,13 +139,13 @@ Configuration is loaded in the following order (later sources override earlier o
 {
   "Detectors": {
     "GodClass": {
-      "MaxMethods": 20,
-      "MaxFields": 15,
-      "MaxLinesOfCode": 500
+      "AtfdFew": 4,
+      "WmcVeryHigh": 47,
+      "TccThreshold": 0.3333
     },
     "LongMethod": {
-      "MaxLinesOfCode": 50,
-      "MaxCyclomaticComplexity": 10
+      "MaxCyclomaticComplexity": 10,
+      "MaxLinesOfCode": 50
     },
     "ObsoleteApi": {
       "DeprecatedNamespacePrefixes": []
@@ -129,16 +153,18 @@ Configuration is loaded in the following order (later sources override earlier o
   },
   "Context": {
     "Strategy": "PerFinding",
+    "Level": "Structural",
     "TokenBudget": 2000,
     "SnippetContextLines": 10,
-    "TemplateDirectory": "templates",
     "Metadata": {}
   },
   "Llm": {
-    "Provider": "claude",
-    "Model": "claude-sonnet-4-6",
     "Temperature": 0.2,
-    "MaxTokens": 1024
+    "MaxTokens": 1024,
+    "Models": {
+      "gpt-5.4":         { "Provider": "azure",  "Model": "gpt-5.4", "BaseUrl": "https://<your>.openai.azure.com" },
+      "DeepSeek-V4-Pro": { "Provider": "azure", "Model": "DeepSeek-V4-Pro", "BaseUrl": "https://<your>.openai.azure.com" }
+    }
   }
 }
 ```
@@ -147,11 +173,11 @@ Configuration is loaded in the following order (later sources override earlier o
 
 | Key | Default | Description |
 |---|---|---|
-| `Detectors.GodClass.MaxMethods` | `20` | Method count above which a class is flagged |
-| `Detectors.GodClass.MaxFields` | `15` | Field count above which a class is flagged |
-| `Detectors.GodClass.MaxLinesOfCode` | `500` | LOC above which a class is flagged |
-| `Detectors.LongMethod.MaxLinesOfCode` | `50` | LOC above which a method is flagged |
-| `Detectors.LongMethod.MaxCyclomaticComplexity` | `10` | Complexity above which a method is flagged |
+| `Detectors.GodClass.AtfdFew` | `4` | ATFD (Access to Foreign Data) bound — flagged when ATFD strictly exceeds this |
+| `Detectors.GodClass.WmcVeryHigh` | `47` | WMC (Weighted Method Count) bound — flagged when WMC ≥ this |
+| `Detectors.GodClass.TccThreshold` | `0.3333` | TCC (Tight Class Cohesion) bound — flagged when TCC < this (1/3). All three conditions must hold. |
+| `Detectors.LongMethod.MaxCyclomaticComplexity` | `10` | Primary gate — method flagged when cyclomatic complexity exceeds this |
+| `Detectors.LongMethod.MaxLinesOfCode` | `50` | Secondary — escalates an already-flagged method to Critical |
 | `Detectors.ObsoleteApi.DeprecatedNamespacePrefixes` | `[]` | Additional namespace prefixes to flag beyond `[Obsolete]` |
 
 #### Context strategy
@@ -166,8 +192,8 @@ Configuration is loaded in the following order (later sources override earlier o
 
 | `Provider` value | Notes |
 |---|---|
-| `claude` | Requires `Llm.ApiKey` set in `appsettings.local.json` |
-| `openai` | Requires `Llm.ApiKey` set in `appsettings.local.json` |
+| `claude` | Anthropic models (e.g. `claude-opus-4-8`) — requires an `ApiKey` on the model entry or `Llm.ApiKey` |
+| `azure` | Azure OpenAI (e.g. `gpt-5.4`) — requires `BaseUrl` + `ApiKey` |
 
 Set your API key in a local override file (never commit this):
 

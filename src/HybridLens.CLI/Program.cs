@@ -52,7 +52,7 @@ if (args.Length == 0)
 var root = new RootCommand("HybridLens — hybrid static + LLM .NET code analyser")
 {
     AnalyseCommand.Build(services),
-    LlmOnlyCommand.Build(services),
+    AgenticCommand.Build(services),
     VerifyRepairCommand.Build(services)
 };
 

@@ -180,19 +180,21 @@ def select_pilot_subset(items: list[dict], seed: int, n: int = 10) -> list[dict]
     return pilot[:n]
 
 
-# ── LLM-only selection (§4.4.1) ──────────────────────────────────────────────
+# ── Agentic selection (§4.4.1, B.1) ──────────────────────────────────────────
 
-def select_llm_only(rows: list[dict], seed: int) -> list[dict]:
+def select_agentic(rows: list[dict], seed: int) -> list[dict]:
     """
-    LLM-only rated set: one run per FILE (not per cell), keeping only the matched
-    findings (is_spurious == False) for quality rating. Spurious detections remain
-    in the raw run trace and are characterised descriptively by analyse_results.py.
+    Agentic rated set: one run per FILE (not per cell), keeping only the matched detection
+    findings (is_spurious == False) for quality rating — these are the instances the agent
+    recovered (Table 5.5). Spurious detections (is_spurious == True) and the per-instance
+    verified-repair rows (is_spurious null) are excluded; the former are characterised
+    descriptively by analyse_results.py and the latter feed the objective Table 5.3.
     """
     rng = random.Random(seed + 4)
 
     by_file: dict[str, dict[int, list[dict]]] = {}
     for r in rows:
-        if r.get("architecture") != "llm_only":
+        if r.get("architecture") != "agentic":
             continue
         fp = r.get("file_path")
         run = r.get("run_number", 1)
@@ -203,8 +205,8 @@ def select_llm_only(rows: list[dict], seed: int) -> list[dict]:
         run_numbers = sorted(runs.keys())
         chosen_run = rng.choice(run_numbers)
         for r in runs[chosen_run]:
-            if r.get("is_spurious") is True:
-                continue  # spurious → not quality-rated
+            if r.get("is_spurious") is not False:
+                continue  # keep only matched finding rows; skip spurious + verified-repair rows
             r["selected_from_run_number"] = chosen_run
             selected.append(r)
     return selected
@@ -325,24 +327,24 @@ def main(argv: list[str] | None = None) -> int:
                              "cell selection on raw runs — produces a stratified IRR subset.")
     parser.add_argument("--irr-fraction", type=float, default=0.30,
                         help="Fraction of the primary set to include in the IRR subset (default: 0.30, per §B.8.1).")
-    parser.add_argument("--llm-only", action="store_true",
-                        help="Select the LLM-only rated set: one run per file, matched findings only (§4.4.1). "
-                             "Point --input at the *-llmonly.jsonl run trace.")
+    parser.add_argument("--agentic", "--llm-only", dest="agentic", action="store_true",
+                        help="Select the agentic rated set: one run per file, matched findings only (§4.4.1, B.1). "
+                             "Point --input at the *-agentic.jsonl run trace.")
     args = parser.parse_args(argv)
 
-    # ── LLM-only mode ────────────────────────────────────────────────────────
-    if args.llm_only:
+    # ── Agentic mode ─────────────────────────────────────────────────────────
+    if args.agentic:
         if not args.input:
-            print("error: --input is required with --llm-only", file=sys.stderr); return 2
+            print("error: --input is required with --agentic", file=sys.stderr); return 2
         sources = expand_inputs(args.input)
         if not sources:
             print(f"error: no files matched: {args.input}", file=sys.stderr); return 2
         rows = read_runs(sources)
-        print(f"loaded {len(rows)} llm-only run record(s) from {len(sources)} file(s).")
-        selected = select_llm_only(rows, args.seed)
-        print(f"selected {len(selected)} matched llm-only finding(s) (1 run/file).")
+        print(f"loaded {len(rows)} agentic run record(s) from {len(sources)} file(s).")
+        selected = select_agentic(rows, args.seed)
+        print(f"selected {len(selected)} matched agentic finding(s) (1 run/file).")
         ordered   = stratify_presentation_order(selected, args.seed)
-        lot       = _lot_label(args.seed, pilot=False, irr=False) + "-llmonly"
+        lot       = _lot_label(args.seed, pilot=False, irr=False) + "-agentic"
         annotated = annotate(ordered, args.seed, lot)
         write_jsonl(args.output, annotated)
         print(f"wrote {args.output.resolve()}")

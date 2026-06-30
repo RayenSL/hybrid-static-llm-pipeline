@@ -8,11 +8,14 @@ using Microsoft.Extensions.DependencyInjection;
 namespace HybridLens.CLI.Commands;
 
 /// <summary>
-/// Objective repair verification (§4.5.1, §4.7.1). Reads a runs JSONL, takes every generation row
-/// that produced a repair (hybrid, and matched llm-only), and for each: applies it strict-literally
-/// with a non-evaluated Claude-family applier, builds the applied corpus, and re-measures the
-/// triggering metric. Emits one verification row per candidate with the ordinal ladder and the
-/// binary verified-repair outcome.
+/// Objective repair verification for the HYBRID arm (§4.5.1, §4.7.1). Reads a runs JSONL, takes every
+/// hybrid generation row that produced a repair, and for each: applies it strict-literally with a
+/// non-evaluated Claude-family applier, builds the applied corpus, and re-measures the triggering
+/// metric. Emits one verification row per candidate with the ordinal ladder and binary outcome.
+///
+/// The agentic arm is NOT processed here: the agent edits the source itself within its loop, so its
+/// final solution is scored directly inside <see cref="HybridLens.Pipeline.AgenticRunner"/> with no
+/// separate apply step (§4.7.1). Only hybrid repairs flow through the applier.
 /// </summary>
 public static class VerifyRepairCommand
 {
@@ -32,7 +35,7 @@ public static class VerifyRepairCommand
 
         var applierOption = new Option<string>("--applier")
         {
-            Description = "Applier model key from Llm.Models — a non-evaluated Claude-family model (default: claude-opus-4-8)."
+            Description = "Applier model key from Llm.Models — a non-evaluated model from a different family than the evaluated model (default: DeepSeek-V4-Pro)."
         };
 
         var outOption = new Option<FileInfo?>("--out")
@@ -55,7 +58,7 @@ public static class VerifyRepairCommand
         {
             var from         = parseResult.GetValue(fromOption)!;
             var target       = parseResult.GetValue(targetOption)!;
-            var applierModel = parseResult.GetValue(applierOption) is { Length: > 0 } a ? a : "claude-opus-4-8";
+            var applierModel = parseResult.GetValue(applierOption) is { Length: > 0 } a ? a : "DeepSeek-V4-Pro";
             var outFile      = parseResult.GetValue(outOption);
             var buildTimeout = parseResult.GetValue(buildTimeoutOption);
             if (buildTimeout <= 0) buildTimeout = 180;
@@ -104,9 +107,9 @@ public static class VerifyRepairCommand
     }
 
     /// <summary>
-    /// Reconstructs repair candidates from a runs JSONL: every hybrid row, and every matched
-    /// (non-spurious) llm-only row, that carries a non-empty parsed_suggested_fix. Analyser-only
-    /// rows (no real repair) and pre-existing verification rows are skipped.
+    /// Reconstructs HYBRID repair candidates from a runs JSONL: every hybrid row carrying a non-empty
+    /// parsed_suggested_fix. Analyser-only rows (no real repair), agentic rows (scored in their own
+    /// runner), and pre-existing verification rows are skipped.
     /// </summary>
     private static IReadOnlyList<RepairCandidate> LoadCandidates(string path)
     {
@@ -142,14 +145,10 @@ public static class VerifyRepairCommand
                 var type = NormaliseType(typeStr);
                 if (type is null) continue;
 
+                // Hybrid only. Analyser-only emits no repair; the agentic arm is scored inside its own
+                // runner (no separate applier, §4.7.1). Skip anything that is not a hybrid generation row.
                 var architecture = GetString(root, "architecture") ?? "hybrid";
-                if (architecture.Equals("analyser_only", StringComparison.OrdinalIgnoreCase)) continue;
-
-                // Matched-only for the llm-only arm: a repair on a spurious detection has no instance to resolve.
-                if (architecture.Equals("llm_only", StringComparison.OrdinalIgnoreCase)
-                    && root.TryGetProperty("is_spurious", out var sp)
-                    && sp.ValueKind == JsonValueKind.True)
-                    continue;
+                if (!architecture.Equals("hybrid", StringComparison.OrdinalIgnoreCase)) continue;
 
                 result.Add(new RepairCandidate
                 {

@@ -158,6 +158,9 @@ Generates the descriptive tables and figures the thesis presents in §5.4.
 
 ```bash
 python analyse_results.py --input experiments.jsonl --output output
+
+# include the verified-repair tables (5.3 / 5.7) from the verify-repair output
+python analyse_results.py --input experiments.jsonl --verified "runs/*-verified.jsonl" --output output
 ```
 
 What it computes (per Methodology §4.5–4.6 + Appendix B):
@@ -170,6 +173,8 @@ What it computes (per Methodology §4.5–4.6 + Appendix B):
 | Quality-attribute | `quality_alignment_by_anti_pattern.csv`, `alignment_rate_by_anti_pattern.csv` | Mean correctly-aligned + incorrect count per anti-pattern — RQ1.3 |
 | H1 baseline | `h1_baseline_vs_hybrid_cliffs_delta.csv` | Paired Cliff's δ comparing `analyser_only` vs each hybrid level, per dimension |
 | H2 long-format | `context_monotonicity_long.csv` | One row per (dim × context × ordinal level) with count + proportion + CIs — input file for the CLMM fitted in R |
+| Verified-repair (architecture) — `--verified` | `verified_repair_by_architecture.csv`, `verified_repair_mcnemar_hybrid_vs_agentic.csv` | Table 5.3: success % + ladder breakdown per arm at Minimal (frontier); McNemar hybrid vs agentic — H1b |
+| Verified-repair (context) — `--verified` | `verified_repair_by_context.csv`, `verified_repair_context_trend.csv`, `verified_repair_context_long.csv` | Table 5.7: success % by context (hybrid) + Cochran–Armitage trend + binomial-GLMM long-format for R — H2b |
 
 Statistical primitives used internally:
 
