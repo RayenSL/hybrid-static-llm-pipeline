@@ -114,8 +114,17 @@ public sealed record RunRecord
     public          bool?            AgenticBudgetExhausted   { get; init; }
     /// <summary>Path to the frozen trajectory artefact (all turns + build results + final source) — reproducibility at the artefact level (§4.8.5).</summary>
     public          string?          AgenticTrajectoryRef     { get; init; }
-    /// <summary>On an agentic verified-repair row: whether the agent reported a finding matching this seeded instance (lets analysis restrict the paired comparison to recovered cases, §4.4.1 H1b).</summary>
+    /// <summary>On an agentic verified-repair row: whether the agent reported a finding matching this seeded instance (lets analysis restrict the paired comparison to recovered cases, §4.4.1 H1b). True by construction on the grounded-iterative arm, which is supplied the finding.</summary>
     public          bool?            AgenticRecovered         { get; init; }
+    /// <summary>
+    /// Which snapshot of the iterative trajectory this verified-repair row scores: "first_build" (the
+    /// state submitted at the agent's first build, before any compiler feedback — the single-pass cell of
+    /// the §4.4.1 2×2) or "final" (the state when the agent declared completion or exhausted its budget).
+    /// Both the ungrounded agentic and grounded-iterative arms emit one row of each per instance, so the
+    /// iteration effect (final vs first_build) is read within an arm and the grounding effect across arms.
+    /// Null on analyser/hybrid rows and on agentic detection finding rows.
+    /// </summary>
+    public          string?          AgenticSnapshot          { get; init; }
 
     // ── Failure & parse status ───────────────────────────────────────────────
     public required ParseStatus      ParseStatus      { get; init; }

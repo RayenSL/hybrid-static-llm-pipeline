@@ -94,6 +94,22 @@ The implementation now matches the agentic loop (CLI `agentic`, prompt v2.0.0, a
 
 ---
 
+## I. Grounded-iterative arm & the 2×2 (v19 §4.4.1, Table 4.1, §5.1.5, Tables 5.7–5.9) — IMPLEMENTED 2026-07-02
+
+The v19 H1c design is built and the code matches the text (no code↔thesis gap): CLI `grounded-iterative`,
+architecture tag `grounded_iterative`, the **same** v2.0.0 loop / iteration budget / compiler-only tool as
+the agentic arm, opening prompt seeded with the analyser's Structural finding block (§5.1.5). Both iterative
+arms emit a `first_build` and a `final` verified-repair snapshot per instance — the single-pass and iterative
+rows of the 2×2. These sections need no rewrite, only the fixes below.
+
+- **Table 5.7** (the 2×2) ← `output/tables/verified_repair_2x2.csv` (grounded/ungrounded × first_build/final, + hybrid comparator row).
+- **Table 5.8** (single-factor contrasts) ← `verified_repair_2x2_contrasts.csv` — H1c grounding@iterative, grounding@single-pass, iteration@grounded, iteration@ungrounded, and the descriptive interaction. Holm applies to the grounding McNemar rows only; risk differences use a Newcombe/Wilson **paired** CI, per §4.6.
+- **Table 5.9** (H1b family) ← `verified_repair_h1b_family_contrasts.csv` — hybrid vs agentic first-build (grounding @ single-shot) + agentic final vs first-build (iteration @ ungrounded).
+- **Broken refs specific to these sections** (part of item 23): Table 5.9 caption "from Table **??**" → "from Table **5.7**"; §4.4.1 "three-way architecture comparison of **§??**" → **§4.4.1**; §4.6 "binomial mixed model of **§??**" → **§4.6**.
+- **State budget parity in §5.1.5**: the agentic and grounded-iterative arms must use the **same** frozen iteration budget (6), or the 2×2 no longer holds the control structure fixed. The text's "iteration budget is left unchanged" should be made explicit — "the same frozen budget (6) as the ungrounded agentic arm."
+
+---
+
 ## H. Corpus-repo follow-ups (not the thesis — `hybrid-pipeline-corpus`)
 
 These mirror the two-layer decision (B.9) and keep the published artefacts consistent:

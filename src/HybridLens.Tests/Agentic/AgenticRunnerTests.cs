@@ -5,10 +5,12 @@ using HybridLens.Pipeline;
 namespace HybridLens.Tests.Agentic;
 
 /// <summary>
-/// The agentic arm (§4.4.1, Appendix E v2.0.0) runs an autonomous edit→build loop and writes two row
-/// types per (file × run): detection finding rows (recall/precision) and verified-repair rows scoring
-/// the FINAL edited solution directly (build gate → re-measure; no separate applier). These tests drive
-/// the loop with a scripted adapter, a fake compiler, and a fake re-measurer so no real build runs.
+/// The iterative arms (§4.4.1, Appendix E v2.0.0) run an autonomous edit→build loop. The ungrounded
+/// agentic arm writes detection finding rows (recall/precision) plus, per known instance, TWO verified-
+/// repair rows — a "final" snapshot and a "first_build" snapshot (the single-pass cell of the 2×2). The
+/// grounded-iterative arm seeds the opening prompt with the analyser's finding block, writes no detection
+/// rows, and emits the same two verified snapshots. These tests drive the loop with a scripted adapter, a
+/// fake compiler, and a fake/ content-sensitive re-measurer so no real build runs.
 /// </summary>
 public sealed class AgenticRunnerTests : IDisposable
 {
@@ -62,7 +64,7 @@ public sealed class AgenticRunnerTests : IDisposable
         Assert.False(finding.AgenticBudgetExhausted);
         Assert.NotNull(finding.AgenticTrajectoryRef);
 
-        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null);
+        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null && r.AgenticSnapshot == "final");
         Assert.Equal(VerifiedRepairOutcome.Resolved, verified.VerifiedRepairLadder);
         Assert.True(verified.VerifiedRepairSuccess);
         Assert.True(verified.BuildPassed);
@@ -86,7 +88,7 @@ public sealed class AgenticRunnerTests : IDisposable
         await runner.RunAsync(known, runs: 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
             sweepFiles: [instanceFile]);
 
-        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null);
+        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null && r.AgenticSnapshot == "final");
         Assert.Equal(2, verified.AgenticIterations);                 // exactly the budget
         Assert.True(verified.AgenticBudgetExhausted);
         Assert.Equal(VerifiedRepairOutcome.BuildsUnresolved, verified.VerifiedRepairLadder);
@@ -137,7 +139,7 @@ public sealed class AgenticRunnerTests : IDisposable
         await runner.RunAsync(known, runs: 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
             sweepFiles: [instanceFile]);
 
-        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null);
+        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null && r.AgenticSnapshot == "final");
         Assert.Equal(VerifiedRepairOutcome.BuildFails, verified.VerifiedRepairLadder);
         Assert.False(verified.BuildPassed);
         Assert.False(verified.VerifiedRepairSuccess);
@@ -167,7 +169,7 @@ public sealed class AgenticRunnerTests : IDisposable
         Assert.Equal(AntiPatternType.GodClass, finding.AntiPatternType); // recorded as the instance's true type
         Assert.Equal("LongMethod", finding.LlmReportedAntiPattern);      // the agent's raw label kept for analysis
 
-        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null);
+        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null && r.AgenticSnapshot == "final");
         Assert.True(verified.AgenticRecovered);                          // the instance counts as recovered
     }
 
@@ -187,7 +189,7 @@ public sealed class AgenticRunnerTests : IDisposable
         await runner.RunAsync(known, runs: 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
             sweepFiles: [instanceFile]);
 
-        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null);
+        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null && r.AgenticSnapshot == "final");
         Assert.False(verified.AgenticBudgetExhausted);                   // an API failure is NOT budget exhaustion (§4.8.1)
         Assert.Equal(ErrorStatus.ApiFailure, verified.ErrorStatus);
         Assert.Equal(0, verified.AgenticIterations);
@@ -210,9 +212,81 @@ public sealed class AgenticRunnerTests : IDisposable
         await runner.RunAsync(known, runs: 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
             sweepFiles: [instanceFile]);
 
-        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null);
+        var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null && r.AgenticSnapshot == "final");
         Assert.Equal(ErrorStatus.Unknown, verified.ErrorStatus);
         Assert.False(verified.AgenticBudgetExhausted);
+    }
+
+    [Fact]
+    public async Task FirstBuildSnapshot_IsScoredIndependentlyOfFinal()
+    {
+        // §4.4.1 2×2 single-pass cell: the first-build state is re-scored separately from the final state,
+        // and the two can disagree (iteration is two-directional). Here the agent's first build is still
+        // smelly but builds; a second edit resolves it. The first_build row must be unresolved, final resolved.
+        var (sln, instanceFile, known) = MakeCorpus("Demo.Thing", 1);
+
+        const string firstEditStillSmelly =
+            """{"action":"edit_and_build","edited_file":"// STILL_SMELLY edit","findings":[{"anti_pattern":"GodClass","location":{"symbol":"Demo.Thing","line":1},"explanation":"e","quality_impact":"","remediation":"r"}]}""";
+        const string secondEditClean =
+            """{"action":"edit_and_build","edited_file":"// resolved now","findings":[{"anti_pattern":"GodClass","location":{"symbol":"Demo.Thing","line":1},"explanation":"e","quality_impact":"","remediation":"r"}]}""";
+
+        var store  = new CollectingRunStore();
+        var runner = new AgenticRunner(
+            new ScriptedAdapter(firstEditStillSmelly, secondEditClean, CompleteWithGodClass("Demo.Thing", 1)),
+            "gpt-5.4",
+            new ContentSensitiveMeasurer(triggerMarker: "STILL_SMELLY"),   // re-measures the actual file content
+            sln, iterationBudget: 6, buildTimeoutSeconds: 30,
+            build: (_, _, _) => Task.FromResult((true, "ok")));
+
+        await runner.RunAsync(known, runs: 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
+            sweepFiles: [instanceFile]);
+
+        var final = store.Records.Single(r => r.AgenticSnapshot == "final");
+        var first = store.Records.Single(r => r.AgenticSnapshot == "first_build");
+
+        Assert.Equal(VerifiedRepairOutcome.Resolved,         final.VerifiedRepairLadder);   // second edit cleaned it
+        Assert.Equal(VerifiedRepairOutcome.BuildsUnresolved, first.VerifiedRepairLadder);   // first build still smelly
+        Assert.Equal(2, final.AgenticIterations);
+        Assert.Equal(2, first.AgenticIterations);
+        Assert.Equal("agentic", first.Architecture);
+    }
+
+    [Fact]
+    public async Task GroundedIterative_SeedsFindingBlock_AndWritesNoDetectionRows()
+    {
+        // The grounded-iterative arm (§4.4.1, §5.1.5): the opening prompt carries the analyser's finding
+        // block, it is relieved of detection (no finding rows), and it still emits both verified snapshots.
+        var (sln, instanceFile, known) = MakeCorpus("Demo.Thing", 1);
+
+        var grounding = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            [Path.GetFullPath(instanceFile)] = "## Finding\nAnti-pattern : GodClass\nSymbol : Demo.Thing\n\n## Metrics\n  WMC: 60"
+        };
+
+        var store  = new CollectingRunStore();
+        var runner = new AgenticRunner(
+            new ScriptedAdapter(CompleteWithGodClass("Demo.Thing", 1)),
+            "gpt-5.4",
+            new FakeMeasurer(stillTriggers: false),
+            sln, iterationBudget: 6, buildTimeoutSeconds: 30,
+            build: (_, _, _) => Task.FromResult((true, "ok")),
+            architecture: "grounded_iterative");
+
+        await runner.RunAsync(known, runs: 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
+            sweepFiles: [instanceFile], groundingByFile: grounding);
+
+        // Relieved of detection: every row is a verified-repair row; none is a detection finding row.
+        Assert.NotEmpty(store.Records);
+        Assert.All(store.Records, r => Assert.NotNull(r.VerifiedRepairLadder));
+        Assert.All(store.Records, r => Assert.Equal("grounded_iterative", r.Architecture));
+        Assert.All(store.Records, r => Assert.True(r.AgenticRecovered));            // recovered by construction
+
+        // Both snapshots emitted, and the opening prompt carried the Structural finding block.
+        Assert.Contains(store.Records, r => r.AgenticSnapshot == "final");
+        Assert.Contains(store.Records, r => r.AgenticSnapshot == "first_build");
+        var any = store.Records.First();
+        Assert.Contains("Static-analysis findings", any.RawUserPrompt);
+        Assert.Contains("WMC: 60", any.RawUserPrompt);
     }
 
     // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -287,6 +361,23 @@ public sealed class AgenticRunnerTests : IDisposable
             AntiPatternType type, string workingFilePath, string instanceSymbol, CancellationToken cancellationToken = default)
             => Task.FromResult(new RemeasureResult(stillTriggers,
                 stillTriggers ? new Dictionary<string, double> { ["WMC"] = 60 } : null));
+    }
+
+    /// <summary>
+    /// Re-measures the ACTUAL file content at the path it is given, reporting "still triggers" iff the
+    /// content contains <paramref name="triggerMarker"/>. Lets a test distinguish the first-build snapshot
+    /// from the final one, since each is written to the working file before its re-measure.
+    /// </summary>
+    private sealed class ContentSensitiveMeasurer(string triggerMarker) : IRepairMeasurer
+    {
+        public Task<RemeasureResult> RemeasureAsync(
+            AntiPatternType type, string workingFilePath, string instanceSymbol, CancellationToken cancellationToken = default)
+        {
+            var content = File.Exists(workingFilePath) ? File.ReadAllText(workingFilePath) : string.Empty;
+            var stillTriggers = content.Contains(triggerMarker, StringComparison.Ordinal);
+            return Task.FromResult(new RemeasureResult(stillTriggers,
+                stillTriggers ? new Dictionary<string, double> { ["WMC"] = 60 } : null));
+        }
     }
 
     private sealed class CollectingRunStore : IRunStore

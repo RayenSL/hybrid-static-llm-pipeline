@@ -9,19 +9,29 @@ using HybridLens.Core.QualityAttributes;
 namespace HybridLens.Pipeline;
 
 /// <summary>
-/// Runs the agentic architecture arm (§4.4.1, Appendix E prompt v2.0.0). Unlike the single-shot
-/// LLM-only arm it replaced, the agent works in an AUTONOMOUS LOOP over a whole, unannotated source
-/// FILE: each turn it either edits the file and requests a build, or declares completion. Its only
-/// tool is the compiler — after every edit the pipeline builds a working copy of the corpus and
-/// feeds the result (success or diagnostics) back as the next user turn — and it is never shown the
-/// static analyser, so the arm stays ungrounded. The loop ends when the agent declares completion
-/// or the frozen iteration budget is exhausted (a distinct outcome, §4.8.1).
+/// Runs an iterative, compiler-in-the-loop architecture arm (§4.4.1, Appendix E prompt v2.0.0). The
+/// agent works in an AUTONOMOUS LOOP over a whole source FILE: each turn it either edits the file and
+/// requests a build, or declares completion. Its only tool is the compiler — after every edit the
+/// pipeline builds a working copy of the corpus and feeds the result (success or diagnostics) back as
+/// the next user turn. The loop ends when the agent declares completion or the frozen iteration budget
+/// is exhausted (a distinct outcome, §4.8.1).
 ///
-/// Two row types are written per (file × run):
-///   • detection finding rows — one per reported finding, matched to the known instances by
-///     type + line-in-range OR simple-symbol overlap (§4.5.1), feeding recall and precision; and
-///   • verified-repair rows — one per known instance in the file, scoring the agent's FINAL edited
-///     solution directly (build gate → detector re-run; no separate applier, §4.7.1).
+/// The same runner serves BOTH iterative arms of the §4.4.1 2×2; <paramref name="architecture"/>
+/// selects which:
+///   • <c>"agentic"</c> (ungrounded) — the agent is never shown the static analyser; it detects,
+///     explains, and repairs for itself, so the arm stays ungrounded and is scored for recall/precision.
+///   • <c>"grounded_iterative"</c> — the opening user prompt is seeded with the analyser's Structural
+///     finding block (passed via <c>groundingByFile</c>), routing the detector's output into the same
+///     loop. This relieves the arm of detection, so it emits no detection rows; the H1c contrast
+///     (grounded-iterative vs ungrounded agentic) then varies grounding alone (§5.1.5).
+///
+/// Row types written per (file × run):
+///   • detection finding rows (ungrounded arm only) — one per reported finding, matched to the known
+///     instances by type + line-in-range OR simple-symbol overlap (§4.5.1), feeding recall and precision; and
+///   • verified-repair rows — TWO per known instance, scoring the agent's edited solution directly
+///     (build gate → detector re-run; no separate applier, §4.7.1): a <c>"final"</c> snapshot and a
+///     <c>"first_build"</c> snapshot (the state submitted at the first build, before any compiler
+///     feedback — the single-pass cell of the 2×2, recovered by re-scoring that frozen state, §4.4.1).
 ///
 /// The frozen corpus is never mutated: the tree is copied once to a temp working directory and the
 /// edited file is restored to pristine between runs. The full trajectory is frozen as an artefact
@@ -34,13 +44,21 @@ public sealed class AgenticRunner(
     string solutionPath,
     int iterationBudget,
     int buildTimeoutSeconds,
-    Func<string, int, CancellationToken, Task<(bool Ok, string Output)>>? build = null)
+    Func<string, int, CancellationToken, Task<(bool Ok, string Output)>>? build = null,
+    string architecture = "agentic")
 {
     private static readonly string[] SkipDirs = ["bin", "obj", ".git", ".vs", ".idea"];
 
     /// <summary>The compiler tool. Defaults to a real <c>dotnet build</c>; overridable for tests.</summary>
     private readonly Func<string, int, CancellationToken, Task<(bool Ok, string Output)>> _build
         = build ?? DotnetBuilder.BuildAsync;
+
+    /// <summary>Architecture tag stamped on every row: "agentic" (ungrounded) or "grounded_iterative".</summary>
+    private readonly string _architecture = architecture;
+
+    /// <summary>Only the ungrounded arm performs detection; the grounded arm is supplied the findings, so it
+    /// emits no detection rows and treats every seeded instance as recovered by construction (§4.4.1).</summary>
+    private readonly bool _performsDetection = architecture == "agentic";
 
     /// <param name="knownInstances">Ground-truth instances (the rated set), grouped internally by file.</param>
     /// <param name="runs">Trajectories per file (default 3).</param>
@@ -51,6 +69,11 @@ public sealed class AgenticRunner(
     /// seeded instance contribute precision evidence — any detection on them is a scoreable spurious
     /// finding (§4.5.1). When null, only the files holding a seeded instance are processed.
     /// </param>
+    /// <param name="groundingByFile">
+    /// Grounded-iterative arm only: full-path → the analyser's Structural finding block to seed the
+    /// opening user prompt for that file (§5.1.5). Null/absent ⇒ the ungrounded agentic prompt (whole
+    /// file, no annotation). Keyed case-insensitively to match the resolved file paths.
+    /// </param>
     public async Task RunAsync(
         IReadOnlyList<KnownInstance> knownInstances,
         int runs,
@@ -59,7 +82,8 @@ public sealed class AgenticRunner(
         string trajectoryDir,
         TextWriter progress,
         CancellationToken ct,
-        IReadOnlyList<string>? sweepFiles = null)
+        IReadOnlyList<string>? sweepFiles = null,
+        IReadOnlyDictionary<string, string>? groundingByFile = null)
     {
         var knownByFile = knownInstances
             .GroupBy(k => Path.GetFullPath(k.FilePath), StringComparer.OrdinalIgnoreCase)
@@ -76,7 +100,7 @@ public sealed class AgenticRunner(
 
         var withInstances = files.Count(knownByFile.ContainsKey);
         progress.WriteLine(
-            $"agentic: {files.Count} file(s) ({withInstances} with seeded instances), " +
+            $"{_architecture}: {files.Count} file(s) ({withInstances} with seeded instances), " +
             $"{knownInstances.Count} known instance(s), model={modelName}, runs={runs}, " +
             $"budget={iterationBudget}, prompt={PromptTemplate.AgenticVersion}");
         progress.WriteLine($"  working copy: {workingRoot}");
@@ -111,8 +135,13 @@ public sealed class AgenticRunner(
                 var estTokens = content.Length / 4;                 // ~4 chars/token heuristic
                 var truncated = estTokens > maxInputTokenGuard;
 
+                // Grounded-iterative arm: the opening prompt carries the analyser's Structural finding
+                // block for this file; ungrounded arm: null (whole file, no annotation).
+                var grounding = groundingByFile is not null && groundingByFile.TryGetValue(filePath, out var gb) ? gb : null;
+
                 progress.WriteLine($"  [{fileNo}/{files.Count}] {Path.GetFileName(filePath)} " +
-                                   $"(~{estTokens} tok{(truncated ? ", TRUNCATED-GUARD" : "")}, {known.Count} known)");
+                                   $"(~{estTokens} tok{(truncated ? ", TRUNCATED-GUARD" : "")}, {known.Count} known" +
+                                   $"{(grounding is not null ? ", grounded" : "")})");
 
                 for (var run = 1; run <= runs; run++)
                 {
@@ -125,7 +154,7 @@ public sealed class AgenticRunner(
                     try
                     {
                         var traj = await RunTrajectoryAsync(
-                            systemPrompt, rel.Replace('\\', '/'), content, workingSln, workingTarget, ct);
+                            systemPrompt, rel.Replace('\\', '/'), content, workingSln, workingTarget, grounding, ct);
 
                         var artefactRef = await WriteTrajectoryArtefactAsync(trajectoryDir, rel, run, traj, ct);
 
@@ -164,13 +193,17 @@ public sealed class AgenticRunner(
 
     private async Task<Trajectory> RunTrajectoryAsync(
         string systemPrompt, string relForPrompt, string originalContent,
-        string workingSln, string workingTarget, CancellationToken ct)
+        string workingSln, string workingTarget, string? groundingBlock, CancellationToken ct)
     {
-        var userPrompt = PromptTemplate.BuildAgenticUserPrompt(relForPrompt, originalContent);
+        var userPrompt = groundingBlock is null
+            ? PromptTemplate.BuildAgenticUserPrompt(relForPrompt, originalContent)
+            : PromptTemplate.BuildGroundedIterativeUserPrompt(relForPrompt, originalContent, groundingBlock);
         var turns      = new List<ChatTurn> { new(ChatRole.User, userPrompt) };
         var builds     = new List<BuildAttempt>();
 
-        var finalContent  = originalContent;     // last applied+built edit (== original if never edited)
+        var finalContent     = originalContent;  // last applied+built edit (== original if never edited)
+        var firstBuildContent = originalContent; // state submitted at the FIRST build (== original if never edited)
+        bool? firstBuildOk    = null;            // verdict for the first build (null until the first edit builds)
         var iterations    = 0;                   // builds performed
         bool? lastBuildOk = null;                // verdict for finalContent's last build
         var declared      = new List<ParsedAgenticFinding>();
@@ -259,6 +292,11 @@ public sealed class AgenticRunner(
             iterations++;
             finalContent = parsed.EditedFile!;
             lastBuildOk  = ok;
+            if (iterations == 1)                  // freeze the first-build snapshot for the 2×2 single-pass cell
+            {
+                firstBuildContent = parsed.EditedFile!;
+                firstBuildOk      = ok;
+            }
             builds.Add(new BuildAttempt(iterations, ok, Tail(output, 2000)));
 
             turns.Add(new ChatTurn(ChatRole.User,
@@ -277,10 +315,14 @@ public sealed class AgenticRunner(
         // (the pristine corpus file compiles by construction).
         var buildPassedFinal = iterations == 0 || lastBuildOk == true;
 
+        // First-build snapshot: the pristine file compiles by construction when nothing was edited;
+        // otherwise its build is the recorded verdict of the first edit.
+        var firstBuildPassed = iterations == 0 || firstBuildOk == true;
+
         return new Trajectory(
             relForPrompt, systemPrompt, userPrompt, turns, builds, finalContent,
             iterations, exhausted, parseOk, buildPassedFinal, declared, inputTokens, outputTokens,
-            error, errorMessage);
+            error, errorMessage, firstBuildContent, firstBuildPassed);
     }
 
     // ── Record construction ────────────────────────────────────────────────
@@ -293,40 +335,74 @@ public sealed class AgenticRunner(
         var records   = new List<RunRecord>();
         var matchedKeys = new HashSet<string>(StringComparer.Ordinal);
 
-        // 1. Detection finding rows (recall + precision). Absence of a row for a known instance = a miss.
-        foreach (var f in traj.Findings)
-        {
-            var match = Match(f, known);
-            if (match is not null) matchedKeys.Add(match.InstanceKey);
-            records.Add(FindingRecord(filePath, f, match, runNumber, timestamp, truncated, traj, artefactRef));
-        }
+        // 1. Detection finding rows (recall + precision) — only the ungrounded arm detects. The grounded
+        //    arm is supplied the findings (relieved of detection), so it writes no detection rows (§4.4.1).
+        if (_performsDetection)
+            foreach (var f in traj.Findings)
+            {
+                var match = Match(f, known);
+                if (match is not null) matchedKeys.Add(match.InstanceKey);
+                records.Add(FindingRecord(filePath, f, match, runNumber, timestamp, truncated, traj, artefactRef));
+            }
 
-        // 2. Verified-repair rows — score the FINAL edited solution against each seeded instance in the file.
+        if (known.Count == 0) return records;
+
+        // 2a. FINAL snapshot — score the agent's final edited solution (workingTarget already holds it).
+        var finalScores = new Dictionary<string, SnapshotScore>(StringComparer.Ordinal);
         foreach (var inst in known)
         {
             ct.ThrowIfCancellationRequested();
+            finalScores[inst.InstanceKey] = await ScoreSnapshotAsync(inst, traj.BuildPassedFinal, workingTarget, ct);
+        }
 
-            bool? buildPassed;
-            IReadOnlyDictionary<string, double>? remeasured;
-            VerifiedRepairOutcome ladder;
+        // 2b. FIRST-BUILD snapshot — the single-pass cell of the 2×2 (§4.4.1): the state submitted at the
+        //     first build, before any compiler feedback. Re-score that frozen state with the SAME detector.
+        //     Write it back to the working file first so the detector (and its semantic model) sees it; a
+        //     first build that failed never reaches re-measure (it ladders to build_fails below).
+        if (traj.FirstBuildPassed)
+            await File.WriteAllTextAsync(workingTarget, traj.FirstBuildContent, ct);
+        var firstScores = new Dictionary<string, SnapshotScore>(StringComparer.Ordinal);
+        foreach (var inst in known)
+        {
+            ct.ThrowIfCancellationRequested();
+            firstScores[inst.InstanceKey] = await ScoreSnapshotAsync(inst, traj.FirstBuildPassed, workingTarget, ct);
+        }
 
-            if (!traj.BuildPassedFinal)
-            {
-                buildPassed = false; remeasured = null; ladder = VerifiedRepairOutcome.BuildFails;
-            }
-            else
-            {
-                var remeasure = await measurer.RemeasureAsync(inst.Type, workingTarget, inst.SymbolName, ct);
-                buildPassed = true;
-                ladder      = remeasure.StillTriggers ? VerifiedRepairOutcome.BuildsUnresolved : VerifiedRepairOutcome.Resolved;
-                remeasured  = remeasure.StillTriggers ? remeasure.Metrics : null;
-            }
+        // 3. Emit one verified-repair row per (instance × snapshot).
+        foreach (var inst in known)
+        {
+            var recovered = !_performsDetection || matchedKeys.Contains(inst.InstanceKey);
 
+            var fin = finalScores[inst.InstanceKey];
             records.Add(VerifiedRecord(inst, runNumber, timestamp, truncated, traj, artefactRef,
-                buildPassed, remeasured, ladder, recovered: matchedKeys.Contains(inst.InstanceKey)));
+                fin.BuildPassed, fin.Metrics, fin.Ladder, recovered, snapshot: "final"));
+
+            var fb = firstScores[inst.InstanceKey];
+            records.Add(VerifiedRecord(inst, runNumber, timestamp, truncated, traj, artefactRef,
+                fb.BuildPassed, fb.Metrics, fb.Ladder, recovered, snapshot: "first_build"));
         }
 
         return records;
+    }
+
+    private readonly record struct SnapshotScore(
+        bool? BuildPassed, IReadOnlyDictionary<string, double>? Metrics, VerifiedRepairOutcome Ladder);
+
+    /// <summary>
+    /// Scores one trajectory snapshot against a seeded instance: build gate then, on a green build,
+    /// detector re-run (§4.5.1). A snapshot whose build failed ladders to <c>build_fails</c> without
+    /// re-measuring; the caller must have written the snapshot's source to <paramref name="fileToMeasure"/>.
+    /// </summary>
+    private async Task<SnapshotScore> ScoreSnapshotAsync(
+        KnownInstance inst, bool buildPassed, string fileToMeasure, CancellationToken ct)
+    {
+        if (!buildPassed)
+            return new SnapshotScore(false, null, VerifiedRepairOutcome.BuildFails);
+
+        var remeasure = await measurer.RemeasureAsync(inst.Type, fileToMeasure, inst.SymbolName, ct);
+        var ladder    = remeasure.StillTriggers ? VerifiedRepairOutcome.BuildsUnresolved : VerifiedRepairOutcome.Resolved;
+        var metrics   = remeasure.StillTriggers ? remeasure.Metrics : null;
+        return new SnapshotScore(true, metrics, ladder);
     }
 
     private RunRecord FindingRecord(
@@ -355,7 +431,7 @@ public sealed class AgenticRunner(
             ContextLevel      = ContextLevel.Minimal,        // architecture is the discriminator, not context
             ModelName         = modelName,
             PromptVersion     = PromptTemplate.AgenticVersion,
-            Architecture      = "agentic",
+            Architecture      = _architecture,
             LlmReportedSymbol = f.Symbol,
             LlmReportedLine   = f.Line,
             LlmReportedAntiPattern = f.AntiPattern,    // the agent's raw type label (match is location-based, §4.5.1)
@@ -388,7 +464,7 @@ public sealed class AgenticRunner(
     private RunRecord VerifiedRecord(
         KnownInstance inst, int runNumber, DateTimeOffset timestamp, bool truncated, Trajectory traj,
         string artefactRef, bool? buildPassed, IReadOnlyDictionary<string, double>? remeasured,
-        VerifiedRepairOutcome ladder, bool recovered)
+        VerifiedRepairOutcome ladder, bool recovered, string snapshot)
         => new()
         {
             RunId             = Guid.NewGuid().ToString("N"),
@@ -404,7 +480,7 @@ public sealed class AgenticRunner(
             ContextLevel      = ContextLevel.Minimal,
             ModelName         = modelName,
             PromptVersion     = PromptTemplate.AgenticVersion,
-            Architecture      = "agentic",
+            Architecture      = _architecture,
             ContextTruncated  = truncated,
             RawSystemPrompt   = traj.SystemPrompt,
             RawUserPrompt     = traj.UserPrompt,
@@ -425,6 +501,7 @@ public sealed class AgenticRunner(
             AgenticBudgetExhausted = traj.BudgetExhausted,
             AgenticTrajectoryRef   = artefactRef,
             AgenticRecovered       = recovered,
+            AgenticSnapshot        = snapshot,
             ParseStatus       = traj.ParseOk ? ParseStatus.Ok : ParseStatus.Failed,
             ErrorStatus       = traj.Error,
             ErrorMessage      = traj.ErrorMessage
@@ -574,7 +651,8 @@ public sealed class AgenticRunner(
         string FinalContent, int Iterations, bool BudgetExhausted, bool ParseOk,
         bool BuildPassedFinal, IReadOnlyList<ParsedAgenticFinding> Findings,
         int InputTokens, int OutputTokens,
-        ErrorStatus? Error, string? ErrorMessage);
+        ErrorStatus? Error, string? ErrorMessage,
+        string FirstBuildContent, bool FirstBuildPassed);
 
     private async Task<string> WriteTrajectoryArtefactAsync(
         string trajectoryDir, string rel, int run, Trajectory traj, CancellationToken ct)
@@ -586,6 +664,7 @@ public sealed class AgenticRunner(
         {
             file             = traj.RelPath,
             run,
+            architecture     = _architecture,
             model            = modelName,
             prompt_version   = PromptTemplate.AgenticVersion,
             iteration_budget = iterationBudget,
@@ -595,6 +674,8 @@ public sealed class AgenticRunner(
             error            = traj.Error?.ToString(),
             error_message    = traj.ErrorMessage,
             build_passed_final = traj.BuildPassedFinal,
+            first_build_passed = traj.FirstBuildPassed,
+            first_build_source = traj.FirstBuildContent,
             system_prompt    = traj.SystemPrompt,
             turns            = traj.Turns.Select(t => new { role = t.Role.ToString().ToLowerInvariant(), content = t.Content }),
             builds           = traj.Builds.Select(b => new { attempt = b.Attempt, ok = b.Ok, output = b.OutputTail }),

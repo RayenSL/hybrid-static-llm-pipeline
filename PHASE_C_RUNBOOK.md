@@ -97,10 +97,33 @@ every `.cs` (~61 files, incl. the clean/distractor set) for fuller precision ove
 
 ---
 
+## 3b. Grounded-iterative arm (the H1c contrast, §4.4.1 / §5.1.5)
+
+Identical loop, iteration budget, and compiler-only tool as the agentic arm — but the opening prompt is
+seeded with the analyser's **Structural finding block** for each instance (rendered by `ContextBuilder`),
+so the arm is *relieved of detection* and **varies grounding alone**. Point `--from` at a **structural**
+hybrid trace: that trace carries the detector metrics the grounding block needs.
+
+```powershell
+$structural = Get-ChildItem runs/*.jsonl | Select-Object -First 1   # a structural-level hybrid trace
+dotnet run --project src/HybridLens.CLI -- grounded-iterative `
+    --from $structural.FullName --target $CORPUS --model gpt-5.4 --runs 3 --budget 6
+```
+
+It writes **no detection rows** (it is handed the findings) and, per instance, **two** verified-repair
+rows — a `final` and a `first_build` snapshot. Together with the agentic arm's two snapshots these fill
+the **2×2 of grounding × control structure** (Table 5.7); **H1c** is grounded-vs-ungrounded at the
+iterative snapshot (Table 5.8), and Table 5.9 adds the single-shot grounding contrast (hybrid vs the
+agentic first build). Keep `--budget` **identical** to the agentic arm so the control structure is held
+fixed — that is the whole point of the contrast.
+
+---
+
 ## 4. Verified-repair (objective repair outcome — hybrid arm only)
 
-Combine the hybrid traces into one file, then apply → build → re-measure. Analyser-only rows
-(no repair) and agentic rows (scored in their own runner) are skipped automatically.
+Combine the hybrid traces into one file, then apply → build → re-measure. Analyser-only rows (no repair)
+and the iterative-arm rows (agentic + grounded-iterative, each scored in its own runner) are skipped
+automatically.
 
 ```powershell
 Get-Content runs/*.jsonl | Set-Content runs/_all.jsonl
@@ -134,10 +157,11 @@ python analysis/select_rating_set.py --input "runs/*.jsonl" --output experiments
 python analysis/score_runs.py --input experiments_to_rate.jsonl --output experiments.jsonl --rater R1
 # 3. inter-rater reliability
 python analysis/compare_raters.py --r1 experiments.jsonl --r2 experiments_R2.jsonl
-# 4. thesis tables + figures, INCLUDING verified-repair (Tables 5.3 / 5.7).
-#    --verified globs BOTH the hybrid verify-repair trace AND the agentic trace (the agent's
-#    final solutions carry verified-repair rows too), so Table 5.3 covers all three arms.
-Get-Content runs/_verified.jsonl, runs/*-agentic.jsonl | Set-Content runs/_verified_all.jsonl
+# 4. thesis tables + figures, INCLUDING verified-repair (Tables 5.3 / 5.7 / 5.8 / 5.9).
+#    --verified globs the hybrid verify-repair trace AND both iterative arms' traces (agentic +
+#    grounded-iterative), whose final solutions carry verified-repair rows (first_build + final).
+#    Table 5.3 then covers all arms; the 2×2 (5.7) + H1c contrasts (5.8/5.9) get both agentic arms.
+Get-Content runs/_verified.jsonl, runs/*-agentic.jsonl, runs/*-grounded-iterative.jsonl | Set-Content runs/_verified_all.jsonl
 python analysis/analyse_results.py --input experiments.jsonl --verified runs/_verified_all.jsonl --output output
 ```
 
@@ -150,8 +174,9 @@ python analysis/analyse_results.py --input experiments.jsonl --verified runs/_ve
 | Hybrid generations (gpt-5.4) | 360 |
 | Analyser-only records | 30 |
 | Agentic trajectories (gpt-5.4) | ~3 × (#instance files ≈ 30) ≈ 90, each a multi-turn loop |
-| Applier calls (DeepSeek-V4-Pro) | ~360 (hybrid only; agentic needs no applier) |
-| `dotnet build`s | ~400+ during verify-repair (hybrid) + up to budget×agentic-trajectories (agentic loop) |
+| Grounded-iterative trajectories (gpt-5.4) | ~90 more (same shape as agentic; the H1c arm) |
+| Applier calls (DeepSeek-V4-Pro) | ~360 (hybrid only; both iterative arms need no applier) |
+| `dotnet build`s | ~400+ during verify-repair (hybrid) + up to budget × trajectories × 2 iterative arms |
 
 LLM spend is modest (gpt-5.4 on small files); **wall-clock is dominated by the builds** — both the
 verify-repair pass and the agentic loop — not the API calls.
@@ -161,5 +186,9 @@ verify-repair pass and the agentic loop — not the API calls.
   (matches the thesis 3F run-count); add `--sweep-corpus` for fuller precision over clean/distractors. See §3.
 - ~~Agentic verified-repair~~ — **RESOLVED**: the agent's final solution is scored in-runner (no
   separate applier, §4.7.1); `verify-repair` is hybrid-only.
+- ~~Grounding-vs-iteration confound (H1b)~~ — **RESOLVED (2026-07-02)**: added the **grounded-iterative**
+  arm (§3b) and the first-build snapshot decomposition, forming the §4.4.1 2×2. H1c isolates grounding at
+  the iterative snapshot; the first_build snapshots isolate iteration within each arm. Keep the agentic and
+  grounded-iterative `--budget` equal, or the 2×2 no longer holds the control structure fixed.
 - **Verify-repair coverage** — this runbook verifies *all* hybrid generations (thesis §5.2.5). If
   runtime is prohibitive, you could sample, but log it (no silent caps).

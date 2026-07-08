@@ -54,3 +54,4 @@ appsettings.*.local.json
 .DS_Store
 Thumbs.db
 desktop.ini
+__pycache__/
