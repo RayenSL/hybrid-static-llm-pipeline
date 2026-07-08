@@ -7,6 +7,7 @@
 #   bash run_phase_c.sh --skip-repair            skip verify-repair entirely (~400 builds, ~1-2 h)
 #   bash run_phase_c.sh --dry-run                print commands only, no execution
 #   bash run_phase_c.sh --post-rating            run analysis on rated experiments.jsonl
+#   MAX_PER_TYPE=1 RUNS=1 bash run_phase_c.sh     cheap pilot of the whole pipeline (env overrides)
 #
 # Prerequisites:
 #   - dotnet 10 on PATH
@@ -27,16 +28,18 @@ elif [[ -d "/z" ]];                             then Z_DRIVE="/z"
 else                                                 Z_DRIVE="Z:"
 fi
 
-CORPUS="$Z_DRIVE/GitHub/hybrid-pipeline-corpus/corpus/Corpus.sln"
-GROUND_TRUTH="$Z_DRIVE/GitHub/hybrid-pipeline-corpus/ground-truth/records"
-CLI="src/HybridLens.CLI"
-MODEL="gpt-5.4"
-APPLIER="DeepSeek-V4-Pro"
-RUNS=3
-BUDGET=6   # agentic iteration budget — max edit→build attempts per trajectory (§4.8.1)
-MAX_PER_TYPE=10
-IRR_FRACTION=0.30
-RNG_SEED=42
+# All overridable from the environment (defaults preserve the full-scale thesis run). Handy for a
+# cheap orchestration pilot: MAX_PER_TYPE=1 RUNS=1 bash run_phase_c.sh
+CORPUS="${CORPUS:-$Z_DRIVE/GitHub/hybrid-pipeline-corpus/corpus/Corpus.sln}"
+GROUND_TRUTH="${GROUND_TRUTH:-$Z_DRIVE/GitHub/hybrid-pipeline-corpus/ground-truth/records}"
+CLI="${CLI:-src/HybridLens.CLI}"
+MODEL="${MODEL:-gpt-5.4}"
+APPLIER="${APPLIER:-DeepSeek-V4-Pro}"
+RUNS="${RUNS:-3}"
+BUDGET="${BUDGET:-6}"   # agentic iteration budget — max edit→build attempts per trajectory (§4.8.1); keep equal across the agentic + grounded-iterative arms
+MAX_PER_TYPE="${MAX_PER_TYPE:-10}"
+IRR_FRACTION="${IRR_FRACTION:-0.30}"
+RNG_SEED="${RNG_SEED:-42}"
 
 # ── Parse flags ────────────────────────────────────────────────────────────────
 SKIP_REPAIR=0
@@ -50,7 +53,7 @@ while [[ $# -gt 0 ]]; do
         --dry-run)       DRY_RUN=1;            shift ;;
         --post-rating)   POST_RATING=1;        shift ;;
         --max-repairs)   MAX_REPAIRS="${2:?'--max-repairs requires a number'}"; shift 2 ;;
-        -h|--help)       sed -n '2,9p' "$0";   exit 0 ;;
+        -h|--help)       sed -n '2,10p' "$0";  exit 0 ;;
         *) printf 'Unknown flag: %s\n' "$1" >&2; exit 2 ;;
     esac
 done
@@ -101,6 +104,7 @@ run() {
 # Most recently modified JSONL by naming convention
 latest_run()      { ls -t runs/[0-9]*.jsonl    2>/dev/null | head -1 || echo ""; }
 latest_agentic()  { ls -t runs/*-agentic.jsonl 2>/dev/null | head -1 || echo ""; }
+latest_grounded() { ls -t runs/*-grounded-iterative.jsonl 2>/dev/null | head -1 || echo ""; }
 latest_verified() { ls -t runs/*-verified.jsonl 2>/dev/null | head -1 || echo ""; }
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -112,21 +116,25 @@ if [[ $POST_RATING -eq 1 ]]; then
     [[ -f "experiments.jsonl" ]] \
         || die "experiments.jsonl not found — run R1 rating first (see instructions at end of previous run)"
 
-    # Verified-repair rows come from two sources: the hybrid verify-repair trace AND the agentic
-    # trace (the agent's final solutions are scored in-runner, §4.7.1). Combine both for Table 5.3.
+    # Verified-repair rows come from three sources: the hybrid verify-repair trace, the ungrounded
+    # agentic trace, and the grounded-iterative trace (both iterative arms are scored in-runner at their
+    # first_build + final snapshots, §4.7.1). Combine all three so Table 5.3 covers every arm and the
+    # §4.4.1 2×2 (Table 5.7) + H1c contrasts have both agentic arms.
     VERIFIED=$(latest_verified)
     AGENTIC=$(latest_agentic)
+    GROUNDED=$(latest_grounded)
     VERIFIED_FLAG=""
-    if [[ -n "$VERIFIED" || -n "$AGENTIC" ]]; then
+    if [[ -n "$VERIFIED" || -n "$AGENTIC" || -n "$GROUNDED" ]]; then
         VERIFIED_COMBINED="runs/phase-c-verified-combined.jsonl"
         if [[ $DRY_RUN -eq 0 ]]; then
             : > "$VERIFIED_COMBINED"
             [[ -n "$VERIFIED" ]] && cat "$VERIFIED" >> "$VERIFIED_COMBINED"
             [[ -n "$AGENTIC"  ]] && cat "$AGENTIC"  >> "$VERIFIED_COMBINED"
+            [[ -n "$GROUNDED" ]] && cat "$GROUNDED" >> "$VERIFIED_COMBINED"
         fi
         VERIFIED_FLAG="--verified $VERIFIED_COMBINED"
     else
-        warn "No verified-repair or agentic trace found; repair tables will be skipped"
+        warn "No verified-repair / agentic / grounded-iterative trace found; repair tables will be skipped"
     fi
 
     run "$PYTHON" analysis/analyse_results.py \
@@ -170,7 +178,7 @@ info "Model       : $MODEL  (evaluated)"
 info "Applier     : $APPLIER  (repair only, not evaluated)"
 info "Runs/finding: $RUNS"
 info "Cap/type    : $MAX_PER_TYPE  (${MAX_PER_TYPE}×3 = $((MAX_PER_TYPE * 3)) findings total)"
-info "Runs        : 4 levels × $MAX_PER_TYPE × $RUNS = $((4 * MAX_PER_TYPE * RUNS)) hybrid  +  ~$((MAX_PER_TYPE * 3 * RUNS)) agentic trajectories (each a multi-turn build loop)"
+info "Runs        : 4 levels × $MAX_PER_TYPE × $RUNS = $((4 * MAX_PER_TYPE * RUNS)) hybrid  +  ~$((MAX_PER_TYPE * 3 * RUNS)) agentic  +  ~$((MAX_PER_TYPE * 3 * RUNS)) grounded-iterative trajectories (each a multi-turn build loop)"
 [[ $MAX_REPAIRS -gt 0 ]] && info "Repairs     : $MAX_REPAIRS unique instance(s) (--max-repairs)"
 [[ $SKIP_REPAIR -eq 1 ]] && warn "verify-repair SKIPPED (--skip-repair)"
 [[ $DRY_RUN -eq 1 ]]     && warn "DRY RUN — no commands will execute"
@@ -187,11 +195,17 @@ run_analyse \
 TRACE_ANALYSER=$(latest_run)
 ok "Trace: $TRACE_ANALYSER"
 
-# Band agreement: confirm detector metrics match frozen ground truth
-run "$PYTHON" analysis/band_agreement.py \
-    --runs         "$TRACE_ANALYSER" \
-    --ground-truth "$GROUND_TRUTH"
-ok "Band agreement: 30/30 expected"
+# Band agreement: confirm detector metrics match the frozen ground truth. It checks the run trace
+# against ALL 30 truth records and fails unless every one agrees, so it's only meaningful at full
+# scale — skip it on a partial pilot (MAX_PER_TYPE < 10), where the sample can't cover all 30.
+if [[ $MAX_PER_TYPE -ge 10 ]]; then
+    run "$PYTHON" analysis/band_agreement.py \
+        --runs         "$TRACE_ANALYSER" \
+        --ground-truth "$GROUND_TRUTH"
+    ok "Band agreement: 30/30 expected"
+else
+    warn "Band agreement skipped (pilot: MAX_PER_TYPE=$MAX_PER_TYPE < 10 can't cover all 30 truth records)"
+fi
 
 # ── C-1: Hybrid arm — 4 context levels ─────────────────────────────────────────
 step "C-1  Hybrid arm"
@@ -249,6 +263,23 @@ run "$DOTNET" run --project "$CLI" -- agentic \
 
 TRACE_AGENTIC=$(latest_agentic)
 ok "Agentic → $TRACE_AGENTIC"
+
+# ── C-2b: Grounded-iterative arm (H1c) ──────────────────────────────────────────
+# Same loop + budget as the agentic arm, but the opening prompt is seeded with the analyser's
+# Structural finding block, so it varies grounding alone (§4.4.1, §5.1.5). --from the structural
+# trace supplies each instance's detector metrics for that block. Populates the grounded row of the
+# §4.4.1 2×2 (Table 5.7); its first_build snapshot is decomposed in-runner beside the final one.
+step "C-2b  Grounded-iterative arm (analyser-grounded autonomous repair loop — the H1c contrast)"
+info "$((MAX_PER_TYPE * 3)) instance files × $RUNS trajectories, budget=$BUDGET (must match the agentic arm)"
+run "$DOTNET" run --project "$CLI" -- grounded-iterative \
+    --from   "$(winpath "$TRACE_STRUCTURAL")" \
+    --target "$(winpath "$CORPUS")" \
+    --model  "$MODEL" \
+    --runs   $RUNS \
+    --budget $BUDGET
+
+TRACE_GROUNDED=$(latest_grounded)
+ok "Grounded-iterative → $TRACE_GROUNDED"
 
 # ── C-3: Verify-repair ──────────────────────────────────────────────────────────
 TRACE_VERIFIED=""

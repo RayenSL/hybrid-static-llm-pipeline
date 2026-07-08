@@ -107,6 +107,17 @@ public static class PromptTemplate
         $"## Source file: {relativePath}\n```csharp\n{fileContent}\n```";
 
     /// <summary>
+    /// Opening user prompt for the grounded-iterative arm (§4.4.1, §5.1.5). Identical to the ungrounded
+    /// agentic prompt except that it is preceded by the analyser's Structural-level finding block(s)
+    /// (rendered by <c>ContextBuilder</c> at <see cref="ContextLevel.Structural"/>), so the detector's
+    /// output is routed into the loop rather than withheld. The system prompt, loop, compiler-only tool,
+    /// and iteration budget are unchanged — this arm differs from the ungrounded one only here, which is
+    /// what lets the H1c contrast vary grounding alone (and, as a consequence, relieves it of detection).
+    /// </summary>
+    public static string BuildGroundedIterativeUserPrompt(string relativePath, string fileContent, string findingBlock) =>
+        $"## Static-analysis findings (already located by the analyser — repair these occurrences)\n{findingBlock.TrimEnd()}\n\n## Source file: {relativePath}\n```csharp\n{fileContent}\n```";
+
+    /// <summary>
     /// Build-result feedback fed back as the next user turn after an <c>edit_and_build</c> action.
     /// On success the agent is invited to declare completion; on failure it is shown the diagnostics.
     /// </summary>

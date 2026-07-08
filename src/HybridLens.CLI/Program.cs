@@ -53,6 +53,7 @@ var root = new RootCommand("HybridLens — hybrid static + LLM .NET code analyse
 {
     AnalyseCommand.Build(services),
     AgenticCommand.Build(services),
+    GroundedIterativeCommand.Build(services),
     VerifyRepairCommand.Build(services)
 };
 

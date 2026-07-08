@@ -553,6 +553,7 @@ def agentic_recall(df: pd.DataFrame, tables_dir: Path, figures_dir: Path) -> Non
     matched_keys = set(
         findings.loc[findings["is_spurious"] == False, "matched_instance_id"].dropna()
     ) if "matched_instance_id" in findings.columns else set()
+    n_reported_matches = int((findings["is_spurious"] == False).sum()) if "is_spurious" in findings.columns else 0
 
     rows: list[dict] = []
     for ap, grp in known.groupby("anti_pattern_type"):
@@ -568,6 +569,14 @@ def agentic_recall(df: pd.DataFrame, tables_dir: Path, figures_dir: Path) -> Non
     # Overall row
     all_keys = set(known["instance_key"]); n = len(all_keys)
     rec = len(all_keys & matched_keys)
+    # Guard against a silent zero: if the arm reported matches but none intersect the known instance_key
+    # set, matched_instance_id and instance_key are in different string spaces (usually a file_path format
+    # mismatch between the agentic --from trace and the hybrid/analyser traces), not a true 0% recall.
+    if n_reported_matches > 0 and rec == 0:
+        warnings.warn(
+            f"agentic recall: {n_reported_matches} matched finding(s) reported but none intersect the "
+            "known instance_key set — matched_instance_id and instance_key likely differ in format "
+            "(e.g. file_path normalisation). Recall shown as 0; verify path consistency before trusting it.")
     lo, hi = wilson_ci(rec, n)
     rows.append({"anti_pattern_type": "ALL", "known": n, "recovered": rec,
                  "recall": round(rec / n if n else float("nan"), 4),
@@ -679,12 +688,28 @@ def load_verified(pattern: str) -> pd.DataFrame:
     df["verified_repair_success"] = (
         df["verified_repair_success"].map(_to_bool) if "verified_repair_success" in df.columns else False
     )
+    # Normalise the iterative-arm snapshot tag ("first_build" | "final"); NA on hybrid/analyser rows and
+    # on any older agentic rows written before the snapshot split. Used by the §4.4.1 2×2 (Table 5.7).
+    if "agentic_snapshot" in df.columns:
+        df["agentic_snapshot"] = df["agentic_snapshot"].astype("string").str.strip().str.lower()
+        df.loc[~df["agentic_snapshot"].isin(["first_build", "final"]), "agentic_snapshot"] = pd.NA
     return df
 
 
 def _ladder_counts(sub: pd.DataFrame) -> dict:
     col = sub["verified_repair_ladder"] if "verified_repair_ladder" in sub.columns else pd.Series(dtype=str)
     return {lvl: int((col == lvl).sum()) for lvl in LADDER_ORDER}
+
+
+def _final_only(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep exactly one verified-repair row per instance for the iterative arms by dropping their
+    first_build snapshot rows (the deployed outcome is the 'final' state). Hybrid/analyser rows carry no
+    snapshot (NA) and pass through unchanged. Prevents the two snapshots from double-counting in the
+    architecture contrast (Table 5.3) and its McNemar (§4.4.1)."""
+    if "agentic_snapshot" not in df.columns:
+        return df
+    s = df["agentic_snapshot"]
+    return df[s.isna() | (s == "final")]
 
 
 def verified_repair_by_architecture(df: pd.DataFrame, tables_dir: Path) -> None:
@@ -696,7 +721,8 @@ def verified_repair_by_architecture(df: pd.DataFrame, tables_dir: Path) -> None:
     contrast = df[(df["model_name"] == FRONTIER_MODEL) & (df["context_level"] == "minimal")]
     rows = []
     for arch in ("analyser_only", "hybrid", "agentic"):
-        adf = contrast[contrast["architecture"] == arch]
+        # The agentic arm now emits two snapshots per instance; score its deployed 'final' state here.
+        adf = _final_only(contrast[contrast["architecture"] == arch])
         n = len(adf)
         k = int(adf["verified_repair_success"].sum()) if n else 0
         lo, hi = wilson_ci(k, n)
@@ -711,7 +737,7 @@ def verified_repair_by_architecture(df: pd.DataFrame, tables_dir: Path) -> None:
             "note": "no repair (0 by construction)" if arch == "analyser_only" else "",
         })
     save_table(pd.DataFrame(rows), tables_dir, "verified_repair_by_architecture")
-    save_table(mcnemar_paired(contrast, "hybrid", "agentic"),
+    save_table(mcnemar_paired(_final_only(contrast), "hybrid", "agentic"),
                tables_dir, "verified_repair_mcnemar_hybrid_vs_agentic")
 
 
@@ -748,9 +774,9 @@ def _mcnemar_stat(b: int, c: int) -> tuple[float, float]:
 
 
 def verified_repair_by_context(df: pd.DataFrame, tables_dir: Path) -> None:
-    """Table 5.7: verified-repair success by context level (hybrid arm, frontier model), with a
+    """Table 5.10 (H2b): verified-repair success by context level (hybrid arm, frontier model), with a
     Cochran–Armitage trend test and a long-format CSV (one row per generation) for the binomial
-    GLMM fitted in R (H2b)."""
+    GLMM fitted in R. The §4.4.1 2×2 (Table 5.7) is a separate architecture contrast, not this one."""
     sub = df[(df["architecture"] == "hybrid") & (df["model_name"] == FRONTIER_MODEL)]
     rows, long_rows = [], []
     for ord_i, lvl in enumerate(HYBRID_CONTEXT_ORDER):
@@ -801,6 +827,160 @@ def cochran_armitage(by_ctx: pd.DataFrame) -> pd.DataFrame:
     p = 2 * (1 - norm.cdf(abs(z)))
     return pd.DataFrame([{"test": "cochran_armitage", "z": round(z, 4),
                           "p_value": round(p, 4), "groups": len(valid), "note": ""}])
+
+
+# ── Grounding × control-structure 2×2 (H1c, §4.4.1, Tables 5.7–5.9) ───────────
+
+def _success_by_instance(df: pd.DataFrame, arch: str, snapshot: str | None) -> pd.Series:
+    """instance_key → resolved-in-any-run (bool) for one architecture and (optional) snapshot. Mirrors
+    the per-instance .max() collapse used by mcnemar_paired so all paired contrasts share one convention."""
+    sub = df[df["architecture"] == arch]
+    if snapshot is not None and "agentic_snapshot" in sub.columns:
+        sub = sub[sub["agentic_snapshot"] == snapshot]
+    if sub.empty or "instance_key" not in sub.columns:
+        return pd.Series(dtype=bool)
+    return sub.groupby("instance_key")["verified_repair_success"].max().astype(bool)
+
+
+def newcombe_paired_ci(a11: int, a10: int, a01: int, a00: int, alpha: float = 0.05):
+    """Newcombe's method-10 CI for the difference of two PAIRED proportions — the Wilson-based interval
+    the thesis specifies for the paired verified-repair risk difference (§4.6). Cells: a11 both-resolved,
+    a10 A-only, a01 B-only, a00 neither. Returns (diff = pA − pB, lo, hi)."""
+    n = a11 + a10 + a01 + a00
+    if n == 0:
+        return (float("nan"), float("nan"), float("nan"))
+    p1 = (a11 + a10) / n
+    p2 = (a11 + a01) / n
+    diff = p1 - p2
+    l1, u1 = wilson_ci(a11 + a10, n)
+    l2, u2 = wilson_ci(a11 + a01, n)
+    denom = (a11 + a10) * (a01 + a00) * (a11 + a01) * (a10 + a00)
+    if denom <= 0:
+        phi = 0.0
+    else:
+        A = a11 * a00 - a10 * a01
+        phi = (A - n / 2) / math.sqrt(denom) if A > n / 2 else (0.0 if A >= 0 else A / math.sqrt(denom))
+    lo = diff - math.sqrt(max(0.0, (p1 - l1) ** 2 - 2 * phi * (p1 - l1) * (u2 - p2) + (u2 - p2) ** 2))
+    hi = diff + math.sqrt(max(0.0, (u1 - p1) ** 2 - 2 * phi * (u1 - p1) * (p2 - l2) + (p2 - l2) ** 2))
+    return (diff, lo, hi)
+
+
+def _paired_contrast(a: pd.Series, b: pd.Series, label: str, isolates: str) -> dict:
+    """Paired 2×2 of two success-by-instance series → risk difference (Newcombe/Wilson CI) + McNemar p."""
+    paired = pd.concat([a.rename("a"), b.rename("b")], axis=1).dropna().astype(bool)
+    a11 = int(( paired.a &  paired.b).sum())
+    a10 = int(( paired.a & ~paired.b).sum())
+    a01 = int((~paired.a &  paired.b).sum())
+    a00 = int((~paired.a & ~paired.b).sum())
+    diff, lo, hi = newcombe_paired_ci(a11, a10, a01, a00)
+    _, p = _mcnemar_stat(a10, a01)
+    _r = lambda v: None if v != v else round(v, 4)
+    return {
+        "contrast": label, "isolates": isolates, "n_pairs": len(paired),
+        "a_yes_b_no": a10, "a_no_b_yes": a01,
+        "risk_diff": _r(diff), "ci_lo": _r(lo), "ci_hi": _r(hi), "mcnemar_p": _r(p),
+    }
+
+
+def _holm_on_grounding(table: pd.DataFrame) -> pd.DataFrame:
+    """Holm-correct the McNemar p-values of the GROUNDING contrasts within a family (§4.6). The iteration
+    contrasts are net changes between two snapshots of one trajectory — not exchangeability tests — so they
+    are excluded from the correction, matching the thesis's treatment."""
+    if table.empty:
+        return table
+    mask = table["isolates"].str.startswith("grounding")
+    ps = [v for v in table.loc[mask, "mcnemar_p"].tolist()]
+    if ps and any(v is not None for v in ps):
+        corrected = holm_correct([v if v is not None else 1.0 for v in ps])
+        table.loc[mask, "mcnemar_p_holm"] = [round(c, 4) for c in corrected]
+    return table
+
+
+def verified_repair_2x2(df: pd.DataFrame, tables_dir: Path) -> None:
+    """
+    Table 5.7 (the 2×2 of grounding × control structure) + Table 5.8 (single-factor contrasts from it) +
+    Table 5.9 (H1b-family: single-shot grounding and ungrounded iteration), all §4.4.1 at Minimal grounding
+    on the frontier model. The four cells are the TWO iterative arms — grounded_iterative and (ungrounded)
+    agentic — each observed at its first_build (single-pass) and final (iterative) snapshot. The hybrid arm
+    is reported beneath as the deployed single-pass grounded comparator; it is NOT a cell of the square.
+    H1c is the grounded-vs-ungrounded contrast at the iterative snapshot, which varies grounding alone.
+    """
+    if "agentic_snapshot" not in df.columns:
+        warnings.warn("2×2: no agentic_snapshot column (run the agentic/grounded arms) — skipped")
+        return
+    base = df[(df["model_name"] == FRONTIER_MODEL) & (df["context_level"] == "minimal")]
+    present = set(base["architecture"])
+    if "agentic" not in present:
+        warnings.warn("2×2: no agentic rows — skipped")
+        return
+    grounded_present = "grounded_iterative" in present
+    if not grounded_present:
+        warnings.warn("2×2: no grounded_iterative rows — H1c/grounding contrasts unavailable; "
+                      "reporting the ungrounded row + iteration contrast only")
+
+    # ── Table 5.7: the four cells (+ hybrid comparator beneath) ──────────────
+    cells = []
+    for arm_label, arch in (("grounded", "grounded_iterative"), ("ungrounded", "agentic")):
+        if arch not in present:
+            continue
+        for snap in ("first_build", "final"):
+            sub = base[(base["architecture"] == arch) & (base["agentic_snapshot"] == snap)]
+            n = len(sub)
+            k = int(sub["verified_repair_success"].sum()) if n else 0
+            lo, hi = wilson_ci(k, n) if n else (float("nan"), float("nan"))
+            cells.append({
+                "arm": arm_label, "architecture": arch, "snapshot": snap,
+                "control_structure": "single_pass" if snap == "first_build" else "iterative",
+                "n": n, "resolved": k,
+                "success_pct": round(100 * k / n, 2) if n else float("nan"),
+                "ci_lo_pct": round(100 * lo, 2) if n else float("nan"),
+                "ci_hi_pct": round(100 * hi, 2) if n else float("nan"),
+            })
+    hyb = base[base["architecture"] == "hybrid"]
+    if len(hyb):
+        n = len(hyb); k = int(hyb["verified_repair_success"].sum()); lo, hi = wilson_ci(k, n)
+        cells.append({
+            "arm": "comparator", "architecture": "hybrid", "snapshot": "applied_literally",
+            "control_structure": "single_pass", "n": n, "resolved": k,
+            "success_pct": round(100 * k / n, 2), "ci_lo_pct": round(100 * lo, 2),
+            "ci_hi_pct": round(100 * hi, 2),
+        })
+    save_table(pd.DataFrame(cells), tables_dir, "verified_repair_2x2")
+
+    # Per-instance success series feeding the paired contrasts.
+    g_final = _success_by_instance(base, "grounded_iterative", "final")
+    g_first = _success_by_instance(base, "grounded_iterative", "first_build")
+    a_final = _success_by_instance(base, "agentic",            "final")
+    a_first = _success_by_instance(base, "agentic",            "first_build")
+    hyb_succ = _success_by_instance(base, "hybrid", None)
+
+    # ── Table 5.8: single-factor contrasts drawn from the 2×2 ────────────────
+    contrasts: list[dict] = []
+    if grounded_present:
+        contrasts.append(_paired_contrast(g_final, a_final, "grounded_vs_ungrounded_iterative_H1c", "grounding @ iterative"))
+        contrasts.append(_paired_contrast(g_first, a_first, "grounded_vs_ungrounded_single_pass",   "grounding @ single-pass"))
+        contrasts.append(_paired_contrast(g_final, g_first, "grounded_final_vs_first_build",         "iteration @ grounded"))
+    contrasts.append(_paired_contrast(a_final, a_first, "ungrounded_final_vs_first_build", "iteration @ ungrounded"))
+    if grounded_present:
+        # Difference of grounding effects (descriptive interaction): effect@iterative − effect@single-pass.
+        rate = lambda s: float(s.mean()) if len(s) else float("nan")
+        eff_iter   = rate(g_final) - rate(a_final)
+        eff_single = rate(g_first) - rate(a_first)
+        inter = eff_iter - eff_single
+        contrasts.append({
+            "contrast": "difference_of_grounding_effects", "isolates": "interaction (descriptive)",
+            "n_pairs": None, "a_yes_b_no": None, "a_no_b_yes": None,
+            "risk_diff": None if inter != inter else round(inter, 4),
+            "ci_lo": None, "ci_hi": None, "mcnemar_p": None,
+        })
+    save_table(_holm_on_grounding(pd.DataFrame(contrasts)), tables_dir, "verified_repair_2x2_contrasts")
+
+    # ── Table 5.9: H1b family — single-shot grounding + ungrounded iteration ──
+    h1b: list[dict] = []
+    if len(hyb_succ):
+        h1b.append(_paired_contrast(hyb_succ, a_first, "hybrid_vs_agentic_first_build", "grounding @ single-shot"))
+    h1b.append(_paired_contrast(a_final, a_first, "agentic_final_vs_first_build", "iteration @ ungrounded"))
+    save_table(_holm_on_grounding(pd.DataFrame(h1b)), tables_dir, "verified_repair_h1b_family_contrasts")
 
 
 # ── Driver ───────────────────────────────────────────────────────────────────
@@ -864,6 +1044,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"loaded {len(vdf)} verified-repair row(s) from {args.verified}")
             verified_repair_by_architecture(vdf, tables_dir)
             verified_repair_by_context(vdf, tables_dir)
+            verified_repair_2x2(vdf, tables_dir)
 
     print(f"\ndone — tables in {tables_dir.resolve()}")
     print(f"       figures in {figures_dir.resolve()}")
