@@ -61,10 +61,17 @@ public static class GroundedIterativeCommand
             Description = "Per-build dotnet build timeout in seconds (default: 180)."
         };
 
+        var qualityDiffOption = new Option<bool>("--quality-diff")
+        {
+            Description = "Also measure whole-solution quality impact of each trajectory's FINAL built state " +
+                          "(Layer 1 detectors + Layer 2 CA analyzers, before→after). Adds one dedicated analyzer " +
+                          "build per trajectory; the agent's iteration builds stay analyzer-free."
+        };
+
         var command = new Command("grounded-iterative",
             "Run the grounded-iterative arm (H1c): the agentic loop seeded with the analyser's Structural finding block, varying grounding alone.")
         {
-            fromOption, targetOption, modelOption, runsOption, budgetOption, maxTokenGuardOption, buildTimeoutOption
+            fromOption, targetOption, modelOption, runsOption, budgetOption, maxTokenGuardOption, buildTimeoutOption, qualityDiffOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -80,6 +87,7 @@ public static class GroundedIterativeCommand
             if (maxTokenGuard <= 0) maxTokenGuard = 120_000;
             var buildTimeout  = parseResult.GetValue(buildTimeoutOption);
             if (buildTimeout <= 0) buildTimeout = 180;
+            var qualityDiff   = parseResult.GetValue(qualityDiffOption);
 
             if (!from.Exists)
             {
@@ -143,10 +151,14 @@ public static class GroundedIterativeCommand
             Console.Error.WriteLine($"Trajectories: {Path.GetFullPath(trajectoryDir)}{Environment.NewLine}");
 
             var measurer = services.GetRequiredService<IRepairMeasurer>();
+            var qualityScanner = qualityDiff ? services.GetRequiredService<ISolutionQualityScanner>() : null;
+            if (qualityDiff)
+                Console.Error.WriteLine("quality-diff: ON — whole-solution Layer 1 + Layer 2 measured for each trajectory's final built state.");
 
             await using IRunStore runStore = new JsonlRunStore(runStorePath);
             var runner = new AgenticRunner(
-                adapter, model, measurer, target.FullName, budget, buildTimeout, architecture: "grounded_iterative");
+                adapter, model, measurer, target.FullName, budget, buildTimeout, architecture: "grounded_iterative",
+                qualityScanner: qualityScanner);
             await runner.RunAsync(
                 known, runs, runStore, maxTokenGuard, trajectoryDir, Console.Error, cancellationToken,
                 sweepFiles: null, groundingByFile: groundingByFile);

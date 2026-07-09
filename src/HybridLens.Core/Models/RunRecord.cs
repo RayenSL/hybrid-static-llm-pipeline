@@ -107,6 +107,17 @@ public sealed record RunRecord
     /// <summary>Binary headline outcome = applies ∧ builds ∧ metric-resolved.</summary>
     public          bool?            VerifiedRepairSuccess    { get; init; }
 
+    // ── Whole-solution quality impact (opt-in; § quality-impact) ─────────────
+    /// <summary>
+    /// Before→after whole-solution quality change for this applied repair, measured only on rows whose
+    /// applied state built (a meaningful "after" exists). Two instruments: the study's own detector over
+    /// the whole solution (Layer 1, self-scored) and Microsoft.CodeAnalysis.NetAnalyzers (Layer 2,
+    /// independent — breaks the self-scoring circularity). Null unless the run was invoked with
+    /// <c>--quality-diff</c>, and null on generation/detection rows, unapplicable rows, and build-failed
+    /// rows. On the iterative arms only the <c>final</c> snapshot carries it (the state a developer would ship).
+    /// </summary>
+    public          QualityDelta?    QualityDelta             { get; init; }
+
     // ── Agentic loop fields (§4.4.1, §4.8; null on analyser/hybrid rows) ──────
     /// <summary>Number of edit→build attempts the agentic trajectory consumed.</summary>
     public          int?             AgenticIterations        { get; init; }

@@ -48,10 +48,16 @@ public static class VerifyRepairCommand
             Description = "Per-candidate dotnet build timeout in seconds (default: 180)."
         };
 
+        var qualityDiffOption = new Option<bool>("--quality-diff")
+        {
+            Description = "Also measure whole-solution quality impact per built repair (Layer 1 detectors + Layer 2 CA analyzers, before→after). " +
+                          "Adds a dedicated analyzer build per candidate; the verified-repair gate stays analyzer-free."
+        };
+
         var command = new Command("verify-repair",
             "Apply each LLM repair, build, and re-measure the triggering metric (verified-repair, H1/H2b).")
         {
-            fromOption, targetOption, applierOption, outOption, buildTimeoutOption
+            fromOption, targetOption, applierOption, outOption, buildTimeoutOption, qualityDiffOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -62,6 +68,7 @@ public static class VerifyRepairCommand
             var outFile      = parseResult.GetValue(outOption);
             var buildTimeout = parseResult.GetValue(buildTimeoutOption);
             if (buildTimeout <= 0) buildTimeout = 180;
+            var qualityDiff  = parseResult.GetValue(qualityDiffOption);
 
             if (!from.Exists)
             {
@@ -94,9 +101,13 @@ public static class VerifyRepairCommand
                           ?? Path.Combine("runs", $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}-verified.jsonl");
             Console.Error.WriteLine($"Run trace: {Path.GetFullPath(outPath)}{Environment.NewLine}");
 
+            var qualityScanner = qualityDiff ? services.GetRequiredService<ISolutionQualityScanner>() : null;
+            if (qualityDiff)
+                Console.Error.WriteLine("quality-diff: ON — whole-solution Layer 1 + Layer 2 measured per built repair.");
+
             await using IRunStore store = new JsonlRunStore(outPath);
             var applier  = new RepairApplier(applierAdapter, applierModel);
-            var verifier = new RepairVerifier(applier, measurer, target.FullName, buildTimeout);
+            var verifier = new RepairVerifier(applier, measurer, target.FullName, buildTimeout, qualityScanner: qualityScanner);
             await verifier.RunAsync(candidates, store, Console.Error, cancellationToken);
 
             Console.Error.WriteLine($"{Environment.NewLine}verify-repair complete.");
