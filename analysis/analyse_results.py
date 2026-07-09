@@ -983,6 +983,112 @@ def verified_repair_2x2(df: pd.DataFrame, tables_dir: Path) -> None:
     save_table(_holm_on_grounding(pd.DataFrame(h1b)), tables_dir, "verified_repair_h1b_family_contrasts")
 
 
+# ── Whole-solution quality impact (§ quality-impact) ──────────────────────────
+
+def _qnum(v, default: int = 0):
+    """Coerce a JSON delta value to a number; None/NaN/missing → default."""
+    if isinstance(v, bool):
+        return int(v)
+    if isinstance(v, (int, float)) and not (isinstance(v, float) and np.isnan(v)):
+        return v
+    return default
+
+
+def _quality_rows(df: pd.DataFrame) -> pd.DataFrame:
+    """Verified-repair rows carrying a quality_delta object, flattened to scalar columns. The iterative
+    arms are restricted to their 'final' snapshot (the deployed state), matching the other verified tables.
+    Empty when the run was produced without --quality-diff (no quality_delta column / all null)."""
+    if "quality_delta" not in df.columns:
+        return pd.DataFrame()
+    d = _final_only(df).copy()
+    d = d[d["quality_delta"].apply(lambda v: isinstance(v, dict))].copy()
+    if d.empty:
+        return pd.DataFrame()
+    q = d["quality_delta"]
+    d["q_smell_total"]       = q.apply(lambda v: _qnum(v.get("smell_total_delta")))
+    d["q_smell_collateral"]  = q.apply(lambda v: bool(v.get("smell_collateral")))
+    d["q_ca_available"]      = q.apply(lambda v: bool(v.get("ca_available")))
+    d["q_ca_headline_total"] = q.apply(lambda v: _qnum(v.get("ca_headline_total_delta")))
+    d["q_ca_all_total"]      = q.apply(lambda v: _qnum(v.get("ca_all_total_delta")))
+    d["q_obsolete_total"]    = q.apply(lambda v: _qnum(v.get("compiler_obsolete_delta")))
+    d["q_ca_introduced_n"]   = q.apply(lambda v: len(v.get("ca_introduced") or []))
+    d["q_ca_removed_n"]      = q.apply(lambda v: len(v.get("ca_removed") or []))
+    return d
+
+
+def _quality_summary_row(prefix: dict, a: pd.DataFrame) -> dict:
+    """One summary row: Layer-1 smell delta + collateral rate, and Layer-2 CA delta (over the CA-available
+    subset). Positive deltas mean the repair ADDED problems (worse); negative means it removed them."""
+    n = len(a)
+    ca = a[a["q_ca_available"]]
+    n_ca = len(ca)
+    return {
+        **prefix,
+        "n_built": n,
+        # Layer 1 (self-scored detector, whole solution)
+        "smell_delta_mean": round(float(a["q_smell_total"].mean()), 3) if n else float("nan"),
+        "smell_delta_sum": int(a["q_smell_total"].sum()) if n else 0,
+        "collateral_n": int(a["q_smell_collateral"].sum()) if n else 0,
+        "collateral_pct": round(100 * float(a["q_smell_collateral"].mean()), 1) if n else 0.0,
+        # Layer 2 (independent CA instrument) — headline tier
+        "n_ca_available": n_ca,
+        "ca_headline_delta_mean": round(float(ca["q_ca_headline_total"].mean()), 3) if n_ca else float("nan"),
+        "ca_headline_worse_n": int((ca["q_ca_headline_total"] > 0).sum()) if n_ca else 0,
+        "ca_headline_better_n": int((ca["q_ca_headline_total"] < 0).sum()) if n_ca else 0,
+        "ca_headline_neutral_n": int((ca["q_ca_headline_total"] == 0).sum()) if n_ca else 0,
+        # Layer 2 — all tier (sensitivity) + set churn + obsolete corroboration
+        "ca_all_delta_mean": round(float(ca["q_ca_all_total"].mean()), 3) if n_ca else float("nan"),
+        "ca_introduced_mean": round(float(ca["q_ca_introduced_n"].mean()), 2) if n_ca else float("nan"),
+        "ca_removed_mean": round(float(ca["q_ca_removed_n"].mean()), 2) if n_ca else float("nan"),
+        "obsolete_delta_sum": int(ca["q_obsolete_total"].sum()) if n_ca else 0,
+    }
+
+
+def quality_impact_block(df: pd.DataFrame, tables_dir: Path) -> None:
+    """Whole-solution quality impact of the applied repairs (the supervisor's question: do the changes
+    improve or degrade the codebase, not just resolve the one flagged metric?). Three tables:
+      • by architecture (Minimal, frontier) — the deployed state of each arm;
+      • hybrid by context level — the context sweep parallel to H2b;
+      • CA headline delta by category — WHERE any degradation/improvement lands.
+    Only rows whose applied state built carry a quality_delta, so n_built ≤ the arm's resolved+unresolved."""
+    q = _quality_rows(df)
+    if q.empty:
+        return
+
+    have_dims = has(q, "model_name", "context_level", "architecture")
+    base = q[(q["model_name"] == FRONTIER_MODEL) & (q["context_level"] == "minimal")] if have_dims else q
+
+    # Table 1 — by architecture (deployed state, Minimal context / frontier model).
+    rows = [_quality_summary_row({"architecture": arch}, base[base["architecture"] == arch])
+            for arch in sorted(base["architecture"].dropna().unique())]
+    if rows:
+        save_table(pd.DataFrame(rows), tables_dir, "quality_impact_by_architecture")
+
+    # Table 2 — hybrid by context level (parallels the H2b context sweep).
+    if have_dims:
+        hyb = q[(q["architecture"] == "hybrid") & (q["model_name"] == FRONTIER_MODEL)]
+        ctx_rows = [_quality_summary_row({"context_level": ctx}, hyb[hyb["context_level"] == ctx])
+                    for ctx in HYBRID_CONTEXT_ORDER if len(hyb[hyb["context_level"] == ctx])]
+        if ctx_rows:
+            save_table(pd.DataFrame(ctx_rows), tables_dir, "quality_impact_hybrid_by_context")
+
+    # Table 3 — CA headline net delta by category, per architecture (net over the Minimal/frontier base).
+    cat_rows = []
+    for arch in sorted(base["architecture"].dropna().unique()):
+        agg: dict[str, float] = {}
+        for v in base[base["architecture"] == arch]["quality_delta"]:
+            for cat, nn in (v.get("ca_headline_delta_by_category") or {}).items():
+                agg[cat] = agg.get(cat, 0) + _qnum(nn)
+        for cat, nn in sorted(agg.items(), key=lambda kv: (-abs(kv[1]), kv[0])):
+            if nn != 0:
+                cat_rows.append({"architecture": arch, "category": cat, "net_headline_delta": int(nn)})
+    if cat_rows:
+        save_table(pd.DataFrame(cat_rows), tables_dir, "quality_impact_ca_by_category")
+
+    print(f"quality-impact: {len(q)} built row(s) carried a quality delta "
+          f"({int(q['q_ca_available'].sum())} with CA data); wrote quality_impact_* tables")
+
+
 # ── Driver ───────────────────────────────────────────────────────────────────
 
 def main(argv: list[str] | None = None) -> int:
@@ -995,7 +1101,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Output root directory (default: ./output)")
     parser.add_argument("--verified", type=str, default=None,
                         help="Path or glob to verify-repair JSONL(s); enables the verified-repair "
-                             "tables (5.3 by architecture, 5.7 by context level).")
+                             "tables (5.3 by architecture, 5.7 by context level) and, when the run used "
+                             "--quality-diff, the whole-solution quality-impact tables.")
     args = parser.parse_args(argv)
 
     if not args.input.exists():
@@ -1045,6 +1152,8 @@ def main(argv: list[str] | None = None) -> int:
             verified_repair_by_architecture(vdf, tables_dir)
             verified_repair_by_context(vdf, tables_dir)
             verified_repair_2x2(vdf, tables_dir)
+            # Whole-solution quality impact (only present when the run used --quality-diff).
+            quality_impact_block(vdf, tables_dir)
 
     print(f"\ndone — tables in {tables_dir.resolve()}")
     print(f"       figures in {figures_dir.resolve()}")

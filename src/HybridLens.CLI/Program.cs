@@ -33,6 +33,8 @@ var services = new ServiceCollection()
     .AddSingleton(configuration.GetSection("Llm").Get<LlmConfig>()               ?? new LlmConfig())
     .AddSingleton(configuration.GetSection("Pipeline").Get<PipelineConfig>()     ?? new PipelineConfig())
     .AddSingleton<WorkspaceLoader>()
+    .AddSingleton<SolutionQualityScanner>()
+    .AddSingleton<ISolutionQualityScanner>(sp => sp.GetRequiredService<SolutionQualityScanner>())
     .AddSingleton<IRepairMeasurer, RoslynRepairMeasurer>()
     .AddSingleton<IContextBuilder, HybridLens.ContextBuilder.ContextBuilder>()
     .AddSingleton<ILlmAdapterFactory, LlmAdapterFactory>()
@@ -54,7 +56,8 @@ var root = new RootCommand("HybridLens — hybrid static + LLM .NET code analyse
     AnalyseCommand.Build(services),
     AgenticCommand.Build(services),
     GroundedIterativeCommand.Build(services),
-    VerifyRepairCommand.Build(services)
+    VerifyRepairCommand.Build(services),
+    QualityScanCommand.Build(services)
 };
 
 return await root.Parse(args).InvokeAsync();

@@ -19,13 +19,17 @@ public sealed class RepairVerifier(
     IRepairMeasurer measurer,
     string solutionPath,
     int buildTimeoutSeconds,
-    Func<string, int, CancellationToken, Task<(bool Ok, string Output)>>? build = null)
+    Func<string, int, CancellationToken, Task<(bool Ok, string Output)>>? build = null,
+    ISolutionQualityScanner? qualityScanner = null)
 {
     private static readonly string[] SkipDirs = ["bin", "obj", ".git", ".vs", ".idea"];
 
     /// <summary>The build gate. Defaults to a real <c>dotnet build</c>; overridable for tests.</summary>
     private readonly Func<string, int, CancellationToken, Task<(bool Ok, string Output)>> _build
         = build ?? DotnetBuilder.BuildAsync;
+
+    /// <summary>Shared pristine-corpus quality baseline (the "before" for every candidate), captured once when <c>--quality-diff</c> is on.</summary>
+    private SolutionQualityScan? _qualityBaseline;
 
     public async Task RunAsync(
         IReadOnlyList<RepairCandidate> candidates,
@@ -45,6 +49,17 @@ public sealed class RepairVerifier(
         CopyTree(corpusRoot, workingRoot);
         try
         {
+            if (qualityScanner is not null)
+            {
+                progress.WriteLine("  quality-diff: capturing shared pristine baseline (dedicated 8.0-all analyzer build)…");
+                _qualityBaseline = await qualityScanner.BuildAndScanAsync(
+                    workingSln, workingRoot, _build, buildTimeoutSeconds, cancellationToken);
+                progress.WriteLine(
+                    $"  baseline: {_qualityBaseline.SmellTotal} smell(s); CA headline {_qualityBaseline.CaHeadlineTotal}, " +
+                    $"all {_qualityBaseline.CaAllTotal}, obsolete {_qualityBaseline.CompilerObsoleteCount} " +
+                    $"(CA available={_qualityBaseline.CaAvailable})");
+            }
+
             var n = 0;
             foreach (var candidate in candidates)
             {
@@ -148,12 +163,26 @@ public sealed class RepairVerifier(
                 : VerifiedRepairOutcome.Resolved;
 
             sw.Stop();
-            return BuildRecord(c, timestamp, sw.Elapsed.TotalMilliseconds, apply,
+            var durationMs = sw.Elapsed.TotalMilliseconds;   // timed BEFORE the quality build so the instrument does not inflate repair timing
+
+            // Whole-solution quality impact: the build gate passed, so a meaningful "after" state exists.
+            // A dedicated analyzer build (workingTarget still holds the applied source) emits the SARIF the
+            // scanner reads; the delta is against the shared pristine baseline.
+            QualityDelta? qualityDelta = null;
+            if (qualityScanner is not null && _qualityBaseline is not null)
+            {
+                var afterScan = await qualityScanner.BuildAndScanAsync(
+                    workingSln, workingRoot, _build, buildTimeoutSeconds, ct);
+                qualityDelta = QualityDelta.Between(_qualityBaseline, afterScan, c.Type, rel.Replace('\\', '/'));
+            }
+
+            return BuildRecord(c, timestamp, durationMs, apply,
                 applicable: true, unapplicableReason: null,
                 buildPassed: true,
                 remeasured: remeasure.StillTriggers ? remeasure.Metrics : null,
                 ladder: ladder,
-                parseStatus: ParseStatus.Ok, errorStatus: null, errorMessage: null);
+                parseStatus: ParseStatus.Ok, errorStatus: null, errorMessage: null,
+                qualityDelta: qualityDelta);
         }
         finally
         {
@@ -168,7 +197,8 @@ public sealed class RepairVerifier(
         RepairCandidate c, DateTimeOffset timestamp, double durationMs, ApplierResult apply,
         bool applicable, string? unapplicableReason, bool? buildPassed,
         IReadOnlyDictionary<string, double>? remeasured, VerifiedRepairOutcome ladder,
-        ParseStatus parseStatus, ErrorStatus? errorStatus, string? errorMessage)
+        ParseStatus parseStatus, ErrorStatus? errorStatus, string? errorMessage,
+        QualityDelta? qualityDelta = null)
         => new()
         {
             RunId                    = Guid.NewGuid().ToString("N"),
@@ -201,6 +231,7 @@ public sealed class RepairVerifier(
             RemeasuredMetrics        = remeasured,
             VerifiedRepairLadder     = ladder,
             VerifiedRepairSuccess    = ladder == VerifiedRepairOutcome.Resolved,
+            QualityDelta             = qualityDelta,
             ParseStatus              = parseStatus,
             ErrorStatus              = errorStatus,
             ErrorMessage             = errorMessage

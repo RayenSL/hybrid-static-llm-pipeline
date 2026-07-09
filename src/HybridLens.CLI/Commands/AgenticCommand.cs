@@ -63,10 +63,17 @@ public static class AgenticCommand
             Description = "Per-build dotnet build timeout in seconds (default: 180)."
         };
 
+        var qualityDiffOption = new Option<bool>("--quality-diff")
+        {
+            Description = "Also measure whole-solution quality impact of each trajectory's FINAL built state " +
+                          "(Layer 1 detectors + Layer 2 CA analyzers, before→after). Adds one dedicated analyzer " +
+                          "build per trajectory; the agent's iteration builds stay analyzer-free."
+        };
+
         var command = new Command("agentic",
             "Run the ungrounded agentic arm (H1b): an autonomous detect-and-repair loop with the compiler as its only tool.")
         {
-            fromOption, targetOption, modelOption, runsOption, budgetOption, sweepOption, maxTokenGuardOption, buildTimeoutOption
+            fromOption, targetOption, modelOption, runsOption, budgetOption, sweepOption, maxTokenGuardOption, buildTimeoutOption, qualityDiffOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -83,6 +90,7 @@ public static class AgenticCommand
             if (maxTokenGuard <= 0) maxTokenGuard = 120_000;
             var buildTimeout  = parseResult.GetValue(buildTimeoutOption);
             if (buildTimeout <= 0) buildTimeout = 180;
+            var qualityDiff   = parseResult.GetValue(qualityDiffOption);
 
             if (!from.Exists)
             {
@@ -130,9 +138,13 @@ public static class AgenticCommand
             Console.Error.WriteLine($"Trajectories: {Path.GetFullPath(trajectoryDir)}{Environment.NewLine}");
 
             var measurer = services.GetRequiredService<IRepairMeasurer>();
+            var qualityScanner = qualityDiff ? services.GetRequiredService<ISolutionQualityScanner>() : null;
+            if (qualityDiff)
+                Console.Error.WriteLine("quality-diff: ON — whole-solution Layer 1 + Layer 2 measured for each trajectory's final built state.");
 
             await using IRunStore runStore = new JsonlRunStore(runStorePath);
-            var runner = new AgenticRunner(adapter, model, measurer, target.FullName, budget, buildTimeout);
+            var runner = new AgenticRunner(adapter, model, measurer, target.FullName, budget, buildTimeout,
+                qualityScanner: qualityScanner);
             await runner.RunAsync(known, runs, runStore, maxTokenGuard, trajectoryDir, Console.Error, cancellationToken, sweepFiles);
 
             Console.Error.WriteLine($"{Environment.NewLine}Agentic run complete.");

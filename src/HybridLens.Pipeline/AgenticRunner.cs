@@ -45,7 +45,8 @@ public sealed class AgenticRunner(
     int iterationBudget,
     int buildTimeoutSeconds,
     Func<string, int, CancellationToken, Task<(bool Ok, string Output)>>? build = null,
-    string architecture = "agentic")
+    string architecture = "agentic",
+    ISolutionQualityScanner? qualityScanner = null)
 {
     private static readonly string[] SkipDirs = ["bin", "obj", ".git", ".vs", ".idea"];
 
@@ -59,6 +60,9 @@ public sealed class AgenticRunner(
     /// <summary>Only the ungrounded arm performs detection; the grounded arm is supplied the findings, so it
     /// emits no detection rows and treats every seeded instance as recovered by construction (§4.4.1).</summary>
     private readonly bool _performsDetection = architecture == "agentic";
+
+    /// <summary>Shared pristine-corpus quality baseline (the "before" for every trajectory), captured once when <c>--quality-diff</c> is on.</summary>
+    private SolutionQualityScan? _qualityBaseline;
 
     /// <param name="knownInstances">Ground-truth instances (the rated set), grouped internally by file.</param>
     /// <param name="runs">Trajectories per file (default 3).</param>
@@ -111,6 +115,17 @@ public sealed class AgenticRunner(
         CopyTree(corpusRoot, workingRoot);
         try
         {
+            if (qualityScanner is not null)
+            {
+                progress.WriteLine("  quality-diff: capturing shared pristine baseline (dedicated 8.0-all analyzer build)…");
+                _qualityBaseline = await qualityScanner.BuildAndScanAsync(
+                    workingSln, workingRoot, _build, buildTimeoutSeconds, ct);
+                progress.WriteLine(
+                    $"  baseline: {_qualityBaseline.SmellTotal} smell(s); CA headline {_qualityBaseline.CaHeadlineTotal}, " +
+                    $"all {_qualityBaseline.CaAllTotal}, obsolete {_qualityBaseline.CompilerObsoleteCount} " +
+                    $"(CA available={_qualityBaseline.CaAvailable})");
+            }
+
             var fileNo = 0;
             foreach (var filePath in files)
             {
@@ -159,7 +174,9 @@ public sealed class AgenticRunner(
                         var artefactRef = await WriteTrajectoryArtefactAsync(trajectoryDir, rel, run, traj, ct);
 
                         // Re-measure reads workingTarget (the final edited state) BEFORE the finally restore.
-                        var records = await BuildRecordsAsync(filePath, workingTarget, known, run, truncated, traj, artefactRef, ct);
+                        var records = await BuildRecordsAsync(
+                            filePath, workingTarget, workingSln, rel.Replace('\\', '/'),
+                            known, run, truncated, traj, artefactRef, ct);
                         foreach (var rec in records)
                             await runStore.AppendAsync(rec, ct);
 
@@ -328,7 +345,8 @@ public sealed class AgenticRunner(
     // ── Record construction ────────────────────────────────────────────────
 
     private async Task<List<RunRecord>> BuildRecordsAsync(
-        string filePath, string workingTarget, List<KnownInstance> known, int runNumber, bool truncated,
+        string filePath, string workingTarget, string workingSln, string relFile,
+        List<KnownInstance> known, int runNumber, bool truncated,
         Trajectory traj, string artefactRef, CancellationToken ct)
     {
         var timestamp = DateTimeOffset.UtcNow;
@@ -355,6 +373,17 @@ public sealed class AgenticRunner(
             finalScores[inst.InstanceKey] = await ScoreSnapshotAsync(inst, traj.BuildPassedFinal, workingTarget, ct);
         }
 
+        // 2a′. Whole-solution quality impact of the agent's FINAL state (the state a developer would ship).
+        //      Measured once per trajectory via a dedicated analyzer build while workingTarget still holds
+        //      finalContent — BEFORE the first-build snapshot overwrites it below. Only the final rows carry it.
+        SolutionQualityScan? finalAfterScan = null;
+        if (qualityScanner is not null && _qualityBaseline is not null && traj.BuildPassedFinal)
+        {
+            var workingRoot = Path.GetDirectoryName(workingSln)!;
+            finalAfterScan = await qualityScanner.BuildAndScanAsync(
+                workingSln, workingRoot, _build, buildTimeoutSeconds, ct);
+        }
+
         // 2b. FIRST-BUILD snapshot — the single-pass cell of the 2×2 (§4.4.1): the state submitted at the
         //     first build, before any compiler feedback. Re-score that frozen state with the SAME detector.
         //     Write it back to the working file first so the detector (and its semantic model) sees it; a
@@ -374,8 +403,11 @@ public sealed class AgenticRunner(
             var recovered = !_performsDetection || matchedKeys.Contains(inst.InstanceKey);
 
             var fin = finalScores[inst.InstanceKey];
+            var finalDelta = finalAfterScan is not null
+                ? QualityDelta.Between(_qualityBaseline!, finalAfterScan, inst.Type, relFile)
+                : null;
             records.Add(VerifiedRecord(inst, runNumber, timestamp, truncated, traj, artefactRef,
-                fin.BuildPassed, fin.Metrics, fin.Ladder, recovered, snapshot: "final"));
+                fin.BuildPassed, fin.Metrics, fin.Ladder, recovered, snapshot: "final", qualityDelta: finalDelta));
 
             var fb = firstScores[inst.InstanceKey];
             records.Add(VerifiedRecord(inst, runNumber, timestamp, truncated, traj, artefactRef,
@@ -464,7 +496,7 @@ public sealed class AgenticRunner(
     private RunRecord VerifiedRecord(
         KnownInstance inst, int runNumber, DateTimeOffset timestamp, bool truncated, Trajectory traj,
         string artefactRef, bool? buildPassed, IReadOnlyDictionary<string, double>? remeasured,
-        VerifiedRepairOutcome ladder, bool recovered, string snapshot)
+        VerifiedRepairOutcome ladder, bool recovered, string snapshot, QualityDelta? qualityDelta = null)
         => new()
         {
             RunId             = Guid.NewGuid().ToString("N"),
@@ -497,6 +529,7 @@ public sealed class AgenticRunner(
             RemeasuredMetrics        = remeasured,
             VerifiedRepairLadder     = ladder,
             VerifiedRepairSuccess    = ladder == VerifiedRepairOutcome.Resolved,
+            QualityDelta             = qualityDelta,
             AgenticIterations      = traj.Iterations,
             AgenticBudgetExhausted = traj.BudgetExhausted,
             AgenticTrajectoryRef   = artefactRef,
