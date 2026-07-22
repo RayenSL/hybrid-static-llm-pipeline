@@ -1,0 +1,24 @@
+=== R1 ===
+INVOICE INV-R1
+Trade Co
+VAT registered
+Std item 600 (std 120.00)
+Reduced item 500 (reduced 25.00)
+Zero item 100 (zero-rated)
+NET 1200 VAT 145.00 DISC 60.00 TOTAL 1285.00
+Remit within 14 days
+=== R2 ===
+INVOICE INV-R2
+State Dept
+Government purchase order
+Consulting 200 (std 40.00)
+NET 200 VAT 40.00 DISC 0 TOTAL 240.00
+Remit within 30 days
+=== R3 ===
+INVOICE INV-R3
+Jane
+Consumer
+This is a very long product description exceeding forty characters 6000 (zero-rated)
+  (description truncated)
+NET 6000 VAT 0 DISC 600.00 TOTAL 5400.00
+Remit within 14 days

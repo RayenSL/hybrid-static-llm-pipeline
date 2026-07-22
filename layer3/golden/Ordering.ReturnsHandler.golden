@@ -1,0 +1,13 @@
+A.returnable=true
+A.refund=371.25
+A.process=accepted
+A.restock=81
+A.processDup=already processed
+A.returnableAfter=false
+B.returnable=false
+B.process=quantity too high
+B.refund=675.0
+C.process=customer blocked
+D.processNoRef=missing reference
+D.processEmpty=nothing to return
+D.refundLargeQty=142.50

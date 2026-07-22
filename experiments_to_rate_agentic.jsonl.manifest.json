@@ -1,0 +1,22 @@
+{
+  "schema_version": "selection-1.0",
+  "blinding_lot": "lot-4a64f189-agentic",
+  "selection_seed": 42,
+  "is_pilot": false,
+  "n_rows": 38,
+  "by_model": {
+    "gpt-5.4": 38
+  },
+  "by_context_level": {
+    "minimal": 38
+  },
+  "by_anti_pattern": {
+    "god_class": 28,
+    "long_method": 5,
+    "obsolete_api_usage": 5
+  },
+  "sources": [
+    "runs\\20260708-101125-agentic.jsonl"
+  ],
+  "output": "experiments_to_rate_agentic.jsonl"
+}

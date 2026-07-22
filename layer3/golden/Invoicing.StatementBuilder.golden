@@ -1,0 +1,22 @@
+statement=[STATEMENT FOR Beta Corp
+contact: billing@example.com
+A1: 150
+A4: 250
+TOTAL 400]
+summary=summary: Beta Corp (biz)
+amtNeg=(12.50)
+amtZero=0.00
+amtSmall=~0.50
+amtK=2.50K
+amtM=3.00M
+amtStd=42.75
+totZero== 0.00
+totMinor== 5.00 (minor)
+totNotable== 60000.00 (notable)
+totReview== 150000.00 (review)
+totLarge== 2000000.00 (large)
+contactBiz=ap+CUST123@example.com
+contactGov=gov+GOV9@example.com
+contactGovX=special@example.com
+contactShort=billing@example.com
+contactEmpty=billing@example.com

@@ -31,7 +31,9 @@ fi
 # All overridable from the environment (defaults preserve the full-scale thesis run). Handy for a
 # cheap orchestration pilot: MAX_PER_TYPE=1 RUNS=1 bash run_phase_c.sh
 CORPUS="${CORPUS:-$Z_DRIVE/GitHub/hybrid-pipeline-corpus/corpus/Corpus.sln}"
-GROUND_TRUTH="${GROUND_TRUTH:-$Z_DRIVE/GitHub/hybrid-pipeline-corpus/ground-truth/records}"
+# band_agreement.py appends "/records" itself, so this must be the ground-truth ROOT, not .../records
+# (passing .../records made it glob .../records/records → 0 truth records → the gate passed vacuously).
+GROUND_TRUTH="${GROUND_TRUTH:-$Z_DRIVE/GitHub/hybrid-pipeline-corpus/ground-truth}"
 CLI="${CLI:-src/HybridLens.CLI}"
 MODEL="${MODEL:-gpt-5.4}"
 APPLIER="${APPLIER:-DeepSeek-V4-Pro}"

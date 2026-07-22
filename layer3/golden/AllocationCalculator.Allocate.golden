@@ -1,0 +1,4 @@
+spread=[Z1:10,Z2:8,Z3:11,OVERFLOW:1]
+empty=[]
+overflow=[Z1:5,OVERFLOW:20]
+halffit=[Z1:4]

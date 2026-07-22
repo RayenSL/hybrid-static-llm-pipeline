@@ -1,0 +1,3 @@
+normal=[SMALL:10,MID:55,BIG:LARGE:350]
+peak=[SMALL:15,MID:82,BIG:LARGE:525]
+winter=[W1:175]

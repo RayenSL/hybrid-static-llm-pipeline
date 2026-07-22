@@ -1,0 +1,31 @@
+instance_id,type,matched,agree,detail
+GC-01,GodClass,True,True,exact
+GC-02,GodClass,True,True,exact
+GC-03,GodClass,True,True,exact
+GC-04,GodClass,True,True,exact
+GC-05,GodClass,True,True,exact
+GC-06,GodClass,True,True,exact
+GC-07,GodClass,True,True,exact
+GC-08,GodClass,True,True,exact
+GC-09,GodClass,True,True,exact
+GC-10,GodClass,True,True,exact
+LM-01,LongMethod,True,True,exact
+LM-02,LongMethod,True,True,exact
+LM-03,LongMethod,True,True,exact
+LM-04,LongMethod,True,True,exact
+LM-05,LongMethod,True,True,exact
+LM-06,LongMethod,True,True,exact
+LM-07,LongMethod,True,True,exact
+LM-08,LongMethod,True,True,exact
+LM-09,LongMethod,True,True,exact
+LM-10,LongMethod,True,True,exact
+OB-01,ObsoleteApiUsage,True,True,marker present (both)
+OB-02,ObsoleteApiUsage,True,True,marker present (both)
+OB-03,ObsoleteApiUsage,True,True,marker present (both)
+OB-04,ObsoleteApiUsage,True,True,marker present (both)
+OB-05,ObsoleteApiUsage,True,True,marker present (both)
+OB-06,ObsoleteApiUsage,True,True,marker present (both)
+OB-07,ObsoleteApiUsage,True,True,marker present (both)
+OB-08,ObsoleteApiUsage,True,True,marker present (both)
+OB-09,ObsoleteApiUsage,True,True,marker present (both)
+OB-10,ObsoleteApiUsage,True,True,marker present (both)
