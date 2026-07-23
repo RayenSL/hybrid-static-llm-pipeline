@@ -126,6 +126,22 @@ provider/key:
 }
 ```
 
+## Automated quality evaluation
+
+The end-to-end runner finishes with programmatic evaluation; it does not pause for interactive input:
+
+```bash
+bash run_phase_c.sh
+```
+
+The resulting flow is `static analysis → LLM repair → apply/build/re-measure → quality reports`. Reports are generated directly from normal JSONL run records and include detector agreement against frozen ground truth, parse/failure status, lexical ISO/IEC 25010 alignment, agentic recall and spurious detections, verified-repair outcomes, whole-solution analyzer deltas, and characterization-test results. Failed or low-confidence records remain visible and do not block report production.
+
+To regenerate reports from existing traces:
+
+```bash
+python analysis/analyse_results.py --input "runs/*.jsonl" --output output
+```
+
 ## Configuration
 
 Configuration is loaded in the following order (later sources override earlier ones):

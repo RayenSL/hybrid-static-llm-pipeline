@@ -2,16 +2,15 @@
 # run_phase_c.sh — HybridLens Phase C end-to-end pipeline
 #
 # Usage:
-#   bash run_phase_c.sh                          run C-0 → C-4 (automated, all repairs)
+#   bash run_phase_c.sh                          run the complete automated pipeline
 #   bash run_phase_c.sh --max-repairs N          repair only N unique instances (e.g. 1 for a smoke test)
 #   bash run_phase_c.sh --skip-repair            skip verify-repair entirely (~400 builds, ~1-2 h)
 #   bash run_phase_c.sh --dry-run                print commands only, no execution
-#   bash run_phase_c.sh --post-rating            run analysis on rated experiments.jsonl
 #   MAX_PER_TYPE=1 RUNS=1 bash run_phase_c.sh     cheap pilot of the whole pipeline (env overrides)
 #
 # Prerequisites:
 #   - dotnet 10 on PATH
-#   - python 3 on PATH
+#   - python 3 on PATH with analysis/requirements.txt installed
 #   - src/HybridLens.CLI/appsettings.local.json with Llm.ApiKey set
 #   - Corpus at Z:/GitHub/hybrid-pipeline-corpus/corpus/Corpus.sln
 
@@ -40,20 +39,16 @@ APPLIER="${APPLIER:-DeepSeek-V4-Pro}"
 RUNS="${RUNS:-3}"
 BUDGET="${BUDGET:-6}"   # agentic iteration budget — max edit→build attempts per trajectory (§4.8.1); keep equal across the agentic + grounded-iterative arms
 MAX_PER_TYPE="${MAX_PER_TYPE:-10}"
-IRR_FRACTION="${IRR_FRACTION:-0.30}"
-RNG_SEED="${RNG_SEED:-42}"
 
 # ── Parse flags ────────────────────────────────────────────────────────────────
 SKIP_REPAIR=0
 DRY_RUN=0
-POST_RATING=0
 MAX_REPAIRS=0   # 0 = repair every candidate; N = repair only N unique instances
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --skip-repair)   SKIP_REPAIR=1;        shift ;;
         --dry-run)       DRY_RUN=1;            shift ;;
-        --post-rating)   POST_RATING=1;        shift ;;
         --max-repairs)   MAX_REPAIRS="${2:?'--max-repairs requires a number'}"; shift 2 ;;
         -h|--help)       sed -n '2,10p' "$0";  exit 0 ;;
         *) printf 'Unknown flag: %s\n' "$1" >&2; exit 2 ;;
@@ -104,62 +99,18 @@ run() {
 }
 
 # Most recently modified JSONL by naming convention
-latest_run()      { ls -t runs/[0-9]*.jsonl    2>/dev/null | head -1 || echo ""; }
+latest_run() {
+    local trace
+    while IFS= read -r trace; do
+        case "$trace" in
+            *-agentic.jsonl|*-grounded-iterative.jsonl|*-verified.jsonl) continue ;;
+            *) printf "%s\n" "$trace"; return ;;
+        esac
+    done < <(ls -t runs/[0-9]*.jsonl 2>/dev/null)
+}
 latest_agentic()  { ls -t runs/*-agentic.jsonl 2>/dev/null | head -1 || echo ""; }
 latest_grounded() { ls -t runs/*-grounded-iterative.jsonl 2>/dev/null | head -1 || echo ""; }
 latest_verified() { ls -t runs/*-verified.jsonl 2>/dev/null | head -1 || echo ""; }
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  POST-RATING MODE — jump straight to analysis; C-0..C-4 already ran
-# ══════════════════════════════════════════════════════════════════════════════
-if [[ $POST_RATING -eq 1 ]]; then
-    step "C-5  Post-rating analysis"
-
-    [[ -f "experiments.jsonl" ]] \
-        || die "experiments.jsonl not found — run R1 rating first (see instructions at end of previous run)"
-
-    # Verified-repair rows come from three sources: the hybrid verify-repair trace, the ungrounded
-    # agentic trace, and the grounded-iterative trace (both iterative arms are scored in-runner at their
-    # first_build + final snapshots, §4.7.1). Combine all three so Table 5.3 covers every arm and the
-    # §4.4.1 2×2 (Table 5.7) + H1c contrasts have both agentic arms.
-    VERIFIED=$(latest_verified)
-    AGENTIC=$(latest_agentic)
-    GROUNDED=$(latest_grounded)
-    VERIFIED_FLAG=""
-    if [[ -n "$VERIFIED" || -n "$AGENTIC" || -n "$GROUNDED" ]]; then
-        VERIFIED_COMBINED="runs/phase-c-verified-combined.jsonl"
-        if [[ $DRY_RUN -eq 0 ]]; then
-            : > "$VERIFIED_COMBINED"
-            [[ -n "$VERIFIED" ]] && cat "$VERIFIED" >> "$VERIFIED_COMBINED"
-            [[ -n "$AGENTIC"  ]] && cat "$AGENTIC"  >> "$VERIFIED_COMBINED"
-            [[ -n "$GROUNDED" ]] && cat "$GROUNDED" >> "$VERIFIED_COMBINED"
-        fi
-        VERIFIED_FLAG="--verified $VERIFIED_COMBINED"
-    else
-        warn "No verified-repair / agentic / grounded-iterative trace found; repair tables will be skipped"
-    fi
-
-    run "$PYTHON" analysis/analyse_results.py \
-        --input  experiments.jsonl \
-        --output output \
-        $VERIFIED_FLAG
-    ok "Tables and figures → output/"
-
-    if [[ -f "experiments_r2.jsonl" ]]; then
-        run "$PYTHON" analysis/compare_raters.py \
-            --r1 experiments.jsonl \
-            --r2 experiments_r2.jsonl \
-            --output output/irr
-        ok "IRR report → output/irr/"
-    else
-        warn "experiments_r2.jsonl not found — IRR skipped"
-        info "Rate the IRR subset first:"
-        info "  python analysis/score_runs.py --input experiments_irr.jsonl --output experiments_r2.jsonl --rater R2"
-    fi
-
-    step "Done"
-    exit 0
-fi
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  AUTOMATED RUN — C-0 through C-4
@@ -364,45 +315,28 @@ else
     warn "C-3 skipped (--skip-repair)"
 fi
 
-# ── C-4: Select rating set ──────────────────────────────────────────────────────
-step "C-4  Select rating set"
+# ── C-4: Automated quality evaluation ───────────────────────────────────────────────
+step "C-4  Automated quality evaluation"
 
-# Primary set: 1 row per (finding × context_level) cell, fixed random order
-run "$PYTHON" analysis/select_rating_set.py \
-    --input  "$HYBRID_COMBINED" \
-    --output experiments_to_rate.jsonl \
-    --seed   $RNG_SEED
-ok "Primary set → experiments_to_rate.jsonl"
+EVALUATION_INPUT="runs/phase-c-evaluation-combined.jsonl"
+if [[ $DRY_RUN -eq 0 ]]; then
+    : > "$EVALUATION_INPUT"
+    for trace in "$TRACE_ANALYSER" "$HYBRID_COMBINED" "$TRACE_AGENTIC" "$TRACE_GROUNDED" "$TRACE_VERIFIED"; do
+        [[ -n "$trace" && -f "$trace" ]] && cat "$trace" >> "$EVALUATION_INPUT"
+    done
+    ok "Evaluation input: $EVALUATION_INPUT  ($(wc -l < "$EVALUATION_INPUT") rows)"
+else
+    info "combine raw and verified traces → $EVALUATION_INPUT"
+fi
 
-# Agentic set: matched (recovered) findings only
-run "$PYTHON" analysis/select_rating_set.py \
-    --agentic \
-    --input  "$TRACE_AGENTIC" \
-    --output experiments_to_rate_agentic.jsonl \
-    --seed   $RNG_SEED
-ok "Agentic set → experiments_to_rate_agentic.jsonl"
+run "$PYTHON" analysis/analyse_results.py \
+    --input "$EVALUATION_INPUT" \
+    --output output
+ok "Automated reports → output/tables/"
 
-# 30% stratified IRR subsample from the primary set (for R2)
-run "$PYTHON" analysis/select_rating_set.py \
-    --irr-from     experiments_to_rate.jsonl \
-    --irr-fraction $IRR_FRACTION \
-    --output       experiments_irr.jsonl \
-    --seed         $RNG_SEED
-ok "IRR subset (${IRR_FRACTION}) → experiments_irr.jsonl"
+run "$PYTHON" analysis/architecture_figure.py --out-dir output/figures
+ok "Architecture figure → output/figures/fig_architecture.*"
 
-# ── Print what to do next ───────────────────────────────────────────────────────
-step "Phase C complete — manual rating required before analysis"
-printf '\n'
-info "1.  Rate the primary set (R1 — blinded browser view):"
-info "      python analysis/score_runs.py \\"
-info "          --input experiments_to_rate.jsonl \\"
-info "          --output experiments.jsonl --rater R1"
-printf '\n'
-info "2.  Rate the IRR subset (R2 — second rater):"
-info "      python analysis/score_runs.py \\"
-info "          --input experiments_irr.jsonl \\"
-info "          --output experiments_r2.jsonl --rater R2"
-printf '\n'
-info "3.  Run analysis after rating:"
-info "      bash run_phase_c.sh --post-rating"
-printf '\n'
+step "Phase C complete"
+info "All configured stages completed without an interactive handoff."
+info "Failures and low-confidence conditions remain in the run records; they do not block report generation."

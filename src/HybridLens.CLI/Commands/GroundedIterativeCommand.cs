@@ -26,7 +26,7 @@ public static class GroundedIterativeCommand
     {
         var fromOption = new Option<FileInfo>("--from")
         {
-            Description = "experiments_to_rate.jsonl (or any run JSONL) supplying the files, known instances, and their metrics.",
+            Description = "Analyzer run JSONL supplying the files, known instances, and their metrics.",
             Required = true
         };
 

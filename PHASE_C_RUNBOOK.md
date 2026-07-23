@@ -138,32 +138,18 @@ dotnet run --project src/HybridLens.CLI -- verify-repair `
 
 ---
 
-## 5. (Phase D) Band agreement + corpus R1 review
+## 5. Detector agreement and automated final analysis
 
-- **Band agreement — DONE (2026-06-23).** The analyser-only run re-measured every instance with the
-  real HybridLens detector. `HybridLensMeasure` diverged on GodClass ATFD/WMC and one LongMethod CC
-  (10/30; detection unaffected — all 30 still trigger). Decision: HybridLens is authoritative. The corpus
-  `measured_metrics` were re-derived via `hybrid-pipeline-corpus/tools/apply_hybridlens_metrics.py` and
-  re-checked with `analysis/band_agreement.py` → **30/30**. Re-run those two if the detector changes.
-- **R1 corpus review** — populate `verification.reviewer_r1` in each `ground-truth/records/*.json`
-  (single-rater; reviewer_r2 dropped per the decision). Then re-tag/re-freeze if anything changed.
-
-## 6. (Phase E) Rating + final analysis
+- **Band agreement.** The analyzer-only run re-measures every instance with the real HybridLens detector. `analysis/band_agreement.py` compares those metrics with the frozen truth records and fails if any instance disagrees. This check runs at full scale and is skipped for partial pilots.
+- **Final analysis.** Combine the normal generation and verification traces, then generate reports directly:
 
 ```powershell
-# 1. pick one run per cell, stratified blinded order
-python analysis/select_rating_set.py --input "runs/*.jsonl" --output experiments_to_rate.jsonl --seed 42
-# 2. rate the architecture-contrast subset under rubric v1.0 (R1 full; R2 on the IRR subset)
-python analysis/score_runs.py --input experiments_to_rate.jsonl --output experiments.jsonl --rater R1
-# 3. inter-rater reliability
-python analysis/compare_raters.py --r1 experiments.jsonl --r2 experiments_R2.jsonl
-# 4. thesis tables + figures, INCLUDING verified-repair (Tables 5.3 / 5.7 / 5.8 / 5.9).
-#    --verified globs the hybrid verify-repair trace AND both iterative arms' traces (agentic +
-#    grounded-iterative), whose final solutions carry verified-repair rows (first_build + final).
-#    Table 5.3 then covers all arms; the 2×2 (5.7) + H1c contrasts (5.8/5.9) get both agentic arms.
-Get-Content runs/_verified.jsonl, runs/*-agentic.jsonl, runs/*-grounded-iterative.jsonl | Set-Content runs/_verified_all.jsonl
-python analysis/analyse_results.py --input experiments.jsonl --verified runs/_verified_all.jsonl --output output
+Get-Content runs/*.jsonl | Set-Content runs/_evaluation.jsonl
+python analysis/analyse_results.py --input runs/_evaluation.jsonl --output output
+python analysis/architecture_figure.py --out-dir output/figures
 ```
+
+The reports cover persisted failures, lexical quality-attribute alignment, agentic recall and spurious detections, apply/build/re-measure outcomes, whole-solution analyzer deltas, and characterization-test results. Missing optional instruments and uncertain records are reported without blocking output.
 
 ---
 

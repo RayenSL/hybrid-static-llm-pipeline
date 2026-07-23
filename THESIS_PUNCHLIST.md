@@ -14,27 +14,12 @@ Verified reference values used throughout:
 
 ---
 
-## A. Hallucination taxonomy: "eight" → "seven" (and the additions count)
-
-The prose says eight categories with three additions, but Table 5.9, Table 5.10 and the
-implementation (`score_runs.py`) all enumerate **seven**: factual fabrication, context inconsistency,
-intent mismatch, incomplete suggestion, irrelevant suggestion, risky repair, over-generalisation.
-Per Table 5.9's literature column that is **3 retained from HalluCode + 4 adapted = 7**.
-
-1. **§1.4 (Approach)** — find "an eight-category hallucination taxonomy" → "a seven-category hallucination taxonomy".
-2. **§1.5 (Contribution 2)** — find "retaining the categories applicable to the explanation-and-repair setting and adding three further categories" → "retaining three HalluCode categories applicable to the explanation-and-repair setting and adding four further categories".
-3. **§4.5.1 (Hallucination categorisation)** — find "An eight-category taxonomy derived from Liu et al. [25] with three thesis-specific additions based on pilot data" → "A seven-category taxonomy derived from Liu et al. [25] — three HalluCode categories retained and four thesis-specific additions based on pilot data".
-4. **§5.4.4** — find "The eight-category taxonomy" → "The seven-category taxonomy".
-
----
-
 ## B. Corpus shape, strata, counts, placeholders
 
 5. **§4.3 (Corpus shape)** — find "Four to six independently compilable solutions (five to fifteen files apiece)" → "Five independently compilable .NET 8 projects in a single solution (eleven to fourteen files apiece, 61 files total)".
 6. **§4.3 (Seeded instances and strata)** — find "Instances within each kind were divided into borderline (4 per type, values just fulfilling the criteria) and clear-cut (6 per type, values easily past threshold)." → "God Class and Long Method instances are each split into 5 clear-cut and 5 borderline (values just fulfilling the criteria). Obsolete API Usage has no borderline band — a `[Obsolete]` marker is binary present/absent — so its ten instances are all clear-cut and are instead stratified by replacement availability (direct 4, workaround 3, removed 3). Net: 20 clear-cut, 10 borderline."
 7. **§4.3 (Controls and distractors)** — find "There are around twelve files without any seeded instances" → "There are 31 files without any seeded instances".
 8. **§5.2.3 (Dataset)** placeholders — set: `[N]` = **5 projects**; total files `[F]` = **61**; `[C]` control/distractor files = **31**; `[exact Claude model + version]` = **claude-opus-4-8**; corpus tag **v1.0**, frozen **2026-06-17**, **MIT**, repo `github.com/aceve/hybridlens-corpus`. Also reword "independently compilable .NET solutions" → "independently compilable .NET projects (one solution)".
-9. **§5.2.3 / §4.7 — verification layers.** Decision: corpus verification is **two-layer** (programmatic + a single human reviewer R1; the second corpus reviewer R2 was dropped). In **§5.2.3** find "the three-layer protocol" → "the two-layer protocol". Confirm **§4.7** stays "two-layer verification protocol" and describes only R1 (no R2) for the corpus. (The rubric IRR keeps R1+R2 — that is a *separate* second rater, §4.5/B.8, unchanged.)
 10. **§5.2.4 (Ground Truth)** — set generator model/version = **claude-opus-4-8**; `prompt_template_version` = **1.0.0**. Fix the broken "Table ??" reference for the expected ISO/IEC 25010 mapping to **Table 5.11** (and **Table B.10** in the appendix).
 11. **§5.2.5 (Generations)** — "30 × 4 × 3 = 360 hybrid generations" is correct. Clarify **F**: the agentic "3F" uses *F = number of distinct files spanned by the 30 instances* (not the 61-file corpus total). State the resolved F once the run is done. (Default run scope is instance-spanning files only; `--sweep-corpus` widens to all 61 for fuller precision — note whichever was used.)
 
@@ -90,7 +75,7 @@ The implementation now matches the agentic loop (CLI `agentic`, prompt v2.0.0, a
 ## G. Misc
 
 22. **§5.3.4 (Prompt Construction Validation)** — find "structured chunks covering the quality impact, problem, suggested repair, and risks or assumptions" → "structured fields covering the explanation, the quality impact, and the suggested repair" (the v1.1.0 schema has no separate risks/assumptions field).
-23. **Broken cross-references** — the draft has many unresolved `??` (e.g. "§??", "Table ??", "Appendix ??"). Resolve them in LaTeX; the high-value ones: the architecture-comparison section (referenced as "§??" / "S5.1.1") should point to **§4.4.1**; the rubric appendix references should point to **Appendix B**; the expected-mapping table to **Table 5.11 / B.10**.
+23. **Broken cross-references** — the draft has many unresolved `??` (e.g. "§??", "Table ??", "Appendix ??"). Resolve them in LaTeX; the high-value ones: the architecture-comparison section (referenced as "§??" / "S5.1.1") should point to **§4.4.1**; the expected-mapping table to **Table 5.11 / B.10**.
 
 ---
 
@@ -112,9 +97,6 @@ rows of the 2×2. These sections need no rewrite, only the fixes below.
 
 ## H. Corpus-repo follow-ups (not the thesis — `hybrid-pipeline-corpus`)
 
-These mirror the two-layer decision (B.9) and keep the published artefacts consistent:
-24. `schema/truth-record.schema.json` — the `verification` block comment says "Three-layer protocol"; change to two-layer and **drop the `reviewer_r2` property** (and `disagreement_resolution` if it only served R1/R2 reconciliation).
-25. `ground-truth/records/*.json` — populate `verification.reviewer_r1` for all 30 (single reviewer); remove `reviewer_r2`.
 26. `RUNBOOK.md` / `CLAUDE.md` / `tools/Measure/Measure.csproj` — references to "Table 5.10" for the ISO mapping should match the thesis's table number (5.11 / B.10); wording "three-layer" → "two-layer".
 27. `manifest.json` `repository` is `github.com/aceve/hybridlens-corpus` — confirm that's the intended public URL before release.
 28. **§4.5.1 "same code" claim now holds.** The corpus `measured_metrics` were re-derived from the real HybridLens detector (the separate `HybridLensMeasure` tool diverged on GodClass ATFD/WMC — HL counts more foreign accesses and sums slightly less complexity — and one LongMethod CC; detection was unaffected). So "the same metric implementation that certifies seeded instances is the same code that generates the analyser flags" is now literally true. Optionally note in §4.7/§5.2.3 that `HybridLensMeasure` was a generation-time band-control helper, superseded by the HybridLens detector for the published measured values.

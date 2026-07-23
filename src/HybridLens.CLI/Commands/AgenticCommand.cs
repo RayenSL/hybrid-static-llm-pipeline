@@ -8,8 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 namespace HybridLens.CLI.Commands;
 
 /// <summary>
-/// The agentic architecture arm (§4.4.1, Appendix E prompt v2.0.0). Reads the rated set produced by
-/// select_rating_set.py, derives the distinct source files of the known instances, and runs an
+/// The agentic architecture arm (§4.4.1, Appendix E prompt v2.0.0). Reads a normal analyzer
+/// run trace, derives the distinct source files of the known instances, and runs an
 /// autonomous detect-and-repair loop over each whole file: the agent edits the source and invokes
 /// the compiler (its only tool) until it declares completion or the iteration budget is exhausted.
 /// Self-detections are matched back to the known instances for recall/precision, and the agent's
@@ -22,7 +22,7 @@ public static class AgenticCommand
     {
         var fromOption = new Option<FileInfo>("--from")
         {
-            Description = "experiments_to_rate.jsonl (or any run JSONL) supplying the files + known instances.",
+            Description = "Analyzer run JSONL supplying the files and known instances.",
             Required = true
         };
 

@@ -86,8 +86,7 @@ def main(argv=None) -> int:
              "characterisation tests\nbehavioural preservation\n(golden-master / smoke)", F["layer"], title_fs=9, body_fs=7.2)
 
     analysis = box(7, 2.2, 12.2, 1.5, "Analysis",
-                   "detection recall & precision · verified-repair (H1a/H1b/H1c, 2×2) · quality impact · behaviour\n"
-                   "human explanation rubric (supporting evidence)", F["analysis"], body_fs=8)
+                   "detection recall & precision · verified-repair (H1a/H1b/H1c, 2×2) · quality impact · behaviour", F["analysis"], body_fs=8)
 
     # ── edges ────────────────────────────────────────────────────────────
     def bot(n): return (n["cx"], n["cy"] - n["h"] / 2)

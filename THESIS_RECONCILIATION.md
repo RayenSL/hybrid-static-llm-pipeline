@@ -29,8 +29,6 @@
 | 7 | Dataset | **Discard the Ibis runs** (smoke tests). Corpus is the only dataset. |
 | 8 | Band-verification | **Done (2026-06-23):** HybridLens made authoritative — corpus `measured_metrics` re-derived from the real detector (10 records corrected: 9 GodClass ATFD/WMC + 1 LongMethod CC); band agreement now **30/30**; §4.5.1 "same code" holds. `HybridLensMeasure` retained as a generation-time helper. Corpus repo needs commit + re-tag. |
 | 9 | Thesis edits | **Punch-list only** (PDF; section-referenced edits below). |
-| 10 | Corpus review | **Two-layer** (programmatic + R1). Drop reviewer_r2 from corpus verification. |
-| 11 | Rubric IRR | **Keep R1 + R2** with Cohen's weighted κ on the IRR subset (§4.5 / B.8 unchanged). |
 
 ---
 
@@ -69,7 +67,6 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
 4. **Outcome.** Ordinal ladder `unapplicable < build_fails < builds_unresolved < resolved` (descriptive) + binary `verified_repair_success = applies ∧ builds ∧ metric_resolved` (inferential).
 5. **RunRecord fields** (new): `applier_model`, `applier_prompt_version`, `applicable`, `unapplicable_reason`, `applied_source_ref`, `build_passed`, `remeasured_metrics`, `verified_repair_ladder`, `verified_repair_success`.
 6. **Stats in `analyse_results.py`:** verified-repair % by architecture (Table 5.3) and by context level (Table 5.7) with Wilson CIs; **McNemar** paired hybrid vs agentic (H1b); **Cochran–Armitage** + **binomial GLMM** `verified_repair ~ ordered context + (1|instance)` (H2b); ladder distribution descriptive.
-7. **Gaming guard:** human genuineness spot-check on a stratified 30% of metric-resolved repairs (R1, rubric anchors).
 8. Apply/verify for **both** hybrid and LLM-only repairs; analyser-only = no repair (0 by construction).
 
 ### Phase B — Single-model + corpus wiring
@@ -96,13 +93,8 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
     - **Analyser-only:** 30 deterministic diagnostics (also serves the band re-confirmation in step 17).
     - **LLM-only:** prompt v1.2.0 over the **whole corpus** via `llm-only --target Corpus.sln` — recall over the 30 instances + precision over clean/distractors (resolved 2026-06-23).
 
-### Phase D — Band agreement + verification
+### Phase D — Detector agreement
 15. **[Done 2026-06-23.]** Ran analyser-only (real HybridLens) over the corpus; `HybridLensMeasure` diverged on GodClass ATFD/WMC + 1 LongMethod CC (10/30; detection unaffected). Re-derived `measured_metrics` from HybridLens (`hybrid-pipeline-corpus/tools/apply_hybridlens_metrics.py`), regenerated INDEX, re-validated → **band agreement 30/30**. Corpus repo: commit + re-tag pending.
-16. Complete **corpus R1 review** (`verification.reviewer_r1`) for all 30 instances; remove `reviewer_r2` from schema/records (two-layer).
-
-### Phase E — Rating
-17. Re-rate the **architecture-contrast subset only** (analyser-only, hybrid-Minimal, matched LLM-only at gpt-5.4 — ~90 outputs) under **rubric v1.0** (4 explanation + 4 repair dims, 7 hallucination categories, QA counts). Old `experiments.json` ratings (old `explanation_specificity`, single `hallucination_type`) are superseded.
-18. R1 + R2 on the IRR subset; Cohen's weighted κ (`compare_raters.py`).
 
 ### Phase F — Docs
 19. `README.md`: fix God Class config (ATFD/WMC/TCC, not Methods/Fields/LOC); default provider `claude`→`azure`/`gpt-5.4`; note context `Level` default.
@@ -117,13 +109,9 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
 
 | Location | Current | Change to |
 |---|---|---|
-| §1.4, §4.5.1, §5.4.4 | "**eight**-category" hallucination taxonomy | "**seven**-category" (Table 5.9/5.10 list 7; code = 7). |
-| §1.5 (contrib 2), §4.5.1 | "adding **three** further categories" | "retaining **3** HalluCode categories + adding **4**" (Table 5.9: 3 HalluCode-linked + 4 adapted = 7). |
 | §4.3 | "borderline (**4 per type**) and clear-cut (**6 per type**)" | GC & LM = **5 clear-cut + 5 borderline** each; **OB = 10 clear-cut** (borderline N/A for a binary `[Obsolete]` marker), stratified by replacement availability (direct 4 / workaround 3 / removed 3). Net **20 clear-cut / 10 borderline**. |
 | §4.3, §5.2.3 | "around **twelve** files without any seeded instances" | "**31** clean/distractor files." |
 | §4.3, §5.2.3 | "**Four to six** independently compilable **solutions**" | "**one** solution (`Corpus.sln`) with **five** independently compilable .NET 8 **projects**, 11–14 files each (61 total)." |
-| §4.7 | "**two-layer** verification protocol" | Keep **two-layer** (programmatic + R1). (Decision 10.) |
-| §5.2.3 | "the **three-layer** protocol" | "the **two-layer** protocol." Also update the truth-record schema comment ("Three-layer protocol") + drop `reviewer_r2`. |
 | §5.2.3, §5.2.4 placeholders | `[N]`, `[F]`, `[C]`, `[exact Claude model + version]` | `[N]`=5 projects; `[C]`=31; generator=`claude-opus-4-8`; prompt_template_version 1.0.0; frozen v1.0 (2026-06-17); `[F]`=file count from the re-run. |
 | §5.2.2, §1.4, Appendix A | "frontier **GPT-family** model" placeholders | name **gpt-5.4** (Azure OpenAI). |
 | §4.4.1 | "the analyser-only-versus-hybrid contrast is also reported **across all three models**" | Remove (single-model study). |
@@ -137,7 +125,6 @@ Implements the thesis spine for H1a (repair), H1b (repair), H2b.
 
 - **LLM-only file scope** — **RESOLVED (2026-06-23):** `llm-only --target Corpus.sln` sweeps every corpus `.cs` (recall over the 30 instances + precision over clean/distractors); detections on non-instances are `is_spurious`. Implemented + unit-tested. Thesis §5.2.5 wording should note the LLM-only sweep covers all corpus files (precision measured over the clean/distractor set), not only the instance-spanning files.
 - **Verified-repair scope across context** (H2b): apply/verify all 360 hybrid generations, or one run per (instance × level)? Assumed: all generations (objective metrics are computed on every generation per §5.2.5).
-- **Spot-check rater** for the gaming guard = R1 (assumed).
 - F (file count) is filled after the re-run.
 
 ## Next steps

@@ -327,7 +327,6 @@ public sealed class AnalysisPipeline(
             ExpectedQualityAttributes     = finding.ExpectedQualityAttributes,
             LlmQualityAttributesMentioned = mentionedQualityAttributes,
             QualityAttributeAlignment     = qualityAttributeAlignment,
-            QualityAttributeNotes         = null,                                  // populated by score_runs.py on second-rater review
             ParseStatus                   = parseStatus,
             ErrorStatus                   = errorStatus,
             ErrorMessage                  = errorMessage

@@ -483,7 +483,6 @@ public sealed class AgenticRunner(
             ExpectedQualityAttributes     = expected,
             LlmQualityAttributesMentioned = mentioned,
             QualityAttributeAlignment     = alignment,
-            QualityAttributeNotes         = null,
             AgenticIterations      = traj.Iterations,
             AgenticBudgetExhausted = traj.BudgetExhausted,
             AgenticTrajectoryRef   = artefactRef,

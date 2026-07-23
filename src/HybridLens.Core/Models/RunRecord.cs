@@ -23,7 +23,7 @@ public sealed record RunRecord
     public required string           SymbolName       { get; init; }
     public required int              Line             { get; init; }   // code_location
     public required Severity         Severity         { get; init; }
-    /// <summary>The raw code excerpt from the detector — what the rater sees in the blinded viewer.</summary>
+    /// <summary>The raw code excerpt captured by the detector for downstream generation and audit.</summary>
     public          string?          Snippet          { get; init; }
 
     /// <summary>
@@ -82,8 +82,6 @@ public sealed record RunRecord
     public          IReadOnlyList<string>? LlmQualityAttributesMentioned  { get; init; }
     /// <summary>1 = at least one expected attribute is mentioned; 0 = none mentioned; null = no usable output.</summary>
     public          int?                   QualityAttributeAlignment      { get; init; }
-    /// <summary>Free-text rater notes; populated by <c>score_runs.py</c> on second-rater review. Always null at write time.</summary>
-    public          string?                QualityAttributeNotes          { get; init; }
 
     // ── Verified-repair outcome (objective; §4.5.1, §4.7.1) ──────────────────
     // Populated only on verification rows produced by the verify-repair step;

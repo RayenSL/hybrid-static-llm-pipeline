@@ -4,8 +4,8 @@ namespace HybridLens.Pipeline;
 
 /// <summary>
 /// A known anti-pattern instance from the static analyser — the ground truth against
-/// which an agentic self-detection is matched (§4.5.1). Reconstructed from the rated
-/// set (experiments_to_rate.jsonl): the line range is derived from the start line plus
+/// which an agentic self-detection is matched (§4.5.1). Reconstructed from a
+/// normal analyzer run trace: the line range is derived from the start line plus
 /// the snippet's line count.
 /// </summary>
 public sealed record KnownInstance

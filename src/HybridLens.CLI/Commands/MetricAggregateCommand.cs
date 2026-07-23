@@ -17,7 +17,7 @@ public static class MetricAggregateCommand
     {
         var verifiedOption = new Option<FileInfo>("--verified") { Description = "Verify/agentic runs JSONL with the resolved final rows.", Required = true };
         var trajOption     = new Option<DirectoryInfo>("--trajectories") { Description = "Trajectory artefact directory for the same run.", Required = true };
-        var originalOption = new Option<FileInfo>("--original") { Description = "experiments_to_rate.jsonl (supplies the before metrics).", Required = true };
+        var originalOption = new Option<FileInfo>("--original") { Description = "Analyzer run JSONL supplying the before metrics.", Required = true };
         var corpusOption   = new Option<DirectoryInfo?>("--corpus") { Description = "Corpus root (unused unless before metrics are missing; reserved)." };
         var outOption      = new Option<FileInfo>("--out") { Description = "Output JSON (array of before/after rows).", Required = true };
 

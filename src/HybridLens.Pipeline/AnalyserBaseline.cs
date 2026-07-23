@@ -8,9 +8,6 @@ namespace HybridLens.Pipeline;
 /// anti-pattern label, location, and a brief metric-based reason — without any
 /// LLM-generated explanation, quality-impact discussion, or repair suggestion.
 ///
-/// Raters evaluate baseline records under the same rubric (Appendix B) as the
-/// hybrid (LLM-grounded) conditions; this allows quantitative comparison of how
-/// much the LLM adds beyond what the analyser already provides.
 ///
 /// Determinism: the same Finding always produces the same baseline text. This is
 /// intentional — the baseline is not a stochastic process, so we generate one
@@ -22,7 +19,7 @@ public static class AnalyserBaseline
     public const string PromptVersion = "baseline-v1.0.0";
 
     /// <summary>
-    /// Builds the three structured sections used downstream by the rater workflow.
+    /// Builds the three structured sections used by the normal output pipeline.
     /// quality_impact and remediation are explicitly empty (with an honest note) —
     /// the baseline is, by definition, not the source of those claims.
     /// </summary>
