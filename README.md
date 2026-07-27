@@ -72,13 +72,15 @@ dotnet run --project src/HybridLens.CLI -- --help
 dotnet run --project src/HybridLens.CLI -- analyse --help
 ```
 
-### Run the agentic arm (ungrounded, H1b)
+### Run the agentic arm (target-only ungrounded, H1b)
 
-`agentic` runs the third architecture arm (§4.4.1, prompt v2.0.0). The model gets the *unannotated*
-whole file and must **detect and repair** it through an autonomous loop: each turn it edits the
+`agentic` runs the iterative target-only arm (§4.4.1, prompt v2.0.2). For each known
+instance, the model gets the whole file plus the same neutral symbol and declaration
+line range used in every factorial cell, but no anti-pattern diagnosis or metrics. It
+must **diagnose and repair** that target through an autonomous loop: each turn it edits the
 source and requests a build (its **only** tool is the compiler), observes the result, and revises,
-until it declares completion or the frozen iteration budget is spent. It never sees the static
-analyser, so the arm stays ungrounded. Self-detections are matched to the known instances for
+until it declares completion or the frozen iteration budget is spent. It never sees the static analyser's anti-pattern label, severity, metrics, thresholds,
+or finding text, so the grounding treatment remains withheld. Self-detections are matched to the known instances for
 recall/precision, and the agent's *final edited solution* is scored directly for verified-repair
 (no separate applier — see below).
 

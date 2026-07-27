@@ -11,7 +11,7 @@ namespace HybridLens.CLI.Commands;
 
 /// <summary>
 /// The grounded-iterative arm (§4.4.1, §5.1.5) — the H1c contrast. It reuses the agentic loop and
-/// prompt (v2.0.0) verbatim, but seeds the opening user prompt with the analyser's Structural-level
+/// prompt (v2.0.2) verbatim, but seeds the opening user prompt with the analyser's Structural-level
 /// finding block for each seeded instance in the file (rendered by <see cref="IContextBuilder"/> at
 /// <see cref="ContextLevel.Structural"/>), so the detector's output is routed into the loop rather than
 /// withheld. It therefore differs from the ungrounded <c>agentic</c> command ONLY in that grounding,
@@ -32,7 +32,8 @@ public static class GroundedIterativeCommand
 
         var targetOption = new Option<FileInfo>("--target")
         {
-            Description = "The corpus solution (Corpus.sln). Required — the agent builds a working copy of it as its only tool.",
+            Description = "The corpus solution (Corpus.sln). The agent builds an isolated working copy; " +
+                          "the optional test-enabled condition also executes its frozen visible test.",
             Required = true
         };
 
@@ -68,10 +69,17 @@ public static class GroundedIterativeCommand
                           "build per trajectory; the agent's iteration builds stay analyzer-free."
         };
 
-        var command = new Command("grounded-iterative",
-            "Run the grounded-iterative arm (H1c): the agentic loop seeded with the analyser's Structural finding block, varying grounding alone.")
+        var visibleTestsOption = new Option<DirectoryInfo?>("--visible-tests")
         {
-            fromOption, targetOption, modelOption, runsOption, budgetOption, maxTokenGuardOption, buildTimeoutOption, qualityDiffOption
+            Description = "Generated-test artefact directory. Supplying it assigns the test-enabled condition; " +
+                          "an admitted immutable test runs after every successful build and its result is fed back."
+        };
+
+        var command = new Command("grounded-iterative",
+            "Run the grounded iterative arm with compiler feedback and optional immutable visible-test feedback.")
+        {
+            fromOption, targetOption, modelOption, runsOption, budgetOption, maxTokenGuardOption,
+            buildTimeoutOption, qualityDiffOption, visibleTestsOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -88,6 +96,8 @@ public static class GroundedIterativeCommand
             var buildTimeout  = parseResult.GetValue(buildTimeoutOption);
             if (buildTimeout <= 0) buildTimeout = 180;
             var qualityDiff   = parseResult.GetValue(qualityDiffOption);
+            var visibleDirectory = parseResult.GetValue(visibleTestsOption);
+            var visibleEnabled = visibleDirectory is not null;
 
             if (!from.Exists)
             {
@@ -97,6 +107,11 @@ public static class GroundedIterativeCommand
             if (!target.Exists || !target.Extension.Equals(".sln", StringComparison.OrdinalIgnoreCase))
             {
                 await Console.Error.WriteLineAsync($"error: --target must be an existing .sln: {target.FullName}");
+                return 2;
+            }
+            if (visibleDirectory is not null && !visibleDirectory.Exists)
+            {
+                await Console.Error.WriteLineAsync($"error: --visible-tests directory not found: {visibleDirectory.FullName}");
                 return 2;
             }
 
@@ -111,9 +126,13 @@ public static class GroundedIterativeCommand
             var instances = LoadInstances(from.FullName);
             if (instances.Count == 0)
             {
-                await Console.Error.WriteLineAsync("error: no known instances found in --from file.");
+                await Console.Error.WriteLineAsync("error: no Long Method or God Class instances found in --from file.");
                 return 2;
             }
+
+            var visibleBySource = visibleDirectory is null
+                ? new Dictionary<string, LoadedGeneratedTest>(StringComparer.OrdinalIgnoreCase)
+                : await VisibleTestDirectoryLoader.LoadAsync(visibleDirectory.FullName, cancellationToken);
 
             // Render the Structural-level finding block for each file via ContextBuilder — exactly the
             // grounding the hybrid arm shows (§5.1.5). Per file, all its findings' blocks are concatenated.
@@ -147,13 +166,16 @@ public static class GroundedIterativeCommand
             var stamp         = DateTimeOffset.UtcNow.ToString("yyyyMMdd-HHmmss");
             var runStorePath  = Path.Combine("runs", $"{stamp}-grounded-iterative.jsonl");
             var trajectoryDir = Path.Combine("runs", $"{stamp}-grounded-iterative-trajectories");
+            var finalArtifactDirectory = Path.Combine("runs", $"{stamp}-grounded-iterative-final-sources");
             Console.Error.WriteLine($"Run trace: {Path.GetFullPath(runStorePath)}");
             Console.Error.WriteLine($"Trajectories: {Path.GetFullPath(trajectoryDir)}{Environment.NewLine}");
+            Console.Error.WriteLine($"Final sources: {Path.GetFullPath(finalArtifactDirectory)}{Environment.NewLine}");
 
             var measurer = services.GetRequiredService<IRepairMeasurer>();
             var qualityScanner = qualityDiff ? services.GetRequiredService<ISolutionQualityScanner>() : null;
             if (qualityDiff)
                 Console.Error.WriteLine("quality-diff: ON — whole-solution Layer 1 + Layer 2 measured for each trajectory's final built state.");
+            Console.Error.WriteLine($"visible-tests: assigned={visibleEnabled}, admitted={visibleBySource.Count}");
 
             await using IRunStore runStore = new JsonlRunStore(runStorePath);
             var runner = new AgenticRunner(
@@ -161,7 +183,11 @@ public static class GroundedIterativeCommand
                 qualityScanner: qualityScanner);
             await runner.RunAsync(
                 known, runs, runStore, maxTokenGuard, trajectoryDir, Console.Error, cancellationToken,
-                sweepFiles: null, groundingByFile: groundingByFile);
+                sweepFiles: null,
+                groundingByFile: groundingByFile,
+                visibleTestsByFile: visibleBySource,
+                visibleTestsEnabled: visibleEnabled,
+                finalArtifactDirectory: finalArtifactDirectory);
 
             Console.Error.WriteLine($"{Environment.NewLine}Grounded-iterative run complete.");
             return 0;
@@ -273,7 +299,6 @@ public static class GroundedIterativeCommand
         {
             "godclass"                          => AntiPatternType.GodClass,
             "longmethod"                        => AntiPatternType.LongMethod,
-            "obsoleteapiusage" or "obsoleteapi" => AntiPatternType.ObsoleteApiUsage,
             _                                   => null
         };
     }

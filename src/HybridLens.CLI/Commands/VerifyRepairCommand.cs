@@ -54,10 +54,15 @@ public static class VerifyRepairCommand
                           "Adds a dedicated analyzer build per candidate; the verified-repair gate stays analyzer-free."
         };
 
+        var finalArtifactsOption = new Option<DirectoryInfo?>("--final-artifacts")
+        {
+            Description = "Common final-source artefact directory for later blinded private Layer-3 evaluation."
+        };
+
         var command = new Command("verify-repair",
             "Apply each LLM repair, build, and re-measure the triggering metric (verified-repair, H1/H2b).")
         {
-            fromOption, targetOption, applierOption, outOption, buildTimeoutOption, qualityDiffOption
+            fromOption, targetOption, applierOption, outOption, buildTimeoutOption, qualityDiffOption, finalArtifactsOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -69,6 +74,7 @@ public static class VerifyRepairCommand
             var buildTimeout = parseResult.GetValue(buildTimeoutOption);
             if (buildTimeout <= 0) buildTimeout = 180;
             var qualityDiff  = parseResult.GetValue(qualityDiffOption);
+            var finalArtifacts = parseResult.GetValue(finalArtifactsOption)?.FullName;
 
             if (!from.Exists)
             {
@@ -99,7 +105,11 @@ public static class VerifyRepairCommand
 
             var outPath = outFile?.FullName
                           ?? Path.Combine("runs", $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}-verified.jsonl");
+            finalArtifacts ??= Path.Combine(
+                Path.GetDirectoryName(Path.GetFullPath(outPath))!,
+                Path.GetFileNameWithoutExtension(outPath) + "-final-sources");
             Console.Error.WriteLine($"Run trace: {Path.GetFullPath(outPath)}{Environment.NewLine}");
+            Console.Error.WriteLine($"Final sources: {Path.GetFullPath(finalArtifacts)}{Environment.NewLine}");
 
             var qualityScanner = qualityDiff ? services.GetRequiredService<ISolutionQualityScanner>() : null;
             if (qualityDiff)
@@ -108,7 +118,9 @@ public static class VerifyRepairCommand
             await using IRunStore store = new JsonlRunStore(outPath);
             var applier  = new RepairApplier(applierAdapter, applierModel);
             var verifier = new RepairVerifier(applier, measurer, target.FullName, buildTimeout, qualityScanner: qualityScanner);
-            await verifier.RunAsync(candidates, store, Console.Error, cancellationToken);
+            await verifier.RunAsync(
+                candidates, store, Console.Error, cancellationToken,
+                finalArtifactDirectory: finalArtifacts);
 
             Console.Error.WriteLine($"{Environment.NewLine}verify-repair complete.");
             return 0;

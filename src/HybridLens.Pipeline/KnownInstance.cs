@@ -26,9 +26,10 @@ public sealed record KnownInstance
         AntiPatternType type, string filePath, string symbolName, int line,
         Severity severity, string? snippet)
     {
-        var lineCount = string.IsNullOrEmpty(snippet)
+        var normalizedSnippet = snippet?.Replace("\r\n", "\n").Trim('\r', '\n');
+        var lineCount = string.IsNullOrEmpty(normalizedSnippet)
             ? 1
-            : snippet.Replace("\r\n", "\n").Split('\n').Length;
+            : normalizedSnippet.Split('\n').Length;
         return new KnownInstance
         {
             Type       = type,

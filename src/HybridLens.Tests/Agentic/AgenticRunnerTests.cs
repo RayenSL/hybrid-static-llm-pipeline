@@ -1,11 +1,13 @@
 using HybridLens.Core.Abstractions;
 using HybridLens.Core.Models;
 using HybridLens.Pipeline;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace HybridLens.Tests.Agentic;
 
 /// <summary>
-/// The iterative arms (§4.4.1, Appendix E v2.0.0) run an autonomous edit→build loop. The ungrounded
+/// The iterative arms (§4.4.1, Appendix E v2.0.2) run an autonomous edit→build loop. The ungrounded
 /// agentic arm writes detection finding rows (recall/precision) plus, per known instance, TWO verified-
 /// repair rows — a "final" snapshot and a "first_build" snapshot (the single-pass cell of the 2×2). The
 /// grounded-iterative arm seeds the opening prompt with the analyser's finding block, writes no detection
@@ -57,12 +59,15 @@ public sealed class AgenticRunnerTests : IDisposable
 
         var finding = store.Records.Single(r => r.VerifiedRepairLadder is null);
         Assert.Equal("agentic", finding.Architecture);
-        Assert.Equal("v2.0.0", finding.PromptVersion);
+        Assert.Equal("v2.0.2", finding.PromptVersion);
         Assert.False(finding.IsSpurious);
         Assert.NotNull(finding.MatchedInstanceId);
         Assert.Equal(1, finding.AgenticIterations);
         Assert.False(finding.AgenticBudgetExhausted);
         Assert.NotNull(finding.AgenticTrajectoryRef);
+        Assert.Contains("Neutral target declarations", finding.RawUserPrompt);
+        Assert.Contains("Demo.Thing", finding.RawUserPrompt);
+        Assert.DoesNotContain("Static-analysis findings", finding.RawUserPrompt);
 
         var verified = store.Records.Single(r => r.VerifiedRepairLadder is not null && r.AgenticSnapshot == "final");
         Assert.Equal(VerifiedRepairOutcome.Resolved, verified.VerifiedRepairLadder);
@@ -285,8 +290,265 @@ public sealed class AgenticRunnerTests : IDisposable
         Assert.Contains(store.Records, r => r.AgenticSnapshot == "final");
         Assert.Contains(store.Records, r => r.AgenticSnapshot == "first_build");
         var any = store.Records.First();
+        Assert.Contains("Neutral target declarations", any.RawUserPrompt);
+        Assert.Contains("Demo.Thing", any.RawUserPrompt);
         Assert.Contains("Static-analysis findings", any.RawUserPrompt);
         Assert.Contains("WMC: 60", any.RawUserPrompt);
+        Assert.Contains("explicitly supplied", any.RawSystemPrompt, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("no access to static-analysis", any.RawSystemPrompt, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task VisibleTest_RunsAfterSuccessfulBuild_AndFailureFeedsNextTurn()
+    {
+        var (sln, instanceFile, known) = MakeCorpus("Demo.Thing", 1);
+        var project = Path.Combine(Path.GetDirectoryName(instanceFile)!, "Demo.csproj");
+        File.WriteAllText(project, "<Project Sdk=\"Microsoft.NET.Sdk\" />");
+        var visible = VisibleTest(instanceFile, project);
+        var visibleByFile = new Dictionary<string, LoadedGeneratedTest>(StringComparer.OrdinalIgnoreCase)
+        {
+            [Path.GetFullPath(instanceFile)] = visible
+        };
+
+        var operations = new List<string>();
+        var testRun = 0;
+        var adapter = new CapturingAdapter(
+            EditWithGodClass("Demo.Thing", 1),
+            EditWithGodClass("Demo.Thing", 1),
+            CompleteWithGodClass("Demo.Thing", 1));
+        var runner = new AgenticRunner(
+            adapter,
+            "gpt-5.4",
+            new FakeMeasurer(stillTriggers: false),
+            sln,
+            iterationBudget: 2,
+            buildTimeoutSeconds: 30,
+            build: (_, _, _) =>
+            {
+                operations.Add("build");
+                return Task.FromResult((true, "Build succeeded"));
+            },
+            executeVisibleTest: (_, workingProject, _, _) =>
+            {
+                operations.Add("test");
+                Assert.Equal(Path.GetFileName(project), Path.GetFileName(workingProject));
+                testRun++;
+                var passed = testRun == 2;
+                return Task.FromResult(new GeneratedTestExecutionResult(
+                    BuildPassed: true,
+                    TestPassed: passed,
+                    DurationMs: 12.5,
+                    OutputTail: passed ? "PASS" : "FAIL: expected 3, actual 4"));
+            });
+
+        var store = new CollectingRunStore();
+        await runner.RunAsync(
+            known, 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
+            sweepFiles: [instanceFile],
+            visibleTestsByFile: visibleByFile,
+            visibleTestsEnabled: true);
+
+        Assert.Equal(["build", "test", "build", "test"], operations);
+        Assert.Equal(3, adapter.Conversations.Count);
+        Assert.Contains("two external checks", adapter.Conversations[0].SystemPrompt, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("exactly one tool", adapter.Conversations[0].SystemPrompt, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("Immutable visible characterization test", adapter.Conversations[0].Turns[0].Content);
+        Assert.Contains("Immutable visible characterization test: FAIL",
+            adapter.Conversations[1].Turns.Last().Content);
+        Assert.Contains("expected 3, actual 4", adapter.Conversations[1].Turns.Last().Content);
+        Assert.Contains(adapter.Conversations[2].Turns,
+            t => t.Role == ChatRole.User &&
+                 t.Content.Contains("Immutable visible characterization test: PASS", StringComparison.Ordinal));
+        GeneratedTestArtifactLoader.VerifyUnchanged(visible);
+
+        var final = store.Records.Single(r => r.AgenticSnapshot == "final");
+        var first = store.Records.Single(r => r.AgenticSnapshot == "first_build");
+        Assert.True(final.VisibleTestsEnabled);
+        Assert.True(final.VisibleTestAvailable);
+        Assert.True(final.VisibleTestPassed);
+        Assert.False(first.VisibleTestPassed);
+        Assert.Equal(3, final.LlmCallCount);
+        Assert.Equal(2, final.BuildAttemptCount);
+        Assert.Equal(2, final.TestAttemptCount);
+        Assert.Equal(25, final.TestDurationMs);
+        Assert.Equal("iterative", final.ControlStructure);
+        Assert.Equal("v2.1.2", final.PromptVersion);
+        Assert.NotNull(final.MaterializedSourceRef);
+        Assert.True(File.Exists(final.MaterializedSourceRef));
+        Assert.NotNull(final.MaterializedSourceSha256);
+    }
+
+    [Fact]
+    public async Task AssignedButUnavailableVisibleTest_RemainsInTestEnabledArm()
+    {
+        var (sln, instanceFile, known) = MakeCorpus("Demo.Thing", 1);
+        var store = new CollectingRunStore();
+        var runner = new AgenticRunner(
+            new ScriptedAdapter(EditWithGodClass("Demo.Thing", 1), CompleteWithGodClass("Demo.Thing", 1)),
+            "gpt-5.4",
+            new FakeMeasurer(stillTriggers: false),
+            sln,
+            iterationBudget: 2,
+            buildTimeoutSeconds: 30,
+            build: (_, _, _) => Task.FromResult((true, "ok")));
+
+        await runner.RunAsync(
+            known, 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
+            sweepFiles: [instanceFile],
+            visibleTestsByFile: new Dictionary<string, LoadedGeneratedTest>(StringComparer.OrdinalIgnoreCase),
+            visibleTestsEnabled: true);
+
+        var final = store.Records.Single(r => r.AgenticSnapshot == "final");
+        Assert.True(final.VisibleTestsEnabled);
+        Assert.False(final.VisibleTestAvailable);
+        Assert.Null(final.VisibleTestPassed);
+        Assert.Equal(0, final.TestAttemptCount);
+        Assert.Equal("v2.0.2", final.PromptVersion);
+    }
+
+    [Fact]
+    public async Task ImmediateCompletion_ExecutesVisibleTestAsFinalMeasurementWithoutFeedback()
+    {
+        var (sln, instanceFile, known) = MakeCorpus("Demo.Thing", 1);
+        var project = Path.Combine(Path.GetDirectoryName(instanceFile)!, "Demo.csproj");
+        File.WriteAllText(project, """<Project Sdk="Microsoft.NET.Sdk" />""");
+        var visible = VisibleTest(instanceFile, project);
+        var adapter = new CapturingAdapter(CompleteWithGodClass("Demo.Thing", 1));
+        var buildCalls = 0;
+        var testCalls = 0;
+        var runner = new AgenticRunner(
+            adapter,
+            "gpt-5.4",
+            new FakeMeasurer(stillTriggers: true),
+            sln,
+            iterationBudget: 2,
+            buildTimeoutSeconds: 30,
+            build: (_, _, _) =>
+            {
+                buildCalls++;
+                return Task.FromResult((true, "ok"));
+            },
+            executeVisibleTest: (_, _, _, _) =>
+            {
+                testCalls++;
+                return Task.FromResult(new GeneratedTestExecutionResult(true, true, 5, "PASS"));
+            });
+        var store = new CollectingRunStore();
+
+        await runner.RunAsync(
+            known, 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
+            sweepFiles: [instanceFile],
+            visibleTestsByFile: new Dictionary<string, LoadedGeneratedTest>(StringComparer.OrdinalIgnoreCase)
+            {
+                [Path.GetFullPath(instanceFile)] = visible
+            },
+            visibleTestsEnabled: true);
+
+        var final = store.Records.Single(r => r.AgenticSnapshot == "final");
+        Assert.Equal(0, buildCalls);
+        Assert.Equal(1, testCalls);
+        Assert.Single(adapter.Conversations);
+        Assert.True(final.VisibleTestPassed);
+        Assert.Equal(1, final.TestAttemptCount);
+    }
+
+    [Fact]
+    public async Task VisibleTestFromDifferentSourceRevision_IsRejectedBeforeModelCall()
+    {
+        var (sln, instanceFile, known) = MakeCorpus("Demo.Thing", 1);
+        var project = Path.Combine(Path.GetDirectoryName(instanceFile)!, "Demo.csproj");
+        File.WriteAllText(project, """<Project Sdk="Microsoft.NET.Sdk" />""");
+        var valid = VisibleTest(instanceFile, project);
+        var stale = valid with { Artifact = valid.Artifact with { SourceSha256 = "stale" } };
+        var adapter = new CapturingAdapter(CompleteWithGodClass("Demo.Thing", 1));
+        var runner = new AgenticRunner(
+            adapter, "gpt-5.4", new FakeMeasurer(true), sln, 2, 30,
+            build: (_, _, _) => Task.FromResult((true, "ok")));
+
+        var error = await Assert.ThrowsAsync<InvalidDataException>(() => runner.RunAsync(
+            known, 1, new CollectingRunStore(), 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
+            sweepFiles: [instanceFile],
+            visibleTestsByFile: new Dictionary<string, LoadedGeneratedTest>(StringComparer.OrdinalIgnoreCase)
+            {
+                [Path.GetFullPath(instanceFile)] = stale
+            },
+            visibleTestsEnabled: true));
+
+        Assert.Contains("different pristine source revision", error.Message);
+        Assert.Empty(adapter.Conversations);
+    }
+
+    [Fact]
+    public async Task ValidTurnResetsParseFailures_AndUnknownActionDoesNotBuild()
+    {
+        var (sln, instanceFile, known) = MakeCorpus("Demo.Thing", 1);
+        var buildCalls = 0;
+        var runner = new AgenticRunner(
+            new ScriptedAdapter(
+                "not json",
+                EditWithGodClass("Demo.Thing", 1),
+                """{"action":"ship_it","edited_file":"// must not build","findings":[]}""",
+                CompleteWithGodClass("Demo.Thing", 1)),
+            "gpt-5.4",
+            new FakeMeasurer(false),
+            sln,
+            iterationBudget: 2,
+            buildTimeoutSeconds: 30,
+            build: (_, _, _) =>
+            {
+                buildCalls++;
+                return Task.FromResult((true, "ok"));
+            });
+        var store = new CollectingRunStore();
+
+        await runner.RunAsync(
+            known, 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
+            sweepFiles: [instanceFile]);
+
+        var final = store.Records.Single(r => r.AgenticSnapshot == "final");
+        Assert.Equal(1, buildCalls);
+        Assert.Equal(4, final.LlmCallCount);
+        Assert.Equal(ParseStatus.Ok, final.ParseStatus);
+        Assert.Null(final.ErrorStatus);
+    }
+
+    [Fact]
+    public async Task CompletionWithoutEditedFile_IsRejectedAndRePrompted()
+    {
+        var (sln, instanceFile, known) = MakeCorpus("Demo.Thing", 1);
+        var adapter = new CapturingAdapter(
+            """{"action":"complete","findings":[]}""",
+            CompleteWithGodClass("Demo.Thing", 1));
+        var runner = new AgenticRunner(
+            adapter, "gpt-5.4", new FakeMeasurer(true), sln, 2, 30,
+            build: (_, _, _) => Task.FromResult((true, "ok")));
+        var store = new CollectingRunStore();
+
+        await runner.RunAsync(
+            known, 1, store, 120_000, TrajDir(), TextWriter.Null, CancellationToken.None,
+            sweepFiles: [instanceFile]);
+
+        var final = store.Records.Single(r => r.AgenticSnapshot == "final");
+        Assert.Equal(2, final.LlmCallCount);
+        Assert.Equal(ParseStatus.Ok, final.ParseStatus);
+        Assert.Null(final.ErrorStatus);
+    }
+
+    [Fact]
+    public async Task GroundedArchitectureRequiresFindingBlock_AndUnknownArchitectureIsRejected()
+    {
+        var (sln, instanceFile, known) = MakeCorpus("Demo.Thing", 1);
+        var adapter = new ScriptedAdapter(CompleteWithGodClass("Demo.Thing", 1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new AgenticRunner(
+            adapter, "gpt-5.4", new FakeMeasurer(true), sln, 2, 30,
+            architecture: "typo"));
+
+        var grounded = new AgenticRunner(
+            adapter, "gpt-5.4", new FakeMeasurer(true), sln, 2, 30,
+            architecture: "grounded_iterative");
+        await Assert.ThrowsAsync<ArgumentException>(() => grounded.RunAsync(
+            known, 1, new CollectingRunStore(), 120_000, TrajDir(), TextWriter.Null,
+            CancellationToken.None, sweepFiles: [instanceFile]));
     }
 
     // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -324,6 +586,44 @@ public sealed class AgenticRunnerTests : IDisposable
         return dir;
     }
 
+    private static LoadedGeneratedTest VisibleTest(string sourceFile, string projectFile)
+    {
+        var source = new GeneratedTestSource(
+            "PreservesThingBehaviour",
+            ["using Demo;"],
+            "var value = new Thing();\nCheck.NotNull(value);");
+        var hash = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(
+            string.Join("\n", source.UsingDirectives) + "\n" + source.TestBody)));
+        var artifact = new GeneratedTestArtifact
+        {
+            ArtifactId = "visible-test",
+            ArtifactRef = "visible-test.json",
+            Timestamp = DateTimeOffset.UtcNow,
+            SourceFile = sourceFile,
+            SourceSha256 = MaterializedSourceArtifactWriter.Sha256(File.ReadAllText(sourceFile)),
+            TargetSymbolName = "Demo.Thing",
+            TargetStartLine = 1,
+            TargetEndLine = 1,
+            ProjectFile = projectFile,
+            ModelName = "test-author-model",
+            PromptVersion = "v1.1.0",
+            RawSystemPrompt = "system",
+            RawUserPrompt = "user",
+            RawLlmOutput = "output",
+            DurationMs = 1,
+            TestName = source.TestName,
+            UsingDirectives = source.UsingDirectives,
+            TestBody = source.TestBody,
+            TestSha256 = hash,
+            AdmissionStatus = GeneratedTestAdmissionStatus.Admitted,
+            ParsePassed = true,
+            AssertionGatePassed = true,
+            BuildPassed = true,
+            BaselineRunsPassed = [true, true]
+        };
+        return new LoadedGeneratedTest(artifact, source);
+    }
+
     public void Dispose()
     {
         foreach (var d in _tempDirs)
@@ -340,6 +640,28 @@ public sealed class AgenticRunnerTests : IDisposable
 
         public Task<LlmResponse> CompleteAsync(LlmConversation conversation, CancellationToken cancellationToken = default)
         {
+            var content = responses[Math.Min(_i, responses.Length - 1)];
+            _i++;
+            return Task.FromResult(new LlmResponse { Content = content, InputTokens = 7, OutputTokens = 11 });
+        }
+    }
+
+    private sealed class CapturingAdapter(params string[] responses) : ILlmAdapter
+    {
+        private int _i;
+        public List<LlmConversation> Conversations { get; } = [];
+
+        public Task<LlmResponse> CompleteAsync(LlmRequest request, CancellationToken cancellationToken = default)
+            => throw new NotSupportedException("agentic uses the conversation overload");
+
+        public Task<LlmResponse> CompleteAsync(LlmConversation conversation, CancellationToken cancellationToken = default)
+        {
+            Conversations.Add(new LlmConversation
+            {
+                SystemPrompt = conversation.SystemPrompt,
+                PromptVersion = conversation.PromptVersion,
+                Turns = conversation.Turns.ToList()
+            });
             var content = responses[Math.Min(_i, responses.Length - 1)];
             _i++;
             return Task.FromResult(new LlmResponse { Content = content, InputTokens = 7, OutputTokens = 11 });

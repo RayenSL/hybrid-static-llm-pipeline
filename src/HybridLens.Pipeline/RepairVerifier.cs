@@ -35,7 +35,8 @@ public sealed class RepairVerifier(
         IReadOnlyList<RepairCandidate> candidates,
         IRunStore store,
         TextWriter progress,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        string? finalArtifactDirectory = null)
     {
         var corpusRoot  = Path.GetDirectoryName(Path.GetFullPath(solutionPath))!;
         var workingRoot = Path.Combine(Path.GetTempPath(), $"hybridlens-verify-{Guid.NewGuid():N}");
@@ -45,6 +46,9 @@ public sealed class RepairVerifier(
             $"verify-repair: {candidates.Count} candidate(s), applier={applier.Model} " +
             $"(prompt {applier.PromptVersion}), solution={Path.GetFileName(solutionPath)}");
         progress.WriteLine($"  working copy: {workingRoot}");
+        var materializedDirectory = finalArtifactDirectory
+            ?? Path.Combine("runs", $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}-hybrid-final-sources");
+        Directory.CreateDirectory(materializedDirectory);
 
         CopyTree(corpusRoot, workingRoot);
         try
@@ -65,7 +69,8 @@ public sealed class RepairVerifier(
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 n++;
-                var record = await VerifyOneAsync(candidate, corpusRoot, workingRoot, workingSln, cancellationToken);
+                var record = await VerifyOneAsync(
+                    candidate, corpusRoot, workingRoot, workingSln, materializedDirectory, cancellationToken);
                 await store.AppendAsync(record, cancellationToken);
 
                 var outcome = record.VerifiedRepairLadder?.ToString()
@@ -83,7 +88,8 @@ public sealed class RepairVerifier(
     }
 
     private async Task<RunRecord> VerifyOneAsync(
-        RepairCandidate c, string corpusRoot, string workingRoot, string workingSln, CancellationToken ct)
+        RepairCandidate c, string corpusRoot, string workingRoot, string workingSln,
+        string materializedDirectory, CancellationToken ct)
     {
         var timestamp = DateTimeOffset.UtcNow;
         var sw = Stopwatch.StartNew();
@@ -146,6 +152,23 @@ public sealed class RepairVerifier(
             await File.WriteAllTextAsync(workingTarget, apply.EditedFile!, ct);
 
             var (built, buildOutput) = await _build(workingSln, buildTimeoutSeconds, ct);
+            var materialized = new MaterializedSourceArtifact
+            {
+                ArtifactId = Guid.NewGuid().ToString("N"),
+                Timestamp = DateTimeOffset.UtcNow,
+                Architecture = c.Architecture,
+                GroundingEnabled = true,
+                ControlStructure = "hybrid_applied",
+                VisibleTestsEnabled = false,
+                VisibleTestAvailable = false,
+                RunNumber = c.RunNumber,
+                RelativeFile = relForPrompt,
+                SourceSha256 = MaterializedSourceArtifactWriter.Sha256(apply.EditedFile!),
+                FinalSource = apply.EditedFile!,
+                BuildPassed = built
+            };
+            var materializedRef = await MaterializedSourceArtifactWriter.WriteAsync(
+                materializedDirectory, materialized, ct);
             if (!built)
             {
                 sw.Stop();
@@ -154,7 +177,9 @@ public sealed class RepairVerifier(
                     buildPassed: false, remeasured: null,
                     ladder: VerifiedRepairOutcome.BuildFails,
                     parseStatus: ParseStatus.Ok, errorStatus: null,
-                    errorMessage: Tail(buildOutput, 2000));
+                    errorMessage: Tail(buildOutput, 2000),
+                    materializedRef: materializedRef,
+                    materializedHash: materialized.SourceSha256);
             }
 
             var remeasure = await measurer.RemeasureAsync(c.Type, workingTarget, c.SymbolName, ct);
@@ -182,7 +207,9 @@ public sealed class RepairVerifier(
                 remeasured: remeasure.StillTriggers ? remeasure.Metrics : null,
                 ladder: ladder,
                 parseStatus: ParseStatus.Ok, errorStatus: null, errorMessage: null,
-                qualityDelta: qualityDelta);
+                qualityDelta: qualityDelta,
+                materializedRef: materializedRef,
+                materializedHash: materialized.SourceSha256);
         }
         finally
         {
@@ -198,7 +225,9 @@ public sealed class RepairVerifier(
         bool applicable, string? unapplicableReason, bool? buildPassed,
         IReadOnlyDictionary<string, double>? remeasured, VerifiedRepairOutcome ladder,
         ParseStatus parseStatus, ErrorStatus? errorStatus, string? errorMessage,
-        QualityDelta? qualityDelta = null)
+        QualityDelta? qualityDelta = null,
+        string? materializedRef = null,
+        string? materializedHash = null)
         => new()
         {
             RunId                    = Guid.NewGuid().ToString("N"),
@@ -215,6 +244,12 @@ public sealed class RepairVerifier(
             ModelName                = c.ModelName,
             PromptVersion            = c.PromptVersion,
             Architecture             = c.Architecture,
+            GroundingEnabled         = true,
+            ControlStructure         = "hybrid_applied",
+            VisibleTestsEnabled      = false,
+            VisibleTestAvailable     = false,
+            MaterializedSourceRef    = materializedRef,
+            MaterializedSourceSha256 = materializedHash,
             RawSystemPrompt          = apply.SystemPrompt,
             RawUserPrompt            = apply.UserPrompt,
             RawLlmOutput             = apply.RawOutput,

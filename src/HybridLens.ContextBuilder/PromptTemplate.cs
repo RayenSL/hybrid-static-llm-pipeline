@@ -1,3 +1,5 @@
+using HybridLens.Core.Models;
+
 namespace HybridLens.ContextBuilder;
 
 /// <summary>
@@ -41,17 +43,18 @@ public static class PromptTemplate
         }
         """;
 
-    // ── Agentic condition (§4.4.1, Appendix E, prompt v2.0.0) ────────────────
+    // ── Agentic condition (§4.4.1, Appendix E, prompt v2.0.2) ────────────────
     //
-    // v2.0.0 replaces the single-shot whole-file prompt with an AUTONOMOUS LOOP. It differs
-    // from the hybrid prompt in four ways: the model must DETECT occurrences before repairing;
+    // v2.0.2 defines the target-only AUTONOMOUS LOOP. It differs
+    // from the hybrid prompt in four ways: the model must DIAGNOSE the neutrally located target before repairing;
     // it receives NO finding header/metrics/label; it sees the WHOLE source file; and it is
     // granted exactly one tool — a compiler it may invoke repeatedly, observing build results
     // between calls, until it declares completion or the iteration budget is exhausted. Each
     // turn is a JSON OBJECT carrying an action, the full edited file, and the located findings.
     // The detector is never exposed (only the compiler), keeping the arm ungrounded.
 
-    public const string AgenticVersion = "v2.0.0";
+    public const string AgenticVersion = "v2.0.2";
+    public const string AgenticVisibleTestVersion = "v2.1.2";
 
     /// <summary>
     /// The agentic system prompt (Appendix E.1). Contains the literal token
@@ -59,8 +62,11 @@ public static class PromptTemplate
     /// </summary>
     public const string AgenticSystemPromptTemplate = """
         You are a .NET code quality expert operating as an autonomous agent. You are given a
-        complete C# source file. Your task is to (1) identify every occurrence of the following
-        anti-patterns in the file, and (2) repair them by editing the source:
+        complete C# source file and neutral coordinates for the target declaration(s). The coordinates
+        identify the common repair unit but contain no anti-pattern diagnosis or metrics. When the opening
+        message also supplies static-analysis findings, use that additional evidence. Otherwise, diagnose
+        the supplied target declaration(s) yourself. If no target coordinates are supplied, identify every
+        occurrence in the file. Repair the targeted occurrences by editing the source:
 
         - God Class
         - Long Method
@@ -72,9 +78,7 @@ public static class PromptTemplate
         {ITERATION_BUDGET} build attempts. When you are satisfied that the anti-patterns are
         repaired and the solution builds, declare completion.
 
-        You have exactly one tool: a compiler that builds the current state of the file and returns
-        success or the diagnostic errors. You have no other tools and no access to static-analysis
-        output.
+        {TOOL_DESCRIPTION}
 
         For each occurrence, also record its location and explain its impact on the relevant
         ISO/IEC 25010 software quality attributes. Focus on attributes such as maintainability,
@@ -99,12 +103,47 @@ public static class PromptTemplate
         """;
 
     /// <summary>The agentic system prompt with the frozen iteration budget substituted (Appendix E.1).</summary>
-    public static string BuildAgenticSystemPrompt(int iterationBudget) =>
-        AgenticSystemPromptTemplate.Replace("{ITERATION_BUDGET}", iterationBudget.ToString());
+    private const string CompilerOnlyDescription = """
+        You have exactly one external check: a compiler that builds the current state of the file and
+        returns success or the diagnostic errors. You cannot execute the static detector or private
+        evaluation tests. Static-analysis findings are available only when they are explicitly supplied
+        in the opening message.
+        """;
 
-    /// <summary>Wraps the whole, unannotated source file as the opening agentic user prompt (Appendix E.2).</summary>
-    public static string BuildAgenticUserPrompt(string relativePath, string fileContent) =>
-        $"## Source file: {relativePath}\n```csharp\n{fileContent}\n```";
+    private const string CompilerAndVisibleTestDescription = """
+        You have two external checks: a compiler and one immutable characterization test authored
+        from the pristine code before repair. After a successful build, the test is executed and you
+        will receive its result. Use that feedback to preserve existing behaviour. Never rewrite,
+        weaken, bypass, or work around the test. You cannot execute the static detector or private
+        evaluation tests. Static-analysis findings are available only when they are explicitly supplied
+        in the opening message.
+        """;
+
+    public static string BuildAgenticSystemPrompt(int iterationBudget) =>
+        BuildAgenticSystemPrompt(iterationBudget, visibleTestAvailable: false);
+
+    /// <summary>
+    /// Builds the iterative prompt for the assigned feedback condition. The no-test form remains the
+    /// frozen v2.0.2 prompt. The test-enabled form replaces the compiler-only tool statement because
+    /// an admitted, immutable characterization test is also executed after each successful build.
+    /// </summary>
+    public static string BuildAgenticSystemPrompt(int iterationBudget, bool visibleTestAvailable)
+    {
+        var toolDescription = visibleTestAvailable
+            ? CompilerAndVisibleTestDescription
+            : CompilerOnlyDescription;
+        return AgenticSystemPromptTemplate
+            .Replace("{ITERATION_BUDGET}", iterationBudget.ToString())
+            .Replace("{TOOL_DESCRIPTION}", toolDescription);
+    }
+
+    public static string AgenticPromptVersion(bool visibleTestAvailable) =>
+        visibleTestAvailable ? AgenticVisibleTestVersion : AgenticVersion;
+
+    /// <summary>Wraps the source and the common, diagnosis-free repair coordinates.</summary>
+    public static string BuildAgenticUserPrompt(
+        string relativePath, string fileContent, IReadOnlyList<BlindedTargetDescriptor> targets) =>
+        $"{BuildBlindedTargetSection(targets)}\n\n## Source file: {relativePath}\n```csharp\n{fileContent}\n```";
 
     /// <summary>
     /// Opening user prompt for the grounded-iterative arm (§4.4.1, §5.1.5). Identical to the ungrounded
@@ -114,8 +153,19 @@ public static class PromptTemplate
     /// and iteration budget are unchanged — this arm differs from the ungrounded one only here, which is
     /// what lets the H1c contrast vary grounding alone (and, as a consequence, relieves it of detection).
     /// </summary>
-    public static string BuildGroundedIterativeUserPrompt(string relativePath, string fileContent, string findingBlock) =>
-        $"## Static-analysis findings (already located by the analyser — repair these occurrences)\n{findingBlock.TrimEnd()}\n\n## Source file: {relativePath}\n```csharp\n{fileContent}\n```";
+    public static string BuildGroundedIterativeUserPrompt(
+        string relativePath, string fileContent, IReadOnlyList<BlindedTargetDescriptor> targets, string findingBlock) =>
+        $"{BuildBlindedTargetSection(targets)}\n\n## Static-analysis findings (additional grounding for the same target)\n{findingBlock.TrimEnd()}\n\n## Source file: {relativePath}\n```csharp\n{fileContent}\n```";
+
+    private static string BuildBlindedTargetSection(IReadOnlyList<BlindedTargetDescriptor> targets)
+    {
+        if (targets.Count == 0)
+            return "## Neutral target declarations\nNone supplied; inspect the complete file.";
+        return "## Neutral target declarations (shared by every repair condition)\n" +
+               string.Join("\n", targets.Select(t =>
+                   $"- Symbol: {t.SymbolName}; source lines: {t.StartLine}-{t.EndLine}")) +
+               "\nThese coordinates provide no anti-pattern label, severity, metric, threshold, or repair advice.";
+    }
 
     /// <summary>
     /// Build-result feedback fed back as the next user turn after an <c>edit_and_build</c> action.
@@ -128,6 +178,23 @@ public static class PromptTemplate
               "action \"complete\" and your final findings. Otherwise continue editing."
             : $"## Build result (attempt {attempt}/{budget}): FAILED\n```\n{diagnostics}\n```\n" +
               "Revise the edited file to fix these compiler errors, or declare completion.";
+
+    /// <summary>Appends the admitted pre-repair test, including its frozen content hash.</summary>
+    public static string AppendImmutableVisibleTest(string userPrompt, LoadedVisibleTestPrompt? visibleTest)
+    {
+        if (visibleTest is null) return userPrompt;
+        return userPrompt.TrimEnd() + $$"""
+
+
+            ## Immutable visible characterization test
+            Name: {{visibleTest.Name}}
+            Hash: {{visibleTest.Sha256}}
+            ```csharp
+            {{string.Join(Environment.NewLine, visibleTest.UsingDirectives)}}
+            {{visibleTest.Body}}
+            ```
+            """;
+    }
 
     // ── Repair applier (objective repair verification, §4.5.1 / §4.7.1, Appendix A.1) ──
     //

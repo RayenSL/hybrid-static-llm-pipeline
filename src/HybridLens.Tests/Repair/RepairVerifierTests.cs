@@ -68,6 +68,10 @@ public sealed class RepairVerifierTests : IDisposable
         // Identity is carried from the generation row for grouping.
         Assert.Equal("hybrid", record.Architecture);
         Assert.Equal("gpt-5.4", record.ModelName);
+        Assert.Equal("hybrid_applied", record.ControlStructure);
+        Assert.NotNull(record.MaterializedSourceRef);
+        Assert.True(File.Exists(record.MaterializedSourceRef));
+        Assert.NotNull(record.MaterializedSourceSha256);
     }
 
     [Fact]
@@ -95,7 +99,7 @@ public sealed class RepairVerifierTests : IDisposable
     [Fact]
     public async Task FrozenCorpus_OriginalFileIsNeverModified()
     {
-        var (sln, file, _) = MakeCorpus();
+        var (sln, file, root) = MakeCorpus();
         var before = await File.ReadAllTextAsync(file);
 
         var verifier = new RepairVerifier(
@@ -105,7 +109,9 @@ public sealed class RepairVerifierTests : IDisposable
             build: (_, _, _) => Task.FromResult((true, "ok")));
 
         var store = new CollectingRunStore();
-        await verifier.RunAsync([Candidate(file)], store, TextWriter.Null, CancellationToken.None);
+        await verifier.RunAsync(
+            [Candidate(file)], store, TextWriter.Null, CancellationToken.None,
+            finalArtifactDirectory: Path.Combine(root, "final-sources"));
 
         Assert.Equal(before, await File.ReadAllTextAsync(file));   // edit went to the working copy, not the corpus
     }
@@ -115,7 +121,7 @@ public sealed class RepairVerifierTests : IDisposable
     private async Task<RunRecord> RunOneAsync(
         string applierContent, bool buildOk, bool stillTriggers, bool applierThrows = false)
     {
-        var (sln, file, _) = MakeCorpus();
+        var (sln, file, root) = MakeCorpus();
         var verifier = new RepairVerifier(
             new RepairApplier(new FakeAdapter(applierContent, applierThrows), "claude-opus-4-8"),
             new FakeMeasurer(stillTriggers),
@@ -123,7 +129,9 @@ public sealed class RepairVerifierTests : IDisposable
             build: (_, _, _) => Task.FromResult((buildOk, "build output")));
 
         var store = new CollectingRunStore();
-        await verifier.RunAsync([Candidate(file)], store, TextWriter.Null, CancellationToken.None);
+        await verifier.RunAsync(
+            [Candidate(file)], store, TextWriter.Null, CancellationToken.None,
+            finalArtifactDirectory: Path.Combine(root, "final-sources"));
         return Assert.Single(store.Records);
     }
 

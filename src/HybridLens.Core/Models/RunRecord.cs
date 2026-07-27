@@ -42,6 +42,36 @@ public sealed record RunRecord
     /// <summary>Architecture arm: "analyser_only", "hybrid", or "agentic" (§4.4.1).</summary>
     public          string?          Architecture     { get; init; }
 
+    // ── Generated-test factorial extension (null on legacy/original-study rows) ──
+    /// <summary>True when a static-analysis finding was supplied to the repair model.</summary>
+    public          bool?            GroundingEnabled       { get; init; }
+    /// <summary>Frozen control-structure factor: "single_shot" or "iterative".</summary>
+    public          string?          ControlStructure       { get; init; }
+    /// <summary>Assigned generated-test condition, regardless of whether generation/admission succeeded (ITT).</summary>
+    public          bool?            VisibleTestsEnabled    { get; init; }
+    /// <summary>True only when an admitted visible characterization artefact was available to this repair attempt.</summary>
+    public          bool?            VisibleTestAvailable   { get; init; }
+    /// <summary>Path to the immutable generated-test artefact supplied to this attempt.</summary>
+    public          string?          VisibleTestArtifactRef { get; init; }
+    /// <summary>SHA-256 of the admitted visible test; used to prove it was not edited during repair.</summary>
+    public          string?          VisibleTestSha256      { get; init; }
+    /// <summary>Final execution result of the original frozen visible test. Null when unavailable or not executed.</summary>
+    public          bool?            VisibleTestPassed      { get; init; }
+
+    /// <summary>Total evaluated-model calls consumed by the repair attempt.</summary>
+    public          int?             LlmCallCount           { get; init; }
+    /// <summary>Total production build attempts consumed by the repair attempt.</summary>
+    public          int?             BuildAttemptCount      { get; init; }
+    /// <summary>Total visible-test executions consumed by the repair attempt.</summary>
+    public          int?             TestAttemptCount       { get; init; }
+    /// <summary>Cumulative visible-test execution time for this attempt.</summary>
+    public          double?          TestDurationMs         { get; init; }
+
+    /// <summary>Common frozen final-source artefact used by whole-solution and private Layer-3 evaluation.</summary>
+    public          string?          MaterializedSourceRef  { get; init; }
+    /// <summary>SHA-256 of the exact final production source stored in <see cref="MaterializedSourceRef"/>.</summary>
+    public          string?          MaterializedSourceSha256 { get; init; }
+
     // ── Agentic / ungrounded detection fields (null for analyser/hybrid rows) ──
     /// <summary>Symbol the agentic model reported for this self-detected finding.</summary>
     public          string?          LlmReportedSymbol { get; init; }

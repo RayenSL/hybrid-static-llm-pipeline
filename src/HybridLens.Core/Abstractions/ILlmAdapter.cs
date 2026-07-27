@@ -7,7 +7,7 @@ public interface ILlmAdapter
 
     /// <summary>
     /// Multi-turn completion over a running conversation (system + an alternating user/assistant
-    /// transcript). Used by the agentic arm (§4.4.1, Appendix E v2.0.0), whose loop feeds each
+    /// transcript). Used by the agentic arm (§4.4.1, Appendix E v2.0.2), whose loop feeds each
     /// build result back as a new user turn and reads the model's next action.
     /// </summary>
     Task<LlmResponse> CompleteAsync(LlmConversation conversation, CancellationToken cancellationToken = default);

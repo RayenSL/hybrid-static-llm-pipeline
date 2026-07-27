@@ -283,9 +283,18 @@ public static class AnalyseCommand
                     capNote += $" (global cap → {llmInput.Count})";
 
                 var modelsNote = modelFilter is null ? "all" : string.Join("+", modelFilter);
-                progress.WriteLine(
-                    $"Sending {llmInput.Count} finding(s) to LLM{capNote} " +
-                    $"[context: {contextConfig.Level}, runs: {runs}, models: {modelsNote}, prompt: {HybridLens.ContextBuilder.PromptTemplate.Version}]");
+                if (contextConfig.Level == ContextLevel.AnalyserOnly)
+                {
+                    progress.WriteLine(
+                        $"Recording {llmInput.Count} static-analyser baseline finding(s){capNote} " +
+                        $"[context: {contextConfig.Level}; no LLM calls]");
+                }
+                else
+                {
+                    progress.WriteLine(
+                        $"Sending {llmInput.Count} finding(s) to LLM{capNote} " +
+                        $"[context: {contextConfig.Level}, runs: {runs}, models: {modelsNote}, prompt: {HybridLens.ContextBuilder.PromptTemplate.Version}]");
+                }
                 progress.WriteLine($"Run trace: {Path.GetFullPath(runStorePath)}{Environment.NewLine}");
 
                 await using IRunStore runStore = new JsonlRunStore(runStorePath);

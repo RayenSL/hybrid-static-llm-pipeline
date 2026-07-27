@@ -8,13 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 namespace HybridLens.CLI.Commands;
 
 /// <summary>
-/// The agentic architecture arm (§4.4.1, Appendix E prompt v2.0.0). Reads a normal analyzer
+/// The agentic architecture arm (§4.4.1, Appendix E prompt v2.0.2). Reads a normal analyzer
 /// run trace, derives the distinct source files of the known instances, and runs an
-/// autonomous detect-and-repair loop over each whole file: the agent edits the source and invokes
+/// autonomous target-only diagnosis-and-repair loop over each whole file: the agent edits the source and invokes
 /// the compiler (its only tool) until it declares completion or the iteration budget is exhausted.
 /// Self-detections are matched back to the known instances for recall/precision, and the agent's
 /// FINAL edited solution is scored directly for verified-repair (build gate → detector re-run; no
-/// separate applier). Both arms thus stay ungrounded — the detector is never exposed.
+/// separate applier). Both arms remain diagnosis-ungrounded — detector labels and metrics are never exposed.
 /// </summary>
 public static class AgenticCommand
 {
@@ -28,7 +28,8 @@ public static class AgenticCommand
 
         var targetOption = new Option<FileInfo>("--target")
         {
-            Description = "The corpus solution (Corpus.sln). Required — the agent builds a working copy of it as its only tool.",
+            Description = "The corpus solution (Corpus.sln). The agent builds an isolated working copy; " +
+                          "the optional test-enabled condition also executes its frozen visible test.",
             Required = true
         };
 
@@ -70,10 +71,17 @@ public static class AgenticCommand
                           "build per trajectory; the agent's iteration builds stay analyzer-free."
         };
 
-        var command = new Command("agentic",
-            "Run the ungrounded agentic arm (H1b): an autonomous detect-and-repair loop with the compiler as its only tool.")
+        var visibleTestsOption = new Option<DirectoryInfo?>("--visible-tests")
         {
-            fromOption, targetOption, modelOption, runsOption, budgetOption, sweepOption, maxTokenGuardOption, buildTimeoutOption, qualityDiffOption
+            Description = "Generated-test artefact directory. Supplying it assigns the test-enabled condition; " +
+                          "an admitted immutable test runs after every successful build and its result is fed back."
+        };
+
+        var command = new Command("agentic",
+            "Run the ungrounded iterative arm with compiler feedback and optional immutable visible-test feedback.")
+        {
+            fromOption, targetOption, modelOption, runsOption, budgetOption, sweepOption, maxTokenGuardOption,
+            buildTimeoutOption, qualityDiffOption, visibleTestsOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -91,6 +99,8 @@ public static class AgenticCommand
             var buildTimeout  = parseResult.GetValue(buildTimeoutOption);
             if (buildTimeout <= 0) buildTimeout = 180;
             var qualityDiff   = parseResult.GetValue(qualityDiffOption);
+            var visibleDirectory = parseResult.GetValue(visibleTestsOption);
+            var visibleEnabled = visibleDirectory is not null;
 
             if (!from.Exists)
             {
@@ -100,6 +110,11 @@ public static class AgenticCommand
             if (!target.Exists || !target.Extension.Equals(".sln", StringComparison.OrdinalIgnoreCase))
             {
                 await Console.Error.WriteLineAsync($"error: --target must be an existing .sln: {target.FullName}");
+                return 2;
+            }
+            if (visibleDirectory is not null && !visibleDirectory.Exists)
+            {
+                await Console.Error.WriteLineAsync($"error: --visible-tests directory not found: {visibleDirectory.FullName}");
                 return 2;
             }
 
@@ -114,9 +129,13 @@ public static class AgenticCommand
             var known = LoadKnownInstances(from.FullName);
             if (known.Count == 0)
             {
-                await Console.Error.WriteLineAsync("error: no known instances found in --from file.");
+                await Console.Error.WriteLineAsync("error: no Long Method or God Class instances found in --from file.");
                 return 2;
             }
+
+            var visibleBySource = visibleDirectory is null
+                ? new Dictionary<string, LoadedGeneratedTest>(StringComparer.OrdinalIgnoreCase)
+                : await VisibleTestDirectoryLoader.LoadAsync(visibleDirectory.FullName, cancellationToken);
 
             // Optional whole-corpus sweep: run the agent on every .cs under --target so detections on
             // clean/distractor files are scoreable as spurious (precision over non-instances).
@@ -134,18 +153,26 @@ public static class AgenticCommand
             var stamp         = DateTimeOffset.UtcNow.ToString("yyyyMMdd-HHmmss");
             var runStorePath  = Path.Combine("runs", $"{stamp}-agentic.jsonl");
             var trajectoryDir = Path.Combine("runs", $"{stamp}-agentic-trajectories");
+            var finalArtifactDirectory = Path.Combine("runs", $"{stamp}-agentic-final-sources");
             Console.Error.WriteLine($"Run trace: {Path.GetFullPath(runStorePath)}");
             Console.Error.WriteLine($"Trajectories: {Path.GetFullPath(trajectoryDir)}{Environment.NewLine}");
+            Console.Error.WriteLine($"Final sources: {Path.GetFullPath(finalArtifactDirectory)}{Environment.NewLine}");
 
             var measurer = services.GetRequiredService<IRepairMeasurer>();
             var qualityScanner = qualityDiff ? services.GetRequiredService<ISolutionQualityScanner>() : null;
             if (qualityDiff)
                 Console.Error.WriteLine("quality-diff: ON — whole-solution Layer 1 + Layer 2 measured for each trajectory's final built state.");
+            Console.Error.WriteLine($"visible-tests: assigned={visibleEnabled}, admitted={visibleBySource.Count}");
 
             await using IRunStore runStore = new JsonlRunStore(runStorePath);
             var runner = new AgenticRunner(adapter, model, measurer, target.FullName, budget, buildTimeout,
                 qualityScanner: qualityScanner);
-            await runner.RunAsync(known, runs, runStore, maxTokenGuard, trajectoryDir, Console.Error, cancellationToken, sweepFiles);
+            await runner.RunAsync(
+                known, runs, runStore, maxTokenGuard, trajectoryDir, Console.Error, cancellationToken,
+                sweepFiles: sweepFiles,
+                visibleTestsByFile: visibleBySource,
+                visibleTestsEnabled: visibleEnabled,
+                finalArtifactDirectory: finalArtifactDirectory);
 
             Console.Error.WriteLine($"{Environment.NewLine}Agentic run complete.");
             return 0;
@@ -217,7 +244,6 @@ public static class AgenticCommand
         {
             "godclass"                          => AntiPatternType.GodClass,
             "longmethod"                        => AntiPatternType.LongMethod,
-            "obsoleteapiusage" or "obsoleteapi" => AntiPatternType.ObsoleteApiUsage,
             _                                   => null
         };
     }
