@@ -1,0 +1,17 @@
+{
+  "artifact_id": "c185337978384ec69dbb77b0288dd685",
+  "timestamp": "2026-07-28T19:06:12.7052182+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Scheduling/SlotFinder.cs",
+  "source_sha256": "9633bdc232f88bfe0acde6ab71061e30b3cb69d23aef3324480be425e75a3732",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EFinds the first calendar slot that fits a required duration.\u003C/summary\u003E\npublic sealed class SlotFinder\n{\n    public Slot? FindFirstFit(Resource resource, TimeSpan duration, DateTime notBefore)\n    {\n        ArgumentNullException.ThrowIfNull(resource);\n\n        if (duration \u003C= TimeSpan.Zero)\n            return null;\n\n        return resource.Calendar.FirstOrDefault(slot =\u003E\n            slot.Start \u003E= notBefore \u0026\u0026 IsEligible(slot, duration));\n    }\n\n    private static bool IsEligible(Slot slot, TimeSpan duration)\n    {\n        var startOfDay = slot.Start.Date;\n        var earliestStart = startOfDay.AddHours(8);\n        var latestStart = startOfDay.AddHours(19); // Preserves the original start-hour rule.\n        var latestEnd = startOfDay.AddHours(20);\n\n        return slot.Start \u003E= earliestStart\n            \u0026\u0026 slot.Start \u003C latestStart\n            \u0026\u0026 slot.End \u003C= latestEnd\n            \u0026\u0026 slot.End - slot.Start \u003E= duration;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

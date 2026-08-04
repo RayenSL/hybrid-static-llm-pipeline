@@ -1,0 +1,17 @@
+{
+  "artifact_id": "8fd82b6c740e4368849c9cad96fea249",
+  "timestamp": "2026-07-28T18:47:34.8707507+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Scheduling/Scheduler.cs",
+  "source_sha256": "d1732bf4c7dd30f3af512907d934e2b9a7a07441a95a214fd2d32e0cbcbe95ec",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EPlaces jobs onto the most suitable available resource.\u003C/summary\u003E\npublic sealed class Scheduler\n{\n    private const int MaximumCalendarEntries = 20;\n    private const int OvertimeCalendarThreshold = 10;\n\n    public IReadOnlyList\u003Cstring\u003E PlaceJobs(\n        IEnumerable\u003CJob\u003E jobs,\n        IReadOnlyList\u003CResource\u003E resources)\n    {\n        var placements = new List\u003Cstring\u003E();\n\n        foreach (var job in jobs)\n        {\n            if (string.IsNullOrEmpty(job.RequiredSkill))\n                continue;\n\n            var resource = ChooseResource(job, resources);\n            placements.Add(FormatPlacement(job, resource));\n        }\n\n        return placements;\n    }\n\n    private static Resource? ChooseResource(\n        Job job,\n        IEnumerable\u003CResource\u003E resources) =\u003E\n        resources\n            .Where(r =\u003E r.Skills.Contains(job.RequiredSkill))\n            .Where(r =\u003E r.Calendar.Count \u003C= MaximumCalendarEntries)\n            .MinBy(r =\u003E r.Calendar.Count);\n\n    private static bool RequiresOvertime(Job job, Resource resource) =\u003E\n        (job.Priority \u003E 5 \u0026\u0026 resource.Calendar.Count \u003E OvertimeCalendarThreshold)\n        || job.Duration.TotalHours \u003E 8;\n\n    private static string FormatPlacement(Job job, Resource? resource)\n    {\n        if (resource is null)\n            return $\u0022{job.Id}:UNPLACED\u0022;\n\n        var suffix = RequiresOvertime(job, resource)\n            ? \u0022:OT\u0022\n            : job.Priority \u003E 8 ? \u0022:URGENT\u0022 : string.Empty;\n\n        return $\u0022{job.Id}:{resource.Name}{suffix}\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

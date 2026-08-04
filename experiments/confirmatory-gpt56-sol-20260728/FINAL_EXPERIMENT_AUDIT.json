@@ -1,0 +1,76 @@
+{
+  "audit_status": "pass",
+  "audited_at_utc": "2026-07-28T18:10:54.773360+00:00",
+  "campaign_id": "e6226c2a5114827bfb262d94",
+  "pre_private_freeze_entries_verified": 10,
+  "campaign_core_entries_verified": 971,
+  "repair_attempts": 456,
+  "final_builds_passed": 456,
+  "detector_metrics_resolved": 432,
+  "private_layer3": {
+    "evaluated": 456,
+    "passed": 447,
+    "regressions": 9,
+    "not_run": 0,
+    "oracle_manifest_version": "1.0.0",
+    "regression_independent_instances": 1
+  },
+  "strict_successes": 423,
+  "factorial_arms": 8,
+  "attempts_per_arm": 57,
+  "chapter5_4": {
+    "quality_remeasurements": 456,
+    "quality_analyzer_build_failures": 0,
+    "quality_ca_unavailable": 0,
+    "package_counts": {
+      "tables_csv": 15,
+      "tables_md": 15,
+      "tables_tex": 15,
+      "figures_png": 7,
+      "figures_svg": 7,
+      "figures_pdf": 7
+    }
+  },
+  "paired_primary": {
+    "visible_test_risk_difference": 0.03947368421052632,
+    "ci95_lo": -0.005668306911906465,
+    "ci95_hi": 0.0846156753329591,
+    "exact_signflip_p": 0.125
+  },
+  "resources": {
+    "model_calls": 707,
+    "input_tokens": 1565078,
+    "output_tokens": 861591,
+    "total_tokens": 2426669,
+    "test_generation_cost_usd": 0.598255,
+    "repair_campaign_cost_usd": 33.074865,
+    "combined_nominal_cost_usd": 33.67312,
+    "private_layer3_model_calls": 0
+  },
+  "codebase_archive": {
+    "campaign_id": "e6226c2a5114827bfb262d94",
+    "completed_assignments": 456,
+    "materialized_codebases": 456,
+    "non_materialized_assignments": 0,
+    "archive_contract": "complete source-only corpus + repaired source + metadata + unified diff + checksums",
+    "index_rows": 456,
+    "archive_files_in_checksum_ledger": 32379,
+    "archive_checksum_mismatches": 0,
+    "archive_checksum_verification": "pass",
+    "archive_ledger_sha256": "c5360a4913eba92d7cc9a84301b7ab6a9df82ec6e30e63209fd052550c30b289"
+  },
+  "glmm": {
+    "seed": 20260728,
+    "regularized_map_converged": true,
+    "regularized_vb_converged": true,
+    "weak_prior_converged": false,
+    "interpretation": "sensitivity evidence; paired risk differences primary"
+  },
+  "credential_shaped_value_scan": {
+    "pass": true,
+    "matching_files": []
+  },
+  "excluded_from_final_results": [
+    "results/archive/glmm-analysis-unseeded-initialization"
+  ]
+}

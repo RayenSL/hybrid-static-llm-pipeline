@@ -1,0 +1,17 @@
+{
+  "artifact_id": "be240eef6c9c4f21b008728c36058555",
+  "timestamp": "2026-07-28T13:07:49.4245357+00:00",
+  "architecture": "ungrounded_single_shot",
+  "grounding_enabled": false,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Inventory/AllocationCalculator.cs",
+  "source_sha256": "8bbae5d49e4f91950f09efb4522bd9bbeedcb8ca10c3b14506e4855533d7a7f7",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EAllocates available stock across a warehouse\u0027s zones.\u003C/summary\u003E\npublic sealed class AllocationCalculator\n{\n    public IReadOnlyList\u003Cstring\u003E Allocate(StockItem item, Warehouse warehouse)\n    {\n        var result = new List\u003Cstring\u003E();\n        int remaining = item.OnHand - item.Reserved;\n        if (remaining \u003C= 0)\n            return result;\n\n        foreach (var zone in warehouse.Zones)\n        {\n            if (zone.Capacity \u003C= 0)\n                continue;\n            if (string.IsNullOrEmpty(zone.Name))\n                continue;\n\n            int place;\n            if (remaining \u003E zone.Capacity)\n                place = zone.Capacity;\n            else if (remaining \u003E zone.Capacity / 2)\n                place = remaining - 1;\n            else\n                place = remaining;\n\n            if (place \u003C= 0)\n                continue;\n            result.Add($\u0022{zone.Name}:{place}\u0022);\n            remaining -= place;\n            if (remaining \u003C= 0 \u0026\u0026 result.Count \u003E 0)\n                break;\n        }\n\n        if (remaining \u003E 0)\n            result.Add($\u0022OVERFLOW:{remaining}\u0022);\n        return result;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

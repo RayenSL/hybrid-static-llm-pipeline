@@ -1,0 +1,36 @@
+{
+  "artifact_id": "04fee2b2ac504c34a0327366a8c9e19c",
+  "artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Inventory_AllocationCalculator.cs--04fee2b2ac504c34a0327366a8c9e19c.json",
+  "timestamp": "2026-07-28T08:38:38.1989083+00:00",
+  "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\AllocationCalculator.cs",
+  "source_sha256": "8bbae5d49e4f91950f09efb4522bd9bbeedcb8ca10c3b14506e4855533d7a7f7",
+  "target_symbol_name": "AllocationCalculator.Allocate",
+  "target_start_line": 6,
+  "target_end_line": 39,
+  "project_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\Inventory.csproj",
+  "model_name": "gpt-5.6-sol",
+  "prompt_version": "v1.1.0",
+  "raw_system_prompt": "You are authoring a regression characterization test for existing C# production code.\nCapture observable behaviour through the public interface exactly as it exists. Do not\nimprove, refactor, repair, or diagnose the production code. Do not infer intended behaviour\nthat is not observable from the supplied pristine source.\n\nThe pipeline owns the test project and provides a static Check helper with these methods:\nCheck.True(bool), Check.False(bool), Check.NotNull(object?),\nCheck.Equal\u003CT\u003E(T expected, T actual), and\nCheck.SequenceEqual\u003CT\u003E(IEnumerable\u003CT\u003E expected, IEnumerable\u003CT\u003E actual).\n\nReturn ONLY one JSON object in this exact shape, with no markdown fences:\n{\n  \u0022test_name\u0022: \u0022\u003Cshort descriptive name that does not mention code smells or anti-patterns\u003E\u0022,\n  \u0022using_directives\u0022: [\u0022using Namespace;\u0022],\n  \u0022test_body\u0022: \u0022\u003CC# statements for one public-behaviour characterization scenario\u003E\u0022\n}\n\nRequirements:\n- Exercise observable behaviour through the supplied target declaration.\n- Treat its symbol and source line range only as neutral coordinates, not as a diagnosis.\n- Instantiate or invoke the supplied production code through public members.\n- Derive expected values from the pristine behaviour shown in the source.\n- Include at least one meaningful Check assertion over a production result.\n- Do not assert constants against themselves and do not use Check.True(true).\n- Do not use reflection, file or network I/O, processes, environment variables, clocks,\n  sleeps, randomness, package installation, mocks, or external state.\n- Do not declare namespaces, classes, helper types, or a Main method.\n- Do not modify production code or project configuration.",
+  "raw_user_prompt": "## Production project\nInventory\n\n## Target declaration\nSymbol: AllocationCalculator.Allocate\nSource lines: 6-39\n\nCharacterise existing observable behaviour exercised through this declaration.\nThe target coordinates do not state why the declaration was selected.\n\n## Pristine source file\nsrc/Inventory/AllocationCalculator.cs\n\n\u0060\u0060\u0060csharp\nnamespace Inventory;\n\n/// \u003Csummary\u003EAllocates available stock across a warehouse\u0027s zones.\u003C/summary\u003E\npublic sealed class AllocationCalculator\n{\n    public IReadOnlyList\u003Cstring\u003E Allocate(StockItem item, Warehouse warehouse)\n    {\n        var result = new List\u003Cstring\u003E();\n        int remaining = item.OnHand - item.Reserved;\n        if (remaining \u003C= 0)\n            return result;\n\n        foreach (var zone in warehouse.Zones)\n        {\n            if (zone.Capacity \u003C= 0)\n                continue;\n            if (string.IsNullOrEmpty(zone.Name))\n                continue;\n\n            int place;\n            if (remaining \u003E zone.Capacity)\n                place = zone.Capacity;\n            else if (remaining \u003E zone.Capacity / 2)\n                place = remaining - 1;\n            else\n                place = remaining;\n\n            if (place \u003C= 0)\n                continue;\n            result.Add($\u0022{zone.Name}:{place}\u0022);\n            remaining -= place;\n            if (remaining \u003C= 0 \u0026\u0026 result.Count \u003E 0)\n                break;\n        }\n\n        if (remaining \u003E 0)\n            result.Add($\u0022OVERFLOW:{remaining}\u0022);\n        return result;\n    }\n}\n\n\u0060\u0060\u0060",
+  "raw_llm_output": "{\u0022test_name\u0022:\u0022AllocateLeavesOverflowAfterPartialZonePlacement\u0022,\u0022using_directives\u0022:[\u0022using Inventory;\u0022],\u0022test_body\u0022:\u0022var item = new StockItem\\n{\\n    OnHand = 9,\\n    Reserved = 2\\n};\\nvar warehouse = new Warehouse\\n{\\n    Zones =\\n    {\\n        new Zone\\n        {\\n            Name = \\\u0022Primary\\\u0022,\\n            Capacity = 10\\n        }\\n    }\\n};\\n\\nvar allocations = new AllocationCalculator().Allocate(item, warehouse);\\n\\nCheck.SequenceEqual(new[] { \\\u0022Primary:6\\\u0022, \\\u0022OVERFLOW:1\\\u0022 }, allocations);\u0022}",
+  "input_tokens": 634,
+  "output_tokens": 1171,
+  "duration_ms": 23050.9317,
+  "test_name": "AllocateLeavesOverflowAfterPartialZonePlacement",
+  "using_directives": [
+    "using Inventory;"
+  ],
+  "test_body": "var item = new StockItem\n{\n    OnHand = 9,\n    Reserved = 2\n};\nvar warehouse = new Warehouse\n{\n    Zones =\n    {\n        new Zone\n        {\n            Name = \u0022Primary\u0022,\n            Capacity = 10\n        }\n    }\n};\n\nvar allocations = new AllocationCalculator().Allocate(item, warehouse);\n\nCheck.SequenceEqual(new[] { \u0022Primary:6\u0022, \u0022OVERFLOW:1\u0022 }, allocations);",
+  "test_sha256": "c9813ac33ff9efafd54beea6aba7bc7d12dde0b95fd4a02e382b795f17a113ec",
+  "admission_status": "admitted",
+  "admission_reason": null,
+  "parse_passed": true,
+  "assertion_gate_passed": true,
+  "build_passed": true,
+  "baseline_runs_passed": [
+    true,
+    true
+  ],
+  "admission_output_tail": "\r\nBuild succeeded.\r\n    0 Warning(s)\r\n    0 Error(s)\r\n\r\nTime Elapsed 00:00:01.11\r\nPASS\r\n\r\nPASS\r\n\r\n",
+  "admitted": true
+}

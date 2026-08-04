@@ -1,0 +1,4 @@
+02f312ba5cf8da2adef84fb10b216834da5d137171d76d4efb3ceee067b0a7f2  experiments/grounding-gpt56-sol-20260728/DEVIATIONS.md
+c4953fc54fa7cf20afe397baf9dc172544f814b8f0390f773a5f1f6b70428f72  experiments/grounding-gpt56-sol-20260728/PRE_RUN_AMENDMENT_1.json
+61476901bdf19df929194801ac2a9fbb1c8a4b26fc03849ffed376643aeeed29  src/HybridLens.CLI/Commands/GroundingCampaignCommand.cs
+25f3e165866733b8286e1cd4214203bd3d3a3412035763d0078c505be16d2e09  src/HybridLens.CLI/bin/Debug/net10.0/HybridLens.CLI.dll

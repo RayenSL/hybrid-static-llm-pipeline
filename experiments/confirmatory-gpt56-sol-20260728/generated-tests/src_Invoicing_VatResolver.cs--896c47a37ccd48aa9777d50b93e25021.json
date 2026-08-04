@@ -1,0 +1,36 @@
+{
+  "artifact_id": "896c47a37ccd48aa9777d50b93e25021",
+  "artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Invoicing_VatResolver.cs--896c47a37ccd48aa9777d50b93e25021.json",
+  "timestamp": "2026-07-28T08:38:04.0067722+00:00",
+  "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\VatResolver.cs",
+  "source_sha256": "f466b81fe1694b8d9350856bc67db4b7191f1a941edb1d420a9cae384f439659",
+  "target_symbol_name": "VatResolver.Resolve",
+  "target_start_line": 6,
+  "target_end_line": 40,
+  "project_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\Invoicing.csproj",
+  "model_name": "gpt-5.6-sol",
+  "prompt_version": "v1.1.0",
+  "raw_system_prompt": "You are authoring a regression characterization test for existing C# production code.\nCapture observable behaviour through the public interface exactly as it exists. Do not\nimprove, refactor, repair, or diagnose the production code. Do not infer intended behaviour\nthat is not observable from the supplied pristine source.\n\nThe pipeline owns the test project and provides a static Check helper with these methods:\nCheck.True(bool), Check.False(bool), Check.NotNull(object?),\nCheck.Equal\u003CT\u003E(T expected, T actual), and\nCheck.SequenceEqual\u003CT\u003E(IEnumerable\u003CT\u003E expected, IEnumerable\u003CT\u003E actual).\n\nReturn ONLY one JSON object in this exact shape, with no markdown fences:\n{\n  \u0022test_name\u0022: \u0022\u003Cshort descriptive name that does not mention code smells or anti-patterns\u003E\u0022,\n  \u0022using_directives\u0022: [\u0022using Namespace;\u0022],\n  \u0022test_body\u0022: \u0022\u003CC# statements for one public-behaviour characterization scenario\u003E\u0022\n}\n\nRequirements:\n- Exercise observable behaviour through the supplied target declaration.\n- Treat its symbol and source line range only as neutral coordinates, not as a diagnosis.\n- Instantiate or invoke the supplied production code through public members.\n- Derive expected values from the pristine behaviour shown in the source.\n- Include at least one meaningful Check assertion over a production result.\n- Do not assert constants against themselves and do not use Check.True(true).\n- Do not use reflection, file or network I/O, processes, environment variables, clocks,\n  sleeps, randomness, package installation, mocks, or external state.\n- Do not declare namespaces, classes, helper types, or a Main method.\n- Do not modify production code or project configuration.",
+  "raw_user_prompt": "## Production project\nInvoicing\n\n## Target declaration\nSymbol: VatResolver.Resolve\nSource lines: 6-40\n\nCharacterise existing observable behaviour exercised through this declaration.\nThe target coordinates do not state why the declaration was selected.\n\n## Pristine source file\nsrc/Invoicing/VatResolver.cs\n\n\u0060\u0060\u0060csharp\nnamespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m)\n            return 0m;\n\n        decimal rate;\n        switch (countryCode)\n        {\n            case \u0022GB\u0022:\n                rate = 0.20m;\n                break;\n            case \u0022DE\u0022:\n                rate = 0.19m;\n                break;\n            case \u0022FR\u0022:\n                rate = 0.20m;\n                break;\n            case \u0022IE\u0022:\n                rate = 0.23m;\n                break;\n            default:\n                rate = 0.0m;\n                break;\n        }\n\n        if (account.Kind == AccountKind.Government)\n            rate = 0m;\n        else if (account.Kind == AccountKind.Business \u0026\u0026 net \u003E 10000m)\n            rate *= 0.5m;\n\n        if (rate \u003E 0m \u0026\u0026 net \u003E 100000m)\n            rate = Math.Min(rate, 0.15m);\n\n        return net * rate;\n    }\n}\n\n\u0060\u0060\u0060",
+  "raw_llm_output": "{\n  \u0022test_name\u0022: \u0022NonPositiveNetReturnsZero\u0022,\n  \u0022using_directives\u0022: [\n    \u0022using Invoicing;\u0022\n  ],\n  \u0022test_body\u0022: \u0022var resolver = new VatResolver();\\nvar result = resolver.Resolve(null!, -1m, \\\u0022GB\\\u0022);\\nCheck.Equal(0m, result);\u0022\n}",
+  "input_tokens": 648,
+  "output_tokens": 240,
+  "duration_ms": 7964.6386,
+  "test_name": "NonPositiveNetReturnsZero",
+  "using_directives": [
+    "using Invoicing;"
+  ],
+  "test_body": "var resolver = new VatResolver();\nvar result = resolver.Resolve(null!, -1m, \u0022GB\u0022);\nCheck.Equal(0m, result);",
+  "test_sha256": "937140dc9242c95530fe6f6d3f027ac78a67701e7ae0793995546a0849d72b8e",
+  "admission_status": "admitted",
+  "admission_reason": null,
+  "parse_passed": true,
+  "assertion_gate_passed": true,
+  "build_passed": true,
+  "baseline_runs_passed": [
+    true,
+    true
+  ],
+  "admission_output_tail": "\r\nBuild succeeded.\r\n    0 Warning(s)\r\n    0 Error(s)\r\n\r\nTime Elapsed 00:00:01.09\r\nPASS\r\n\r\nPASS\r\n\r\n",
+  "admitted": true
+}

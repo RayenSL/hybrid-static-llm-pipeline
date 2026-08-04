@@ -1,0 +1,17 @@
+{
+  "artifact_id": "04e2c04a4c5e4060baa1df144ed63794",
+  "timestamp": "2026-07-28T19:03:43.0540849+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Notifications/EmailClient.cs",
+  "source_sha256": "fc134617052de407f3f84aafc38d88b463ff24633409dbcf6b9f212a13f8e6d6",
+  "final_source": "using Notifications.Legacy;\n\nnamespace Notifications;\n\n/// \u003Csummary\u003ESends email messages.\u003C/summary\u003E\npublic sealed class EmailClient\n{\n    private readonly IMailSender _mailSender;\n\n    public EmailClient(IMailSender mailSender)\n    {\n        _mailSender = mailSender ?? throw new ArgumentNullException(nameof(mailSender));\n    }\n\n    public async Task\u003Cbool\u003E SendEmailAsync(Message message, CancellationToken cancellationToken = default)\n    {\n        ArgumentNullException.ThrowIfNull(message);\n        return await _mailSender.SendAsync(\n            message.Recipient.EmailAddress,\n            message.Subject,\n            message.Body,\n            cancellationToken);\n    }\n}\n\npublic interface IMailSender\n{\n    Task\u003Cbool\u003E SendAsync(string address, string subject, string body, CancellationToken cancellationToken = default);\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

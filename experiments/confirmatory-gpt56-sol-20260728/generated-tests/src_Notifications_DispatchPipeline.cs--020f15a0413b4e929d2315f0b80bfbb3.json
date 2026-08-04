@@ -1,0 +1,36 @@
+{
+  "artifact_id": "020f15a0413b4e929d2315f0b80bfbb3",
+  "artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Notifications_DispatchPipeline.cs--020f15a0413b4e929d2315f0b80bfbb3.json",
+  "timestamp": "2026-07-28T08:39:41.5371965+00:00",
+  "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\DispatchPipeline.cs",
+  "source_sha256": "6f0efa6f6f5be82727add824ba7bcb1390586833577e90bea2536f1d5000d6f7",
+  "target_symbol_name": "DispatchPipeline.Run",
+  "target_start_line": 15,
+  "target_end_line": 57,
+  "project_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj",
+  "model_name": "gpt-5.6-sol",
+  "prompt_version": "v1.1.0",
+  "raw_system_prompt": "You are authoring a regression characterization test for existing C# production code.\nCapture observable behaviour through the public interface exactly as it exists. Do not\nimprove, refactor, repair, or diagnose the production code. Do not infer intended behaviour\nthat is not observable from the supplied pristine source.\n\nThe pipeline owns the test project and provides a static Check helper with these methods:\nCheck.True(bool), Check.False(bool), Check.NotNull(object?),\nCheck.Equal\u003CT\u003E(T expected, T actual), and\nCheck.SequenceEqual\u003CT\u003E(IEnumerable\u003CT\u003E expected, IEnumerable\u003CT\u003E actual).\n\nReturn ONLY one JSON object in this exact shape, with no markdown fences:\n{\n  \u0022test_name\u0022: \u0022\u003Cshort descriptive name that does not mention code smells or anti-patterns\u003E\u0022,\n  \u0022using_directives\u0022: [\u0022using Namespace;\u0022],\n  \u0022test_body\u0022: \u0022\u003CC# statements for one public-behaviour characterization scenario\u003E\u0022\n}\n\nRequirements:\n- Exercise observable behaviour through the supplied target declaration.\n- Treat its symbol and source line range only as neutral coordinates, not as a diagnosis.\n- Instantiate or invoke the supplied production code through public members.\n- Derive expected values from the pristine behaviour shown in the source.\n- Include at least one meaningful Check assertion over a production result.\n- Do not assert constants against themselves and do not use Check.True(true).\n- Do not use reflection, file or network I/O, processes, environment variables, clocks,\n  sleeps, randomness, package installation, mocks, or external state.\n- Do not declare namespaces, classes, helper types, or a Main method.\n- Do not modify production code or project configuration.",
+  "raw_user_prompt": "## Production project\nNotifications\n\n## Target declaration\nSymbol: DispatchPipeline.Run\nSource lines: 15-57\n\nCharacterise existing observable behaviour exercised through this declaration.\nThe target coordinates do not state why the declaration was selected.\n\n## Pristine source file\nsrc/Notifications/DispatchPipeline.cs\n\n\u0060\u0060\u0060csharp\nnamespace Notifications;\n\n/// \u003Csummary\u003ERuns a message through validation, throttling, rendering and delivery.\u003C/summary\u003E\npublic sealed class DispatchPipeline\n{\n    private readonly ITemplateStore _templates;\n    private readonly UnsubscribeList _unsubscribed;\n\n    public DispatchPipeline(ITemplateStore templates, UnsubscribeList unsubscribed)\n    {\n        _templates = templates;\n        _unsubscribed = unsubscribed;\n    }\n\n    public string Run(Message message, int attempt)\n    {\n        if (string.IsNullOrEmpty(message.Body))\n            return \u0022empty body\u0022;\n\n        var recipient = message.Recipient;\n        if (message.Channel == Channel.Email \u0026\u0026 !recipient.EmailAddress.Contains(\u0027@\u0027))\n            return \u0022invalid email\u0022;\n        if (message.Channel == Channel.Sms \u0026\u0026 recipient.Phone.Length \u003C 5)\n            return \u0022invalid phone\u0022;\n        if (_unsubscribed.IsUnsubscribed(recipient.EmailAddress))\n            return \u0022unsubscribed\u0022;\n\n        if (attempt \u003E 5)\n            return \u0022throttled\u0022;\n\n        var template = _templates.Get(message.Subject);\n        if (template == null)\n            return \u0022no template\u0022;\n\n        string body;\n        switch (message.Channel)\n        {\n            case Channel.Email:\n                body = template \u002B message.Body;\n                break;\n            case Channel.Sms:\n                body = message.Body;\n                break;\n            case Channel.Push:\n                body = message.Subject;\n                break;\n            default:\n                body = message.Body;\n                break;\n        }\n\n        if (attempt \u003E 0 \u0026\u0026 body.Length \u003E 0)\n            return $\u0022retry:{attempt}:{body.Length}\u0022;\n        if (body.Length == 0)\n            return \u0022empty render\u0022;\n        return $\u0022sent:{body.Length}\u0022;\n    }\n}\n\n\u0060\u0060\u0060",
+  "raw_llm_output": "{\u0022test_name\u0022:\u0022EmptyBodyStopsDispatch\u0022,\u0022using_directives\u0022:[\u0022using Notifications;\u0022],\u0022test_body\u0022:\u0022var message = new Message\\n{\\n    Body = string.Empty,\\n    Subject = string.Empty,\\n    Recipient = null!,\\n    Channel = Channel.Email\\n};\\nvar pipeline = new DispatchPipeline(null!, null!);\\n\\nvar result = pipeline.Run(message, 0);\\n\\nCheck.Equal(\\\u0022empty body\\\u0022, result);\u0022}",
+  "input_tokens": 748,
+  "output_tokens": 760,
+  "duration_ms": 16491.2371,
+  "test_name": "EmptyBodyStopsDispatch",
+  "using_directives": [
+    "using Notifications;"
+  ],
+  "test_body": "var message = new Message\n{\n    Body = string.Empty,\n    Subject = string.Empty,\n    Recipient = null!,\n    Channel = Channel.Email\n};\nvar pipeline = new DispatchPipeline(null!, null!);\n\nvar result = pipeline.Run(message, 0);\n\nCheck.Equal(\u0022empty body\u0022, result);",
+  "test_sha256": "9a274cc0955582fcfe850179b9c3609ed437fa359b4ffc48f75fadfb3f3b2629",
+  "admission_status": "admitted",
+  "admission_reason": null,
+  "parse_passed": true,
+  "assertion_gate_passed": true,
+  "build_passed": true,
+  "baseline_runs_passed": [
+    true,
+    true
+  ],
+  "admission_output_tail": "\r\nBuild succeeded.\r\n    0 Warning(s)\r\n    0 Error(s)\r\n\r\nTime Elapsed 00:00:01.06\r\nPASS\r\n\r\nPASS\r\n\r\n",
+  "admitted": true
+}

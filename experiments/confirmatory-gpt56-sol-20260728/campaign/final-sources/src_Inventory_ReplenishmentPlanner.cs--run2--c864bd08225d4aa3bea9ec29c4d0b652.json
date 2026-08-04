@@ -1,0 +1,17 @@
+{
+  "artifact_id": "c864bd08225d4aa3bea9ec29c4d0b652",
+  "timestamp": "2026-07-28T09:41:39.6009509+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Inventory/ReplenishmentPlanner.cs",
+  "source_sha256": "edb0bc9af2b4eeae508eb4065c9da3a041e4dea2b9bf97e6b6b04c1b45c235c7",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n        foreach (var item in items)\n        {\n            string? planEntry = BuildPlanEntry(item, supplier, season);\n            if (planEntry is not null)\n                plan.Add(planEntry);\n        }\n\n        return plan;\n    }\n\n    private static string? BuildPlanEntry(StockItem item, ISupplier supplier, int season)\n    {\n        if (item.OnHand \u003C 0)\n            return null;\n\n        int available = item.OnHand - item.Reserved;\n        if (available \u003E item.ReorderPoint)\n            return null;\n\n        int orderQuantity = CalculateOrderQuantity(item.ReorderPoint - available, season);\n        if (orderQuantity \u003C= 0 || string.IsNullOrEmpty(item.Sku))\n            return null;\n\n        bool placed = supplier.PlaceOrder(item.Sku, orderQuantity);\n        return FormatPlanEntry(item.Sku, orderQuantity, placed);\n    }\n\n    private static int CalculateOrderQuantity(int deficit, int season)\n    {\n        int orderQuantity = deficit switch\n        {\n            \u003C= 0 =\u003E 0,\n            \u003C 10 =\u003E 10,\n            \u003C 100 =\u003E deficit,\n            _ =\u003E deficit \u002B 50\n        };\n\n        return season switch\n        {\n            4 when orderQuantity \u003E 0 =\u003E (int)(orderQuantity * 1.5),\n            1 =\u003E orderQuantity / 2,\n            _ =\u003E orderQuantity\n        };\n    }\n\n    private static string FormatPlanEntry(string sku, int orderQuantity, bool placed)\n    {\n        if (!placed)\n            return $\u0022{sku}:FAILED\u0022;\n\n        return orderQuantity \u003E 200\n            ? $\u0022{sku}:LARGE:{orderQuantity}\u0022\n            : $\u0022{sku}:{orderQuantity}\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

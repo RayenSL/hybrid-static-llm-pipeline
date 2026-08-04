@@ -1,0 +1,19 @@
+{
+  "audit_status": "pass",
+  "policy": "one generation call per planned instance; no retries for any failure",
+  "planned_targets": 19,
+  "persisted_artifacts": 19,
+  "unique_observed_targets": 19,
+  "planned_targets_equal_observed_targets": true,
+  "duplicate_persisted_targets": 0,
+  "remaining_targets": 0,
+  "model_names": [
+    "gpt-5.6-sol"
+  ],
+  "admission_status_counts": {
+    "admitted": 17,
+    "baseline_failed": 1,
+    "build_failed": 1
+  },
+  "note": "The ledger is derived from immutable per-call artifacts and their timestamps. No failed target was regenerated."
+}

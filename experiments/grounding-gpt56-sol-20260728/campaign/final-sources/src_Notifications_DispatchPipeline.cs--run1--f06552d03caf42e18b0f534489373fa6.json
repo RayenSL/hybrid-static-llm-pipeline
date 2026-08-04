@@ -1,0 +1,17 @@
+{
+  "artifact_id": "f06552d03caf42e18b0f534489373fa6",
+  "timestamp": "2026-07-28T18:58:08.512604+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Notifications/DispatchPipeline.cs",
+  "source_sha256": "38ad86b22cffc946c333c5ee44f4c1f6d5a7c03431f978bea871a4ade80ed721",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003ERuns a message through validation, throttling, rendering and delivery.\u003C/summary\u003E\npublic sealed class DispatchPipeline\n{\n    private readonly ITemplateStore _templates;\n    private readonly UnsubscribeList _unsubscribed;\n\n    public DispatchPipeline(ITemplateStore templates, UnsubscribeList unsubscribed)\n    {\n        _templates = templates;\n        _unsubscribed = unsubscribed;\n    }\n\n    public string Run(Message message, int attempt)\n    {\n        var error = Validate(message, attempt);\n        if (error != null)\n            return error;\n\n        var template = _templates.Get(message.Subject);\n        if (template == null)\n            return \u0022no template\u0022;\n\n        var body = Render(message, template);\n        return BuildResult(body, attempt);\n    }\n\n    private string? Validate(Message message, int attempt)\n    {\n        if (string.IsNullOrEmpty(message.Body)) return \u0022empty body\u0022;\n        if (message.Recipient == null) return \u0022invalid recipient\u0022;\n\n        var recipient = message.Recipient;\n        if (message.Channel == Channel.Email \u0026\u0026\n            (string.IsNullOrEmpty(recipient.EmailAddress) || !recipient.EmailAddress.Contains(\u0027@\u0027)))\n            return \u0022invalid email\u0022;\n        if (message.Channel == Channel.Sms \u0026\u0026\n            (string.IsNullOrEmpty(recipient.Phone) || recipient.Phone.Length \u003C 5))\n            return \u0022invalid phone\u0022;\n        if (_unsubscribed.IsUnsubscribed(recipient.EmailAddress)) return \u0022unsubscribed\u0022;\n        return attempt \u003E 5 ? \u0022throttled\u0022 : null;\n    }\n\n    private static string Render(Message message, string template) =\u003E\n        message.Channel switch\n        {\n            Channel.Email =\u003E template \u002B message.Body,\n            Channel.Sms =\u003E message.Body,\n            Channel.Push =\u003E message.Subject,\n            _ =\u003E message.Body\n        };\n\n    private static string BuildResult(string body, int attempt)\n    {\n        if (attempt \u003E 0 \u0026\u0026 body.Length \u003E 0) return $\u0022retry:{attempt}:{body.Length}\u0022;\n        return body.Length == 0 ? \u0022empty render\u0022 : $\u0022sent:{body.Length}\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

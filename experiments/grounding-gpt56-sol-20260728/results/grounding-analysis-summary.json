@@ -1,0 +1,107 @@
+{
+  "campaign_id": "eb160df37c8996164a8730c0",
+  "model": "gpt-5.6-sol",
+  "targets": 30,
+  "assignments": 120,
+  "context_summary": [
+    {
+      "Context": "Minimal",
+      "n": 30,
+      "Unapplicable": 21,
+      "Build failed": 0,
+      "Built unresolved": 0,
+      "Detector-resolved": 9,
+      "Verified rate [95% CI]": "30.0% [16.7, 47.9]",
+      "Layer 3 pass": 8,
+      "Layer 3 regression": 1,
+      "Layer 3 not run": 0,
+      "Behavior-preserving verified": 8
+    },
+    {
+      "Context": "Structural",
+      "n": 30,
+      "Unapplicable": 22,
+      "Build failed": 0,
+      "Built unresolved": 0,
+      "Detector-resolved": 8,
+      "Verified rate [95% CI]": "26.7% [14.2, 44.4]",
+      "Layer 3 pass": 7,
+      "Layer 3 regression": 1,
+      "Layer 3 not run": 0,
+      "Behavior-preserving verified": 7
+    },
+    {
+      "Context": "Relational",
+      "n": 30,
+      "Unapplicable": 17,
+      "Build failed": 2,
+      "Built unresolved": 0,
+      "Detector-resolved": 11,
+      "Verified rate [95% CI]": "36.7% [21.9, 54.5]",
+      "Layer 3 pass": 8,
+      "Layer 3 regression": 3,
+      "Layer 3 not run": 2,
+      "Behavior-preserving verified": 8
+    },
+    {
+      "Context": "Full",
+      "n": 30,
+      "Unapplicable": 19,
+      "Build failed": 2,
+      "Built unresolved": 0,
+      "Detector-resolved": 9,
+      "Verified rate [95% CI]": "30.0% [16.7, 47.9]",
+      "Layer 3 pass": 7,
+      "Layer 3 regression": 2,
+      "Layer 3 not run": 2,
+      "Behavior-preserving verified": 7
+    }
+  ],
+  "statistics": {
+    "cochran_q": {
+      "statistic": 2.4782608695652173,
+      "df": 3,
+      "p": 0.4792326450533334
+    },
+    "pairwise": [
+      {
+        "Contrast": "Structural \u2212 Minimal",
+        "Lower-only": 1,
+        "Higher-only": 0,
+        "Risk difference (pp)": "-3.3",
+        "95% bootstrap CI (pp)": "[-10.0, +0.0]",
+        "Exact McNemar p": "1",
+        "Holm p": "1"
+      },
+      {
+        "Contrast": "Relational \u2212 Structural",
+        "Lower-only": 1,
+        "Higher-only": 4,
+        "Risk difference (pp)": "+10.0",
+        "95% bootstrap CI (pp)": "[-3.3, +23.3]",
+        "Exact McNemar p": "0.375",
+        "Holm p": "1"
+      },
+      {
+        "Contrast": "Full \u2212 Relational",
+        "Lower-only": 4,
+        "Higher-only": 2,
+        "Risk difference (pp)": "-6.7",
+        "95% bootstrap CI (pp)": "[-23.3, +10.0]",
+        "Exact McNemar p": "0.6875",
+        "Holm p": "1"
+      }
+    ],
+    "bootstrap_repetitions": 20000,
+    "bootstrap_seed_base": 20260728,
+    "holm_family": [
+      "Structural \u2212 Minimal",
+      "Relational \u2212 Structural",
+      "Full \u2212 Relational"
+    ]
+  },
+  "combined_nominal_sol_cost_usd": 3.171015,
+  "applier_cost_status": "not computed; deployment price was not frozen",
+  "private_result_sha256": "33700012a6e69a280ff7e4c6f0ce1d09532af6219391014f02942044eefe4cbb",
+  "quality_rescore_sha256": "1db6008e3ea448f79d49dd1950494ae8249d612e70ccc9c73436dd0aa2dc2129"
+}

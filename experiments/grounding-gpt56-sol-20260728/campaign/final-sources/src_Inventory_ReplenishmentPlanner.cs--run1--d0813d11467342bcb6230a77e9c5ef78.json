@@ -1,0 +1,17 @@
+{
+  "artifact_id": "d0813d11467342bcb6230a77e9c5ef78",
+  "timestamp": "2026-07-28T19:12:38.0232707+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Inventory/ReplenishmentPlanner.cs",
+  "source_sha256": "b166e4856277cae02bdbf4d86c5c5f840ae0f7b10ab76a839b71246c7152b477",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(\n        IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n\n        foreach (var item in items)\n        {\n            if (!CanReplenish(item))\n                continue;\n\n            int quantity = ApplySeason(\n                CalculateBaseQuantity(item.ReorderPoint - Available(item)),\n                season);\n            var sku = item.Sku;\n\n            if (quantity \u003C= 0 || string.IsNullOrEmpty(sku))\n                continue;\n\n            bool placed = supplier.PlaceOrder(sku, quantity);\n            plan.Add(FormatResult(sku, quantity, placed));\n        }\n\n        return plan;\n    }\n\n    private static int Available(StockItem item) =\u003E item.OnHand - item.Reserved;\n\n    private static bool CanReplenish(StockItem item) =\u003E\n        item.OnHand \u003E= 0 \u0026\u0026 Available(item) \u003C= item.ReorderPoint;\n\n    private static int CalculateBaseQuantity(int deficit) =\u003E deficit switch\n    {\n        \u003C= 0 =\u003E 0,\n        \u003C 10 =\u003E 10,\n        \u003C 100 =\u003E deficit,\n        _ =\u003E deficit \u002B 50\n    };\n\n    private static int ApplySeason(int quantity, int season) =\u003E\n        season == 4 \u0026\u0026 quantity \u003E 0 ? (int)(quantity * 1.5) :\n        season == 1 ? quantity / 2 : quantity;\n\n    private static string FormatResult(string sku, int quantity, bool placed) =\u003E\n        !placed ? $\u0022{sku}:FAILED\u0022 :\n        quantity \u003E 200 ? $\u0022{sku}:LARGE:{quantity}\u0022 : $\u0022{sku}:{quantity}\u0022;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

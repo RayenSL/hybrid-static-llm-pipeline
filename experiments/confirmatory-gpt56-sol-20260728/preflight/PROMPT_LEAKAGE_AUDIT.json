@@ -1,0 +1,23 @@
+{
+  "audited_at_utc": "2026-07-28T08:40:58.591985+00:00",
+  "scope": "test-authoring user-prompt header before pristine source",
+  "artifacts": 19,
+  "allowed_metadata": [
+    "production project",
+    "target symbol",
+    "target source line range",
+    "relative pristine source path",
+    "pristine source text"
+  ],
+  "prohibited_metadata": [
+    "anti-pattern label",
+    "severity",
+    "detector metrics",
+    "thresholds",
+    "finding text",
+    "reference repair",
+    "private oracle"
+  ],
+  "violations": [],
+  "status": "pass"
+}

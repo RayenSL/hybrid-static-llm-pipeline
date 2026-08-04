@@ -1,0 +1,12 @@
+{
+  "status": "grounding_experiment_complete",
+  "sealed_at_utc": "2026-07-28T20:02:41.008181+00:00",
+  "campaign_id": "eb160df37c8996164a8730c0",
+  "assignments": 120,
+  "contexts": 4,
+  "targets": 30,
+  "chapter54_integration": true,
+  "confirmatory_package_modified": false,
+  "final_checksum_entries": 27,
+  "final_checksum_ledger_sha256": "957f60ee3d899d262266e920e6a7732071546a9828ff3ad10e226d05a4c250ff"
+}

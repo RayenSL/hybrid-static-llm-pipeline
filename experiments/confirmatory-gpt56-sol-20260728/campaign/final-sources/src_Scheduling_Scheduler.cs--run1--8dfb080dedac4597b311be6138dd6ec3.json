@@ -1,0 +1,17 @@
+{
+  "artifact_id": "8dfb080dedac4597b311be6138dd6ec3",
+  "timestamp": "2026-07-28T12:53:52.3229965+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 1,
+  "relative_file": "src/Scheduling/Scheduler.cs",
+  "source_sha256": "a7f9a7b2fc2b52ae4d109347b42793366d72fe15827f4166e8e12b6d47ef3264",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EPlaces jobs onto the most suitable available resource.\u003C/summary\u003E\npublic sealed class Scheduler\n{\n    public IReadOnlyList\u003Cstring\u003E PlaceJobs(IEnumerable\u003CJob\u003E jobs, IReadOnlyList\u003CResource\u003E resources)\n    {\n        var placements = new List\u003Cstring\u003E();\n        foreach (var job in jobs)\n        {\n            if (string.IsNullOrEmpty(job.RequiredSkill))\n                continue;\n\n            var chosen = FindBestResource(job.RequiredSkill, resources);\n            placements.Add(chosen is null\n                ? $\u0022{job.Id}:UNPLACED\u0022\n                : FormatPlacement(job, chosen));\n        }\n\n        return placements;\n    }\n\n    private static Resource? FindBestResource(\n        string requiredSkill,\n        IReadOnlyList\u003CResource\u003E resources)\n    {\n        Resource? chosen = null;\n        foreach (var resource in resources)\n        {\n            if (!CanAccept(resource, requiredSkill))\n                continue;\n\n            if (chosen is null || resource.Calendar.Count \u003C chosen.Calendar.Count)\n                chosen = resource;\n        }\n\n        return chosen;\n    }\n\n    private static bool CanAccept(Resource resource, string requiredSkill) =\u003E\n        resource.Skills.Contains(requiredSkill) \u0026\u0026 resource.Calendar.Count \u003C= 20;\n\n    private static string FormatPlacement(Job job, Resource resource)\n    {\n        var suffix = RequiresOvertime(job, resource)\n            ? \u0022:OT\u0022\n            : job.Priority \u003E 8\n                ? \u0022:URGENT\u0022\n                : string.Empty;\n\n        return $\u0022{job.Id}:{resource.Name}{suffix}\u0022;\n    }\n\n    private static bool RequiresOvertime(Job job, Resource resource) =\u003E\n        (job.Priority \u003E 5 \u0026\u0026 resource.Calendar.Count \u003E 10) ||\n        job.Duration.TotalHours \u003E 8;\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Scheduling_Scheduler.cs--3c696611869f4d2e9e14d929a0b1a2bf.json",
+  "visible_test_sha256": "e49575f02f5bb9d3816b0fe12d42ba670e9d6e99078cf9a07261cc7c1753433d",
+  "build_passed": true,
+  "visible_test_passed": true
+}

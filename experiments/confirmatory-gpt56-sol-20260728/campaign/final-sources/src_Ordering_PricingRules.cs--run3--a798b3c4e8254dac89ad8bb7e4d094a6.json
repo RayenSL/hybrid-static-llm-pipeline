@@ -1,0 +1,17 @@
+{
+  "artifact_id": "a798b3c4e8254dac89ad8bb7e4d094a6",
+  "timestamp": "2026-07-28T12:53:08.2462567+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Ordering/PricingRules.cs",
+  "source_sha256": "5364fa698a45b3b572b960c9515b0a5a53a189aa615649b712e58bebadf34744",
+  "final_source": "namespace Ordering;\n\n/// \u003Csummary\u003EApplies tier, override and channel adjustments to an order subtotal.\u003C/summary\u003E\npublic sealed class PricingRules\n{\n    public decimal ApplyAdjustments(Order order, CustomerTier tier)\n    {\n        var subtotal = CalculateSubtotal(order);\n\n        if (tier == CustomerTier.Blocked)\n            return 0m;\n\n        var adjusted = ApplyTierAdjustment(subtotal, tier);\n        adjusted = ApplyDiscounts(adjusted, subtotal, order);\n        adjusted = ApplyChannelAdjustment(adjusted, order.Channel);\n\n        return decimal.Max(0m, adjusted);\n    }\n\n    private static decimal CalculateSubtotal(Order order)\n    {\n        decimal subtotal = 0m;\n        foreach (var line in order.Lines)\n            subtotal \u002B= line.UnitPrice * line.Quantity;\n\n        return subtotal;\n    }\n\n    private static decimal ApplyTierAdjustment(decimal subtotal, CustomerTier tier) =\u003E\n        tier == CustomerTier.Wholesale ? subtotal * 0.95m : subtotal;\n\n    private static decimal ApplyDiscounts(decimal adjusted, decimal subtotal, Order order)\n    {\n        if (order.DiscountOverride is { } discountOverride \u0026\u0026 discountOverride \u003E 0m)\n            adjusted -= discountOverride;\n\n        if (subtotal \u003E 500m)\n            adjusted -= 10m;\n\n        return adjusted;\n    }\n\n    private static decimal ApplyChannelAdjustment(decimal adjusted, OrderChannel channel) =\u003E\n        channel switch\n        {\n            OrderChannel.Web =\u003E adjusted,\n            OrderChannel.Phone =\u003E adjusted \u002B 2m,\n            OrderChannel.Marketplace =\u003E adjusted * 1.02m,\n            _ =\u003E adjusted,\n        };\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

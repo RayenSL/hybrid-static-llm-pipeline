@@ -1,0 +1,17 @@
+{
+  "artifact_id": "4a138932789548fa9fc377edddef16c7",
+  "timestamp": "2026-07-28T19:04:25.9118826+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Scheduling/ReminderSender.cs",
+  "source_sha256": "8be7b5457b8e91eb745e7ab1c6c8f0dfe7f0fa356c81d28579735e0621fe5d46",
+  "final_source": "using Scheduling.Legacy;\n\nnamespace Scheduling;\n\n/// \u003Csummary\u003ESends reminders for upcoming jobs.\u003C/summary\u003E\npublic sealed class ReminderSender\n{\n    private readonly INotificationSender _notifications;\n\n    public ReminderSender(INotificationSender notifications) =\u003E\n        _notifications = notifications;\n\n    public bool Send(Job job, string recipient)\n    {\n        // TODO: localise the reminder text per recipient\n        return _notifications.Send(recipient, $\u0022Reminder for {job.Id}\u0022);\n    }\n}\n\npublic interface INotificationSender\n{\n    bool Send(string recipient, string message);\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

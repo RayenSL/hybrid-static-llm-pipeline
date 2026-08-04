@@ -1,0 +1,17 @@
+{
+  "artifact_id": "091b97c83fab4204bc95d2bac62208c0",
+  "timestamp": "2026-07-28T10:42:25.5903846+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 1,
+  "relative_file": "src/Inventory/AllocationCalculator.cs",
+  "source_sha256": "9b02412d629d5c68df1538346c3df7feedec8ee431a568ab70fc79e0811fd8ef",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EAllocates available stock across a warehouse\u0027s zones.\u003C/summary\u003E\npublic sealed class AllocationCalculator\n{\n    public IReadOnlyList\u003Cstring\u003E Allocate(StockItem item, Warehouse warehouse)\n    {\n        var result = new List\u003Cstring\u003E();\n        int remaining = item.OnHand - item.Reserved;\n\n        if (remaining \u003C= 0)\n            return result;\n\n        foreach (var zone in warehouse.Zones)\n        {\n            TryAllocateToZone(zone, result, ref remaining);\n            if (remaining \u003C= 0 \u0026\u0026 result.Count \u003E 0)\n                break;\n        }\n\n        AddOverflowIfNeeded(result, remaining);\n        return result;\n    }\n\n    private static void TryAllocateToZone(Zone zone, List\u003Cstring\u003E result, ref int remaining)\n    {\n        if (zone.Capacity \u003C= 0 || string.IsNullOrEmpty(zone.Name))\n            return;\n\n        int quantity = CalculatePlacement(remaining, zone.Capacity);\n        if (quantity \u003C= 0)\n            return;\n\n        result.Add($\u0022{zone.Name}:{quantity}\u0022);\n        remaining -= quantity;\n    }\n\n    private static int CalculatePlacement(int remaining, int capacity)\n    {\n        if (remaining \u003E capacity)\n            return capacity;\n\n        return remaining \u003E capacity / 2\n            ? remaining - 1\n            : remaining;\n    }\n\n    private static void AddOverflowIfNeeded(List\u003Cstring\u003E result, int remaining)\n    {\n        if (remaining \u003E 0)\n            result.Add($\u0022OVERFLOW:{remaining}\u0022);\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Inventory_AllocationCalculator.cs--04fee2b2ac504c34a0327366a8c9e19c.json",
+  "visible_test_sha256": "c9813ac33ff9efafd54beea6aba7bc7d12dde0b95fd4a02e382b795f17a113ec",
+  "build_passed": true,
+  "visible_test_passed": true
+}

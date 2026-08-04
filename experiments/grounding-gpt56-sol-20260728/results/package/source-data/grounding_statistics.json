@@ -1,0 +1,43 @@
+{
+  "cochran_q": {
+    "statistic": 2.4782608695652173,
+    "df": 3,
+    "p": 0.4792326450533334
+  },
+  "pairwise": [
+    {
+      "Contrast": "Structural \u2212 Minimal",
+      "Lower-only": 1,
+      "Higher-only": 0,
+      "Risk difference (pp)": "-3.3",
+      "95% bootstrap CI (pp)": "[-10.0, +0.0]",
+      "Exact McNemar p": "1",
+      "Holm p": "1"
+    },
+    {
+      "Contrast": "Relational \u2212 Structural",
+      "Lower-only": 1,
+      "Higher-only": 4,
+      "Risk difference (pp)": "+10.0",
+      "95% bootstrap CI (pp)": "[-3.3, +23.3]",
+      "Exact McNemar p": "0.375",
+      "Holm p": "1"
+    },
+    {
+      "Contrast": "Full \u2212 Relational",
+      "Lower-only": 4,
+      "Higher-only": 2,
+      "Risk difference (pp)": "-6.7",
+      "95% bootstrap CI (pp)": "[-23.3, +10.0]",
+      "Exact McNemar p": "0.6875",
+      "Holm p": "1"
+    }
+  ],
+  "bootstrap_repetitions": 20000,
+  "bootstrap_seed_base": 20260728,
+  "holm_family": [
+    "Structural \u2212 Minimal",
+    "Relational \u2212 Structural",
+    "Full \u2212 Relational"
+  ]
+}

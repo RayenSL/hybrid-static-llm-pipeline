@@ -1,0 +1,7 @@
+### Table 5.9: Pre-repair characterization-test generation and admission
+
+| Anti-pattern | Generated | Admitted | Baseline failed | Build failed | Admission rate |
+|---|---|---|---|---|---|
+| God Class | 10 | 9 | 1 | 0 | 90.0% |
+| Long Method | 9 | 8 | 0 | 1 | 88.9% |
+| Overall | 19 | 17 | 1 | 1 | 89.5% |

@@ -1,0 +1,17 @@
+{
+  "artifact_id": "4ed12537ecd14c7690612722e404e698",
+  "timestamp": "2026-07-28T19:11:03.3391925+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Ordering/PricingRules.cs",
+  "source_sha256": "ce234aa9a32cda8359d8596532b155db3e1276dac7e8782e5fab8adc7bebc719",
+  "final_source": "namespace Ordering;\n\n/// \u003Csummary\u003EApplies tier, override and channel adjustments to an order subtotal.\u003C/summary\u003E\npublic sealed class PricingRules\n{\n    public decimal ApplyAdjustments(Order order, CustomerTier tier)\n    {\n        var subtotal = CalculateSubtotal(order.Lines);\n        if (tier == CustomerTier.Blocked)\n            return 0m;\n\n        var amount = ApplyTierDiscount(subtotal, tier);\n        amount = ApplyOverride(amount, order.DiscountOverride);\n        amount = ApplyVolumeDiscount(amount, subtotal);\n        amount = ApplyChannelAdjustment(amount, order.Channel);\n\n        return Math.Max(0m, amount);\n    }\n\n    private static decimal CalculateSubtotal(IEnumerable\u003COrderLine\u003E lines) =\u003E\n        lines.Sum(line =\u003E line.UnitPrice * line.Quantity);\n\n    private static decimal ApplyTierDiscount(decimal amount, CustomerTier tier) =\u003E\n        tier == CustomerTier.Wholesale ? amount * 0.95m : amount;\n\n    private static decimal ApplyOverride(decimal amount, decimal? value) =\u003E\n        value is \u003E 0m ? amount - value.Value : amount;\n\n    private static decimal ApplyVolumeDiscount(decimal amount, decimal subtotal) =\u003E\n        subtotal \u003E 500m ? amount - 10m : amount;\n\n    private static decimal ApplyChannelAdjustment(decimal amount, OrderChannel channel) =\u003E\n        channel switch\n        {\n            OrderChannel.Web =\u003E amount,\n            OrderChannel.Phone =\u003E amount \u002B 2m,\n            OrderChannel.Marketplace =\u003E amount * 1.02m,\n            _ =\u003E amount,\n        };\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

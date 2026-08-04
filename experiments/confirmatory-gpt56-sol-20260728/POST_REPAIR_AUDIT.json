@@ -1,0 +1,89 @@
+{
+  "audit_status": "pass",
+  "audited_at_utc": "2026-07-28T13:30:52.674537+00:00",
+  "campaign_id": "e6226c2a5114827bfb262d94",
+  "manifest_sha256": "0c33f9bab116ad21812b72f2d3e150cafac725ed0c70b1dc722db0e9eb54d06c",
+  "repair_assignments": 456,
+  "execution_ledger_rows": 456,
+  "completed_ledger_rows": 456,
+  "errored_ledger_rows": 0,
+  "trace_files": 456,
+  "trace_row_count_distribution": {
+    "1": 228,
+    "2": 115,
+    "3": 113
+  },
+  "final_source_artifacts": 456,
+  "unique_referenced_final_sources": 456,
+  "all_final_sources_hash_verified": true,
+  "all_conditions_match_manifest": true,
+  "model_names": [
+    "gpt-5.6-sol"
+  ],
+  "parse_status_counts": {
+    "ok": 456
+  },
+  "error_status_counts": {
+    "None": 456
+  },
+  "verified_repair_ladder_counts": {
+    "resolved": 432,
+    "builds_unresolved": 24
+  },
+  "visible_test_policy": {
+    "assigned_test_on": 228,
+    "test_on_with_available_test": 204,
+    "test_on_without_available_test": 24,
+    "visible_tests_passed": 204
+  },
+  "resources": {
+    "assignments": 456,
+    "input_tokens": 1542837,
+    "output_tokens": 845356,
+    "llm_calls": 688,
+    "build_attempts": 460,
+    "visible_test_attempts": 204,
+    "model_duration_ms": 14121800.0281,
+    "final_builds_passed": 456,
+    "visible_tests_passed": 204,
+    "detector_repairs_verified": 432,
+    "total_tokens": 2388193,
+    "nominal_cost_usd": 33.074865,
+    "standard_global_price_usd_per_million": {
+      "input": 5.0,
+      "output": 30.0
+    },
+    "by_arm_csv": "resource-by-arm.csv"
+  },
+  "campaign_wall_clock": {
+    "first_completion_utc": "2026-07-28T09:01:10.3740631+00:00",
+    "last_completion_utc": "2026-07-28T13:10:12.3828331+00:00",
+    "includes_user-interruption_and_resume": true
+  },
+  "interruption_audit": {
+    "resume_boundary_completed_assignments": 320,
+    "quarantined_assignment_order": 321,
+    "quarantined_assignment_id": "c4effd44903d8b45f5723c2b",
+    "quarantined_trace_bytes": 0,
+    "quarantined_trace_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "completed_assignments_repeated": 0
+  },
+  "codebase_archive": {
+    "campaign_id": "e6226c2a5114827bfb262d94",
+    "completed_assignments": 456,
+    "materialized_codebases": 456,
+    "non_materialized_assignments": 0,
+    "archive_contract": "complete source-only corpus + repaired source + metadata + unified diff + checksums",
+    "index_rows": 456,
+    "archive_files_in_checksum_ledger": 32379,
+    "archive_checksum_mismatches": 0,
+    "archive_checksum_verification": "pass",
+    "archive_ledger_sha256": "c5360a4913eba92d7cc9a84301b7ab6a9df82ec6e30e63209fd052550c30b289"
+  },
+  "credential_shaped_value_scan": {
+    "scope": "campaign core traces, ledger, and final-source artifacts",
+    "matching_files": [],
+    "pass": true
+  },
+  "private_layer3_executed": false
+}

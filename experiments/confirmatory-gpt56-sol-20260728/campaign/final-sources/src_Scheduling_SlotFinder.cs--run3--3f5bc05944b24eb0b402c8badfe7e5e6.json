@@ -1,0 +1,17 @@
+{
+  "artifact_id": "3f5bc05944b24eb0b402c8badfe7e5e6",
+  "timestamp": "2026-07-28T09:52:20.3471565+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 3,
+  "relative_file": "src/Scheduling/SlotFinder.cs",
+  "source_sha256": "6e661eb819ae6ac92e540dadde754b0a8fba68c56aae8268641839c8b3fa1398",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EFinds the first calendar slot that fits a required duration.\u003C/summary\u003E\npublic sealed class SlotFinder\n{\n    public Slot? FindFirstFit(Resource resource, TimeSpan duration, DateTime notBefore)\n    {\n        if (!CanSearch(resource, duration))\n            return null;\n\n        foreach (var slot in resource.Calendar)\n        {\n            if (IsSuitable(slot, duration, notBefore))\n                return slot;\n        }\n\n        return null;\n    }\n\n    private static bool CanSearch(Resource resource, TimeSpan duration) =\u003E\n        resource.Calendar.Count != 0 \u0026\u0026 duration \u003E TimeSpan.Zero;\n\n    private static bool IsSuitable(Slot slot, TimeSpan duration, DateTime notBefore) =\u003E\n        slot.Start \u003E= notBefore \u0026\u0026\n        HasRequiredDuration(slot, duration) \u0026\u0026\n        StartsDuringWorkingHours(slot) \u0026\u0026\n        slot.End.Hour \u003C= 20;\n\n    private static bool HasRequiredDuration(Slot slot, TimeSpan duration) =\u003E\n        slot.End - slot.Start \u003E= duration;\n\n    private static bool StartsDuringWorkingHours(Slot slot) =\u003E\n        slot.Start.Hour \u003E= 8 \u0026\u0026 slot.Start.Hour \u003C= 18;\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Scheduling_SlotFinder.cs--d6414856719a496b9574f6f4db9f15b5.json",
+  "visible_test_sha256": "129439d9ac460f0acd29cbdddb54aabb385bf831478b1d28392079faca223003",
+  "build_passed": true,
+  "visible_test_passed": true
+}

@@ -1,0 +1,8 @@
+### Table 5.8: Cell-specific visible-characterization-test effects
+
+| Grounding | Control | Test effect (pp) | 95% CI (pp) | Exact p | Holm p | Interpretation |
+|---|---|---|---|---|---|---|
+| ungrounded | single-shot | +8.77 | [-3.01, +20.56] | 0.25 | 1 | exploratory / underpowered |
+| ungrounded | iterative | +1.75 | [-1.93, +5.44] | 1 | 1 | exploratory / underpowered |
+| grounded | single-shot | +0.00 | [+0.00, +0.00] | 1 | 1 | exploratory / underpowered |
+| grounded | iterative | +5.26 | [-5.79, +16.32] | 1 | 1 | exploratory / underpowered |

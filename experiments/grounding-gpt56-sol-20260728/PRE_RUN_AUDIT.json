@@ -1,0 +1,38 @@
+{
+  "status": "pre_run_frozen",
+  "frozen_at_utc": "2026-07-28T18:32:01.919489+00:00",
+  "campaign_id": "eb160df37c8996164a8730c0",
+  "manifest_sha256": "5bbc78caca64675c1f0541c64ab15b1e36f82685bd49e839280a871a23ed834a",
+  "baseline_sha256": "91e2d565e889303ce6820f061eb0c606f5b723fc36631b6f30366882db2eb793",
+  "targets": 30,
+  "assignments": 120,
+  "repetitions": 1,
+  "anti_pattern_targets": {
+    "god_class": 10,
+    "long_method": 10,
+    "obsolete_api_usage": 10
+  },
+  "context_levels": [
+    "minimal",
+    "structural",
+    "relational",
+    "full"
+  ],
+  "evaluated_model": "gpt-5.6-sol",
+  "applier_model": "DeepSeek-V4-Pro",
+  "prompt_version": "v1.1.0",
+  "applier_prompt_version": "v1.0.0",
+  "randomization_seed": 20260728,
+  "campaign_output_empty": true,
+  "credential_shaped_value_scan": {
+    "pass": true,
+    "matching_files": []
+  },
+  "ledger_sha256": {
+    "PIPELINE_SHA256SUMS.txt": "554ff7f2ee612cacbc786a92fd524e358e9514803f6d7e783e0f0695f9da7086",
+    "BINARY_SHA256SUMS.txt": "5d15c4f0bf33f2aee249e5c95e0be466a55d89ad8bcd1153bdc13430ad94b56a",
+    "CORPUS_SHA256SUMS.txt": "b67254d64d293d896313d6a7dd568709893da9837e80835a1a8bd1ee4fd019aa",
+    "GROUND_TRUTH_SHA256SUMS.txt": "7dcb5805988322a4e94c332715168dd1d8c4c9f24c2bad0a21d217bd10c20802",
+    "EXPERIMENT_INPUT_SHA256SUMS.txt": "70fdc446c7abb8b713393e483cbca561c7a513865572607ee058d60d036478fc"
+  }
+}

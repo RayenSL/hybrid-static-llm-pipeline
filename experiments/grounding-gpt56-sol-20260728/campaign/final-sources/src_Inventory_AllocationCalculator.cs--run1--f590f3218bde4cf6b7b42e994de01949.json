@@ -1,0 +1,17 @@
+{
+  "artifact_id": "f590f3218bde4cf6b7b42e994de01949",
+  "timestamp": "2026-07-28T19:01:03.452971+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Inventory/AllocationCalculator.cs",
+  "source_sha256": "c65306d93a0550a685b448ed162bfc90001ab3de4b49e7f9efe758c3b618f504",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EAllocates available stock across a warehouse\u0027s zones.\u003C/summary\u003E\npublic sealed class AllocationCalculator\n{\n    private static bool IsUsable(Zone zone) =\u003E\n        zone.Capacity \u003E 0 \u0026\u0026 !string.IsNullOrEmpty(zone.Name);\n\n    private static int CalculatePlacement(int remaining, int capacity)\n    {\n        if (remaining \u003E capacity) return capacity;\n        if (remaining \u003E capacity / 2) return remaining - 1;\n        return remaining;\n    }\n\n    public IReadOnlyList\u003Cstring\u003E Allocate(StockItem item, Warehouse warehouse)\n    {\n        var result = new List\u003Cstring\u003E();\n        var remaining = item.OnHand - item.Reserved;\n\n        foreach (var zone in warehouse.Zones.Where(IsUsable))\n        {\n            if (remaining \u003C= 0) break;\n\n            var place = CalculatePlacement(remaining, zone.Capacity);\n            if (place \u003C= 0) continue;\n\n            result.Add($\u0022{zone.Name}:{place}\u0022);\n            remaining -= place;\n        }\n\n        if (remaining \u003E 0) result.Add($\u0022OVERFLOW:{remaining}\u0022);\n        return result;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

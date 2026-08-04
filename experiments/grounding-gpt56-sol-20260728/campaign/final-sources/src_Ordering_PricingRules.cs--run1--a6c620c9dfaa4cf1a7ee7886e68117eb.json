@@ -1,0 +1,17 @@
+{
+  "artifact_id": "a6c620c9dfaa4cf1a7ee7886e68117eb",
+  "timestamp": "2026-07-28T19:11:38.4069536+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Ordering/PricingRules.cs",
+  "source_sha256": "19fa2d1893887056d99edf971a7f0afd9f5a86444fae6de0a868d2c50fe67e45",
+  "final_source": "namespace Ordering;\n\n/// \u003Csummary\u003EApplies tier, override and channel adjustments to an order subtotal.\u003C/summary\u003E\npublic sealed class PricingRules\n{\n    private const decimal WholesaleFactor = 0.95m;\n    private const decimal LargeOrderThreshold = 500m;\n    private const decimal LargeOrderDiscount = 10m;\n\n    public decimal ApplyAdjustments(Order order, CustomerTier tier)\n    {\n        var subtotal = CalculateSubtotal(order);\n        if (tier == CustomerTier.Blocked)\n            return 0m;\n\n        var price = ApplyTier(subtotal, tier);\n        price = ApplyOverride(price, order.DiscountOverride);\n        price = ApplyLargeOrderDiscount(price, subtotal);\n        price = ApplyChannelAdjustment(price, order.Channel);\n        return decimal.Max(0m, price);\n    }\n\n    private static decimal CalculateSubtotal(Order order) =\u003E\n        order.Lines.Sum(line =\u003E line.UnitPrice * line.Quantity);\n\n    private static decimal ApplyTier(decimal price, CustomerTier tier) =\u003E\n        tier == CustomerTier.Wholesale ? price * WholesaleFactor : price;\n\n    private static decimal ApplyOverride(decimal price, decimal? discountOverride)\n    {\n        if (discountOverride is { } ovr \u0026\u0026 ovr \u003E 0m)\n            return price - ovr;\n        return price;\n    }\n\n    private static decimal ApplyLargeOrderDiscount(decimal price, decimal subtotal)\n    {\n        if (subtotal \u003E LargeOrderThreshold)\n            return price - LargeOrderDiscount;\n        return price;\n    }\n\n    private static decimal ApplyChannelAdjustment(decimal price, OrderChannel channel) =\u003E\n        channel switch\n        {\n            OrderChannel.Web =\u003E price,\n            OrderChannel.Phone =\u003E price \u002B 2m,\n            OrderChannel.Marketplace =\u003E price * 1.02m,\n            _ =\u003E price,\n        };\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

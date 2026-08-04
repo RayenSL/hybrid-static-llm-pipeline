@@ -1,0 +1,154 @@
+[
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\CycleCountService.cs",
+    "symbol_name": "Inventory.CycleCountService",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 3,
+    "target_start_line": 6,
+    "target_end_line": 132
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\StockController.cs",
+    "symbol_name": "Inventory.StockController",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 4,
+    "target_start_line": 7,
+    "target_end_line": 206
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\BillingManager.cs",
+    "symbol_name": "Invoicing.BillingManager",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 3,
+    "target_start_line": 6,
+    "target_end_line": 202
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\StatementBuilder.cs",
+    "symbol_name": "Invoicing.StatementBuilder",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 3,
+    "target_start_line": 6,
+    "target_end_line": 159
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\NotificationCenter.cs",
+    "symbol_name": "Notifications.NotificationCenter",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 3,
+    "target_start_line": 6,
+    "target_end_line": 112
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\CheckoutCoordinator.cs",
+    "symbol_name": "Ordering.CheckoutCoordinator",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 3,
+    "target_start_line": 6,
+    "target_end_line": 205
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\OrderProcessor.cs",
+    "symbol_name": "Ordering.OrderProcessor",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 3,
+    "target_start_line": 6,
+    "target_end_line": 225
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\ReturnsHandler.cs",
+    "symbol_name": "Ordering.ReturnsHandler",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 1,
+    "target_start_line": 4,
+    "target_end_line": 133
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\RecurrenceEngine.cs",
+    "symbol_name": "Scheduling.RecurrenceEngine",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 3,
+    "target_start_line": 6,
+    "target_end_line": 121
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\ScheduleManager.cs",
+    "symbol_name": "Scheduling.ScheduleManager",
+    "anti_pattern_type": "god_class",
+    "leading_trivia_lines_removed": 3,
+    "target_start_line": 6,
+    "target_end_line": 203
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\InvoiceRenderer.cs",
+    "symbol_name": "InvoiceRenderer.Render",
+    "anti_pattern_type": "long_method",
+    "leading_trivia_lines_removed": 0,
+    "target_start_line": 8,
+    "target_end_line": 61
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\AllocationCalculator.cs",
+    "symbol_name": "AllocationCalculator.Allocate",
+    "anti_pattern_type": "long_method",
+    "leading_trivia_lines_removed": 0,
+    "target_start_line": 6,
+    "target_end_line": 39
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\ReplenishmentPlanner.cs",
+    "symbol_name": "ReplenishmentPlanner.BuildPlan",
+    "anti_pattern_type": "long_method",
+    "leading_trivia_lines_removed": 0,
+    "target_start_line": 6,
+    "target_end_line": 47
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\VatResolver.cs",
+    "symbol_name": "VatResolver.Resolve",
+    "anti_pattern_type": "long_method",
+    "leading_trivia_lines_removed": 0,
+    "target_start_line": 6,
+    "target_end_line": 40
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\DispatchPipeline.cs",
+    "symbol_name": "DispatchPipeline.Run",
+    "anti_pattern_type": "long_method",
+    "leading_trivia_lines_removed": 0,
+    "target_start_line": 15,
+    "target_end_line": 57
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\RetryPolicy.cs",
+    "symbol_name": "RetryPolicy.NextDelay",
+    "anti_pattern_type": "long_method",
+    "leading_trivia_lines_removed": 0,
+    "target_start_line": 6,
+    "target_end_line": 40
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\PricingRules.cs",
+    "symbol_name": "PricingRules.ApplyAdjustments",
+    "anti_pattern_type": "long_method",
+    "leading_trivia_lines_removed": 0,
+    "target_start_line": 6,
+    "target_end_line": 33
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\Scheduler.cs",
+    "symbol_name": "Scheduler.PlaceJobs",
+    "anti_pattern_type": "long_method",
+    "leading_trivia_lines_removed": 0,
+    "target_start_line": 6,
+    "target_end_line": 45
+  },
+  {
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\SlotFinder.cs",
+    "symbol_name": "SlotFinder.FindFirstFit",
+    "anti_pattern_type": "long_method",
+    "leading_trivia_lines_removed": 0,
+    "target_start_line": 6,
+    "target_end_line": 29
+  }
+]

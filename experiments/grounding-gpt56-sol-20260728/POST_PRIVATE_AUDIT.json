@@ -1,0 +1,17 @@
+{
+  "status": "private_layer3_sealed",
+  "sealed_at_utc": "2026-07-28T19:32:54.296085+00:00",
+  "private_result_sha256": "33700012a6e69a280ff7e4c6f0ce1d09532af6219391014f02942044eefe4cbb",
+  "private_rows": 41,
+  "materialized_artifacts": 41,
+  "evaluated_passed": 30,
+  "evaluated_regression": 7,
+  "not_run": 4,
+  "not_run_reasons": {
+    "production_build_failed": 4
+  },
+  "artifact_id_set_match": true,
+  "source_hash_match": true,
+  "result_used": "first protected 41-row result only",
+  "duplicate_diagnostic_execution_used": false
+}

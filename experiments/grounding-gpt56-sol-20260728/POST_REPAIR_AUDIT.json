@@ -1,0 +1,48 @@
+{
+  "status": "repair_campaign_sealed",
+  "sealed_at_utc": "2026-07-28T19:23:22.808913+00:00",
+  "campaign_id": "eb160df37c8996164a8730c0",
+  "manifest_sha256": "5bbc78caca64675c1f0541c64ab15b1e36f82685bd49e839280a871a23ed834a",
+  "execution_ledger_sha256": "56b781aa05cee5e49e5f7e524ca36ed81761e7ba63cc893d7d8b85566f0d9526",
+  "post_repair_checksum_ledger_sha256": "2e0baf3e6121e6d936fc50c982f79f02b35b49682a29803116a4f392d31a86cd",
+  "assignments": 120,
+  "unique_targets": 30,
+  "context_counts": {
+    "minimal": 30,
+    "structural": 30,
+    "relational": 30,
+    "full": 30
+  },
+  "anti_pattern_assignment_counts": {
+    "god_class": 40,
+    "long_method": 40,
+    "obsolete_api_usage": 40
+  },
+  "trace_files": 120,
+  "trace_record_counts": {
+    "2": 120
+  },
+  "evaluated_model_calls": 120,
+  "applier_calls": 120,
+  "evaluated_model_counts": {
+    "gpt-5.6-sol": 120
+  },
+  "applier_model_counts": {
+    "DeepSeek-V4-Pro": 120
+  },
+  "materialized_final_sources": 41,
+  "non_materialized_assignments": 79,
+  "verified_repair_ladder": {
+    "build_fails": 4,
+    "resolved": 37,
+    "unapplicable": 79
+  },
+  "combined_input_tokens": 234212,
+  "combined_output_tokens": 113915,
+  "frozen_checksum_entries_verified": {
+    "pre_run": 13,
+    "amendment_1": 1,
+    "amendment_2": 5
+  },
+  "private_layer3_executed": false
+}

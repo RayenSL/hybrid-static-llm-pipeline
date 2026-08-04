@@ -1,0 +1,17 @@
+{
+  "artifact_id": "02eca6e1959b4dbea2cc5a582b87a9fa",
+  "timestamp": "2026-07-28T10:51:23.6560883+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Notifications/RetryPolicy.cs",
+  "source_sha256": "a4beab03df5a76f34a8f8154611e0e32ee772b8690dacdc3719bc20df344e6f3",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    private const int MaximumAttempt = 10;\n    private const int MaximumDelay = 3600;\n    private const int BusyThreshold = 600;\n\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n\n        if (attempt \u003E MaximumAttempt)\n            return MaximumDelay;\n\n        var delay = GetBaseDelay(channel) * attempt;\n        delay = ApplyServerBusyBackoff(delay, serverBusy);\n        return NormalizeDelay(delay, attempt);\n    }\n\n    private static int GetBaseDelay(Channel channel) =\u003E channel switch\n    {\n        Channel.Email =\u003E 30,\n        Channel.Sms =\u003E 10,\n        Channel.Push =\u003E 5,\n        _ =\u003E 15\n    };\n\n    private static int ApplyServerBusyBackoff(int delay, bool serverBusy)\n    {\n        return serverBusy \u0026\u0026 delay \u003C BusyThreshold ? delay * 2 : delay;\n    }\n\n    private static int NormalizeDelay(int delay, int attempt)\n    {\n        if (delay \u003E MaximumDelay)\n            return MaximumDelay;\n\n        if (delay \u003C 1)\n            return 1;\n\n        return attempt \u003E 7 ? delay \u002B 100 : delay;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

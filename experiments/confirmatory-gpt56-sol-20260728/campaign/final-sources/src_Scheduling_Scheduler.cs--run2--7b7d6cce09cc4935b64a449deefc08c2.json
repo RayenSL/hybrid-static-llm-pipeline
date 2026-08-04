@@ -1,0 +1,17 @@
+{
+  "artifact_id": "7b7d6cce09cc4935b64a449deefc08c2",
+  "timestamp": "2026-07-28T12:02:43.7659944+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Scheduling/Scheduler.cs",
+  "source_sha256": "fe5e8bd323374e8307b4d49781ef1c1f50dc44f79af0e689b960379163689574",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EPlaces jobs onto the most suitable available resource.\u003C/summary\u003E\npublic sealed class Scheduler\n{\n    private const int MaximumCalendarEntries = 20;\n    private const int OvertimeCalendarThreshold = 10;\n    private const int OvertimePriorityThreshold = 5;\n    private const int UrgentPriorityThreshold = 8;\n    private const double MaximumRegularHours = 8;\n\n    public IReadOnlyList\u003Cstring\u003E PlaceJobs(IEnumerable\u003CJob\u003E jobs, IReadOnlyList\u003CResource\u003E resources)\n    {\n        var placements = new List\u003Cstring\u003E();\n\n        foreach (var job in jobs)\n        {\n            if (!string.IsNullOrEmpty(job.RequiredSkill))\n                placements.Add(CreatePlacement(job, resources));\n        }\n\n        return placements;\n    }\n\n    private static string CreatePlacement(Job job, IReadOnlyList\u003CResource\u003E resources)\n    {\n        var resource = FindBestResource(job.RequiredSkill, resources);\n        if (resource is null)\n            return $\u0022{job.Id}:UNPLACED\u0022;\n\n        return FormatPlacement(job, resource);\n    }\n\n    private static Resource? FindBestResource(\n        string requiredSkill,\n        IReadOnlyList\u003CResource\u003E resources)\n    {\n        Resource? chosen = null;\n\n        foreach (var resource in resources)\n        {\n            if (!IsEligible(resource, requiredSkill))\n                continue;\n\n            if (chosen is null || resource.Calendar.Count \u003C chosen.Calendar.Count)\n                chosen = resource;\n        }\n\n        return chosen;\n    }\n\n    private static bool IsEligible(Resource resource, string requiredSkill) =\u003E\n        resource.Skills.Contains(requiredSkill) \u0026\u0026\n        resource.Calendar.Count \u003C= MaximumCalendarEntries;\n\n    private static string FormatPlacement(Job job, Resource resource)\n    {\n        var suffix = RequiresOvertime(job, resource)\n            ? \u0022:OT\u0022\n            : job.Priority \u003E UrgentPriorityThreshold\n                ? \u0022:URGENT\u0022\n                : string.Empty;\n\n        return $\u0022{job.Id}:{resource.Name}{suffix}\u0022;\n    }\n\n    private static bool RequiresOvertime(Job job, Resource resource) =\u003E\n        (job.Priority \u003E OvertimePriorityThreshold \u0026\u0026\n         resource.Calendar.Count \u003E OvertimeCalendarThreshold) ||\n        job.Duration.TotalHours \u003E MaximumRegularHours;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

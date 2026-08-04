@@ -1,0 +1,17 @@
+{
+  "artifact_id": "6c58cb795f2e451091f8bec8083d7498",
+  "timestamp": "2026-07-28T12:56:11.6973923+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Scheduling/Scheduler.cs",
+  "source_sha256": "bcc17d2431ccd822eb4bb76ad240f3fad508a667e1a7312b4b2a779b47b568f3",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EPlaces jobs onto the most suitable available resource.\u003C/summary\u003E\npublic sealed class Scheduler\n{\n    public IReadOnlyList\u003Cstring\u003E PlaceJobs(IEnumerable\u003CJob\u003E jobs, IReadOnlyList\u003CResource\u003E resources)\n    {\n        var placements = new List\u003Cstring\u003E();\n        foreach (var job in jobs)\n        {\n            var placement = PlaceJob(job, resources);\n            if (placement != null)\n                placements.Add(placement);\n        }\n\n        return placements;\n    }\n\n    private static string? PlaceJob(Job job, IReadOnlyList\u003CResource\u003E resources)\n    {\n        if (string.IsNullOrEmpty(job.RequiredSkill))\n            return null;\n\n        var chosen = FindSuitableResource(job.RequiredSkill, resources);\n        return chosen == null\n            ? $\u0022{job.Id}:UNPLACED\u0022\n            : FormatPlacement(job, chosen);\n    }\n\n    private static Resource? FindSuitableResource(\n        string requiredSkill,\n        IReadOnlyList\u003CResource\u003E resources)\n    {\n        Resource? chosen = null;\n        foreach (var resource in resources)\n        {\n            if (!CanPerformJob(resource, requiredSkill))\n                continue;\n\n            if (chosen == null || resource.Calendar.Count \u003C chosen.Calendar.Count)\n                chosen = resource;\n        }\n\n        return chosen;\n    }\n\n    private static bool CanPerformJob(Resource resource, string requiredSkill) =\u003E\n        resource.Skills.Contains(requiredSkill) \u0026\u0026 resource.Calendar.Count \u003C= 20;\n\n    private static string FormatPlacement(Job job, Resource resource)\n    {\n        var suffix = IsOvertime(job, resource)\n            ? \u0022:OT\u0022\n            : job.Priority \u003E 8\n                ? \u0022:URGENT\u0022\n                : string.Empty;\n\n        return $\u0022{job.Id}:{resource.Name}{suffix}\u0022;\n    }\n\n    private static bool IsOvertime(Job job, Resource resource) =\u003E\n        (job.Priority \u003E 5 \u0026\u0026 resource.Calendar.Count \u003E 10) ||\n        job.Duration.TotalHours \u003E 8;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

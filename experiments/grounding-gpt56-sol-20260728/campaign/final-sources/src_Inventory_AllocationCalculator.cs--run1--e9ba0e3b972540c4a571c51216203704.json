@@ -1,0 +1,17 @@
+{
+  "artifact_id": "e9ba0e3b972540c4a571c51216203704",
+  "timestamp": "2026-07-28T19:02:06.084928+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Inventory/AllocationCalculator.cs",
+  "source_sha256": "c83776157b2b476589f370aae20f06562bd7a10203bac1fcd0fb9ade8d2d1194",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EAllocates available stock across a warehouse\u0027s zones.\u003C/summary\u003E\npublic sealed class AllocationCalculator\n{\n    public IReadOnlyList\u003Cstring\u003E Allocate(StockItem item, Warehouse warehouse)\n    {\n        var allocations = new List\u003Cstring\u003E();\n        var remaining = item.OnHand - item.Reserved;\n\n        if (remaining \u003C= 0)\n            return allocations;\n\n        foreach (var zone in warehouse.Zones.Where(IsEligible))\n        {\n            var quantity = CalculatePlacement(remaining, zone.Capacity);\n            if (quantity \u003C= 0)\n                continue;\n\n            allocations.Add(FormatAllocation(zone.Name, quantity));\n            remaining -= quantity;\n\n            if (remaining \u003C= 0)\n                break;\n        }\n\n        if (remaining \u003E 0)\n            allocations.Add(FormatOverflow(remaining));\n\n        return allocations;\n    }\n\n    private static bool IsEligible(Zone zone) =\u003E\n        zone.Capacity \u003E 0 \u0026\u0026 !string.IsNullOrEmpty(zone.Name);\n\n    private static int CalculatePlacement(int remaining, int capacity)\n    {\n        if (remaining \u003E capacity)\n            return capacity;\n\n        return remaining \u003E capacity / 2 ? remaining - 1 : remaining;\n    }\n\n    private static string FormatAllocation(string name, int quantity) =\u003E\n        $\u0022{name}:{quantity}\u0022;\n\n    private static string FormatOverflow(int quantity) =\u003E\n        $\u0022OVERFLOW:{quantity}\u0022;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

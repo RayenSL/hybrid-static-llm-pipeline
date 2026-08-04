@@ -1,0 +1,34 @@
+{
+  "audit_status": "pass",
+  "model_independent": true,
+  "design_inputs": {
+    "instances": 19,
+    "repetitions": 3,
+    "conditions": 8,
+    "simulation_seed": 20260727,
+    "simulations_per_condition": 10000
+  },
+  "files": [
+    {
+      "name": "power_simulation.py",
+      "sha256": "b55f1a661ca67b7bfef156a278585fad958a7f07e14db91888aec71764380d74",
+      "byte_identical_to_previous_frozen_analysis": true
+    },
+    {
+      "name": "power_grid.csv",
+      "sha256": "6db37f5b54c7bec10cfe2dea360136f1901770a76ea36e0f0c26ee1148182cc3",
+      "byte_identical_to_previous_frozen_analysis": true
+    },
+    {
+      "name": "power_classification.json",
+      "sha256": "af4304e4fae598ce30a309d965373a17d2461c73ad0494c1d314b5dc9fe3564d",
+      "byte_identical_to_previous_frozen_analysis": true
+    },
+    {
+      "name": "POWER_REPORT.md",
+      "sha256": "dd2074606b325151e674d27920e32c20693a46dc1a992166b6a7d83cd696dfdf",
+      "byte_identical_to_previous_frozen_analysis": true
+    }
+  ],
+  "reproducibility_note": "The model-independent power analysis and outputs are byte-identical to the previously executed frozen analysis. A local rerun was attempted at finalization, but the available Python runtimes did not include SciPy; no result was altered."
+}

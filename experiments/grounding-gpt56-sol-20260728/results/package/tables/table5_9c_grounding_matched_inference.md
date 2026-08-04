@@ -1,0 +1,6 @@
+| Test | Statistic | df | p | Holm p |
+|---|---|---|---|---|
+| Global Cochran Q | 2.4783 | 3 | 0.479233 | — |
+| Structural − Minimal | 1 vs 0 discordant | — | 1 | 1 |
+| Relational − Structural | 1 vs 4 discordant | — | 0.375 | 1 |
+| Full − Relational | 4 vs 2 discordant | — | 0.6875 | 1 |

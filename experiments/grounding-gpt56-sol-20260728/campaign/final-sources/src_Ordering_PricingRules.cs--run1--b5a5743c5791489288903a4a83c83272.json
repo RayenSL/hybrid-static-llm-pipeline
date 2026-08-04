@@ -1,0 +1,17 @@
+{
+  "artifact_id": "b5a5743c5791489288903a4a83c83272",
+  "timestamp": "2026-07-28T19:12:08.3722542+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Ordering/PricingRules.cs",
+  "source_sha256": "3d1f6c01bd09e2be344369c3da380d317372341df5bc2e16a805820be06a8561",
+  "final_source": "namespace Ordering;\n\n/// \u003Csummary\u003EApplies tier, override and channel adjustments to an order subtotal.\u003C/summary\u003E\npublic sealed class PricingRules\n{\n    private const decimal WholesaleFactor = 0.95m;\n    private const decimal LargeOrderThreshold = 500m;\n    private const decimal LargeOrderDiscount = 10m;\n\n    public decimal ApplyAdjustments(Order order, CustomerTier tier)\n    {\n        var subtotal = CalculateSubtotal(order);\n\n        if (tier == CustomerTier.Blocked)\n            return 0m;\n\n        var adjusted = ApplyTier(subtotal, tier);\n        adjusted = ApplyOverride(adjusted, order.DiscountOverride);\n        adjusted = ApplyLargeOrderDiscount(adjusted, subtotal);\n        adjusted = ApplyChannelAdjustment(adjusted, order.Channel);\n\n        return Math.Max(0m, adjusted);\n    }\n\n    private static decimal CalculateSubtotal(Order order) =\u003E\n        order.Lines.Sum(line =\u003E line.UnitPrice * line.Quantity);\n\n    private static decimal ApplyTier(decimal amount, CustomerTier tier) =\u003E\n        tier == CustomerTier.Wholesale ? amount * WholesaleFactor : amount;\n\n    private static decimal ApplyOverride(decimal amount, decimal? value) =\u003E\n        value is \u003E 0m ? amount - value.Value : amount;\n\n    private static decimal ApplyLargeOrderDiscount(decimal amount, decimal subtotal) =\u003E\n        subtotal \u003E LargeOrderThreshold ? amount - LargeOrderDiscount : amount;\n\n    private static decimal ApplyChannelAdjustment(decimal amount, OrderChannel channel) =\u003E\n        channel switch\n        {\n            OrderChannel.Phone =\u003E amount \u002B 2m,\n            OrderChannel.Marketplace =\u003E amount * 1.02m,\n            _ =\u003E amount\n        };\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

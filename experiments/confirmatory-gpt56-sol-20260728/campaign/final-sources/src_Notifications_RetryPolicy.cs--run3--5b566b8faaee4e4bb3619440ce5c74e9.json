@@ -1,0 +1,17 @@
+{
+  "artifact_id": "5b566b8faaee4e4bb3619440ce5c74e9",
+  "timestamp": "2026-07-28T12:47:36.0694691+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Notifications/RetryPolicy.cs",
+  "source_sha256": "8bab37a03af86793eff3d02766dd7aa1a8256d0c8ce494134bcc1215a5efce47",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    private const int MaximumAttempt = 10;\n    private const int MaximumDelaySeconds = 3600;\n    private const int BusyThresholdSeconds = 600;\n    private const int LateAttemptThreshold = 7;\n    private const int LateAttemptPenaltySeconds = 100;\n\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n\n        if (attempt \u003E MaximumAttempt)\n            return MaximumDelaySeconds;\n\n        int delay = GetBaseDelay(channel) * attempt;\n        return AdjustDelay(delay, attempt, serverBusy);\n    }\n\n    private static int GetBaseDelay(Channel channel) =\u003E channel switch\n    {\n        Channel.Email =\u003E 30,\n        Channel.Sms =\u003E 10,\n        Channel.Push =\u003E 5,\n        _ =\u003E 15\n    };\n\n    private static int AdjustDelay(int delay, int attempt, bool serverBusy)\n    {\n        if (serverBusy \u0026\u0026 delay \u003C BusyThresholdSeconds)\n            delay *= 2;\n\n        if (delay \u003E MaximumDelaySeconds)\n            return MaximumDelaySeconds;\n\n        if (delay \u003C 1)\n            return 1;\n\n        return attempt \u003E LateAttemptThreshold\n            ? delay \u002B LateAttemptPenaltySeconds\n            : delay;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

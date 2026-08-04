@@ -1,0 +1,3 @@
+estimator,log_random_intercept_sd,random_intercept_sd,approx_log_sd_sd
+laplace_map_regularized,-0.29242788270674325,0.7464490749816651,0.43317902095812294
+variational_bayes_regularized,0.777380650422323,2.175765704043245,0.14400885705189387

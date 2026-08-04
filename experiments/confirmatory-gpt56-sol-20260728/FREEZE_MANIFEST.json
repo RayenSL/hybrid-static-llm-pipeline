@@ -1,0 +1,329 @@
+{
+  "experiment_id": "confirmatory-gpt56-sol-20260728",
+  "status": "pre_repair_frozen_after_model_dependent_preflight",
+  "frozen_at_utc": "2026-07-28T08:55:51.798413+00:00",
+  "pipeline_git_revision": "4f7c2607b8854c7c21ec02002daa058f5828c209",
+  "pipeline_content_sha256": "8a29f51e95794d6623743e7865301f38cc641e989bd46446ff03e196e62cd778",
+  "pipeline_file_count": 179,
+  "corpus_git_revision": "16befd9a07d15c52da7ba1bac55c32aef56bfd2e",
+  "corpus_model_visible_content_sha256": "599967fc818465b619e899dc083e82355ba5d665217fcc0237aa03b6598d3d01",
+  "corpus_model_visible_file_count": 68,
+  "ground_truth_content_sha256": "7dcb5805988322a4e94c332715168dd1d8c4c9f24c2bad0a21d217bd10c20802",
+  "ground_truth_file_count": 43,
+  "source_baseline": "Z:\\GitHub\\hybrid-static-llm-pipeline\\archive\\previous-runs-20260727\\runs\\20260708-095630.jsonl",
+  "source_baseline_sha256": "7fd517d82ab001745e095e01f0067f9cb8cd5c4bbe75e5922943aaecb5c4b825",
+  "confirmatory_baseline": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\confirmatory-baseline.jsonl",
+  "confirmatory_baseline_sha256": "48ce04394a52e1bfa76817c1b825f97b7cd4e6a7e110f6bd8fb9ff0e526e199c",
+  "baseline_normalization": {
+    "method": "strip detector-leading trivia before the symbol declaration; retain declaration through snippet end",
+    "uses_ground_truth": false,
+    "script": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\preflight\\normalize_baseline.py",
+    "script_sha256": "089b013c0b2cd9ea2f635fb389f18efe2e02f8b7a0d36a21340d9509bd2ce685",
+    "audit": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\preflight\\BASELINE_NORMALIZATION_AUDIT.json",
+    "audit_sha256": "d6dee56a81391bbece5e66f4425e3ffbe83b14a2769ff7451f252641a486e3c6"
+  },
+  "excluded_instances": [
+    {
+      "instance_id": "LM-01",
+      "reason": "used for GPT-5.4 and GPT-5.6 Sol end-to-end shakedowns; outcomes inspected before the confirmatory run"
+    }
+  ],
+  "included_instances": [
+    {
+      "instance_id": "GC-07",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\CycleCountService.cs",
+      "symbol_name": "Inventory.CycleCountService",
+      "start_line": 6,
+      "end_line": 132
+    },
+    {
+      "instance_id": "GC-06",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\StockController.cs",
+      "symbol_name": "Inventory.StockController",
+      "start_line": 7,
+      "end_line": 206
+    },
+    {
+      "instance_id": "GC-04",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\BillingManager.cs",
+      "symbol_name": "Invoicing.BillingManager",
+      "start_line": 6,
+      "end_line": 202
+    },
+    {
+      "instance_id": "GC-05",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\StatementBuilder.cs",
+      "symbol_name": "Invoicing.StatementBuilder",
+      "start_line": 6,
+      "end_line": 159
+    },
+    {
+      "instance_id": "GC-10",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\NotificationCenter.cs",
+      "symbol_name": "Notifications.NotificationCenter",
+      "start_line": 6,
+      "end_line": 112
+    },
+    {
+      "instance_id": "GC-02",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\CheckoutCoordinator.cs",
+      "symbol_name": "Ordering.CheckoutCoordinator",
+      "start_line": 6,
+      "end_line": 205
+    },
+    {
+      "instance_id": "GC-01",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\OrderProcessor.cs",
+      "symbol_name": "Ordering.OrderProcessor",
+      "start_line": 6,
+      "end_line": 225
+    },
+    {
+      "instance_id": "GC-03",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\ReturnsHandler.cs",
+      "symbol_name": "Ordering.ReturnsHandler",
+      "start_line": 4,
+      "end_line": 133
+    },
+    {
+      "instance_id": "GC-09",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\RecurrenceEngine.cs",
+      "symbol_name": "Scheduling.RecurrenceEngine",
+      "start_line": 6,
+      "end_line": 121
+    },
+    {
+      "instance_id": "GC-08",
+      "type": "god_class",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\ScheduleManager.cs",
+      "symbol_name": "Scheduling.ScheduleManager",
+      "start_line": 6,
+      "end_line": 203
+    },
+    {
+      "instance_id": "LM-03",
+      "type": "long_method",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\InvoiceRenderer.cs",
+      "symbol_name": "InvoiceRenderer.Render",
+      "start_line": 8,
+      "end_line": 61
+    },
+    {
+      "instance_id": "LM-06",
+      "type": "long_method",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\AllocationCalculator.cs",
+      "symbol_name": "AllocationCalculator.Allocate",
+      "start_line": 6,
+      "end_line": 39
+    },
+    {
+      "instance_id": "LM-05",
+      "type": "long_method",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\ReplenishmentPlanner.cs",
+      "symbol_name": "ReplenishmentPlanner.BuildPlan",
+      "start_line": 6,
+      "end_line": 47
+    },
+    {
+      "instance_id": "LM-04",
+      "type": "long_method",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\VatResolver.cs",
+      "symbol_name": "VatResolver.Resolve",
+      "start_line": 6,
+      "end_line": 40
+    },
+    {
+      "instance_id": "LM-09",
+      "type": "long_method",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\DispatchPipeline.cs",
+      "symbol_name": "DispatchPipeline.Run",
+      "start_line": 15,
+      "end_line": 57
+    },
+    {
+      "instance_id": "LM-10",
+      "type": "long_method",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\RetryPolicy.cs",
+      "symbol_name": "RetryPolicy.NextDelay",
+      "start_line": 6,
+      "end_line": 40
+    },
+    {
+      "instance_id": "LM-02",
+      "type": "long_method",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\PricingRules.cs",
+      "symbol_name": "PricingRules.ApplyAdjustments",
+      "start_line": 6,
+      "end_line": 33
+    },
+    {
+      "instance_id": "LM-07",
+      "type": "long_method",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\Scheduler.cs",
+      "symbol_name": "Scheduler.PlaceJobs",
+      "start_line": 6,
+      "end_line": 45
+    },
+    {
+      "instance_id": "LM-08",
+      "type": "long_method",
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\SlotFinder.cs",
+      "symbol_name": "SlotFinder.FindFirstFit",
+      "start_line": 6,
+      "end_line": 29
+    }
+  ],
+  "instance_count": 19,
+  "long_method_count": 9,
+  "god_class_count": 10,
+  "repetitions": 3,
+  "conditions_per_block": 8,
+  "repair_assignment_count": 456,
+  "model_configuration": {
+    "key": "gpt-5.6-sol",
+    "provider": "azure",
+    "deployment": "gpt-5.6-sol",
+    "temperature": 1.0,
+    "reasoning_effort": "provider_default_medium",
+    "configured_max_tokens": 1024,
+    "request_max_output_tokens": null,
+    "request_max_output_tokens_note": "The current adapter intentionally omits the request limit so whole-file agent edits are not truncated; the deployment default therefore applies.",
+    "compatibility_probe": {
+      "non_evaluation_fixture": true,
+      "initial_temperature_0_1": "HTTP 400; Sol accepts only default 1",
+      "corrected_temperature_1_0": "admitted; build and two pristine runs passed"
+    }
+  },
+  "generated_test_policy": {
+    "one_call_per_instance": true,
+    "retry": false,
+    "generated_before_repair": true,
+    "detector_coordinates_supplied": [
+      "production project",
+      "source file",
+      "target symbol",
+      "target start line",
+      "target end line",
+      "pristine source"
+    ],
+    "anti_pattern_label_withheld": true,
+    "ground_truth_withheld": true,
+    "private_tests_withheld": true,
+    "baseline_runs": 2,
+    "timeout_seconds": 180,
+    "calls": 19,
+    "admitted": 17,
+    "build_failed": 1,
+    "baseline_failed": 1
+  },
+  "repair_policy": {
+    "iteration_budget": 6,
+    "build_timeout_seconds": 180,
+    "max_input_tokens": 120000
+  },
+  "randomization_seed": 503999552,
+  "randomization_seed_derivation": "first 31 bits of SHA-256(HybridLens-confirmatory-v1|pipeline_content_sha256|corpus_model_visible_content_sha256)",
+  "minimum_meaningful_risk_difference": 0.2,
+  "confirmatory_estimand": "visible_test_main_effect",
+  "exploratory_estimands": [
+    "cell_specific_test_effects",
+    "grounding_x_visible_test",
+    "control_structure_x_visible_test",
+    "grounding_x_control_structure_x_visible_test"
+  ],
+  "power_classification": {
+    "visible_test_main": {
+      "minimum_power_across_scenarios_at_20pp": 0.9934,
+      "maximum_power_across_scenarios_at_20pp": 0.9969,
+      "adequate_at_80_percent_in_all_scenarios": true
+    },
+    "cell_specific_test": {
+      "minimum_power_across_scenarios_at_20pp": 0.3895,
+      "maximum_power_across_scenarios_at_20pp": 0.419,
+      "adequate_at_80_percent_in_all_scenarios": false
+    },
+    "two_way_test_interaction": {
+      "minimum_power_across_scenarios_at_20pp": 0.6274,
+      "maximum_power_across_scenarios_at_20pp": 0.7034,
+      "adequate_at_80_percent_in_all_scenarios": false
+    },
+    "three_way_interaction": {
+      "minimum_power_across_scenarios_at_20pp": 0.2021,
+      "maximum_power_across_scenarios_at_20pp": 0.2484,
+      "adequate_at_80_percent_in_all_scenarios": false
+    }
+  },
+  "resource_reporting": {
+    "measures": [
+      "input tokens",
+      "output tokens",
+      "LLM calls",
+      "builds",
+      "tests",
+      "durations",
+      "nominal USD cost"
+    ],
+    "standard_global_price_usd_per_million": {
+      "input": 5.0,
+      "output": 30.0
+    },
+    "test_generation": {
+      "input_tokens": 22241,
+      "output_tokens": 16235,
+      "nominal_cost_usd": 0.598255
+    }
+  },
+  "optional_hybrid_comparator": false,
+  "campaign_id": "e6226c2a5114827bfb262d94",
+  "factorial_manifest": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\factorial-manifest.json",
+  "factorial_manifest_sha256": "0c33f9bab116ad21812b72f2d3e150cafac725ed0c70b1dc722db0e9eb54d06c",
+  "model_amendment": {
+    "change": "gpt-5.4 to Azure-deployed gpt-5.6-sol",
+    "timing": "before any confirmatory repair assignment or private outcome",
+    "previous_confirmatory_repair_assignments_executed": 0,
+    "superseded_freeze": "Z:\\GitHub\\hybrid-static-llm-pipeline\\archive\\previous-runs-20260727\\gpt54-confirmatory-freeze-superseded-20260728",
+    "same_instances_repetitions_conditions_seed_and_pipeline": true,
+    "model_dependent_characterization_tests_regenerated": true
+  },
+  "codebase_archive_contract": {
+    "status": "frozen_before_confirmatory_repairs",
+    "script": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\preflight\\archive_materialized_codebases.py",
+    "script_sha256": "4dff5833fe0b289c8be59ccd6be9c7f4b07dc3d2ed0d5aa564d704d85aaaf2c4",
+    "execution_point": "after all repair assignments and before private Layer 3",
+    "output_directory": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\campaign\\viewable-codebases",
+    "contents_per_materialized_assignment": [
+      "complete source-only corpus",
+      "repaired final source applied",
+      "ASSIGNMENT.json",
+      "REPAIR.diff",
+      "README.txt",
+      "SHA256SUMS.txt"
+    ],
+    "index_files": [
+      "INDEX.csv",
+      "INDEX.json",
+      "SUMMARY.json",
+      "ARCHIVE_SHA256SUMS.txt"
+    ],
+    "non_materialized_policy": "retain index row with materialized=false; do not invent a codebase",
+    "private_information_included": false,
+    "consumer_build_command": "dotnet build corpus/Corpus.sln (normal restore recreates excluded obj assets)",
+    "sol_sanity_validation": {
+      "campaign_id": "1ff57314a37b4fec9c1f7a44",
+      "completed_assignments": 8,
+      "materialized_codebases": 8,
+      "all_archive_hashes_verified": true,
+      "archived_solution_build_smoke_passed": true,
+      "build_smoke_location": "disposable Windows temporary copy"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+Anti-pattern,Reported findings,Matched,Spurious,Precision [95% Wilson CI]
+God Class,60,60,0,"100.0% [94.0, 100.0]"
+Long Method,53,53,0,"100.0% [93.2, 100.0]"
+Overall,113,113,0,"100.0% [96.7, 100.0]"

@@ -1,0 +1,17 @@
+{
+  "artifact_id": "e1ad62477f3a411c9e827b1cbd5df488",
+  "timestamp": "2026-07-28T11:05:08.9969652+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Invoicing/VatResolver.cs",
+  "source_sha256": "b7e4ae2de32f63cc1c846b48b46d7f8a7095c16ecf117935b73d16c03aec5cca",
+  "final_source": "namespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m)\n            return 0m;\n\n        var jurisdictionRate = GetJurisdictionRate(countryCode);\n        var accountRate = ApplyAccountAdjustment(account, net, jurisdictionRate);\n        var finalRate = ApplyHighValueCap(net, accountRate);\n\n        return net * finalRate;\n    }\n\n    private static decimal GetJurisdictionRate(string countryCode) =\u003E\n        countryCode switch\n        {\n            \u0022GB\u0022 =\u003E 0.20m,\n            \u0022DE\u0022 =\u003E 0.19m,\n            \u0022FR\u0022 =\u003E 0.20m,\n            \u0022IE\u0022 =\u003E 0.23m,\n            _ =\u003E 0m\n        };\n\n    private static decimal ApplyAccountAdjustment(\n        Account account,\n        decimal net,\n        decimal rate)\n    {\n        if (account.Kind == AccountKind.Government)\n            return 0m;\n\n        return account.Kind == AccountKind.Business \u0026\u0026 net \u003E 10000m\n            ? rate * 0.5m\n            : rate;\n    }\n\n    private static decimal ApplyHighValueCap(decimal net, decimal rate) =\u003E\n        rate \u003E 0m \u0026\u0026 net \u003E 100000m\n            ? Math.Min(rate, 0.15m)\n            : rate;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

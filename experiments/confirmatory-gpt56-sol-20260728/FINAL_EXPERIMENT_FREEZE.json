@@ -1,0 +1,12 @@
+{
+  "status": "final_experiment_frozen",
+  "frozen_at_utc": "2026-07-28T18:10:57.767803+00:00",
+  "campaign_id": "e6226c2a5114827bfb262d94",
+  "pre_run_freeze_ledger_sha256": "f6f5850e54024cf91bcc0fc4dc3d2da11f6629e392ac8b44204fee8233db0d31",
+  "post_repair_freeze_ledger_sha256": "c4a96f4d2fe51c469597a24cff4bcccd3fbb827399c81733ce6cb56bdb9dcd8c",
+  "final_results_file_count": 161,
+  "final_results_ledger_sha256": "8d583bb0577a1bffef3e5169c92318bf00653330f023863ec65cce00960188a3",
+  "final_audit_sha256": "5616da7c2d86ee43ba76d638b60eeda6b6976a015d2042cc9de365e3047956e4",
+  "report_sha256": "0355b0bc1ea53ac71f12150eefbbdd29e7627ec9f1c0edddaf0113facc2e7f28",
+  "deviations_sha256": "2b176981eb34f8b0a5f2a64fadcf878ed0f6422c998e43ee81747c37f1345a41"
+}

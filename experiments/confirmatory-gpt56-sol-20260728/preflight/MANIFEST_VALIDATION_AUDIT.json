@@ -1,0 +1,19 @@
+{
+  "audit_status": "pass",
+  "campaign_id": "e6226c2a5114827bfb262d94",
+  "model_name": "gpt-5.6-sol",
+  "assignment_count": 456,
+  "assignment_ids_unique": true,
+  "orders_are_exactly_1_through_456": true,
+  "block_count": 57,
+  "every_block_contains_exactly_eight_assignments": true,
+  "every_block_contains_each_factorial_condition_once": true,
+  "test_off_assignments": 228,
+  "test_on_assignments": 228,
+  "test_on_with_admitted_test": 204,
+  "test_on_without_admitted_test": 24,
+  "all_test_off_artifact_refs_are_null": true,
+  "all_visible_test_hashes_match_artifact_test_hashes": true,
+  "baseline_sha256_matches": true,
+  "repair_execution_started": false
+}

@@ -1,0 +1,17 @@
+{
+  "artifact_id": "d385248ff1fb4b84a6e1a265e21ba36c",
+  "timestamp": "2026-07-28T10:23:58.5815286+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 1,
+  "relative_file": "src/Inventory/ReplenishmentPlanner.cs",
+  "source_sha256": "3233390edcf8bdf7729be5c1d42d7742acdfc3388c8e88c93ec80f02872ecd2c",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n\n        foreach (var item in items)\n        {\n            int orderQuantity = CalculateOrderQuantity(item, season);\n            if (orderQuantity \u003C= 0 || string.IsNullOrEmpty(item.Sku))\n                continue;\n\n            bool placed = supplier.PlaceOrder(item.Sku, orderQuantity);\n            plan.Add(FormatPlanEntry(item.Sku, orderQuantity, placed));\n        }\n\n        return plan;\n    }\n\n    private static int CalculateOrderQuantity(StockItem item, int season)\n    {\n        if (item.OnHand \u003C 0)\n            return 0;\n\n        int available = item.OnHand - item.Reserved;\n        if (available \u003E item.ReorderPoint)\n            return 0;\n\n        int deficit = item.ReorderPoint - available;\n        int orderQuantity = deficit switch\n        {\n            \u003C= 0 =\u003E 0,\n            \u003C 10 =\u003E 10,\n            \u003C 100 =\u003E deficit,\n            _ =\u003E deficit \u002B 50\n        };\n\n        return season switch\n        {\n            4 when orderQuantity \u003E 0 =\u003E (int)(orderQuantity * 1.5),\n            1 =\u003E orderQuantity / 2,\n            _ =\u003E orderQuantity\n        };\n    }\n\n    private static string FormatPlanEntry(string sku, int orderQuantity, bool placed)\n    {\n        if (!placed)\n            return $\u0022{sku}:FAILED\u0022;\n\n        return orderQuantity \u003E 200\n            ? $\u0022{sku}:LARGE:{orderQuantity}\u0022\n            : $\u0022{sku}:{orderQuantity}\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Inventory_ReplenishmentPlanner.cs--d8581a6ad38449429b93354914a4489f.json",
+  "visible_test_sha256": "61a6e8758501a74a22b9996dc2f0d10496ebb924c069fa5a6532b7e0dfe24f50",
+  "build_passed": true,
+  "visible_test_passed": true
+}

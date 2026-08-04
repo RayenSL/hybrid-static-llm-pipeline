@@ -1,0 +1,17 @@
+{
+  "artifact_id": "cf5c537ffba141c0933934505d05dab1",
+  "timestamp": "2026-07-28T18:39:38.8407036+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Invoicing/PdfExporter.cs",
+  "source_sha256": "f154697290610c77a49c8205645f28d03ad27a8542adb7b6075dda9df92736f9",
+  "final_source": "using Invoicing.Legacy;\n\nnamespace Invoicing;\n\n/// \u003Csummary\u003EExports an invoice as a PDF byte stream.\u003C/summary\u003E\npublic sealed class PdfExporter\n{\n    private readonly IInvoiceRenderer _renderer;\n\n    public PdfExporter(IInvoiceRenderer renderer)\n    {\n        _renderer = renderer ?? throw new ArgumentNullException(nameof(renderer));\n    }\n\n    public byte[] Export(Invoice invoice)\n    {\n        ArgumentNullException.ThrowIfNull(invoice);\n        var lines = invoice.Lines\n            .Select(line =\u003E $\u0022{line.Description}: {line.NetAmount}\u0022)\n            .ToArray();\n\n        return _renderer.Render($\u0022Invoice {invoice.Number}\u0022, lines);\n    }\n}\n\npublic interface IInvoiceRenderer\n{\n    byte[] Render(string title, IReadOnlyCollection\u003Cstring\u003E lines);\n}\n\npublic sealed class SupportedInvoiceRenderer : IInvoiceRenderer\n{\n    public byte[] Render(string title, IReadOnlyCollection\u003Cstring\u003E lines)\n        =\u003E RenderApiV2.ToPdf(title, lines);\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": false,
+  "visible_test_passed": null
+}

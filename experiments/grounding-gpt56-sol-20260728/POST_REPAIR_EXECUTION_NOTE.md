@@ -1,0 +1,3 @@
+# Post-repair execution note
+
+The first post-seal `private-layer3` invocation continued in a yielded process session and completed all 41 materialized artifacts, writing the protected `private-results/layer3-campaign.jsonl` file. Because only its first four progress lines were initially surfaced, a diagnostic invocation repeated the deterministic local build/oracle checks. The command's create-new guard rejected the diagnostic write because the first result already existed. No model or applier call occurred, no repair or private result was overwritten, and only the first 41-row file is used for analysis.

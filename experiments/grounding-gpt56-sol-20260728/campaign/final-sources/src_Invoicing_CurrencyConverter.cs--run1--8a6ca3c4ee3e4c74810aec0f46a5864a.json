@@ -1,0 +1,17 @@
+{
+  "artifact_id": "8a6ca3c4ee3e4c74810aec0f46a5864a",
+  "timestamp": "2026-07-28T19:05:25.5760838+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Invoicing/CurrencyConverter.cs",
+  "source_sha256": "0a4479b9f2ac2a24d1094aa69260c77e232d6cf01d42ea7e97628d819378cd97",
+  "final_source": "using Invoicing.Legacy;\n\nnamespace Invoicing;\n\n/// \u003Csummary\u003EConverts monetary amounts between currencies.\u003C/summary\u003E\npublic sealed class CurrencyConverter\n{\n    private readonly IExchangeRateProvider _rates;\n\n    public CurrencyConverter(IExchangeRateProvider rates)\n    {\n        _rates = rates ?? throw new ArgumentNullException(nameof(rates));\n    }\n\n    public decimal Convert(decimal amount, string from, string to)\n    {\n        ArgumentException.ThrowIfNullOrWhiteSpace(from);\n        ArgumentException.ThrowIfNullOrWhiteSpace(to);\n\n        var rate = _rates.GetRate(from, to);\n        if (rate \u003C= 0m)\n            throw new InvalidOperationException(\u0022The exchange rate must be positive.\u0022);\n\n        return amount * rate;\n    }\n}\n\npublic interface IExchangeRateProvider\n{\n    decimal GetRate(string from, string to);\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

@@ -1,0 +1,154 @@
+[
+  {
+    "instance_id": "GC-07",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\CycleCountService.cs",
+    "symbol_name": "Inventory.CycleCountService",
+    "start_line": 6,
+    "end_line": 132
+  },
+  {
+    "instance_id": "GC-06",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\StockController.cs",
+    "symbol_name": "Inventory.StockController",
+    "start_line": 7,
+    "end_line": 206
+  },
+  {
+    "instance_id": "GC-04",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\BillingManager.cs",
+    "symbol_name": "Invoicing.BillingManager",
+    "start_line": 6,
+    "end_line": 202
+  },
+  {
+    "instance_id": "GC-05",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\StatementBuilder.cs",
+    "symbol_name": "Invoicing.StatementBuilder",
+    "start_line": 6,
+    "end_line": 159
+  },
+  {
+    "instance_id": "GC-10",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\NotificationCenter.cs",
+    "symbol_name": "Notifications.NotificationCenter",
+    "start_line": 6,
+    "end_line": 112
+  },
+  {
+    "instance_id": "GC-02",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\CheckoutCoordinator.cs",
+    "symbol_name": "Ordering.CheckoutCoordinator",
+    "start_line": 6,
+    "end_line": 205
+  },
+  {
+    "instance_id": "GC-01",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\OrderProcessor.cs",
+    "symbol_name": "Ordering.OrderProcessor",
+    "start_line": 6,
+    "end_line": 225
+  },
+  {
+    "instance_id": "GC-03",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\ReturnsHandler.cs",
+    "symbol_name": "Ordering.ReturnsHandler",
+    "start_line": 4,
+    "end_line": 133
+  },
+  {
+    "instance_id": "GC-09",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\RecurrenceEngine.cs",
+    "symbol_name": "Scheduling.RecurrenceEngine",
+    "start_line": 6,
+    "end_line": 121
+  },
+  {
+    "instance_id": "GC-08",
+    "type": "god_class",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\ScheduleManager.cs",
+    "symbol_name": "Scheduling.ScheduleManager",
+    "start_line": 6,
+    "end_line": 203
+  },
+  {
+    "instance_id": "LM-03",
+    "type": "long_method",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\InvoiceRenderer.cs",
+    "symbol_name": "InvoiceRenderer.Render",
+    "start_line": 8,
+    "end_line": 61
+  },
+  {
+    "instance_id": "LM-06",
+    "type": "long_method",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\AllocationCalculator.cs",
+    "symbol_name": "AllocationCalculator.Allocate",
+    "start_line": 6,
+    "end_line": 39
+  },
+  {
+    "instance_id": "LM-05",
+    "type": "long_method",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\ReplenishmentPlanner.cs",
+    "symbol_name": "ReplenishmentPlanner.BuildPlan",
+    "start_line": 6,
+    "end_line": 47
+  },
+  {
+    "instance_id": "LM-04",
+    "type": "long_method",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\VatResolver.cs",
+    "symbol_name": "VatResolver.Resolve",
+    "start_line": 6,
+    "end_line": 40
+  },
+  {
+    "instance_id": "LM-09",
+    "type": "long_method",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\DispatchPipeline.cs",
+    "symbol_name": "DispatchPipeline.Run",
+    "start_line": 15,
+    "end_line": 57
+  },
+  {
+    "instance_id": "LM-10",
+    "type": "long_method",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\RetryPolicy.cs",
+    "symbol_name": "RetryPolicy.NextDelay",
+    "start_line": 6,
+    "end_line": 40
+  },
+  {
+    "instance_id": "LM-02",
+    "type": "long_method",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\PricingRules.cs",
+    "symbol_name": "PricingRules.ApplyAdjustments",
+    "start_line": 6,
+    "end_line": 33
+  },
+  {
+    "instance_id": "LM-07",
+    "type": "long_method",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\Scheduler.cs",
+    "symbol_name": "Scheduler.PlaceJobs",
+    "start_line": 6,
+    "end_line": 45
+  },
+  {
+    "instance_id": "LM-08",
+    "type": "long_method",
+    "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\SlotFinder.cs",
+    "symbol_name": "SlotFinder.FindFirstFit",
+    "start_line": 6,
+    "end_line": 29
+  }
+]

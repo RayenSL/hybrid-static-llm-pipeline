@@ -1,0 +1,30 @@
+{
+  "status": "frozen_before_confirmatory_repairs",
+  "script": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-20260727\\preflight\\archive_materialized_codebases.py",
+  "script_sha256": "4dff5833fe0b289c8be59ccd6be9c7f4b07dc3d2ed0d5aa564d704d85aaaf2c4",
+  "execution_point": "after all repair assignments and before private Layer 3",
+  "output_directory": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-20260727\\campaign\\viewable-codebases",
+  "contents_per_materialized_assignment": [
+    "complete source-only corpus",
+    "repaired final source applied",
+    "ASSIGNMENT.json",
+    "REPAIR.diff",
+    "README.txt",
+    "SHA256SUMS.txt"
+  ],
+  "index_files": [
+    "INDEX.csv",
+    "INDEX.json",
+    "SUMMARY.json",
+    "ARCHIVE_SHA256SUMS.txt"
+  ],
+  "non_materialized_policy": "retain index row with materialized=false; no invented codebase",
+  "private_information_included": false,
+  "consumer_build_command": "dotnet build corpus/Corpus.sln (normal restore recreates excluded obj assets)",
+  "pilot_validation": {
+    "campaign_id": "a502482a3c6056b16a5aaa89",
+    "codebases": 8,
+    "archive_hashes_verified": true,
+    "archived_solution_build_smoke_passed": true
+  }
+}

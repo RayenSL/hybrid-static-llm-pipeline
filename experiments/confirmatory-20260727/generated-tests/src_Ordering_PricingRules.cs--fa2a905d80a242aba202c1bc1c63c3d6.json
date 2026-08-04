@@ -1,0 +1,36 @@
+{
+  "artifact_id": "fa2a905d80a242aba202c1bc1c63c3d6",
+  "artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-20260727\\generated-tests\\src_Ordering_PricingRules.cs--fa2a905d80a242aba202c1bc1c63c3d6.json",
+  "timestamp": "2026-07-27T15:25:47.3599913+00:00",
+  "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\PricingRules.cs",
+  "source_sha256": "c970012f4e5e172f60714ced8d446bec0f72a15b0ac30ab5ce9fb2a8d9208057",
+  "target_symbol_name": "PricingRules.ApplyAdjustments",
+  "target_start_line": 6,
+  "target_end_line": 33,
+  "project_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\Ordering.csproj",
+  "model_name": "gpt-5.4",
+  "prompt_version": "v1.1.0",
+  "raw_system_prompt": "You are authoring a regression characterization test for existing C# production code.\nCapture observable behaviour through the public interface exactly as it exists. Do not\nimprove, refactor, repair, or diagnose the production code. Do not infer intended behaviour\nthat is not observable from the supplied pristine source.\n\nThe pipeline owns the test project and provides a static Check helper with these methods:\nCheck.True(bool), Check.False(bool), Check.NotNull(object?),\nCheck.Equal\u003CT\u003E(T expected, T actual), and\nCheck.SequenceEqual\u003CT\u003E(IEnumerable\u003CT\u003E expected, IEnumerable\u003CT\u003E actual).\n\nReturn ONLY one JSON object in this exact shape, with no markdown fences:\n{\n  \u0022test_name\u0022: \u0022\u003Cshort descriptive name that does not mention code smells or anti-patterns\u003E\u0022,\n  \u0022using_directives\u0022: [\u0022using Namespace;\u0022],\n  \u0022test_body\u0022: \u0022\u003CC# statements for one public-behaviour characterization scenario\u003E\u0022\n}\n\nRequirements:\n- Exercise observable behaviour through the supplied target declaration.\n- Treat its symbol and source line range only as neutral coordinates, not as a diagnosis.\n- Instantiate or invoke the supplied production code through public members.\n- Derive expected values from the pristine behaviour shown in the source.\n- Include at least one meaningful Check assertion over a production result.\n- Do not assert constants against themselves and do not use Check.True(true).\n- Do not use reflection, file or network I/O, processes, environment variables, clocks,\n  sleeps, randomness, package installation, mocks, or external state.\n- Do not declare namespaces, classes, helper types, or a Main method.\n- Do not modify production code or project configuration.",
+  "raw_user_prompt": "## Production project\nOrdering\n\n## Target declaration\nSymbol: PricingRules.ApplyAdjustments\nSource lines: 6-33\n\nCharacterise existing observable behaviour exercised through this declaration.\nThe target coordinates do not state why the declaration was selected.\n\n## Pristine source file\nsrc/Ordering/PricingRules.cs\n\n\u0060\u0060\u0060csharp\nnamespace Ordering;\n\n/// \u003Csummary\u003EApplies tier, override and channel adjustments to an order subtotal.\u003C/summary\u003E\npublic sealed class PricingRules\n{\n    public decimal ApplyAdjustments(Order order, CustomerTier tier)\n    {\n        decimal subtotal = 0m;\n        foreach (var line in order.Lines)\n            subtotal \u002B= line.UnitPrice * line.Quantity;\n\n        decimal adjusted = subtotal;\n        if (tier == CustomerTier.Wholesale)\n            adjusted *= 0.95m;\n        else if (tier == CustomerTier.Blocked)\n            return 0m;\n\n        if (order.DiscountOverride is { } ovr \u0026\u0026 ovr \u003E 0m)\n            adjusted -= ovr;\n\n        if (subtotal \u003E 500m)\n            adjusted -= 10m;\n\n        adjusted = order.Channel switch\n        {\n            OrderChannel.Web =\u003E adjusted,\n            OrderChannel.Phone =\u003E adjusted \u002B 2m,\n            OrderChannel.Marketplace =\u003E adjusted * 1.02m,\n            _ =\u003E adjusted,\n        };\n\n        return adjusted \u003C 0m ? 0m : adjusted;\n    }\n}\n\n\u0060\u0060\u0060",
+  "raw_llm_output": "{\n  \u0022test_name\u0022: \u0022ApplyAdjustments_combines_wholesale_override_bulk_and_marketplace_adjustments\u0022,\n  \u0022using_directives\u0022: [\u0022using Ordering;\u0022],\n  \u0022test_body\u0022: \u0022var order = new Order\\n{\\n    Channel = OrderChannel.Marketplace,\\n    DiscountOverride = 20m\\n};\\norder.Lines.Add(new OrderLine { UnitPrice = 200m, Quantity = 2 });\\norder.Lines.Add(new OrderLine { UnitPrice = 150m, Quantity = 1 });\\n\\nvar pricingRules = new PricingRules();\\nvar result = pricingRules.ApplyAdjustments(order, CustomerTier.Wholesale);\\n\\nCheck.Equal(397.8m, result);\u0022\n}",
+  "input_tokens": 626,
+  "output_tokens": 156,
+  "duration_ms": 7686.8105,
+  "test_name": "ApplyAdjustments_combines_wholesale_override_bulk_and_marketplace_adjustments",
+  "using_directives": [
+    "using Ordering;"
+  ],
+  "test_body": "var order = new Order\n{\n    Channel = OrderChannel.Marketplace,\n    DiscountOverride = 20m\n};\norder.Lines.Add(new OrderLine { UnitPrice = 200m, Quantity = 2 });\norder.Lines.Add(new OrderLine { UnitPrice = 150m, Quantity = 1 });\n\nvar pricingRules = new PricingRules();\nvar result = pricingRules.ApplyAdjustments(order, CustomerTier.Wholesale);\n\nCheck.Equal(397.8m, result);",
+  "test_sha256": "f4c998508bdca87944b187170c1b20f19dc7903c742188a9c3873d4bf7722a38",
+  "admission_status": "baseline_failed",
+  "admission_reason": "generated test failed against the pristine baseline",
+  "parse_passed": true,
+  "assertion_gate_passed": true,
+  "build_passed": true,
+  "baseline_runs_passed": [
+    false,
+    false
+  ],
+  "admission_output_tail": "\r\nBuild succeeded.\r\n    0 Warning(s)\r\n    0 Error(s)\r\n\r\nTime Elapsed 00:00:01.73\r\nFAIL: InvalidOperationException: expected \u0027397,8\u0027, actual \u0027502,3500\u0027\r\n\r\nFAIL: InvalidOperationException: expected \u0027397,8\u0027, actual \u0027502,3500\u0027\r\n\r\n",
+  "admitted": false
+}

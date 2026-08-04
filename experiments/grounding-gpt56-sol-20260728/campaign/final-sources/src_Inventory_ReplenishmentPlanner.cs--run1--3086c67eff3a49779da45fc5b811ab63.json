@@ -1,0 +1,17 @@
+{
+  "artifact_id": "3086c67eff3a49779da45fc5b811ab63",
+  "timestamp": "2026-07-28T19:13:02.2110738+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Inventory/ReplenishmentPlanner.cs",
+  "source_sha256": "b023da49d5e7c1f6fd7c67f469ddccd2789efd2fae560f66824971a1211a9b62",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n        foreach (var item in items)\n        {\n            if (item.OnHand \u003C 0)\n                continue;\n            if (string.IsNullOrEmpty(item.Sku))\n                continue;\n\n            int orderQty = CalculateOrderQuantity(item, season);\n            if (orderQty \u003C= 0)\n                continue;\n\n            bool placed = supplier.PlaceOrder(item.Sku, orderQty);\n            plan.Add(FormatResult(item.Sku, orderQty, placed));\n        }\n        return plan;\n    }\n\n    private static int CalculateOrderQuantity(StockItem item, int season)\n    {\n        int available = item.OnHand - item.Reserved;\n        if (available \u003E item.ReorderPoint) return 0;\n\n        int deficit = item.ReorderPoint - available;\n        int quantity = deficit \u003C= 0 ? 0\n            : deficit \u003C 10 ? 10\n            : deficit \u003C 100 ? deficit\n            : deficit \u002B 50;\n\n        return season switch\n        {\n            4 when quantity \u003E 0 =\u003E checked(quantity * 3 / 2),\n            1 =\u003E quantity / 2,\n            _ =\u003E quantity\n        };\n    }\n\n    private static string FormatResult(string sku, int quantity, bool placed) =\u003E\n        !placed ? $\u0022{sku}:FAILED\u0022 :\n        quantity \u003E 200 ? $\u0022{sku}:LARGE:{quantity}\u0022 :\n        $\u0022{sku}:{quantity}\u0022;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

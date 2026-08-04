@@ -1,0 +1,14 @@
+| Anti-pattern | Context | Verified repair | Behavior-preserving verified |
+|---|---|---|---|
+| God Class | Minimal | 0/10 | 0/10 |
+| God Class | Structural | 0/10 | 0/10 |
+| God Class | Relational | 0/10 | 0/10 |
+| God Class | Full | 0/10 | 0/10 |
+| Long Method | Minimal | 9/10 | 8/10 |
+| Long Method | Structural | 8/10 | 7/10 |
+| Long Method | Relational | 9/10 | 8/10 |
+| Long Method | Full | 8/10 | 7/10 |
+| Obsolete API Usage | Minimal | 0/10 | 0/10 |
+| Obsolete API Usage | Structural | 0/10 | 0/10 |
+| Obsolete API Usage | Relational | 2/10 | 0/10 |
+| Obsolete API Usage | Full | 1/10 | 0/10 |

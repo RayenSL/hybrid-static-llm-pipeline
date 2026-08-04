@@ -1,0 +1,38 @@
+{
+  "artifact_id": "68ce343dfefa47e3b81390317f6fc7ff",
+  "artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-20260727\\generated-tests\\src_Scheduling_SlotFinder.cs--68ce343dfefa47e3b81390317f6fc7ff.json",
+  "timestamp": "2026-07-27T15:26:45.263894+00:00",
+  "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\SlotFinder.cs",
+  "source_sha256": "f08b22ff8e4098833813dceb17d17fb47eb61004eb7527e0909fb7fd4e9acad1",
+  "target_symbol_name": "SlotFinder.FindFirstFit",
+  "target_start_line": 6,
+  "target_end_line": 29,
+  "project_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\Scheduling.csproj",
+  "model_name": "gpt-5.4",
+  "prompt_version": "v1.1.0",
+  "raw_system_prompt": "You are authoring a regression characterization test for existing C# production code.\nCapture observable behaviour through the public interface exactly as it exists. Do not\nimprove, refactor, repair, or diagnose the production code. Do not infer intended behaviour\nthat is not observable from the supplied pristine source.\n\nThe pipeline owns the test project and provides a static Check helper with these methods:\nCheck.True(bool), Check.False(bool), Check.NotNull(object?),\nCheck.Equal\u003CT\u003E(T expected, T actual), and\nCheck.SequenceEqual\u003CT\u003E(IEnumerable\u003CT\u003E expected, IEnumerable\u003CT\u003E actual).\n\nReturn ONLY one JSON object in this exact shape, with no markdown fences:\n{\n  \u0022test_name\u0022: \u0022\u003Cshort descriptive name that does not mention code smells or anti-patterns\u003E\u0022,\n  \u0022using_directives\u0022: [\u0022using Namespace;\u0022],\n  \u0022test_body\u0022: \u0022\u003CC# statements for one public-behaviour characterization scenario\u003E\u0022\n}\n\nRequirements:\n- Exercise observable behaviour through the supplied target declaration.\n- Treat its symbol and source line range only as neutral coordinates, not as a diagnosis.\n- Instantiate or invoke the supplied production code through public members.\n- Derive expected values from the pristine behaviour shown in the source.\n- Include at least one meaningful Check assertion over a production result.\n- Do not assert constants against themselves and do not use Check.True(true).\n- Do not use reflection, file or network I/O, processes, environment variables, clocks,\n  sleeps, randomness, package installation, mocks, or external state.\n- Do not declare namespaces, classes, helper types, or a Main method.\n- Do not modify production code or project configuration.",
+  "raw_user_prompt": "## Production project\nScheduling\n\n## Target declaration\nSymbol: SlotFinder.FindFirstFit\nSource lines: 6-29\n\nCharacterise existing observable behaviour exercised through this declaration.\nThe target coordinates do not state why the declaration was selected.\n\n## Pristine source file\nsrc/Scheduling/SlotFinder.cs\n\n\u0060\u0060\u0060csharp\nnamespace Scheduling;\n\n/// \u003Csummary\u003EFinds the first calendar slot that fits a required duration.\u003C/summary\u003E\npublic sealed class SlotFinder\n{\n    public Slot? FindFirstFit(Resource resource, TimeSpan duration, DateTime notBefore)\n    {\n        if (resource.Calendar.Count == 0)\n            return null;\n        if (duration \u003C= TimeSpan.Zero)\n            return null;\n\n        foreach (var slot in resource.Calendar)\n        {\n            if (slot.Start \u003C notBefore)\n                continue;\n            var length = slot.End - slot.Start;\n            if (length \u003C duration)\n                continue;\n            if (slot.Start.Hour \u003C 8 || slot.Start.Hour \u003E 18)\n                continue;\n            if (length \u003E= duration \u0026\u0026 slot.End.Hour \u003C= 20)\n                return slot;\n        }\n\n        if (resource.Calendar.Count \u003E 100)\n            return null;\n        return null;\n    }\n}\n\n\u0060\u0060\u0060",
+  "raw_llm_output": "{\u0022test_name\u0022:\u0022FindFirstFit_returns_first_slot_meeting_time_and_duration_constraints\u0022,\u0022using_directives\u0022:[\u0022using System;\u0022,\u0022using System.Collections.Generic;\u0022,\u0022using Scheduling;\u0022],\u0022test_body\u0022:\u0022var resource = new Resource\\n{\\n    Calendar = new List\u003CSlot\u003E\\n    {\\n        new Slot { Start = new DateTime(2024, 1, 1, 7, 0, 0), End = new DateTime(2024, 1, 1, 9, 0, 0) },\\n        new Slot { Start = new DateTime(2024, 1, 1, 9, 0, 0), End = new DateTime(2024, 1, 1, 9, 30, 0) },\\n        new Slot { Start = new DateTime(2024, 1, 1, 10, 0, 0), End = new DateTime(2024, 1, 1, 11, 0, 0) },\\n        new Slot { Start = new DateTime(2024, 1, 1, 12, 0, 0), End = new DateTime(2024, 1, 1, 13, 0, 0) }\\n    }\\n};\\nvar finder = new SlotFinder();\\nvar result = finder.FindFirstFit(resource, TimeSpan.FromMinutes(45), new DateTime(2024, 1, 1, 9, 30, 0));\\nCheck.NotNull(result);\\nCheck.Equal(new DateTime(2024, 1, 1, 10, 0, 0), result!.Start);\\nCheck.Equal(new DateTime(2024, 1, 1, 11, 0, 0), result.End);\u0022}",
+  "input_tokens": 583,
+  "output_tokens": 400,
+  "duration_ms": 9277.6094,
+  "test_name": "FindFirstFit_returns_first_slot_meeting_time_and_duration_constraints",
+  "using_directives": [
+    "using System;",
+    "using System.Collections.Generic;",
+    "using Scheduling;"
+  ],
+  "test_body": "var resource = new Resource\n{\n    Calendar = new List\u003CSlot\u003E\n    {\n        new Slot { Start = new DateTime(2024, 1, 1, 7, 0, 0), End = new DateTime(2024, 1, 1, 9, 0, 0) },\n        new Slot { Start = new DateTime(2024, 1, 1, 9, 0, 0), End = new DateTime(2024, 1, 1, 9, 30, 0) },\n        new Slot { Start = new DateTime(2024, 1, 1, 10, 0, 0), End = new DateTime(2024, 1, 1, 11, 0, 0) },\n        new Slot { Start = new DateTime(2024, 1, 1, 12, 0, 0), End = new DateTime(2024, 1, 1, 13, 0, 0) }\n    }\n};\nvar finder = new SlotFinder();\nvar result = finder.FindFirstFit(resource, TimeSpan.FromMinutes(45), new DateTime(2024, 1, 1, 9, 30, 0));\nCheck.NotNull(result);\nCheck.Equal(new DateTime(2024, 1, 1, 10, 0, 0), result!.Start);\nCheck.Equal(new DateTime(2024, 1, 1, 11, 0, 0), result.End);",
+  "test_sha256": "ee0e4ceb4f19b1fe14838efc111c74a06aebfc2e2c9b53d89c68ffebcb475d9a",
+  "admission_status": "admitted",
+  "admission_reason": null,
+  "parse_passed": true,
+  "assertion_gate_passed": true,
+  "build_passed": true,
+  "baseline_runs_passed": [
+    true,
+    true
+  ],
+  "admission_output_tail": "\r\nBuild succeeded.\r\n    0 Warning(s)\r\n    0 Error(s)\r\n\r\nTime Elapsed 00:00:01.96\r\nPASS\r\n\r\nPASS\r\n\r\n",
+  "admitted": true
+}

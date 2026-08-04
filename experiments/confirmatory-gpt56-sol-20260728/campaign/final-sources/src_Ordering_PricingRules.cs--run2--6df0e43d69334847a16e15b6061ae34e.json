@@ -1,0 +1,17 @@
+{
+  "artifact_id": "6df0e43d69334847a16e15b6061ae34e",
+  "timestamp": "2026-07-28T11:11:15.4686399+00:00",
+  "architecture": "ungrounded_single_shot",
+  "grounding_enabled": false,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Ordering/PricingRules.cs",
+  "source_sha256": "c970012f4e5e172f60714ced8d446bec0f72a15b0ac30ab5ce9fb2a8d9208057",
+  "final_source": "namespace Ordering;\n\n/// \u003Csummary\u003EApplies tier, override and channel adjustments to an order subtotal.\u003C/summary\u003E\npublic sealed class PricingRules\n{\n    public decimal ApplyAdjustments(Order order, CustomerTier tier)\n    {\n        decimal subtotal = 0m;\n        foreach (var line in order.Lines)\n            subtotal \u002B= line.UnitPrice * line.Quantity;\n\n        decimal adjusted = subtotal;\n        if (tier == CustomerTier.Wholesale)\n            adjusted *= 0.95m;\n        else if (tier == CustomerTier.Blocked)\n            return 0m;\n\n        if (order.DiscountOverride is { } ovr \u0026\u0026 ovr \u003E 0m)\n            adjusted -= ovr;\n\n        if (subtotal \u003E 500m)\n            adjusted -= 10m;\n\n        adjusted = order.Channel switch\n        {\n            OrderChannel.Web =\u003E adjusted,\n            OrderChannel.Phone =\u003E adjusted \u002B 2m,\n            OrderChannel.Marketplace =\u003E adjusted * 1.02m,\n            _ =\u003E adjusted,\n        };\n\n        return adjusted \u003C 0m ? 0m : adjusted;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

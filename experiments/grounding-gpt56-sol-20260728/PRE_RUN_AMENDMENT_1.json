@@ -1,0 +1,32 @@
+{
+  "status": "pre_run_amendment_frozen",
+  "amended_at_utc": "2026-07-28T18:34:30.096310+00:00",
+  "campaign_id": "eb160df37c8996164a8730c0",
+  "reason": "idempotent trace-writer ownership fix after assignment 1 was committed",
+  "scientific_contract_changed": false,
+  "manifest_changed": false,
+  "prompt_or_context_changed": false,
+  "model_or_sampling_config_changed": false,
+  "repair_or_measurement_logic_changed": false,
+  "model_calls_repeated": 0,
+  "original_grounding_command_sha256": "0a86e1da37acc4f67124ac411d541b499b8a1c934e7c4c6767e292712e632333",
+  "amended_grounding_command_sha256": "61476901bdf19df929194801ac2a9fbb1c8a4b26fc03849ffed376643aeeed29",
+  "original_cli_binary_sha256": "3419f83a49d6152f23a485c62fde000bf4ce79c66ae71c8cd9d5b46070523c70",
+  "amended_cli_binary_sha256": "25f3e165866733b8286e1cd4214203bd3d3a3412035763d0078c505be16d2e09",
+  "manifest_sha256": "5bbc78caca64675c1f0541c64ab15b1e36f82685bd49e839280a871a23ed834a",
+  "baseline_sha256": "91e2d565e889303ce6820f061eb0c606f5b723fc36631b6f30366882db2eb793",
+  "protocol_sha256": "f03c429bf8879833bedc47994815a4132ed7c33d4081a56ec1d3119cefc65f79",
+  "assignment_1": {
+    "assignment_id": "27365ab123b33f8947e7dd81",
+    "completed": true,
+    "trace_sha256": "f924332ae5db5d60a87e4cc7acc761816f52e1e4006ebdff3514eb851913bb97",
+    "run_ids": [
+      "92ebc04f041d4d0db5f63eae509e9ebf",
+      "d24c0f92492b40e4bac7ecfcd83ecde4"
+    ],
+    "evaluated_model_calls": 1,
+    "applier_calls": 1,
+    "outcome": "unapplicable",
+    "will_not_be_repeated": true
+  }
+}

@@ -1,0 +1,9 @@
+grounding,control_structure,visible_tests,assignments,input_tokens,output_tokens,total_tokens,llm_calls,build_attempts,visible_test_attempts,model_duration_ms,nominal_cost_usd,final_builds_passed,visible_tests_passed,detector_repairs_verified
+ungrounded,iterative,off,57,236334,108159,344493,114,57,0,1586101.9995,4.42644,57,0,56
+ungrounded,iterative,on,57,259834,110190,370024,115,58,51,1801474.5527,4.60487,57,51,57
+ungrounded,single_shot,off,57,57693,93854,151547,57,57,0,1652412.8701,3.104085,57,0,43
+ungrounded,single_shot,on,57,65649,94351,160000,57,57,51,1788370.5824,3.158775,57,51,48
+grounded,iterative,off,57,346438,114769,461207,116,59,0,1650951.0735,5.17526,57,0,57
+grounded,iterative,on,57,361021,113391,474412,115,58,51,1807231.7957,5.206835,57,51,57
+grounded,single_shot,off,57,103956,106168,210124,57,57,0,1877070.5342,3.70482,57,0,57
+grounded,single_shot,on,57,111912,104474,216386,57,57,51,1958186.62,3.69378,57,51,57

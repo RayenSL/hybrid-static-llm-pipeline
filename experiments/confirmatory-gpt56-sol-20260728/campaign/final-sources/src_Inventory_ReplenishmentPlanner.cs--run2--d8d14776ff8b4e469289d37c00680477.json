@@ -1,0 +1,17 @@
+{
+  "artifact_id": "d8d14776ff8b4e469289d37c00680477",
+  "timestamp": "2026-07-28T09:41:20.3115985+00:00",
+  "architecture": "grounded_single_shot",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 2,
+  "relative_file": "src/Inventory/ReplenishmentPlanner.cs",
+  "source_sha256": "4751a13b69535129b033fce44243e781ab0c06c2aff9716c18cdedc1621c3788",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n        foreach (var item in items)\n        {\n            if (!TryGetOrderQuantity(item, season, out int orderQuantity))\n                continue;\n            if (string.IsNullOrEmpty(item.Sku))\n                continue;\n\n            bool placed = supplier.PlaceOrder(item.Sku, orderQuantity);\n            plan.Add(CreatePlanEntry(item, orderQuantity, placed));\n        }\n\n        return plan;\n    }\n\n    private static bool TryGetOrderQuantity(StockItem item, int season, out int orderQuantity)\n    {\n        orderQuantity = 0;\n        if (item.OnHand \u003C 0)\n            return false;\n\n        int available = item.OnHand - item.Reserved;\n        if (available \u003E item.ReorderPoint)\n            return false;\n\n        int deficit = item.ReorderPoint - available;\n        orderQuantity = CalculateBaseOrderQuantity(deficit);\n        orderQuantity = ApplySeasonalAdjustment(orderQuantity, season);\n        return orderQuantity \u003E 0;\n    }\n\n    private static int CalculateBaseOrderQuantity(int deficit)\n    {\n        if (deficit \u003C= 0)\n            return 0;\n        if (deficit \u003C 10)\n            return 10;\n        if (deficit \u003C 100)\n            return deficit;\n\n        return deficit \u002B 50;\n    }\n\n    private static int ApplySeasonalAdjustment(int orderQuantity, int season)\n    {\n        if (season == 4 \u0026\u0026 orderQuantity \u003E 0)\n            return (int)(orderQuantity * 1.5);\n        if (season == 1)\n            return orderQuantity / 2;\n\n        return orderQuantity;\n    }\n\n    private static string CreatePlanEntry(StockItem item, int orderQuantity, bool placed)\n    {\n        if (placed \u0026\u0026 orderQuantity \u003E 200)\n            return $\u0022{item.Sku}:LARGE:{orderQuantity}\u0022;\n        if (placed)\n            return $\u0022{item.Sku}:{orderQuantity}\u0022;\n\n        return $\u0022{item.Sku}:FAILED\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Inventory_ReplenishmentPlanner.cs--d8581a6ad38449429b93354914a4489f.json",
+  "visible_test_sha256": "61a6e8758501a74a22b9996dc2f0d10496ebb924c069fa5a6532b7e0dfe24f50",
+  "build_passed": true,
+  "visible_test_passed": true
+}

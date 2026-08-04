@@ -1,0 +1,27 @@
+{
+  "method": "cluster-level paired risk-difference Monte Carlo sensitivity analysis",
+  "simulation_seed": 20260727,
+  "minimum_meaningful_risk_difference": 0.2,
+  "classifications": {
+    "visible_test_main": {
+      "minimum_power_across_scenarios_at_20pp": 0.9934,
+      "maximum_power_across_scenarios_at_20pp": 0.9969,
+      "adequate_at_80_percent_in_all_scenarios": true
+    },
+    "cell_specific_test": {
+      "minimum_power_across_scenarios_at_20pp": 0.3895,
+      "maximum_power_across_scenarios_at_20pp": 0.419,
+      "adequate_at_80_percent_in_all_scenarios": false
+    },
+    "two_way_test_interaction": {
+      "minimum_power_across_scenarios_at_20pp": 0.6274,
+      "maximum_power_across_scenarios_at_20pp": 0.7034,
+      "adequate_at_80_percent_in_all_scenarios": false
+    },
+    "three_way_interaction": {
+      "minimum_power_across_scenarios_at_20pp": 0.2021,
+      "maximum_power_across_scenarios_at_20pp": 0.2484,
+      "adequate_at_80_percent_in_all_scenarios": false
+    }
+  }
+}

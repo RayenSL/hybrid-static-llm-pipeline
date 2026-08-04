@@ -1,0 +1,33 @@
+{
+  "status": "pre_run_amendment_frozen",
+  "amended_at_utc": "2026-07-28T18:36:32.790350+00:00",
+  "campaign_id": "eb160df37c8996164a8730c0",
+  "reason": "close trace idempotently before checksum calculation",
+  "scientific_contract_changed": false,
+  "manifest_changed": false,
+  "prompt_or_context_changed": false,
+  "model_or_sampling_config_changed": false,
+  "repair_or_measurement_logic_changed": false,
+  "model_calls_repeated": 0,
+  "prior_grounding_command_sha256": "61476901bdf19df929194801ac2a9fbb1c8a4b26fc03849ffed376643aeeed29",
+  "amended_grounding_command_sha256": "aba07cba62f7402ab7c30733c8175f35f067bc67c28c0801788a59f90dabf161",
+  "prior_cli_binary_sha256": "25f3e165866733b8286e1cd4214203bd3d3a3412035763d0078c505be16d2e09",
+  "amended_cli_binary_sha256": "e36fa43e4c0bf08112fb6a94ae4fba230819376f009504aceb8ffbea325ff8e6",
+  "manifest_sha256": "5bbc78caca64675c1f0541c64ab15b1e36f82685bd49e839280a871a23ed834a",
+  "baseline_sha256": "91e2d565e889303ce6820f061eb0c606f5b723fc36631b6f30366882db2eb793",
+  "assignment_2_recovery": {
+    "assignment_id": "09c9ef9bb3bfb703bef8f9fb",
+    "context_level": "full",
+    "completed": true,
+    "trace_sha256": "7d7685000c89ef7123f041cd259d3617a565725a8ca54de71f92a96d2ad6aecb",
+    "run_ids": [
+      "dc3ca6c53c894e65819ca21d0b35ae4a",
+      "66095fc9c0fc452b857c34b3c51cb1b2"
+    ],
+    "evaluated_model_calls": 1,
+    "applier_calls": 1,
+    "outcome": "unapplicable",
+    "ledger_reconstructed_without_model_call": true,
+    "will_not_be_repeated": true
+  }
+}

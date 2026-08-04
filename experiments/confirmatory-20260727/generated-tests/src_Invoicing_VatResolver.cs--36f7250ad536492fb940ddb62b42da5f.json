@@ -1,0 +1,33 @@
+{
+  "artifact_id": "36f7250ad536492fb940ddb62b42da5f",
+  "artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-20260727\\generated-tests\\src_Invoicing_VatResolver.cs--36f7250ad536492fb940ddb62b42da5f.json",
+  "timestamp": "2026-07-27T15:26:01.9532085+00:00",
+  "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\VatResolver.cs",
+  "source_sha256": "f466b81fe1694b8d9350856bc67db4b7191f1a941edb1d420a9cae384f439659",
+  "target_symbol_name": "VatResolver.Resolve",
+  "target_start_line": 6,
+  "target_end_line": 40,
+  "project_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\Invoicing.csproj",
+  "model_name": "gpt-5.4",
+  "prompt_version": "v1.1.0",
+  "raw_system_prompt": "You are authoring a regression characterization test for existing C# production code.\nCapture observable behaviour through the public interface exactly as it exists. Do not\nimprove, refactor, repair, or diagnose the production code. Do not infer intended behaviour\nthat is not observable from the supplied pristine source.\n\nThe pipeline owns the test project and provides a static Check helper with these methods:\nCheck.True(bool), Check.False(bool), Check.NotNull(object?),\nCheck.Equal\u003CT\u003E(T expected, T actual), and\nCheck.SequenceEqual\u003CT\u003E(IEnumerable\u003CT\u003E expected, IEnumerable\u003CT\u003E actual).\n\nReturn ONLY one JSON object in this exact shape, with no markdown fences:\n{\n  \u0022test_name\u0022: \u0022\u003Cshort descriptive name that does not mention code smells or anti-patterns\u003E\u0022,\n  \u0022using_directives\u0022: [\u0022using Namespace;\u0022],\n  \u0022test_body\u0022: \u0022\u003CC# statements for one public-behaviour characterization scenario\u003E\u0022\n}\n\nRequirements:\n- Exercise observable behaviour through the supplied target declaration.\n- Treat its symbol and source line range only as neutral coordinates, not as a diagnosis.\n- Instantiate or invoke the supplied production code through public members.\n- Derive expected values from the pristine behaviour shown in the source.\n- Include at least one meaningful Check assertion over a production result.\n- Do not assert constants against themselves and do not use Check.True(true).\n- Do not use reflection, file or network I/O, processes, environment variables, clocks,\n  sleeps, randomness, package installation, mocks, or external state.\n- Do not declare namespaces, classes, helper types, or a Main method.\n- Do not modify production code or project configuration.",
+  "raw_user_prompt": "## Production project\nInvoicing\n\n## Target declaration\nSymbol: VatResolver.Resolve\nSource lines: 6-40\n\nCharacterise existing observable behaviour exercised through this declaration.\nThe target coordinates do not state why the declaration was selected.\n\n## Pristine source file\nsrc/Invoicing/VatResolver.cs\n\n\u0060\u0060\u0060csharp\nnamespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m)\n            return 0m;\n\n        decimal rate;\n        switch (countryCode)\n        {\n            case \u0022GB\u0022:\n                rate = 0.20m;\n                break;\n            case \u0022DE\u0022:\n                rate = 0.19m;\n                break;\n            case \u0022FR\u0022:\n                rate = 0.20m;\n                break;\n            case \u0022IE\u0022:\n                rate = 0.23m;\n                break;\n            default:\n                rate = 0.0m;\n                break;\n        }\n\n        if (account.Kind == AccountKind.Government)\n            rate = 0m;\n        else if (account.Kind == AccountKind.Business \u0026\u0026 net \u003E 10000m)\n            rate *= 0.5m;\n\n        if (rate \u003E 0m \u0026\u0026 net \u003E 100000m)\n            rate = Math.Min(rate, 0.15m);\n\n        return net * rate;\n    }\n}\n\n\u0060\u0060\u0060",
+  "raw_llm_output": "{\u0022test_name\u0022:\u0022Resolve_applies_business_discount_and_large_net_cap_for_ie\u0022,\u0022using_directives\u0022:[\u0022using Invoicing;\u0022],\u0022test_body\u0022:\u0022var resolver = new VatResolver();\\nvar account = new Account(AccountKind.Business);\\nvar result = resolver.Resolve(account, 200000m, \\\u0022IE\\\u0022);\\nCheck.Equal(30000m, result);\u0022}",
+  "input_tokens": 648,
+  "output_tokens": 81,
+  "duration_ms": 4397.9981,
+  "test_name": "Resolve_applies_business_discount_and_large_net_cap_for_ie",
+  "using_directives": [
+    "using Invoicing;"
+  ],
+  "test_body": "var resolver = new VatResolver();\nvar account = new Account(AccountKind.Business);\nvar result = resolver.Resolve(account, 200000m, \u0022IE\u0022);\nCheck.Equal(30000m, result);",
+  "test_sha256": "4e648cce4c7df74331a6fd8065557241d9dc0ecef34137d51c62166eee36d8cf",
+  "admission_status": "build_failed",
+  "admission_reason": "generated characterization project did not compile",
+  "parse_passed": true,
+  "assertion_gate_passed": true,
+  "build_passed": false,
+  "baseline_runs_passed": [],
+  "admission_output_tail": "C:\\Users\\RayenSyal\\AppData\\Local\\Temp\\hybridlens-generated-test-8b6ea8239df1431198db47a66b67f5aa\\Program.cs(22,27): error CS1729: \u0027Account\u0027 does not contain a constructor that takes 1 arguments [C:\\Users\\RayenSyal\\AppData\\Local\\Temp\\hybridlens-generated-test-8b6ea8239df1431198db47a66b67f5aa\\GeneratedCharacterization.csproj]\r\n\r\nBuild FAILED.\r\n\r\nC:\\Users\\RayenSyal\\AppData\\Local\\Temp\\hybridlens-generated-test-8b6ea8239df1431198db47a66b67f5aa\\Program.cs(22,27): error CS1729: \u0027Account\u0027 does not contain a constructor that takes 1 arguments [C:\\Users\\RayenSyal\\AppData\\Local\\Temp\\hybridlens-generated-test-8b6ea8239df1431198db47a66b67f5aa\\GeneratedCharacterization.csproj]\r\n    0 Warning(s)\r\n    1 Error(s)\r\n\r\nTime Elapsed 00:00:01.70\r\n",
+  "admitted": false
+}

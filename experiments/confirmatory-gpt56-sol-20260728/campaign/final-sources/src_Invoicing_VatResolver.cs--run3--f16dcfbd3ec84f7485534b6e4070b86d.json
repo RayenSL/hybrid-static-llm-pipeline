@@ -1,0 +1,17 @@
+{
+  "artifact_id": "f16dcfbd3ec84f7485534b6e4070b86d",
+  "timestamp": "2026-07-28T11:07:03.9798316+00:00",
+  "architecture": "grounded_single_shot",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 3,
+  "relative_file": "src/Invoicing/VatResolver.cs",
+  "source_sha256": "696e19dd8e022fbecab45f80c138480ef3344dd1e6af9be09cbf874f92260bc5",
+  "final_source": "namespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m)\n            return 0m;\n\n        var rate = GetJurisdictionRate(countryCode);\n        rate = ApplyAccountAdjustment(rate, account, net);\n        rate = ApplyHighValueCap(rate, net);\n\n        return net * rate;\n    }\n\n    private static decimal GetJurisdictionRate(string countryCode)\n    {\n        return countryCode switch\n        {\n            \u0022GB\u0022 =\u003E 0.20m,\n            \u0022DE\u0022 =\u003E 0.19m,\n            \u0022FR\u0022 =\u003E 0.20m,\n            \u0022IE\u0022 =\u003E 0.23m,\n            _ =\u003E 0.0m\n        };\n    }\n\n    private static decimal ApplyAccountAdjustment(decimal rate, Account account, decimal net)\n    {\n        if (account.Kind == AccountKind.Government)\n            return 0m;\n\n        if (account.Kind == AccountKind.Business \u0026\u0026 net \u003E 10000m)\n            return rate * 0.5m;\n\n        return rate;\n    }\n\n    private static decimal ApplyHighValueCap(decimal rate, decimal net)\n    {\n        if (rate \u003E 0m \u0026\u0026 net \u003E 100000m)\n            return Math.Min(rate, 0.15m);\n\n        return rate;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Invoicing_VatResolver.cs--896c47a37ccd48aa9777d50b93e25021.json",
+  "visible_test_sha256": "937140dc9242c95530fe6f6d3f027ac78a67701e7ae0793995546a0849d72b8e",
+  "build_passed": true,
+  "visible_test_passed": true
+}

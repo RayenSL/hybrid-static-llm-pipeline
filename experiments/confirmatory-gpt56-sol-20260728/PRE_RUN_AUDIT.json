@@ -1,0 +1,100 @@
+{
+  "audit_status": "pass",
+  "audited_at_utc": "2026-07-28T08:55:51.798413+00:00",
+  "repair_execution_status": "not_started_by_design_awaiting_explicit_launch",
+  "campaign_id": "e6226c2a5114827bfb262d94",
+  "manifest_sha256": "0c33f9bab116ad21812b72f2d3e150cafac725ed0c70b1dc722db0e9eb54d06c",
+  "pipeline_content_sha256": "8a29f51e95794d6623743e7865301f38cc641e989bd46446ff03e196e62cd778",
+  "corpus_content_sha256": "599967fc818465b619e899dc083e82355ba5d665217fcc0237aa03b6598d3d01",
+  "ground_truth_content_sha256": "7dcb5805988322a4e94c332715168dd1d8c4c9f24c2bad0a21d217bd10c20802",
+  "confirmatory_baseline_sha256": "48ce04394a52e1bfa76817c1b825f97b7cd4e6a7e110f6bd8fb9ff0e526e199c",
+  "instances": 19,
+  "repetitions": 3,
+  "blocks": 57,
+  "assignments": 456,
+  "test_off_assignments": 228,
+  "test_on_assignments": 228,
+  "test_on_with_admitted_test": 204,
+  "test_on_without_admitted_test": 24,
+  "generated_test_calls": 19,
+  "generated_test_admitted": 17,
+  "generated_test_build_failed": 1,
+  "generated_test_baseline_failed": 1,
+  "generated_test_input_tokens": 22241,
+  "generated_test_output_tokens": 16235,
+  "generated_test_total_tokens": 38476,
+  "generated_test_nominal_cost_usd": 0.598255,
+  "test_generation_call_audit": "pass",
+  "prompt_leakage_check": "pass",
+  "pipeline_tests_passed": 85,
+  "pristine_corpus_build_passed": true,
+  "randomization_seed": 503999552,
+  "iteration_budget": 6,
+  "build_timeout_seconds": 180,
+  "max_input_token_guard": 120000,
+  "model_name": "gpt-5.6-sol",
+  "temperature": 1.0,
+  "reasoning_effort": "provider_default_medium",
+  "confirmatory_estimand": "visible_test_main_effect",
+  "minimum_meaningful_risk_difference": 0.2,
+  "power_classification": {
+    "visible_test_main": {
+      "minimum_power_across_scenarios_at_20pp": 0.9934,
+      "maximum_power_across_scenarios_at_20pp": 0.9969,
+      "adequate_at_80_percent_in_all_scenarios": true
+    },
+    "cell_specific_test": {
+      "minimum_power_across_scenarios_at_20pp": 0.3895,
+      "maximum_power_across_scenarios_at_20pp": 0.419,
+      "adequate_at_80_percent_in_all_scenarios": false
+    },
+    "two_way_test_interaction": {
+      "minimum_power_across_scenarios_at_20pp": 0.6274,
+      "maximum_power_across_scenarios_at_20pp": 0.7034,
+      "adequate_at_80_percent_in_all_scenarios": false
+    },
+    "three_way_interaction": {
+      "minimum_power_across_scenarios_at_20pp": 0.2021,
+      "maximum_power_across_scenarios_at_20pp": 0.2484,
+      "adequate_at_80_percent_in_all_scenarios": false
+    }
+  },
+  "power_reproducibility_audit": "pass; byte-identical frozen analysis",
+  "lm01_excluded": true,
+  "baseline_normalization_verified": true,
+  "private_layer3_executed": false,
+  "private_outcomes_exposed_to_repair_model": false,
+  "confirmatory_repairs_executed": 0,
+  "codebase_archive_contract": {
+    "status": "frozen_before_confirmatory_repairs",
+    "script": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\preflight\\archive_materialized_codebases.py",
+    "script_sha256": "4dff5833fe0b289c8be59ccd6be9c7f4b07dc3d2ed0d5aa564d704d85aaaf2c4",
+    "execution_point": "after all repair assignments and before private Layer 3",
+    "output_directory": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\campaign\\viewable-codebases",
+    "contents_per_materialized_assignment": [
+      "complete source-only corpus",
+      "repaired final source applied",
+      "ASSIGNMENT.json",
+      "REPAIR.diff",
+      "README.txt",
+      "SHA256SUMS.txt"
+    ],
+    "index_files": [
+      "INDEX.csv",
+      "INDEX.json",
+      "SUMMARY.json",
+      "ARCHIVE_SHA256SUMS.txt"
+    ],
+    "non_materialized_policy": "retain index row with materialized=false; do not invent a codebase",
+    "private_information_included": false,
+    "consumer_build_command": "dotnet build corpus/Corpus.sln (normal restore recreates excluded obj assets)",
+    "sol_sanity_validation": {
+      "campaign_id": "1ff57314a37b4fec9c1f7a44",
+      "completed_assignments": 8,
+      "materialized_codebases": 8,
+      "all_archive_hashes_verified": true,
+      "archived_solution_build_smoke_passed": true,
+      "build_smoke_location": "disposable Windows temporary copy"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "artifact_id": "d8581a6ad38449429b93354914a4489f",
+  "artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Inventory_ReplenishmentPlanner.cs--d8581a6ad38449429b93354914a4489f.json",
+  "timestamp": "2026-07-28T08:38:14.3671682+00:00",
+  "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\ReplenishmentPlanner.cs",
+  "source_sha256": "e874b8a86247988285850906d99c23614b9026f85cb05d2351503e51ba0f2757",
+  "target_symbol_name": "ReplenishmentPlanner.BuildPlan",
+  "target_start_line": 6,
+  "target_end_line": 47,
+  "project_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\Inventory.csproj",
+  "model_name": "gpt-5.6-sol",
+  "prompt_version": "v1.1.0",
+  "raw_system_prompt": "You are authoring a regression characterization test for existing C# production code.\nCapture observable behaviour through the public interface exactly as it exists. Do not\nimprove, refactor, repair, or diagnose the production code. Do not infer intended behaviour\nthat is not observable from the supplied pristine source.\n\nThe pipeline owns the test project and provides a static Check helper with these methods:\nCheck.True(bool), Check.False(bool), Check.NotNull(object?),\nCheck.Equal\u003CT\u003E(T expected, T actual), and\nCheck.SequenceEqual\u003CT\u003E(IEnumerable\u003CT\u003E expected, IEnumerable\u003CT\u003E actual).\n\nReturn ONLY one JSON object in this exact shape, with no markdown fences:\n{\n  \u0022test_name\u0022: \u0022\u003Cshort descriptive name that does not mention code smells or anti-patterns\u003E\u0022,\n  \u0022using_directives\u0022: [\u0022using Namespace;\u0022],\n  \u0022test_body\u0022: \u0022\u003CC# statements for one public-behaviour characterization scenario\u003E\u0022\n}\n\nRequirements:\n- Exercise observable behaviour through the supplied target declaration.\n- Treat its symbol and source line range only as neutral coordinates, not as a diagnosis.\n- Instantiate or invoke the supplied production code through public members.\n- Derive expected values from the pristine behaviour shown in the source.\n- Include at least one meaningful Check assertion over a production result.\n- Do not assert constants against themselves and do not use Check.True(true).\n- Do not use reflection, file or network I/O, processes, environment variables, clocks,\n  sleeps, randomness, package installation, mocks, or external state.\n- Do not declare namespaces, classes, helper types, or a Main method.\n- Do not modify production code or project configuration.",
+  "raw_user_prompt": "## Production project\nInventory\n\n## Target declaration\nSymbol: ReplenishmentPlanner.BuildPlan\nSource lines: 6-47\n\nCharacterise existing observable behaviour exercised through this declaration.\nThe target coordinates do not state why the declaration was selected.\n\n## Pristine source file\nsrc/Inventory/ReplenishmentPlanner.cs\n\n\u0060\u0060\u0060csharp\nnamespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n        foreach (var item in items)\n        {\n            if (item.OnHand \u003C 0)\n                continue;\n            int available = item.OnHand - item.Reserved;\n            if (available \u003E item.ReorderPoint)\n                continue;\n\n            int deficit = item.ReorderPoint - available;\n            int orderQty;\n            if (deficit \u003C= 0)\n                orderQty = 0;\n            else if (deficit \u003C 10)\n                orderQty = 10;\n            else if (deficit \u003C 100)\n                orderQty = deficit;\n            else\n                orderQty = deficit \u002B 50;\n\n            if (season == 4 \u0026\u0026 orderQty \u003E 0)\n                orderQty = (int)(orderQty * 1.5);\n            else if (season == 1)\n                orderQty /= 2;\n\n            if (orderQty \u003C= 0)\n                continue;\n            if (string.IsNullOrEmpty(item.Sku))\n                continue;\n\n            bool placed = supplier.PlaceOrder(item.Sku, orderQty);\n            if (placed \u0026\u0026 orderQty \u003E 200)\n                plan.Add($\u0022{item.Sku}:LARGE:{orderQty}\u0022);\n            else if (placed)\n                plan.Add($\u0022{item.Sku}:{orderQty}\u0022);\n            else\n                plan.Add($\u0022{item.Sku}:FAILED\u0022);\n        }\n        return plan;\n    }\n}\n\n\u0060\u0060\u0060",
+  "raw_llm_output": "{\u0022test_name\u0022:\u0022Empty item set produces an empty plan\u0022,\u0022using_directives\u0022:[\u0022using System;\u0022,\u0022using Inventory;\u0022],\u0022test_body\u0022:\u0022var planner = new ReplenishmentPlanner();\\nvar result = planner.BuildPlan(Array.Empty\u003CStockItem\u003E(), null!, 4);\\n\\nCheck.NotNull(result);\\nCheck.SequenceEqual(Array.Empty\u003Cstring\u003E(), result);\u0022}",
+  "input_tokens": 744,
+  "output_tokens": 320,
+  "duration_ms": 9546.7971,
+  "test_name": "Empty item set produces an empty plan",
+  "using_directives": [
+    "using System;",
+    "using Inventory;"
+  ],
+  "test_body": "var planner = new ReplenishmentPlanner();\nvar result = planner.BuildPlan(Array.Empty\u003CStockItem\u003E(), null!, 4);\n\nCheck.NotNull(result);\nCheck.SequenceEqual(Array.Empty\u003Cstring\u003E(), result);",
+  "test_sha256": "61a6e8758501a74a22b9996dc2f0d10496ebb924c069fa5a6532b7e0dfe24f50",
+  "admission_status": "admitted",
+  "admission_reason": null,
+  "parse_passed": true,
+  "assertion_gate_passed": true,
+  "build_passed": true,
+  "baseline_runs_passed": [
+    true,
+    true
+  ],
+  "admission_output_tail": "\r\nBuild succeeded.\r\n    0 Warning(s)\r\n    0 Error(s)\r\n\r\nTime Elapsed 00:00:01.12\r\nPASS\r\n\r\nPASS\r\n\r\n",
+  "admitted": true
+}

@@ -1,0 +1,92 @@
+{
+  "audit_status": "pass",
+  "audited_at_utc": "2026-07-27T15:29:26.056583+00:00",
+  "repair_execution_status": "awaiting_final_launch_confirmation",
+  "campaign_id": "7c1d8dcdddad9bad19d77774",
+  "manifest_sha256": "5f0b0507912feec702b07aa3d84fe53bc8c679c9b0c9966b8cbbd84406cd48fa",
+  "pipeline_content_sha256": "8a29f51e95794d6623743e7865301f38cc641e989bd46446ff03e196e62cd778",
+  "corpus_content_sha256": "599967fc818465b619e899dc083e82355ba5d665217fcc0237aa03b6598d3d01",
+  "confirmatory_baseline_sha256": "48ce04394a52e1bfa76817c1b825f97b7cd4e6a7e110f6bd8fb9ff0e526e199c",
+  "instances": 19,
+  "repetitions": 3,
+  "blocks": 57,
+  "assignments": 456,
+  "test_off_assignments": 228,
+  "test_on_assignments": 228,
+  "test_on_with_admitted_test": 96,
+  "test_on_without_admitted_test": 132,
+  "generated_test_calls": 19,
+  "generated_test_admitted": 8,
+  "generated_test_build_failed": 8,
+  "generated_test_baseline_failed": 3,
+  "generated_test_tokens": 27739,
+  "prompt_leakage_check": "pass",
+  "pipeline_tests_passed": 85,
+  "pristine_corpus_build_passed": true,
+  "randomization_seed": 503999552,
+  "iteration_budget": 6,
+  "build_timeout_seconds": 180,
+  "max_input_token_guard": 120000,
+  "confirmatory_estimand": "visible_test_main_effect",
+  "minimum_meaningful_risk_difference": 0.2,
+  "power_classification": {
+    "visible_test_main": {
+      "minimum_power_across_scenarios_at_20pp": 0.9934,
+      "maximum_power_across_scenarios_at_20pp": 0.9969,
+      "adequate_at_80_percent_in_all_scenarios": true
+    },
+    "cell_specific_test": {
+      "minimum_power_across_scenarios_at_20pp": 0.3895,
+      "maximum_power_across_scenarios_at_20pp": 0.419,
+      "adequate_at_80_percent_in_all_scenarios": false
+    },
+    "two_way_test_interaction": {
+      "minimum_power_across_scenarios_at_20pp": 0.6274,
+      "maximum_power_across_scenarios_at_20pp": 0.7034,
+      "adequate_at_80_percent_in_all_scenarios": false
+    },
+    "three_way_interaction": {
+      "minimum_power_across_scenarios_at_20pp": 0.2021,
+      "maximum_power_across_scenarios_at_20pp": 0.2484,
+      "adequate_at_80_percent_in_all_scenarios": false
+    }
+  },
+  "exploratory_estimands": [
+    "cell_specific_test_effects",
+    "grounding_x_visible_test",
+    "control_structure_x_visible_test",
+    "grounding_x_control_structure_x_visible_test"
+  ],
+  "lm01_excluded": true,
+  "baseline_normalization_verified": true,
+  "codebase_archive_contract": {
+    "status": "frozen_before_confirmatory_repairs",
+    "script": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-20260727\\preflight\\archive_materialized_codebases.py",
+    "script_sha256": "4dff5833fe0b289c8be59ccd6be9c7f4b07dc3d2ed0d5aa564d704d85aaaf2c4",
+    "execution_point": "after all repair assignments and before private Layer 3",
+    "output_directory": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-20260727\\campaign\\viewable-codebases",
+    "contents_per_materialized_assignment": [
+      "complete source-only corpus",
+      "repaired final source applied",
+      "ASSIGNMENT.json",
+      "REPAIR.diff",
+      "README.txt",
+      "SHA256SUMS.txt"
+    ],
+    "index_files": [
+      "INDEX.csv",
+      "INDEX.json",
+      "SUMMARY.json",
+      "ARCHIVE_SHA256SUMS.txt"
+    ],
+    "non_materialized_policy": "retain index row with materialized=false; no invented codebase",
+    "private_information_included": false,
+    "consumer_build_command": "dotnet build corpus/Corpus.sln (normal restore recreates excluded obj assets)",
+    "pilot_validation": {
+      "campaign_id": "a502482a3c6056b16a5aaa89",
+      "codebases": 8,
+      "archive_hashes_verified": true,
+      "archived_solution_build_smoke_passed": true
+    }
+  }
+}

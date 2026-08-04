@@ -1,0 +1,17 @@
+{
+  "artifact_id": "a475239efa544320a387ad3a63a2b873",
+  "timestamp": "2026-07-28T09:42:38.4731573+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 2,
+  "relative_file": "src/Inventory/ReplenishmentPlanner.cs",
+  "source_sha256": "1257f40e31d5bf13c77ba7461082f19547b615769f516a770ae39288ed5fcd86",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n\n        foreach (var item in items)\n        {\n            if (!ShouldReplenish(item))\n                continue;\n\n            int orderQuantity = CalculateOrderQuantity(item, season);\n            if (orderQuantity \u003C= 0 || string.IsNullOrEmpty(item.Sku))\n                continue;\n\n            plan.Add(PlaceOrder(supplier, item.Sku, orderQuantity));\n        }\n\n        return plan;\n    }\n\n    private static bool ShouldReplenish(StockItem item)\n    {\n        if (item.OnHand \u003C 0)\n            return false;\n\n        int available = item.OnHand - item.Reserved;\n        return available \u003C= item.ReorderPoint;\n    }\n\n    private static int CalculateOrderQuantity(StockItem item, int season)\n    {\n        int available = item.OnHand - item.Reserved;\n        int deficit = item.ReorderPoint - available;\n        int orderQuantity = CalculateBaseOrderQuantity(deficit);\n\n        if (season == 4 \u0026\u0026 orderQuantity \u003E 0)\n            return (int)(orderQuantity * 1.5);\n\n        if (season == 1)\n            return orderQuantity / 2;\n\n        return orderQuantity;\n    }\n\n    private static int CalculateBaseOrderQuantity(int deficit)\n    {\n        if (deficit \u003C= 0)\n            return 0;\n        if (deficit \u003C 10)\n            return 10;\n        if (deficit \u003C 100)\n            return deficit;\n\n        return deficit \u002B 50;\n    }\n\n    private static string PlaceOrder(ISupplier supplier, string sku, int orderQuantity)\n    {\n        bool placed = supplier.PlaceOrder(sku, orderQuantity);\n        if (!placed)\n            return $\u0022{sku}:FAILED\u0022;\n\n        return orderQuantity \u003E 200\n            ? $\u0022{sku}:LARGE:{orderQuantity}\u0022\n            : $\u0022{sku}:{orderQuantity}\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Inventory_ReplenishmentPlanner.cs--d8581a6ad38449429b93354914a4489f.json",
+  "visible_test_sha256": "61a6e8758501a74a22b9996dc2f0d10496ebb924c069fa5a6532b7e0dfe24f50",
+  "build_passed": true,
+  "visible_test_passed": true
+}

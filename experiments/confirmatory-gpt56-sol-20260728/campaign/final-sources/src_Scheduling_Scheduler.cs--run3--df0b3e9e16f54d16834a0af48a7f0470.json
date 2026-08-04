@@ -1,0 +1,17 @@
+{
+  "artifact_id": "df0b3e9e16f54d16834a0af48a7f0470",
+  "timestamp": "2026-07-28T09:51:36.4568016+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Scheduling/Scheduler.cs",
+  "source_sha256": "ced45dc3160af20efa051f3d30cf6b5679e4bb9e16affc82aeba2d6a38e8097d",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EPlaces jobs onto the most suitable available resource.\u003C/summary\u003E\npublic sealed class Scheduler\n{\n    public IReadOnlyList\u003Cstring\u003E PlaceJobs(IEnumerable\u003CJob\u003E jobs, IReadOnlyList\u003CResource\u003E resources)\n    {\n        var placements = new List\u003Cstring\u003E();\n        foreach (var job in jobs)\n        {\n            var placement = PlaceJob(job, resources);\n            if (placement is not null)\n                placements.Add(placement);\n        }\n\n        return placements;\n    }\n\n    private static string? PlaceJob(Job job, IReadOnlyList\u003CResource\u003E resources)\n    {\n        var requiredSkill = job.RequiredSkill;\n        if (string.IsNullOrEmpty(requiredSkill))\n            return null;\n\n        var chosen = FindBestResource(requiredSkill, resources);\n        if (chosen is null)\n            return $\u0022{job.Id}:UNPLACED\u0022;\n\n        return FormatPlacement(job, chosen);\n    }\n\n    private static Resource? FindBestResource(\n        string requiredSkill,\n        IReadOnlyList\u003CResource\u003E resources)\n    {\n        Resource? chosen = null;\n        foreach (var resource in resources)\n        {\n            if (!resource.Skills.Contains(requiredSkill) || resource.Calendar.Count \u003E 20)\n                continue;\n\n            if (chosen is null || resource.Calendar.Count \u003C chosen.Calendar.Count)\n                chosen = resource;\n        }\n\n        return chosen;\n    }\n\n    private static string FormatPlacement(Job job, Resource resource)\n    {\n        var suffix = IsOvertime(job, resource)\n            ? \u0022:OT\u0022\n            : job.Priority \u003E 8 ? \u0022:URGENT\u0022 : string.Empty;\n\n        return $\u0022{job.Id}:{resource.Name}{suffix}\u0022;\n    }\n\n    private static bool IsOvertime(Job job, Resource resource) =\u003E\n        (job.Priority \u003E 5 \u0026\u0026 resource.Calendar.Count \u003E 10) ||\n        job.Duration.TotalHours \u003E 8;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

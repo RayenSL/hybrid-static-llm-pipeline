@@ -1,0 +1,24 @@
+{
+  "evaluated_model_key": "gpt-5.6-sol",
+  "evaluated_model": {
+    "provider": "azure",
+    "model": "gpt-5.6-sol",
+    "temperature": 1,
+    "max_tokens": 1024,
+    "base_url_host": "ai-ray-poc.openai.azure.com",
+    "api_key_present": true
+  },
+  "applier_model_key": "DeepSeek-V4-Pro",
+  "applier_model": {
+    "provider": "azure",
+    "model": "DeepSeek-V4-Pro",
+    "temperature": 0.1,
+    "max_tokens": 1024,
+    "base_url_host": "ai-ray-poc.openai.azure.com",
+    "api_key_present": true
+  },
+  "sol_price_usd_per_million_input_tokens": 5.0,
+  "sol_price_usd_per_million_output_tokens": 30.0,
+  "applier_price_not_supplied": true,
+  "credential_values_included": false
+}

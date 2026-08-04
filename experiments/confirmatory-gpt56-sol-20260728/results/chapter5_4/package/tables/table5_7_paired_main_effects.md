@@ -1,0 +1,7 @@
+### Table 5.7: Prespecified paired main effects on strict success
+
+| Contrast | Status | Independent targets | Risk difference (pp) | 95% CI (pp) | Exact sign-flip p |
+|---|---|---|---|---|---|
+| visible_test_main | confirmatory_primary | 19 | +3.95 | [-0.57, +8.46] | 0.125 |
+| grounding_main | planned_secondary | 19 | +11.84 | [+1.27, +22.41] | 0.03125 |
+| iteration_main | planned_secondary | 19 | +5.70 | [-2.88, +14.28] | 0.21875 |

@@ -1,0 +1,16 @@
+{
+  "status": "frozen_after_repairs_and_archive_before_private_layer3",
+  "frozen_at_utc": "2026-07-28T13:30:55.272649+00:00",
+  "campaign_id": "e6226c2a5114827bfb262d94",
+  "manifest_sha256": "0c33f9bab116ad21812b72f2d3e150cafac725ed0c70b1dc722db0e9eb54d06c",
+  "pre_run_ledger_sha256": "f6f5850e54024cf91bcc0fc4dc3d2da11f6629e392ac8b44204fee8233db0d31",
+  "post_repair_audit_sha256": "3e75dab5440bd5154049acbfbaf955448fcdc6be8e496ebd14e578dfbdab4345",
+  "resource_by_arm_sha256": "07e5ea3ec59df99c411ded065ef18f92db9d54f3d9e3318a4715fc4e687fbd44",
+  "campaign_core_file_count": 971,
+  "campaign_core_ledger_sha256": "0b2e730d7fc487ef18826ed72c0b51f371a00ca71c38fdaee8bd9a748a689df0",
+  "archive_file_count": 32379,
+  "archive_ledger_sha256": "c5360a4913eba92d7cc9a84301b7ab6a9df82ec6e30e63209fd052550c30b289",
+  "archive_checksum_verification": "pass",
+  "materialized_codebases": 456,
+  "private_layer3_executed": false
+}

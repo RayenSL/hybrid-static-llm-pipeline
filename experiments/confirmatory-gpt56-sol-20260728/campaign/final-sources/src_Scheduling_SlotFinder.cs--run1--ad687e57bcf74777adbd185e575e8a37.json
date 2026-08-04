@@ -1,0 +1,17 @@
+{
+  "artifact_id": "ad687e57bcf74777adbd185e575e8a37",
+  "timestamp": "2026-07-28T10:19:01.3956248+00:00",
+  "architecture": "grounded_single_shot",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 1,
+  "relative_file": "src/Scheduling/SlotFinder.cs",
+  "source_sha256": "0afbfa794a38c3e65ddda4cca9293526c036b50f3a855605863eddc790ed6169",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EFinds the first calendar slot that fits a required duration.\u003C/summary\u003E\npublic sealed class SlotFinder\n{\n    public Slot? FindFirstFit(Resource resource, TimeSpan duration, DateTime notBefore)\n    {\n        if (!CanSearch(resource, duration))\n            return null;\n\n        foreach (var slot in resource.Calendar)\n        {\n            if (FitsRequirements(slot, duration, notBefore))\n                return slot;\n        }\n\n        return CompleteUnsuccessfulSearch(resource);\n    }\n\n    private static bool CanSearch(Resource resource, TimeSpan duration)\n    {\n        if (resource.Calendar.Count == 0)\n            return false;\n\n        return duration \u003E TimeSpan.Zero;\n    }\n\n    private static bool FitsRequirements(Slot slot, TimeSpan duration, DateTime notBefore)\n    {\n        if (slot.Start \u003C notBefore)\n            return false;\n\n        var length = slot.End - slot.Start;\n        if (length \u003C duration)\n            return false;\n\n        if (slot.Start.Hour \u003C 8 || slot.Start.Hour \u003E 18)\n            return false;\n\n        return length \u003E= duration \u0026\u0026 slot.End.Hour \u003C= 20;\n    }\n\n    private static Slot? CompleteUnsuccessfulSearch(Resource resource)\n    {\n        if (resource.Calendar.Count \u003E 100)\n            return null;\n\n        return null;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\generated-tests\\src_Scheduling_SlotFinder.cs--d6414856719a496b9574f6f4db9f15b5.json",
+  "visible_test_sha256": "129439d9ac460f0acd29cbdddb54aabb385bf831478b1d28392079faca223003",
+  "build_passed": true,
+  "visible_test_passed": true
+}

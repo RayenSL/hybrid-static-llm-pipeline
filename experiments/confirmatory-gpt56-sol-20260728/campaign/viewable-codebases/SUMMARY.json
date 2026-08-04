@@ -1,0 +1,7 @@
+{
+  "campaign_id": "e6226c2a5114827bfb262d94",
+  "completed_assignments": 456,
+  "materialized_codebases": 456,
+  "non_materialized_assignments": 0,
+  "archive_contract": "complete source-only corpus + repaired source + metadata + unified diff + checksums"
+}

@@ -1,0 +1,4 @@
+Contrast,Lower-only,Higher-only,Risk difference (pp),95% bootstrap CI (pp),Exact McNemar p,Holm p
+Structural − Minimal,1,0,-3.3,"[-10.0, +0.0]",1,1
+Relational − Structural,1,4,+10.0,"[-3.3, +23.3]",0.375,1
+Full − Relational,4,2,-6.7,"[-23.3, +10.0]",0.6875,1

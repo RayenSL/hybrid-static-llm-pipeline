@@ -1,0 +1,42 @@
+{
+  "analysis_status": "complete_for_prespecified_instance_level_paired_estimands",
+  "attempts_sha256": "ae4e00a6c4c457a9b19b65b0c955c9b7c56c1254bd949f58805f186e5cefc226",
+  "attempts": 456,
+  "independent_instances": 19,
+  "repetitions_per_cell": 3,
+  "strict_successes": 423,
+  "private_passes": 447,
+  "private_regressions": 9,
+  "method": {
+    "aggregation": "three repetitions averaged within instance and factorial cell",
+    "confidence_interval": "paired instance-level Student-t interval, df=18",
+    "hypothesis_test": "two-sided exact sign-flip randomization test over all 2^19 cluster signs",
+    "multiplicity": "Holm adjustment within each four-cell simple-effect family and the three test-interaction family",
+    "power_classification": "visible-test main effect confirmatory; cell-specific test effects and test interactions exploratory"
+  },
+  "private_regressions_by_arm": [
+    {
+      "grounding_enabled": false,
+      "control_structure": "iterative",
+      "visible_tests_enabled": false,
+      "regressions": 3
+    },
+    {
+      "grounding_enabled": false,
+      "control_structure": "iterative",
+      "visible_tests_enabled": true,
+      "regressions": 3
+    },
+    {
+      "grounding_enabled": true,
+      "control_structure": "iterative",
+      "visible_tests_enabled": false,
+      "regressions": 3
+    }
+  ],
+  "mixed_effects_logistic_model": {
+    "prespecified_formula": "strict_success ~ grounding * control_structure * visible_test + anti_pattern + (1 | instance)",
+    "status": "model_ready_dataset_emitted; validated GLMM runtime unavailable in the frozen local environment",
+    "interpretation_rule": "do not replace the prespecified GLMM with an unvalidated post-hoc optimizer"
+  }
+}

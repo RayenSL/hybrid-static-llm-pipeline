@@ -1,0 +1,32 @@
+{
+  "status": "frozen_before_confirmatory_repairs",
+  "script": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\preflight\\archive_materialized_codebases.py",
+  "script_sha256": "4dff5833fe0b289c8be59ccd6be9c7f4b07dc3d2ed0d5aa564d704d85aaaf2c4",
+  "execution_point": "after all repair assignments and before private Layer 3",
+  "output_directory": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-gpt56-sol-20260728\\campaign\\viewable-codebases",
+  "contents_per_materialized_assignment": [
+    "complete source-only corpus",
+    "repaired final source applied",
+    "ASSIGNMENT.json",
+    "REPAIR.diff",
+    "README.txt",
+    "SHA256SUMS.txt"
+  ],
+  "index_files": [
+    "INDEX.csv",
+    "INDEX.json",
+    "SUMMARY.json",
+    "ARCHIVE_SHA256SUMS.txt"
+  ],
+  "non_materialized_policy": "retain index row with materialized=false; do not invent a codebase",
+  "private_information_included": false,
+  "consumer_build_command": "dotnet build corpus/Corpus.sln (normal restore recreates excluded obj assets)",
+  "sol_sanity_validation": {
+    "campaign_id": "1ff57314a37b4fec9c1f7a44",
+    "completed_assignments": 8,
+    "materialized_codebases": 8,
+    "all_archive_hashes_verified": true,
+    "archived_solution_build_smoke_passed": true,
+    "build_smoke_location": "disposable Windows temporary copy"
+  }
+}

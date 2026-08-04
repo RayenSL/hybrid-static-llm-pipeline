@@ -1,0 +1,36 @@
+{
+  "artifact_id": "5fa5feea99e34c9bb796ee485364a85c",
+  "artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-20260727\\generated-tests\\src_Notifications_RetryPolicy.cs--5fa5feea99e34c9bb796ee485364a85c.json",
+  "timestamp": "2026-07-27T15:26:59.3939468+00:00",
+  "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\RetryPolicy.cs",
+  "source_sha256": "ddb4958a7b93f0eef7fb4a2af22207490a9906e12a2b9666499fabb2658cac0a",
+  "target_symbol_name": "RetryPolicy.NextDelay",
+  "target_start_line": 6,
+  "target_end_line": 40,
+  "project_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj",
+  "model_name": "gpt-5.4",
+  "prompt_version": "v1.1.0",
+  "raw_system_prompt": "You are authoring a regression characterization test for existing C# production code.\nCapture observable behaviour through the public interface exactly as it exists. Do not\nimprove, refactor, repair, or diagnose the production code. Do not infer intended behaviour\nthat is not observable from the supplied pristine source.\n\nThe pipeline owns the test project and provides a static Check helper with these methods:\nCheck.True(bool), Check.False(bool), Check.NotNull(object?),\nCheck.Equal\u003CT\u003E(T expected, T actual), and\nCheck.SequenceEqual\u003CT\u003E(IEnumerable\u003CT\u003E expected, IEnumerable\u003CT\u003E actual).\n\nReturn ONLY one JSON object in this exact shape, with no markdown fences:\n{\n  \u0022test_name\u0022: \u0022\u003Cshort descriptive name that does not mention code smells or anti-patterns\u003E\u0022,\n  \u0022using_directives\u0022: [\u0022using Namespace;\u0022],\n  \u0022test_body\u0022: \u0022\u003CC# statements for one public-behaviour characterization scenario\u003E\u0022\n}\n\nRequirements:\n- Exercise observable behaviour through the supplied target declaration.\n- Treat its symbol and source line range only as neutral coordinates, not as a diagnosis.\n- Instantiate or invoke the supplied production code through public members.\n- Derive expected values from the pristine behaviour shown in the source.\n- Include at least one meaningful Check assertion over a production result.\n- Do not assert constants against themselves and do not use Check.True(true).\n- Do not use reflection, file or network I/O, processes, environment variables, clocks,\n  sleeps, randomness, package installation, mocks, or external state.\n- Do not declare namespaces, classes, helper types, or a Main method.\n- Do not modify production code or project configuration.",
+  "raw_user_prompt": "## Production project\nNotifications\n\n## Target declaration\nSymbol: RetryPolicy.NextDelay\nSource lines: 6-40\n\nCharacterise existing observable behaviour exercised through this declaration.\nThe target coordinates do not state why the declaration was selected.\n\n## Pristine source file\nsrc/Notifications/RetryPolicy.cs\n\n\u0060\u0060\u0060csharp\nnamespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n        if (attempt \u003E 10)\n            return 3600;\n\n        int baseDelay;\n        switch (channel)\n        {\n            case Channel.Email:\n                baseDelay = 30;\n                break;\n            case Channel.Sms:\n                baseDelay = 10;\n                break;\n            case Channel.Push:\n                baseDelay = 5;\n                break;\n            default:\n                baseDelay = 15;\n                break;\n        }\n\n        int delay = baseDelay * attempt;\n        if (serverBusy \u0026\u0026 delay \u003C 600)\n            delay *= 2;\n        if (delay \u003E 3600)\n            delay = 3600;\n        else if (delay \u003C 1)\n            delay = 1;\n        else if (attempt \u003E 7)\n            delay \u002B= 100;\n        return delay;\n    }\n}\n\n\u0060\u0060\u0060",
+  "raw_llm_output": "{\n  \u0022test_name\u0022: \u0022NextDelay_doubles_busy_push_delay_and_adds_late_attempt_offset\u0022,\n  \u0022using_directives\u0022: [\u0022using Notifications;\u0022],\n  \u0022test_body\u0022: \u0022var policy = new RetryPolicy();\\nvar delay = policy.NextDelay(8, Channel.Push, true);\\nCheck.Equal(180, delay);\u0022\n}",
+  "input_tokens": 626,
+  "output_tokens": 76,
+  "duration_ms": 6143.7581,
+  "test_name": "NextDelay_doubles_busy_push_delay_and_adds_late_attempt_offset",
+  "using_directives": [
+    "using Notifications;"
+  ],
+  "test_body": "var policy = new RetryPolicy();\nvar delay = policy.NextDelay(8, Channel.Push, true);\nCheck.Equal(180, delay);",
+  "test_sha256": "52865d49e2a4ad610bc82ee93329ff02785ed90582da514171d2e60daed536f6",
+  "admission_status": "admitted",
+  "admission_reason": null,
+  "parse_passed": true,
+  "assertion_gate_passed": true,
+  "build_passed": true,
+  "baseline_runs_passed": [
+    true,
+    true
+  ],
+  "admission_output_tail": "\r\nBuild succeeded.\r\n    0 Warning(s)\r\n    0 Error(s)\r\n\r\nTime Elapsed 00:00:01.64\r\nPASS\r\n\r\nPASS\r\n\r\n",
+  "admitted": true
+}

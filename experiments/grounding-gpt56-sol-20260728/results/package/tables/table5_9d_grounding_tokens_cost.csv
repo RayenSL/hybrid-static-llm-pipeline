@@ -1,0 +1,5 @@
+Context,Mean prompt characters,Generation input tokens,Generation output tokens,Applier input tokens,Applier output tokens,Nominal Sol cost (USD)
+Minimal,2247.3,20434,20266,31988,6525,0.7102
+Structural,2516.7,22911,21318,31755,5773,0.7541
+Relational,3554.2,30601,22797,32372,6599,0.8369
+Full,3686.0,31531,23740,32620,6897,0.8699

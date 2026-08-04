@@ -1,0 +1,17 @@
+{
+  "artifact_id": "ed66f5d5051a4ab887a846fb4b588aa6",
+  "timestamp": "2026-07-28T18:54:54.3424288+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Invoicing/VatResolver.cs",
+  "source_sha256": "30ea95e36e1ca3c92b59384fb2d99f23a89c2acae171357ba7f9f4b069a7389c",
+  "final_source": "namespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    private static readonly IReadOnlyDictionary\u003Cstring, decimal\u003E Rates =\n        new Dictionary\u003Cstring, decimal\u003E(StringComparer.OrdinalIgnoreCase)\n        {\n            [\u0022GB\u0022] = 0.20m,\n            [\u0022DE\u0022] = 0.19m,\n            [\u0022FR\u0022] = 0.20m,\n            [\u0022IE\u0022] = 0.23m\n        };\n\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m) return 0m;\n\n        var rate = GetBaseRate(countryCode);\n        rate = ApplyAccountRules(account, net, rate);\n        rate = ApplyHighValueCap(net, rate);\n        return net * rate;\n    }\n\n    private static decimal GetBaseRate(string countryCode) =\u003E\n        countryCode != null \u0026\u0026 Rates.TryGetValue(countryCode, out var rate) ? rate : 0m;\n\n    private static decimal ApplyAccountRules(Account account, decimal net, decimal rate) =\u003E\n        account.Kind switch\n        {\n            AccountKind.Government =\u003E 0m,\n            AccountKind.Business when net \u003E 10000m =\u003E rate * 0.5m,\n            _ =\u003E rate\n        };\n\n    private static decimal ApplyHighValueCap(decimal net, decimal rate) =\u003E\n        rate \u003E 0m \u0026\u0026 net \u003E 100000m ? Math.Min(rate, 0.15m) : rate;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

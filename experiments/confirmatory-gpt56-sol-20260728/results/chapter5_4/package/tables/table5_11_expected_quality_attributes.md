@@ -1,0 +1,6 @@
+### Table 5.11: Literature-derived expected quality-attribute mapping
+
+| Anti-pattern | Expected ISO/IEC 25010 attributes |
+|---|---|
+| God Class | Maintainability, Modularity, Analysability, Modifiability |
+| Long Method | Maintainability, Analysability, Testability, Modifiability |

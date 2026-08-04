@@ -1,0 +1,2157 @@
+{
+  "smell_counts_by_type": {
+    "GodClass": 10,
+    "LongMethod": 10,
+    "ObsoleteApiUsage": 10
+  },
+  "smell_total": 30,
+  "smell_keys": [
+    "GodClass|src/Inventory/CycleCountService.cs|Inventory.CycleCountService",
+    "GodClass|src/Inventory/StockController.cs|Inventory.StockController",
+    "GodClass|src/Invoicing/BillingManager.cs|Invoicing.BillingManager",
+    "GodClass|src/Invoicing/StatementBuilder.cs|Invoicing.StatementBuilder",
+    "GodClass|src/Notifications/NotificationCenter.cs|Notifications.NotificationCenter",
+    "GodClass|src/Ordering/CheckoutCoordinator.cs|Ordering.CheckoutCoordinator",
+    "GodClass|src/Ordering/OrderProcessor.cs|Ordering.OrderProcessor",
+    "GodClass|src/Ordering/ReturnsHandler.cs|Ordering.ReturnsHandler",
+    "GodClass|src/Scheduling/RecurrenceEngine.cs|Scheduling.RecurrenceEngine",
+    "GodClass|src/Scheduling/ScheduleManager.cs|Scheduling.ScheduleManager",
+    "LongMethod|src/Inventory/AllocationCalculator.cs|AllocationCalculator.Allocate",
+    "LongMethod|src/Inventory/ReplenishmentPlanner.cs|ReplenishmentPlanner.BuildPlan",
+    "LongMethod|src/Invoicing/InvoiceRenderer.cs|InvoiceRenderer.Render",
+    "LongMethod|src/Invoicing/VatResolver.cs|VatResolver.Resolve",
+    "LongMethod|src/Notifications/DispatchPipeline.cs|DispatchPipeline.Run",
+    "LongMethod|src/Notifications/RetryPolicy.cs|RetryPolicy.NextDelay",
+    "LongMethod|src/Ordering/OrderImporter.cs|OrderImporter.ImportBatch",
+    "LongMethod|src/Ordering/PricingRules.cs|PricingRules.ApplyAdjustments",
+    "LongMethod|src/Scheduling/Scheduler.cs|Scheduler.PlaceJobs",
+    "LongMethod|src/Scheduling/SlotFinder.cs|SlotFinder.FindFirstFit",
+    "ObsoleteApiUsage|src/Inventory/SnapshotWriter.cs|SnapshotWriter.Write \u2192 Inventory.Legacy.SnapshotApiV1.Persist(string, int)",
+    "ObsoleteApiUsage|src/Inventory/StockSync.cs|StockSync.Reconcile \u2192 Inventory.Legacy.SyncApiV1.Reconcile(string, int, int)",
+    "ObsoleteApiUsage|src/Invoicing/CurrencyConverter.cs|CurrencyConverter.Convert \u2192 Invoicing.Legacy.RatesV1.Lookup(string, string)",
+    "ObsoleteApiUsage|src/Invoicing/PdfExporter.cs|PdfExporter.Export \u2192 Invoicing.Legacy.RenderApiV1.ToPdf(string, System.Collections.Generic.IEnumerable\u003Cstring\u003E)",
+    "ObsoleteApiUsage|src/Notifications/EmailClient.cs|EmailClient.SendEmail \u2192 Notifications.Legacy.MailApiV1.Send(string, string, string)",
+    "ObsoleteApiUsage|src/Notifications/PushClient.cs|PushClient.SendPush \u2192 Notifications.Legacy.PushApiV1.Push(string, string)",
+    "ObsoleteApiUsage|src/Notifications/SmsClient.cs|SmsClient.SendSms \u2192 Notifications.Legacy.SmsApiV1.Send(string, string)",
+    "ObsoleteApiUsage|src/Ordering/LabelPrinter.cs|LabelPrinter.Print \u2192 Ordering.Legacy.LabelApiV1.Render(string, string)",
+    "ObsoleteApiUsage|src/Scheduling/CalendarFeed.cs|CalendarFeed.Build \u2192 Scheduling.Legacy.FeedApiV1.Serialize(System.Collections.Generic.IEnumerable\u003Cstring\u003E)",
+    "ObsoleteApiUsage|src/Scheduling/ReminderSender.cs|ReminderSender.Send \u2192 Scheduling.Legacy.NotifyApiV1.Send(string, string)"
+  ],
+  "ca_headline_by_rule": {
+    "CA1822": 30,
+    "CA1305": 23,
+    "CA1865": 1,
+    "CA1716": 2,
+    "CA1854": 1
+  },
+  "ca_headline_by_category": {
+    "Performance": 32,
+    "Globalization": 23,
+    "Naming": 2
+  },
+  "ca_headline_total": 57,
+  "ca_all_by_rule": {
+    "CA2227": 5,
+    "CA1002": 6,
+    "CA1062": 135,
+    "CA1822": 30,
+    "CA1305": 23,
+    "CA1865": 1,
+    "CA1307": 5,
+    "CA1716": 2,
+    "CA1854": 1
+  },
+  "ca_all_by_category": {
+    "Usage": 5,
+    "Design": 141,
+    "Performance": 32,
+    "Globalization": 28,
+    "Naming": 2
+  },
+  "ca_all_total": 208,
+  "compiler_obsolete_count": 10,
+  "diagnostics": [
+    {
+      "rule_id": "CA2227",
+      "category": "Usage",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockItem.cs",
+      "line": 16,
+      "member": null,
+      "key": "CA2227|src/Inventory/StockItem.cs|?"
+    },
+    {
+      "rule_id": "CA1002",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockItem.cs",
+      "line": 16,
+      "member": null,
+      "key": "CA1002|src/Inventory/StockItem.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/SnapshotWriter.cs",
+      "line": 12,
+      "member": null,
+      "key": "CA1062|src/Inventory/SnapshotWriter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockSync.cs",
+      "line": 11,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockSync.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockSync.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Inventory/StockSync.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 42,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockController.cs",
+      "line": 40,
+      "member": null,
+      "key": "CA1822|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 27,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 54,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 141,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 129,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 153,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 67,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockController.cs",
+      "line": 151,
+      "member": null,
+      "key": "CA1822|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 14,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 17,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 18,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 19,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 20,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 21,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 22,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 54,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 113,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 55,
+      "member": null,
+      "key": "CA1305|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/CycleCountService.cs",
+      "line": 111,
+      "member": null,
+      "key": "CA1062|src/Inventory/CycleCountService.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/CycleCountService.cs",
+      "line": 86,
+      "member": null,
+      "key": "CA1062|src/Inventory/CycleCountService.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 90,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 92,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/CycleCountService.cs",
+      "line": 18,
+      "member": null,
+      "key": "CA1062|src/Inventory/CycleCountService.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/CycleCountService.cs",
+      "line": 14,
+      "member": null,
+      "key": "CA1062|src/Inventory/CycleCountService.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/CycleCountService.cs",
+      "line": 37,
+      "member": null,
+      "key": "CA1062|src/Inventory/CycleCountService.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 191,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/CycleCountService.cs",
+      "line": 57,
+      "member": null,
+      "key": "CA1062|src/Inventory/CycleCountService.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 174,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockController.cs",
+      "line": 168,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockController.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/AllocationCalculator.cs",
+      "line": 13,
+      "member": null,
+      "key": "CA1062|src/Inventory/AllocationCalculator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/AllocationCalculator.cs",
+      "line": 9,
+      "member": null,
+      "key": "CA1062|src/Inventory/AllocationCalculator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 14,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 17,
+      "member": null,
+      "key": "CA1062|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/AllocationCalculator.cs",
+      "line": 6,
+      "member": null,
+      "key": "CA1822|src/Inventory/AllocationCalculator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/ReplenishmentPlanner.cs",
+      "line": 38,
+      "member": null,
+      "key": "CA1062|src/Inventory/ReplenishmentPlanner.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Inventory/ReplenishmentPlanner.cs",
+      "line": 9,
+      "member": null,
+      "key": "CA1062|src/Inventory/ReplenishmentPlanner.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/StockReportFormatter.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Inventory/StockReportFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Inventory/ReplenishmentPlanner.cs",
+      "line": 6,
+      "member": null,
+      "key": "CA1822|src/Inventory/ReplenishmentPlanner.cs|?"
+    },
+    {
+      "rule_id": "CA2227",
+      "category": "Usage",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/Invoice.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA2227|src/Invoicing/Invoice.cs|?"
+    },
+    {
+      "rule_id": "CA1002",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/Invoice.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1002|src/Invoicing/Invoice.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/CurrencyConverter.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Invoicing/CurrencyConverter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/PdfExporter.cs",
+      "line": 11,
+      "member": null,
+      "key": "CA1062|src/Invoicing/PdfExporter.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/PdfExporter.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Invoicing/PdfExporter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/PaymentGateway.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1062|src/Invoicing/PaymentGateway.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/InvoiceRenderer.cs",
+      "line": 12,
+      "member": null,
+      "key": "CA1305|src/Invoicing/InvoiceRenderer.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/InvoiceRenderer.cs",
+      "line": 35,
+      "member": null,
+      "key": "CA1305|src/Invoicing/InvoiceRenderer.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/InvoiceRenderer.cs",
+      "line": 37,
+      "member": null,
+      "key": "CA1305|src/Invoicing/InvoiceRenderer.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/InvoiceRenderer.cs",
+      "line": 39,
+      "member": null,
+      "key": "CA1305|src/Invoicing/InvoiceRenderer.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/InvoiceRenderer.cs",
+      "line": 54,
+      "member": null,
+      "key": "CA1305|src/Invoicing/InvoiceRenderer.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 41,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 35,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 49,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 47,
+      "member": null,
+      "key": "CA1822|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 95,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 92,
+      "member": null,
+      "key": "CA1822|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 122,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 136,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/StatementBuilder.cs",
+      "line": 55,
+      "member": null,
+      "key": "CA1062|src/Invoicing/StatementBuilder.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 110,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 107,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 146,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1865",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/StatementBuilder.cs",
+      "line": 152,
+      "member": null,
+      "key": "CA1865|src/Invoicing/StatementBuilder.cs|?"
+    },
+    {
+      "rule_id": "CA1307",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/StatementBuilder.cs",
+      "line": 154,
+      "member": null,
+      "key": "CA1307|src/Invoicing/StatementBuilder.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/VatResolver.cs",
+      "line": 31,
+      "member": null,
+      "key": "CA1062|src/Invoicing/VatResolver.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/VatResolver.cs",
+      "line": 6,
+      "member": null,
+      "key": "CA1822|src/Invoicing/VatResolver.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/StatementBuilder.cs",
+      "line": 131,
+      "member": null,
+      "key": "CA1062|src/Invoicing/StatementBuilder.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 180,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 162,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 157,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/BillingManager.cs",
+      "line": 71,
+      "member": null,
+      "key": "CA1062|src/Invoicing/BillingManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/InvoiceRenderer.cs",
+      "line": 13,
+      "member": null,
+      "key": "CA1062|src/Invoicing/InvoiceRenderer.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/InvoiceRenderer.cs",
+      "line": 12,
+      "member": null,
+      "key": "CA1062|src/Invoicing/InvoiceRenderer.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Invoicing/InvoiceRenderer.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Invoicing/InvoiceRenderer.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/StatementBuilder.cs",
+      "line": 25,
+      "member": null,
+      "key": "CA1062|src/Invoicing/StatementBuilder.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Invoicing/StatementBuilder.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1062|src/Invoicing/StatementBuilder.cs|?"
+    },
+    {
+      "rule_id": "CA1307",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/MailApi.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1307|src/Notifications/Legacy/MailApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/PushApi.cs",
+      "line": 21,
+      "member": null,
+      "key": "CA1062|src/Notifications/Legacy/PushApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/PushApi.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1062|src/Notifications/Legacy/PushApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/SmsApi.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1062|src/Notifications/Legacy/SmsApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/SmsApi.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1062|src/Notifications/Legacy/SmsApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/SmsApi.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1062|src/Notifications/Legacy/SmsApi.cs|?"
+    },
+    {
+      "rule_id": "CA1716",
+      "category": "Naming",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/ITemplateStore.cs",
+      "line": 6,
+      "member": null,
+      "key": "CA1716|src/Notifications/ITemplateStore.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/MailApi.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1062|src/Notifications/Legacy/MailApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/PushClient.cs",
+      "line": 10,
+      "member": null,
+      "key": "CA1062|src/Notifications/PushClient.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/SmsClient.cs",
+      "line": 10,
+      "member": null,
+      "key": "CA1062|src/Notifications/SmsClient.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/PushClient.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Notifications/PushClient.cs|?"
+    },
+    {
+      "rule_id": "CA1307",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/MailApi.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1307|src/Notifications/Legacy/MailApi.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/SmsClient.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Notifications/SmsClient.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/RetryPolicy.cs",
+      "line": 6,
+      "member": null,
+      "key": "CA1822|src/Notifications/RetryPolicy.cs|?"
+    },
+    {
+      "rule_id": "CA1307",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/DispatchPipeline.cs",
+      "line": 21,
+      "member": null,
+      "key": "CA1307|src/Notifications/DispatchPipeline.cs|?"
+    },
+    {
+      "rule_id": "CA1307",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/NotificationCenter.cs",
+      "line": 62,
+      "member": null,
+      "key": "CA1307|src/Notifications/NotificationCenter.cs|?"
+    },
+    {
+      "rule_id": "CA1854",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/NotificationCenter.cs",
+      "line": 83,
+      "member": null,
+      "key": "CA1854|src/Notifications/NotificationCenter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/EmailClient.cs",
+      "line": 10,
+      "member": null,
+      "key": "CA1062|src/Notifications/EmailClient.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/MailApi.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1062|src/Notifications/Legacy/MailApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/Legacy/MailApi.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1062|src/Notifications/Legacy/MailApi.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 14,
+      "member": null,
+      "key": "CA1305|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1305|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/EmailClient.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Notifications/EmailClient.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 16,
+      "member": null,
+      "key": "CA1305|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 19,
+      "member": null,
+      "key": "CA1305|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 20,
+      "member": null,
+      "key": "CA1305|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 21,
+      "member": null,
+      "key": "CA1305|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 50,
+      "member": null,
+      "key": "CA1305|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1305",
+      "category": "Globalization",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 51,
+      "member": null,
+      "key": "CA1305|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/NotificationCenter.cs",
+      "line": 33,
+      "member": null,
+      "key": "CA1062|src/Notifications/NotificationCenter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/PreferenceResolver.cs",
+      "line": 10,
+      "member": null,
+      "key": "CA1062|src/Notifications/PreferenceResolver.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/PreferenceResolver.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Notifications/PreferenceResolver.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/NotificationCenter.cs",
+      "line": 75,
+      "member": null,
+      "key": "CA1062|src/Notifications/NotificationCenter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/NotificationCenter.cs",
+      "line": 55,
+      "member": null,
+      "key": "CA1062|src/Notifications/NotificationCenter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/NotificationCenter.cs",
+      "line": 51,
+      "member": null,
+      "key": "CA1062|src/Notifications/NotificationCenter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/NotificationCenter.cs",
+      "line": 95,
+      "member": null,
+      "key": "CA1062|src/Notifications/NotificationCenter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/NotificationCenter.cs",
+      "line": 14,
+      "member": null,
+      "key": "CA1062|src/Notifications/NotificationCenter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/DispatchPipeline.cs",
+      "line": 17,
+      "member": null,
+      "key": "CA1062|src/Notifications/DispatchPipeline.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 14,
+      "member": null,
+      "key": "CA1062|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Notifications/MessageLogFormatter.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Notifications/MessageLogFormatter.cs|?"
+    },
+    {
+      "rule_id": "CA2227",
+      "category": "Usage",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/Order.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA2227|src/Ordering/Order.cs|?"
+    },
+    {
+      "rule_id": "CA1002",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/Order.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1002|src/Ordering/Order.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CatalogService.cs",
+      "line": 20,
+      "member": null,
+      "key": "CA1062|src/Ordering/CatalogService.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/Legacy/LabelApi.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1062|src/Ordering/Legacy/LabelApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/LabelPrinter.cs",
+      "line": 11,
+      "member": null,
+      "key": "CA1062|src/Ordering/LabelPrinter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderRepository.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderRepository.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Ordering/LabelPrinter.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Ordering/LabelPrinter.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 34,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 32,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 70,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 119,
+      "member": null,
+      "key": "CA1822|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 63,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/ReturnsHandler.cs",
+      "line": 89,
+      "member": null,
+      "key": "CA1062|src/Ordering/ReturnsHandler.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 80,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 158,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 97,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 95,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 73,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 148,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 162,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 158,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/ReturnsHandler.cs",
+      "line": 19,
+      "member": null,
+      "key": "CA1062|src/Ordering/ReturnsHandler.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/ReturnsHandler.cs",
+      "line": 13,
+      "member": null,
+      "key": "CA1062|src/Ordering/ReturnsHandler.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 148,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 146,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 173,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 170,
+      "member": null,
+      "key": "CA1822|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 191,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 189,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 187,
+      "member": null,
+      "key": "CA1822|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 213,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 210,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 60,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 57,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 207,
+      "member": null,
+      "key": "CA1822|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/ReturnsHandler.cs",
+      "line": 41,
+      "member": null,
+      "key": "CA1062|src/Ordering/ReturnsHandler.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 129,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 130,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/PricingRules.cs",
+      "line": 9,
+      "member": null,
+      "key": "CA1062|src/Ordering/PricingRules.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Ordering/PricingRules.cs",
+      "line": 6,
+      "member": null,
+      "key": "CA1822|src/Ordering/PricingRules.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/ReturnsHandler.cs",
+      "line": 106,
+      "member": null,
+      "key": "CA1062|src/Ordering/ReturnsHandler.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 88,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 90,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/ReturnsHandler.cs",
+      "line": 64,
+      "member": null,
+      "key": "CA1062|src/Ordering/ReturnsHandler.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 118,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 38,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderProcessor.cs",
+      "line": 40,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderProcessor.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 182,
+      "member": null,
+      "key": "CA1062|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Ordering/CheckoutCoordinator.cs",
+      "line": 179,
+      "member": null,
+      "key": "CA1822|src/Ordering/CheckoutCoordinator.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Ordering/OrderImporter.cs",
+      "line": 14,
+      "member": null,
+      "key": "CA1062|src/Ordering/OrderImporter.cs|?"
+    },
+    {
+      "rule_id": "CA2227",
+      "category": "Usage",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/Job.cs",
+      "line": 16,
+      "member": null,
+      "key": "CA2227|src/Scheduling/Job.cs|?"
+    },
+    {
+      "rule_id": "CA1002",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/Job.cs",
+      "line": 16,
+      "member": null,
+      "key": "CA1002|src/Scheduling/Job.cs|?"
+    },
+    {
+      "rule_id": "CA2227",
+      "category": "Usage",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/Job.cs",
+      "line": 17,
+      "member": null,
+      "key": "CA2227|src/Scheduling/Job.cs|?"
+    },
+    {
+      "rule_id": "CA1002",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/Job.cs",
+      "line": 17,
+      "member": null,
+      "key": "CA1002|src/Scheduling/Job.cs|?"
+    },
+    {
+      "rule_id": "CA1002",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/AvailabilityCache.cs",
+      "line": 11,
+      "member": null,
+      "key": "CA1002|src/Scheduling/AvailabilityCache.cs|?"
+    },
+    {
+      "rule_id": "CA1716",
+      "category": "Naming",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Scheduling/Legacy/FeedApi.cs",
+      "line": 14,
+      "member": null,
+      "key": "CA1716|src/Scheduling/Legacy/FeedApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/Legacy/NotifyApi.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1062|src/Scheduling/Legacy/NotifyApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ReminderSender.cs",
+      "line": 11,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ReminderSender.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/Legacy/NotifyApi.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1062|src/Scheduling/Legacy/NotifyApi.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/Legacy/NotifyApi.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1062|src/Scheduling/Legacy/NotifyApi.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Scheduling/ReminderSender.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Scheduling/ReminderSender.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/CalendarFeed.cs",
+      "line": 11,
+      "member": null,
+      "key": "CA1062|src/Scheduling/CalendarFeed.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Scheduling/CalendarFeed.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1822|src/Scheduling/CalendarFeed.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 35,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 27,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 21,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 63,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 49,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 46,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 44,
+      "member": null,
+      "key": "CA1822|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 83,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/RecurrenceEngine.cs",
+      "line": 31,
+      "member": null,
+      "key": "CA1062|src/Scheduling/RecurrenceEngine.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/RecurrenceEngine.cs",
+      "line": 22,
+      "member": null,
+      "key": "CA1062|src/Scheduling/RecurrenceEngine.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 110,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/SlotFinder.cs",
+      "line": 8,
+      "member": null,
+      "key": "CA1062|src/Scheduling/SlotFinder.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 185,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 141,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 137,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Scheduling/SlotFinder.cs",
+      "line": 6,
+      "member": null,
+      "key": "CA1822|src/Scheduling/SlotFinder.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 120,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 95,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/ScheduleManager.cs",
+      "line": 157,
+      "member": null,
+      "key": "CA1062|src/Scheduling/ScheduleManager.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/RecurrenceEngine.cs",
+      "line": 51,
+      "member": null,
+      "key": "CA1062|src/Scheduling/RecurrenceEngine.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/Scheduler.cs",
+      "line": 15,
+      "member": null,
+      "key": "CA1062|src/Scheduling/Scheduler.cs|?"
+    },
+    {
+      "rule_id": "CA1062",
+      "category": "Design",
+      "level": "warning",
+      "enabled_by_default": false,
+      "file": "src/Scheduling/Scheduler.cs",
+      "line": 9,
+      "member": null,
+      "key": "CA1062|src/Scheduling/Scheduler.cs|?"
+    },
+    {
+      "rule_id": "CA1822",
+      "category": "Performance",
+      "level": "warning",
+      "enabled_by_default": true,
+      "file": "src/Scheduling/Scheduler.cs",
+      "line": 6,
+      "member": null,
+      "key": "CA1822|src/Scheduling/Scheduler.cs|?"
+    }
+  ],
+  "ca_available": true,
+  "note": null
+}

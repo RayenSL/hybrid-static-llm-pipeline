@@ -1,0 +1,17 @@
+{
+  "artifact_id": "d50c1ad49ffc442db5cf3285934aef53",
+  "timestamp": "2026-07-28T18:51:06.3431217+00:00",
+  "architecture": "hybrid",
+  "grounding_enabled": true,
+  "control_structure": "hybrid_applied",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Ordering/LabelPrinter.cs",
+  "source_sha256": "01d4d2680abfb1e0031e917327eba46df112f90e12ab7f33792f25f1fcbfabb5",
+  "final_source": "using Ordering.Legacy;\n\nnamespace Ordering;\n\npublic interface ILabelRenderer\n{\n    string Render(string orderReference, string service);\n}\n\npublic sealed class CurrentLabelRenderer : ILabelRenderer\n{\n    public string Render(string orderReference, string service)\n    {\n        return LabelApiV2.Render(orderReference, service);\n    }\n}\n\n/// \u003Csummary\u003EProduces dispatch labels for an order.\u003C/summary\u003E\npublic sealed class LabelPrinter\n{\n    private readonly ILabelRenderer _renderer;\n\n    public LabelPrinter(ILabelRenderer renderer) =\u003E _renderer = renderer;\n\n    public string Print(Order order, string service)\n    {\n        ArgumentNullException.ThrowIfNull(order);\n        return _renderer.Render(order.Reference, service);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": false,
+  "visible_test_passed": null
+}
