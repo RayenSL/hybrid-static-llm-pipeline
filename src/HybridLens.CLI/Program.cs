@@ -62,6 +62,7 @@ var root = new RootCommand("HybridLens — hybrid static + LLM .NET code analyse
     FactorialCampaignCommand.Build(services),
     GroundingCampaignCommand.Build(services),
     PrivateLayer3Command.Build(),
+    ExternalOracleCommand.Build(),
     FactorialSummaryCommand.Build(),
     VerifyRepairCommand.Build(services),
     QualityScanCommand.Build(services),
