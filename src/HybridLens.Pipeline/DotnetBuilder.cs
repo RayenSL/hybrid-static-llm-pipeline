@@ -11,8 +11,20 @@ namespace HybridLens.Pipeline;
 /// </summary>
 public static class DotnetBuilder
 {
-    public static async Task<(bool Ok, string Output)> BuildAsync(
+    public static Task<(bool Ok, string Output)> BuildAsync(
         string solutionPath, int timeoutSeconds, CancellationToken cancellationToken)
+        => BuildAsync(solutionPath, timeoutSeconds, null, cancellationToken);
+
+    /// <summary>
+    /// As <see cref="BuildAsync(string,int,CancellationToken)"/>, with extra arguments appended to
+    /// the command line. Solutions that cannot restore in the execution environment need
+    /// <c>--no-restore</c> and <c>-p:NuGetAudit=false</c> so the gate builds against a package cache
+    /// populated beforehand; without them a private-feed authentication failure would be
+    /// indistinguishable from a repair that does not compile.
+    /// </summary>
+    public static async Task<(bool Ok, string Output)> BuildAsync(
+        string solutionPath, int timeoutSeconds, IReadOnlyList<string>? extraArguments,
+        CancellationToken cancellationToken)
     {
         var psi = new ProcessStartInfo
         {
@@ -28,6 +40,10 @@ public static class DotnetBuilder
         psi.ArgumentList.Add("-v");
         psi.ArgumentList.Add("quiet");
         psi.ArgumentList.Add("-p:TreatWarningsAsErrors=false");
+        if (extraArguments is not null)
+            foreach (var argument in extraArguments)
+                if (!string.IsNullOrWhiteSpace(argument))
+                    psi.ArgumentList.Add(argument);
 
         using var proc = new Process { StartInfo = psi };
         var output = new StringBuilder();

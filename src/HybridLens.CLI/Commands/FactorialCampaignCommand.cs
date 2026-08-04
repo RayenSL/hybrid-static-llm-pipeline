@@ -23,15 +23,20 @@ public static class FactorialCampaignCommand
     {
         var manifestOption = new Option<FileInfo>("--manifest") { Required = true, Description = "Frozen campaign manifest." };
         var outOption = new Option<DirectoryInfo>("--out") { Required = true, Description = "Campaign output directory." };
+        var dryRunOption = new Option<bool>("--dry-run")
+        {
+            Description = "Validate the manifest, resolve every target and print the plan. No model call is made."
+        };
         var command = new Command("factorial-campaign",
             "Execute or safely resume a frozen randomized-block factorial campaign.")
         {
-            manifestOption, outOption
+            manifestOption, outOption, dryRunOption
         };
         command.SetAction(async (parseResult, cancellationToken) =>
         {
             var manifestFile = parseResult.GetValue(manifestOption)!;
             var outputDirectory = parseResult.GetValue(outOption)!;
+            var dryRun = parseResult.GetValue(dryRunOption);
             if (!manifestFile.Exists)
             {
                 await Console.Error.WriteLineAsync($"error: manifest not found: {manifestFile.FullName}");
@@ -50,6 +55,34 @@ public static class FactorialCampaignCommand
             {
                 await Console.Error.WriteLineAsync($"error: preflight failed before any model call: {ex.Message}");
                 return 2;
+            }
+
+            if (dryRun)
+            {
+                // Preflight already validated the manifest, the target solution, the frozen baseline
+                // hash and every pristine source hash. Report the plan and stop before any model call.
+                Console.WriteLine($"manifest      : {manifestFile.FullName}");
+                Console.WriteLine($"sha256        : {FactorialCampaignPlanner.Sha256File(manifestFile.FullName)}");
+                Console.WriteLine($"campaign      : {manifest.CampaignId}"
+                    + (manifest.Kind is null ? "" : $"  kind: {manifest.Kind}"));
+                Console.WriteLine($"solution      : {manifest.TargetSolution}");
+                Console.WriteLine($"model         : {manifest.ModelName}");
+                Console.WriteLine($"design        : {string.Join(", ", FactorialCampaignPlanner.ExpectedSignatures(manifest))}");
+                Console.WriteLine($"build args    : {(manifest.BuildArguments is { Count: > 0 } b ? string.Join(' ', b) : "(default)")}");
+                Console.WriteLine($"assignments   : {manifest.Assignments.Count}"
+                    + $" over {manifest.Assignments.Select(a => a.SymbolName).Distinct(StringComparer.Ordinal).Count()} target(s)"
+                    + $" x {manifest.Repetitions} repetition(s)");
+                Console.WriteLine($"visible tests : {manifest.Assignments.Count(a => a.VisibleTestsEnabled)} assignment(s)");
+                foreach (var target in manifest.Assignments
+                             .GroupBy(a => a.SymbolName, StringComparer.Ordinal)
+                             .OrderBy(g => g.Key, StringComparer.Ordinal))
+                {
+                    var first = target.First();
+                    Console.WriteLine($"  {target.Key,-56} {first.AntiPatternType,-12}"
+                        + $" lines {first.Line}-{first.TargetEndLine}  {target.Count()} assignment(s)");
+                }
+                Console.WriteLine("dry run: manifest, solution, baseline and all pristine sources verified");
+                return 0;
             }
 
             var adapters = services.GetRequiredService<IReadOnlyDictionary<string, ILlmAdapter>>();
@@ -80,7 +113,20 @@ public static class FactorialCampaignCommand
             var contextBuilder = services.GetRequiredService<IContextBuilder>();
             var measurer = services.GetRequiredService<IRepairMeasurer>();
             var structural = new ContextConfig { Level = ContextLevel.Structural };
-            Console.Error.WriteLine($"Campaign: {manifest.CampaignId}");
+
+            // A manifest may carry extra dotnet build arguments for solutions that cannot restore
+            // in this environment. Absent them the gate keeps its default command line.
+            var buildArguments = manifest.BuildArguments is { Count: > 0 } extra ? extra : null;
+            Func<string, int, CancellationToken, Task<(bool Ok, string Output)>>? build = buildArguments is null
+                ? null
+                : (solution, timeout, token) => DotnetBuilder.BuildAsync(solution, timeout, buildArguments, token);
+
+            Console.Error.WriteLine($"Campaign: {manifest.CampaignId}"
+                + (manifest.Kind is null ? "" : $"  kind: {manifest.Kind}"));
+            if (buildArguments is not null)
+                Console.Error.WriteLine($"Build arguments: {string.Join(' ', buildArguments)}");
+            Console.Error.WriteLine(
+                $"Design: {string.Join(", ", FactorialCampaignPlanner.ExpectedSignatures(manifest))}");
             Console.Error.WriteLine($"Manifest SHA-256: {FactorialCampaignPlanner.Sha256File(manifestFile.FullName)}");
             Console.Error.WriteLine($"Assignments: {manifest.Assignments.Count}; already completed: {completed.Count}");
 
@@ -130,7 +176,8 @@ public static class FactorialCampaignCommand
                             manifest.ModelName,
                             measurer,
                             manifest.TargetSolution,
-                            manifest.BuildTimeoutSeconds);
+                            manifest.BuildTimeoutSeconds,
+                            build);
                         var record = await runner.RunAttemptAsync(
                             known,
                             assignment.RunNumber,
@@ -164,6 +211,7 @@ public static class FactorialCampaignCommand
                             manifest.TargetSolution,
                             manifest.IterationBudget,
                             manifest.BuildTimeoutSeconds,
+                            build,
                             architecture: architecture);
                         await runner.RunAsync(
                             [known],

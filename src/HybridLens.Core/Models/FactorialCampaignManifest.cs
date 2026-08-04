@@ -16,6 +16,30 @@ public sealed record FactorialCampaignManifest
     public required string TargetSolution { get; init; }
     public required string BaselineSource { get; init; }
     public required string BaselineSha256 { get; init; }
+
+    /// <summary>
+    /// The condition signatures every block must contain, each written
+    /// <c>grounding|control_structure|visible_test</c> — for example <c>False|single_shot|False</c>.
+    /// Null means the classic eight-cell 2x2x2 factorial, which is what every frozen confirmatory
+    /// manifest relies on. Supplying a smaller set is what lets a reduced design, such as a
+    /// grounding-only transfer probe, run through the same machinery.
+    /// </summary>
+    public IReadOnlyList<string>? ConditionSignatures { get; init; }
+
+    /// <summary>
+    /// Extra arguments appended to every <c>dotnet build</c> of the build gate. Needed for
+    /// solutions that cannot restore in the execution environment, where
+    /// <c>--no-restore -p:NuGetAudit=false</c> builds against an already-populated package cache.
+    /// Empty or null keeps the default argument list.
+    /// </summary>
+    public IReadOnlyList<string>? BuildArguments { get; init; }
+
+    /// <summary>
+    /// Free-text label for the experiment this manifest belongs to, recorded so a reduced design is
+    /// never mistaken for the confirmatory factorial during analysis.
+    /// </summary>
+    public string? Kind { get; init; }
+
     public required IReadOnlyList<FactorialCampaignAssignment> Assignments { get; init; }
 }
 

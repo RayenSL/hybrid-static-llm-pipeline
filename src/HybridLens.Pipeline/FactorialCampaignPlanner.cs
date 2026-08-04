@@ -153,6 +153,35 @@ public static class FactorialCampaignPlanner
         return manifest;
     }
 
+    /// <summary>
+    /// The condition signatures a manifest's blocks must contain. Absent
+    /// <see cref="FactorialCampaignManifest.ConditionSignatures"/> this is the classic eight-cell
+    /// factorial, so every frozen confirmatory manifest validates exactly as before. A manifest that
+    /// declares its own set — a grounding-only probe, say — is validated against that instead, which
+    /// is what allows a reduced design on an arbitrary solution to reuse this machinery.
+    /// </summary>
+    public static IReadOnlyList<string> ExpectedSignatures(FactorialCampaignManifest manifest)
+    {
+        if (manifest.ConditionSignatures is { Count: > 0 } declared)
+        {
+            var distinct = declared.Distinct(StringComparer.Ordinal).ToList();
+            if (distinct.Count != declared.Count)
+                throw new InvalidDataException("declared condition signatures contain a duplicate");
+            foreach (var signature in distinct)
+            {
+                var parts = signature.Split('|');
+                if (parts.Length != 3 ||
+                    !bool.TryParse(parts[0], out _) ||
+                    parts[1] is not ("single_shot" or "iterative") ||
+                    !bool.TryParse(parts[2], out _))
+                    throw new InvalidDataException(
+                        $"condition signature must read grounding|control_structure|visible_test: {signature}");
+            }
+            return distinct;
+        }
+        return Conditions.Select(c => $"{c.Grounded}|{c.Control}|{c.Tests}").ToList();
+    }
+
     public static void Validate(FactorialCampaignManifest manifest, bool verifyFiles)
     {
         if (manifest.Version != Version) throw new InvalidDataException($"unsupported campaign manifest version: {manifest.Version}");
@@ -168,13 +197,16 @@ public static class FactorialCampaignPlanner
         if (ordered.Select(a => a.AssignmentId).Distinct(StringComparer.Ordinal).Count() != ordered.Count)
             throw new InvalidDataException("campaign assignment IDs are not unique");
 
+        var expected = ExpectedSignatures(manifest).ToHashSet(StringComparer.Ordinal);
         foreach (var block in ordered.GroupBy(a => a.BlockId, StringComparer.Ordinal))
         {
-            if (block.Count() != Conditions.Length) throw new InvalidDataException($"campaign block {block.Key} does not have eight conditions");
+            if (block.Count() != expected.Count)
+                throw new InvalidDataException(
+                    $"campaign block {block.Key} has {block.Count()} conditions; the declared design has {expected.Count}");
             var signatures = block.Select(a => $"{a.GroundingEnabled}|{a.ControlStructure}|{a.VisibleTestsEnabled}")
                 .ToHashSet(StringComparer.Ordinal);
-            var expected = Conditions.Select(c => $"{c.Grounded}|{c.Control}|{c.Tests}").ToHashSet(StringComparer.Ordinal);
-            if (!signatures.SetEquals(expected)) throw new InvalidDataException($"campaign block {block.Key} does not contain the full factorial");
+            if (!signatures.SetEquals(expected))
+                throw new InvalidDataException($"campaign block {block.Key} does not contain the declared design");
             if (block.Select(a => (a.FilePath, a.SymbolName, a.Line, a.TargetEndLine, a.RunNumber)).Distinct().Count() != 1)
                 throw new InvalidDataException($"campaign block {block.Key} mixes instances or repetitions");
         }
