@@ -62,7 +62,7 @@ its verified-repair rate is zero by construction.
 
 ### 2. Hybrid (static analysis → LLM suggestion → strict-literal application)
 
-The detector's finding is passed to `gpt-5.4`, which returns a **text repair recipe** (not code
+The detector's finding is passed to `gpt-5.6-sol`, which returns a **text repair recipe** (not code
 that is executed directly):
 
 > *"Keep `ImportBatch` as a coordinator only. Extract row parsing into `TryParseOrder`,

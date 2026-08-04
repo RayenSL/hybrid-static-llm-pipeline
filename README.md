@@ -35,113 +35,137 @@ dotnet build src/HybridLens.CLI
 
 ## Run
 
-### Analyse a project
+### Analyse a solution or project
+
+Static analysis only, no model call. This is also how a campaign baseline is produced.
 
 ```bash
-dotnet run --project src/HybridLens.CLI -- analyse --target path/to/Project.csproj
+dotnet run --project src/HybridLens.CLI -- analyse --target path/to/Solution.sln --dry-run     --severity Warning --format json --output baseline.jsonl
 ```
 
-### Analyse a solution
+`--target` accepts a `.sln` or a `.csproj`. Add `--config path/to/hybridlens.json` to override
+detector thresholds. Drop `--dry-run` to send each finding to the configured models.
+
+### The confirmatory experiment, end to end
 
 ```bash
-dotnet run --project src/HybridLens.CLI -- analyse --target path/to/Solution.sln
+bash run_experiment.sh                    # every stage, in protocol order
+bash run_experiment.sh --dry-run          # print the commands, execute nothing
+bash run_experiment.sh --stage campaign   # one stage
+bash run_experiment.sh --from oracle      # that stage and everything after
+bash run_experiment.sh --help
 ```
 
-### With a custom config file
+Six stages, in an order the protocol fixes rather than one chosen for convenience:
+
+| stage | what it does | model calls |
+|---|---|---|
+| `baseline` | detector over the pristine solution | none |
+| `tests` | one diagnosis-blind characterisation test per target | one per target |
+| `manifest` | freezes the randomised assignment schedule | none |
+| `campaign` | executes the assignments, sealing one final source each | one per assignment, or up to the budget when iterative |
+| `oracle` | private Layer-3 behavioural measurement | none |
+| `analyse` | summary, statistics, figures | none |
+
+Two properties matter more than the stage list. Behavioural measurement happens only in `oracle`,
+after every repair condition has terminated, so no repair can be tuned to the oracle that scores it.
+And detector re-measurement and private results are withheld from every model call, so the only
+feedback an iterative condition receives is the compiler and, where assigned, a visible test.
+
+Environment overrides; the defaults reproduce the reported run.
 
 ```bash
-dotnet run --project src/HybridLens.CLI -- analyse --target path/to/Project.csproj --config path/to/hybridlens.json
+MODEL=gpt-5.6-sol RUNS=3 BUDGET=6 SEED=503999552 CORPUS=path/to/Corpus.sln bash run_experiment.sh
 ```
 
-### Single-model run (controlled experiment)
-
-`analyse` uses every model in `Llm.Models` by default. Use `--model` to pin generation to one
-evaluated model while keeping others (e.g. the verify-repair applier) configured:
+A cheap orchestration pilot over one target and one repetition:
 
 ```bash
-dotnet run --project src/HybridLens.CLI -- analyse \
-    --target path/to/Corpus.sln --context-level minimal --model gpt-5.4 --runs 3
+RUNS=1 MAX_TARGETS=1 bash run_experiment.sh
 ```
 
-`--model` accepts a comma-separated list; omit it to use all configured models.
+### Inspect a manifest before spending model calls
+
+`--dry-run` validates the manifest, the target solution, the frozen baseline hash and every pristine
+source hash, then prints the plan and stops.
+
+```bash
+dotnet run --project src/HybridLens.CLI -- factorial-campaign     --manifest <manifest>.json --out <campaign-dir> --dry-run
+```
+
+The campaign is crash-safe: an interrupted run resumes from its ledger and never repeats a committed
+assignment. An incomplete trace must be quarantined before resuming, which the command enforces.
+
+### Other experiments
+
+These have their own denominators and are never pooled with the confirmatory factorial.
+
+**Four-level context supplement** — Minimal, Structural, Relational and Full context through the
+suggestion-plus-applier mechanism, where a non-evaluated applier materialises each recommendation
+under a strict-literal contract.
+
+```bash
+dotnet run --project src/HybridLens.CLI -- grounding-campaign     --manifest <grounding-manifest>.json --out <campaign-dir> --preflight-only
+```
+
+The applier must be a different model from the evaluated one, so it never scores code it wrote
+itself. Configure it alongside the evaluated model in `appsettings.local.json`.
+
+**Iterative arms** — `agentic` is ungrounded and `grounded-iterative` differs from it only in that
+the opening message carries the analyser's Structural finding. Both grant the compiler as the sole
+external check and share the frozen build-attempt budget; keeping the budget equal is what holds the
+control structure fixed between them.
+
+```bash
+dotnet run --project src/HybridLens.CLI -- agentic     --from <structural-trace>.jsonl --target path/to/Corpus.sln     --model gpt-5.6-sol --runs 3 --budget 6
+```
+
+By default the agent sees only files holding a target. `--sweep-corpus` widens it to every `.cs`
+file so a detection on a clean file scores as spurious, which is what makes precision measurable
+over known-clean code rather than within target files alone.
+
+**Repair verification for the suggestion-plus-applier mechanism** — applies each recommendation
+strict-literally, rebuilds, and re-measures the triggering condition, scoring the ladder
+`unapplicable < build_fails < builds_unresolved < resolved`. The iterative arms do not pass through
+here: they edit the source themselves and are scored in their own runner.
+
+```bash
+dotnet run --project src/HybridLens.CLI -- verify-repair     --from <runs>.jsonl --target path/to/Corpus.sln     --applier DeepSeek-V4-Pro --out verified.jsonl
+```
+
+**Transfer probe on an arbitrary solution** — a manifest may declare a reduced design through
+`condition_signatures`, and extra `build_arguments` for a solution that cannot restore in the
+execution environment. Behaviour is then measured by an external golden-master harness rather than
+the corpus oracle.
+
+```bash
+dotnet run --project src/HybridLens.CLI -- external-oracle     --artifacts <campaign-dir>/final-sources --target path/to/Solution.sln     --harness path/to/Harness.csproj --golden path/to/golden     --harness-prop -p:ProductRoot={WORKING_ROOT}     --build-arg --no-restore
+```
+
+Each artefact is evaluated in its own copy of the pristine tree with exactly one file replaced, so
+no artefact can observe another. `{WORKING_ROOT}` is substituted with that copy, which is what makes
+the harness measure the repaired tree rather than the pristine one. Outcomes are three-valued:
+`behaviour_preserved`, `behavioural_change`, and `public_contract_change` for a harness that no
+longer compiles because a repair moved members — that last is not a regression and is left for
+adjudication.
+
+### Analysis
+
+```bash
+python analysis/analyse_results.py --input "runs/*.jsonl" --output output
+python analysis/extraction_vs_simplification.py --campaign experiments/<run>
+python analysis/factorial_glmm.py --help
+```
+
+`extraction_vs_simplification.py` classifies every archived repair from its diff as an extraction or
+a branch simplification. It is what turns the Goodhart concern about a metric-resolved outcome from
+a caveat into a measurement.
 
 ### Help
 
 ```bash
 dotnet run --project src/HybridLens.CLI -- --help
-dotnet run --project src/HybridLens.CLI -- analyse --help
-```
-
-### Run the agentic arm (target-only ungrounded, H1b)
-
-`agentic` runs the iterative target-only arm (§4.4.1, prompt v2.0.2). For each known
-instance, the model gets the whole file plus the same neutral symbol and declaration
-line range used in every factorial cell, but no anti-pattern diagnosis or metrics. It
-must **diagnose and repair** that target through an autonomous loop: each turn it edits the
-source and requests a build (its **only** tool is the compiler), observes the result, and revises,
-until it declares completion or the frozen iteration budget is spent. It never sees the static analyser's anti-pattern label, severity, metrics, thresholds,
-or finding text, so the grounding treatment remains withheld. Self-detections are matched to the known instances for
-recall/precision, and the agent's *final edited solution* is scored directly for verified-repair
-(no separate applier — see below).
-
-```bash
-dotnet run --project src/HybridLens.CLI -- agentic \
-    --from runs/<structural-trace>.jsonl \
-    --target path/to/Corpus.sln \
-    --model gpt-5.4 --runs 3 --budget 6
-```
-
-By default the agent runs over the files holding a seeded instance. Add `--sweep-corpus` to run it
-over every `.cs` (incl. clean/distractor files) so detections on non-instances score as spurious
-(fuller precision). Each trajectory (all turns + build results + final source) is frozen as a JSON
-artefact under `runs/<stamp>-agentic-trajectories/`.
-
-### Verify repairs (objective repair outcome)
-
-`verify-repair` takes the repairs the **hybrid** arm produced (the `parsed_suggested_fix` of each
-hybrid run), applies each one strict-literally with a non-evaluated **applier**, rebuilds the corpus,
-and re-measures the metric that triggered the detection. Each candidate is scored on the ladder
-`unapplicable < build_fails < builds_unresolved < resolved`, plus a binary `verified_repair_success`
-(applies ∧ builds ∧ metric-resolved). The agentic arm is **not** processed here — the agent edits the
-source itself, so its final solution is scored inside the `agentic` runner (§4.7.1).
-
-```bash
-dotnet run --project src/HybridLens.CLI -- verify-repair \
-    --from runs/20260101-120000.jsonl \
-    --target path/to/Corpus.sln \
-    --applier DeepSeek-V4-Pro \
-    --out runs/verified.jsonl
-```
-
-The applier must be a model **different from the evaluated model** (so it never scores code it
-completed itself). `DeepSeek-V4-Pro` (Azure) is the default and reuses your Azure config — no extra
-provider/key:
-
-```json
-// appsettings.local.json
-{
-  "Llm": {
-    "Models": {
-      "DeepSeek-V4-Pro": { "Provider": "azure", "Model": "DeepSeek-V4-Pro", "BaseUrl": "https://<your>.openai.azure.com" }
-    }
-  }
-}
-```
-
-## Automated quality evaluation
-
-The end-to-end runner finishes with programmatic evaluation; it does not pause for interactive input:
-
-```bash
-bash run_phase_c.sh
-```
-
-The resulting flow is `static analysis → LLM repair → apply/build/re-measure → quality reports`. Reports are generated directly from normal JSONL run records and include detector agreement against frozen ground truth, parse/failure status, lexical ISO/IEC 25010 alignment, agentic recall and spurious detections, verified-repair outcomes, whole-solution analyzer deltas, and characterization-test results. Failed or low-confidence records remain visible and do not block report production.
-
-To regenerate reports from existing traces:
-
-```bash
-python analysis/analyse_results.py --input "runs/*.jsonl" --output output
+dotnet run --project src/HybridLens.CLI -- <command> --help
 ```
 
 ## Configuration
@@ -180,7 +204,7 @@ Configuration is loaded in the following order (later sources override earlier o
     "Temperature": 0.2,
     "MaxTokens": 1024,
     "Models": {
-      "gpt-5.4":         { "Provider": "azure",  "Model": "gpt-5.4", "BaseUrl": "https://<your>.openai.azure.com" },
+      "gpt-5.6-sol":     { "Provider": "azure",  "Model": "gpt-5.6-sol", "BaseUrl": "https://<your>.openai.azure.com" },
       "DeepSeek-V4-Pro": { "Provider": "azure", "Model": "DeepSeek-V4-Pro", "BaseUrl": "https://<your>.openai.azure.com" }
     }
   }
@@ -211,7 +235,7 @@ Configuration is loaded in the following order (later sources override earlier o
 | `Provider` value | Notes |
 |---|---|
 | `claude` | Anthropic models (e.g. `claude-opus-4-8`) — requires an `ApiKey` on the model entry or `Llm.ApiKey` |
-| `azure` | Azure OpenAI (e.g. `gpt-5.4`) — requires `BaseUrl` + `ApiKey` |
+| `azure` | Azure OpenAI (e.g. `gpt-5.6-sol`) — requires `BaseUrl` + `ApiKey` |
 
 Set your API key in a local override file (never commit this):
 
