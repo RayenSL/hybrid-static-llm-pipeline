@@ -1,0 +1,34 @@
+﻿{
+  "schemaVersion": "1.0",
+  "analysedAt": "2026-07-27T13:11:03.610772+00:00",
+  "target": "Z:\\GitHub\\hybrid-static-llm-pipeline\\pilot\\non-evaluation-fixture\\CharacterizationPilot.sln",
+  "summary": {
+    "total": 1,
+    "critical": 1,
+    "warnings": 0,
+    "llmProcessed": 1
+  },
+  "findings": [
+    {
+      "type": "longMethod",
+      "severity": "critical",
+      "symbolName": "CheckoutCalculator.Calculate",
+      "filePath": "CharacterizationPilot\\CheckoutCalculator.cs",
+      "line": 5,
+      "snippet": "    public decimal Calculate(\n        decimal subtotal,\n        int itemCount,\n        bool isMember,\n        bool hasCoupon,\n        bool weekend,\n        bool expedited,\n        string destination,\n        int loyaltyYears,\n        bool fragile,\n        bool giftWrap,\n        bool firstOrder,\n        bool seasonalSale)\n    {\n        if (subtotal \u003C 0)\n        {\n            throw new ArgumentOutOfRangeException(nameof(subtotal));\n        }\n\n        if (itemCount \u003C 0)\n        {\n            throw new ArgumentOutOfRangeException(nameof(itemCount));\n        }\n\n        var total = subtotal;\n\n        if (isMember)\n        {\n            total *= 0.95m;\n        }\n\n        if (hasCoupon \u0026\u0026 subtotal \u003E= 50m)\n        {\n            total -= 7.50m;\n        }\n\n        if (itemCount \u003E= 10)\n        {\n            total *= 0.97m;\n        }\n\n        if (weekend)\n        {\n            total \u002B= 2m;\n        }\n\n        if (expedited)\n        {\n            total \u002B= 14m;\n        }\n\n        if (string.Equals(destination, \u0022international\u0022, StringComparison.OrdinalIgnoreCase))\n        {\n            total \u002B= 25m;\n        }\n\n        if (loyaltyYears \u003E= 5)\n        {\n            total -= 3m;\n        }\n\n        if (fragile)\n        {\n            total \u002B= 4.25m;\n        }\n\n        if (giftWrap)\n        {\n            total \u002B= 3.50m;\n        }\n\n        if (firstOrder)\n        {\n            total *= 0.98m;\n        }\n\n        if (seasonalSale)\n        {\n            total *= 0.90m;\n        }\n\n        return decimal.Round(total, 2, MidpointRounding.AwayFromZero);\n    }\n",
+      "metrics": {
+        "CyclomaticComplexity": 15,
+        "LinesOfCode": 83,
+        "MaxCyclomaticComplexity": 10,
+        "MaxLinesOfCode": 50
+      },
+      "llmAnalysis": [
+        {
+          "model": "static-analyser",
+          "explanation": "[LongMethod] CheckoutCalculator.Calculate at Z:\\GitHub\\hybrid-static-llm-pipeline\\pilot\\non-evaluation-fixture\\CharacterizationPilot\\CheckoutCalculator.cs:5. Method exceeds size and complexity thresholds (lines of code = 83, cyclomatic complexity = 15).",
+          "remediation": "Remediation: not provided by the static analyser."
+        }
+      ]
+    }
+  ]
+}

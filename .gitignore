@@ -6,6 +6,18 @@ obj/
 **/output/
 **/runs/
 
+# Archived experiment runs (large generated artefacts)
+archive/previous-runs-*/
+experiments/**/archive/
+
+# Per-assignment codebase reconstructions: regenerable from campaign/final-sources
+# via preflight/archive_materialized_codebases.py. The INDEX/SUMMARY/SHA256SUMS
+# records at the viewable-codebases root are kept as provenance.
+experiments/**/viewable-codebases/*/
+
+# Local scratch
+tmp/
+
 # NuGet
 *.nupkg
 *.snupkg

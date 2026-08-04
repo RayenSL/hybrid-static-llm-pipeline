@@ -60,13 +60,15 @@ var root = new RootCommand("HybridLens — hybrid static + LLM .NET code analyse
     FactorialSingleShotCommand.Build(services),
     FactorialManifestCommand.Build(),
     FactorialCampaignCommand.Build(services),
+    GroundingCampaignCommand.Build(services),
     PrivateLayer3Command.Build(),
     FactorialSummaryCommand.Build(),
     VerifyRepairCommand.Build(services),
     QualityScanCommand.Build(services),
     MetricTraceCommand.Build(services),
     MetricAggregateCommand.Build(services),
-    QualityRescoreCommand.Build(services)
+    QualityRescoreCommand.Build(services),
+    Chapter54MetricExportCommand.Build()
 };
 
 return await root.Parse(args).InvokeAsync();
