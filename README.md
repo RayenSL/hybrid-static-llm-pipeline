@@ -139,8 +139,14 @@ execution environment. Behaviour is then measured by an external golden-master h
 the corpus oracle.
 
 ```bash
-dotnet run --project src/HybridLens.CLI -- external-oracle     --artifacts <campaign-dir>/final-sources --target path/to/Solution.sln     --harness path/to/Harness.csproj --golden path/to/golden     --harness-prop -p:ProductRoot={WORKING_ROOT}     --build-arg --no-restore
+dotnet run --project src/HybridLens.CLI -- external-oracle     --artifacts <campaign-dir>/final-sources --target path/to/Solution.sln     --harness path/to/Harness.csproj --golden path/to/golden     --harness-prop -p:ProductRoot={WORKING_ROOT}     --build-arg --no-restore --build-arg -p:NuGetAudit=false     --working-copy-skip bin --working-copy-skip .git --working-copy-skip .vs --working-copy-skip .idea
 ```
+
+Building with `--no-restore` obliges the working copy to keep `obj`, because that is where
+`project.assets.json` lives and nothing else can regenerate it. Omit it and MSBuild stops at
+NETSDK1004 before the repaired file is ever compiled, so every assignment records a build failure the
+model never caused — hence `--working-copy-skip` above, and `working_copy_skip_directories` in a
+manifest. Both paths refuse the unsafe combination at preflight rather than produce that data.
 
 Each artefact is evaluated in its own copy of the pristine tree with exactly one file replaced, so
 no artefact can observe another. `{WORKING_ROOT}` is substituted with that copy, which is what makes

@@ -232,6 +232,16 @@ public static class FactorialCampaignPlanner
                 throw new InvalidDataException($"assignment {assignment.AssignmentId} has an unexpected prompt version");
         }
 
+        // --no-restore cannot regenerate project.assets.json, so a working copy without obj stops at
+        // NETSDK1004 before the repair is compiled and every assignment records a build failure the
+        // model never caused. Refuse the combination rather than produce that data.
+        if (manifest.BuildArguments?.Contains("--no-restore", StringComparer.Ordinal) == true &&
+            (manifest.WorkingCopySkipDirectories ?? FactorialSingleShotRunner.DefaultSkipDirs)
+                .Contains("obj", StringComparer.OrdinalIgnoreCase))
+            throw new InvalidDataException(
+                "a manifest that builds with --no-restore must retain obj in the working copy; "
+                + "declare working_copy_skip_directories without it");
+
         if (!verifyFiles) return;
         if (!File.Exists(manifest.TargetSolution)) throw new FileNotFoundException("manifest target solution not found", manifest.TargetSolution);
         if (!File.Exists(manifest.BaselineSource)) throw new FileNotFoundException("manifest baseline not found", manifest.BaselineSource);

@@ -49,13 +49,18 @@ public sealed class ExternalOracleEvaluator(
     IReadOnlyList<string> harnessProperties,
     IReadOnlyList<string> buildArguments,
     int timeoutSeconds,
+    IReadOnlyList<string>? workingCopySkipDirectories = null,
     Func<string, IReadOnlyList<string>, int, CancellationToken, Task<(bool Ok, string Output)>>? buildHarness = null,
     Func<string, string, int, CancellationToken, Task<(bool Ok, string Output)>>? runHarness = null)
 {
     /// <summary>Substituted with the isolated working-copy root in every harness property.</summary>
     public const string WorkingRootToken = "{WORKING_ROOT}";
 
-    private static readonly string[] SkipDirs = ["bin", "obj", ".git", ".vs", ".idea"];
+    /// <summary>Directories left out of each isolated working copy. A harness built with
+    /// <c>--no-restore</c> must retain <c>obj</c>, or MSBuild stops at NETSDK1004 and the failure
+    /// would be misrecorded as a public-contract change.</summary>
+    private readonly string[] _skipDirs = workingCopySkipDirectories is { Count: > 0 } declared
+        ? [.. declared] : FactorialSingleShotRunner.DefaultSkipDirs;
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
@@ -108,6 +113,11 @@ public sealed class ExternalOracleEvaluator(
             throw new DirectoryNotFoundException($"golden directory not found: {goldenDirectory}");
         if (!File.Exists(harnessProject))
             throw new FileNotFoundException("harness project not found", harnessProject);
+        if (buildArguments.Contains("--no-restore", StringComparer.Ordinal) &&
+            _skipDirs.Contains("obj", StringComparer.OrdinalIgnoreCase))
+            throw new InvalidDataException(
+                "a harness built with --no-restore must retain obj in the working copy; "
+                + "otherwise NETSDK1004 is misrecorded as a public-contract change");
 
         var workingRoot = Path.Combine(Path.GetTempPath(), $"hybridlens-external-oracle-{Guid.NewGuid():N}");
         var stopwatch = Stopwatch.StartNew();
@@ -219,14 +229,14 @@ public sealed class ExternalOracleEvaluator(
     private static int CountLines(string output, string prefix) =>
         output.Split('\n').Count(line => line.TrimStart().StartsWith(prefix, StringComparison.Ordinal));
 
-    private static void CopyTree(string source, string destination)
+    private void CopyTree(string source, string destination)
     {
         Directory.CreateDirectory(destination);
         foreach (var file in Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories))
         {
             var relative = Path.GetRelativePath(source, file);
             if (relative.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                .Any(segment => SkipDirs.Contains(segment, StringComparer.OrdinalIgnoreCase)))
+                .Any(segment => _skipDirs.Contains(segment, StringComparer.OrdinalIgnoreCase)))
                 continue;
             var target = Path.Combine(destination, relative);
             Directory.CreateDirectory(Path.GetDirectoryName(target)!);

@@ -70,12 +70,15 @@ public sealed class ExternalOracleEvaluatorTests : IDisposable
 
     private ExternalOracleEvaluator Evaluator(
         bool harnessBuilds, bool checkPasses, string checkOutput = "",
-        List<string>? capturedProperties = null) =>
+        List<string>? capturedProperties = null,
+        IReadOnlyList<string>? skipDirectories = null) =>
         new(
             _solution, _harness, _golden,
             harnessProperties: [$"-p:ProductRoot={ExternalOracleEvaluator.WorkingRootToken}"],
             buildArguments: ["--no-restore"],
             timeoutSeconds: 30,
+            // --no-restore obliges the copy to keep obj; the guard below enforces it.
+            workingCopySkipDirectories: skipDirectories ?? ["bin", ".git", ".vs", ".idea"],
             buildHarness: (_, properties, _, _) =>
             {
                 capturedProperties?.AddRange(properties);
@@ -163,6 +166,19 @@ public sealed class ExternalOracleEvaluatorTests : IDisposable
 
         await Assert.ThrowsAsync<InvalidDataException>(
             () => Evaluator(harnessBuilds: true, checkPasses: true).EvaluateOneAsync(path));
+    }
+
+    [Fact]
+    public async Task A_no_restore_harness_with_obj_omitted_is_refused_rather_than_mismeasured()
+    {
+        var artifact = WriteArtifact(buildPassed: true);
+        var evaluator = Evaluator(harnessBuilds: true, checkPasses: true,
+            skipDirectories: ["bin", "obj", ".git", ".vs", ".idea"]);
+
+        var error = await Assert.ThrowsAsync<InvalidDataException>(
+            () => evaluator.EvaluateOneAsync(artifact));
+
+        Assert.Contains("must retain obj", error.Message);
     }
 
     public void Dispose()

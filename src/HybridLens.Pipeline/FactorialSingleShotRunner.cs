@@ -17,9 +17,13 @@ public sealed class FactorialSingleShotRunner(
     string solutionPath,
     int buildTimeoutSeconds,
     Func<string, int, CancellationToken, Task<(bool Ok, string Output)>>? build = null,
-    Func<GeneratedTestSource, string, int, CancellationToken, Task<GeneratedTestExecutionResult>>? executeVisibleTest = null)
+    Func<GeneratedTestSource, string, int, CancellationToken, Task<GeneratedTestExecutionResult>>? executeVisibleTest = null,
+    IReadOnlyList<string>? workingCopySkipDirectories = null)
 {
-    private static readonly string[] SkipDirs = ["bin", "obj", ".git", ".vs", ".idea"];
+    public static readonly string[] DefaultSkipDirs = ["bin", "obj", ".git", ".vs", ".idea"];
+
+    private readonly string[] _skipDirs = workingCopySkipDirectories is { Count: > 0 } declared
+        ? [.. declared] : DefaultSkipDirs;
     private readonly Func<string, int, CancellationToken, Task<(bool Ok, string Output)>> _build
         = build ?? DotnetBuilder.BuildAsync;
     private readonly Func<GeneratedTestSource, string, int, CancellationToken, Task<GeneratedTestExecutionResult>> _executeVisibleTest
@@ -89,6 +93,7 @@ public sealed class FactorialSingleShotRunner(
         ErrorStatus? error = null;
         string? errorMessage = null;
         bool? built = null;
+        string? buildOutputTail = null;
         bool? visiblePassed = null;
         var testDuration = 0d;
         var testAttempts = 0;
@@ -125,6 +130,8 @@ public sealed class FactorialSingleShotRunner(
                 await File.WriteAllTextAsync(workingTarget, parsed.EditedFile, cancellationToken);
                 var buildResult = await _build(workingSln, buildTimeoutSeconds, cancellationToken);
                 built = buildResult.Ok;
+                // A bare false cannot tell a broken repair from a broken harness; keep the evidence.
+                buildOutputTail = buildResult.Ok ? null : Tail(buildResult.Output, 4000);
                 if (built == true && visibleTest is not null)
                 {
                     var originalProject = visibleTest.Artifact.ProjectFile;
@@ -223,6 +230,7 @@ public sealed class FactorialSingleShotRunner(
             DurationMs = stopwatch.Elapsed.TotalMilliseconds,
             RepairApplicable = parsed is not null,
             BuildPassed = built,
+            BuildOutputTail = buildOutputTail,
             RemeasuredMetrics = remeasured,
             VerifiedRepairLadder = ladder,
             VerifiedRepairSuccess = ladder == VerifiedRepairOutcome.Resolved,
@@ -284,14 +292,17 @@ public sealed class FactorialSingleShotRunner(
         return dot >= 0 && dot < value.Length - 1 ? value[(dot + 1)..] : value;
     }
 
-    private static void CopyTree(string source, string destination)
+    private static string Tail(string value, int maxChars) =>
+        string.IsNullOrEmpty(value) || value.Length <= maxChars ? value : value[^maxChars..];
+
+    private void CopyTree(string source, string destination)
     {
         Directory.CreateDirectory(destination);
         foreach (var file in Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories))
         {
             var relative = Path.GetRelativePath(source, file);
             if (relative.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)
-                .Any(part => SkipDirs.Contains(part, StringComparer.OrdinalIgnoreCase))) continue;
+                .Any(part => _skipDirs.Contains(part, StringComparer.OrdinalIgnoreCase))) continue;
             var target = Path.Combine(destination, relative);
             Directory.CreateDirectory(Path.GetDirectoryName(target)!);
             File.Copy(file, target, overwrite: true);

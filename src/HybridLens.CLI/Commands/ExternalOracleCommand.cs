@@ -49,6 +49,13 @@ public static class ExternalOracleCommand
             Description = "Extra argument for the harness build, repeatable (for example --no-restore).",
             AllowMultipleArgumentsPerToken = false
         };
+        var skipDirOption = new Option<string[]>("--working-copy-skip")
+        {
+            Description = "Directory omitted from each isolated working copy, repeatable "
+                        + "(default: bin obj .git .vs .idea). A harness built with --no-restore must "
+                        + "retain obj, since project.assets.json cannot be regenerated.",
+            AllowMultipleArgumentsPerToken = false
+        };
         var outOption = new Option<FileInfo?>("--out")
         {
             Description = "Result JSONL (default: runs/<timestamp>-external-oracle.jsonl). Existing files are never overwritten."
@@ -62,7 +69,7 @@ public static class ExternalOracleCommand
             "Evaluate sealed final-source artefacts with an external golden-master harness, after all repair conditions terminate.")
         {
             artifactsOption, targetOption, harnessOption, goldenOption,
-            propertyOption, buildArgOption, outOption, timeoutOption
+            propertyOption, buildArgOption, skipDirOption, outOption, timeoutOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -73,6 +80,7 @@ public static class ExternalOracleCommand
             var golden = parseResult.GetValue(goldenOption)!;
             var properties = parseResult.GetValue(propertyOption) ?? [];
             var buildArgs = parseResult.GetValue(buildArgOption) ?? [];
+            var skipDirs = parseResult.GetValue(skipDirOption) ?? [];
             var timeout = parseResult.GetValue(timeoutOption);
             if (timeout <= 0) timeout = 600;
             var output = parseResult.GetValue(outOption)?.FullName
@@ -106,7 +114,8 @@ public static class ExternalOracleCommand
             }
 
             var evaluator = new ExternalOracleEvaluator(
-                target.FullName, harness.FullName, golden.FullName, properties, buildArgs, timeout);
+                target.FullName, harness.FullName, golden.FullName, properties, buildArgs, timeout,
+                workingCopySkipDirectories: skipDirs);
             var results = await evaluator.EvaluateDirectoryAsync(
                 artifacts.FullName, Console.Error, cancellationToken);
 

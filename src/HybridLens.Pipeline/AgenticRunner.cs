@@ -47,9 +47,14 @@ public sealed class AgenticRunner(
     Func<string, int, CancellationToken, Task<(bool Ok, string Output)>>? build = null,
     string architecture = "agentic",
     ISolutionQualityScanner? qualityScanner = null,
-    Func<GeneratedTestSource, string, int, CancellationToken, Task<GeneratedTestExecutionResult>>? executeVisibleTest = null)
+    Func<GeneratedTestSource, string, int, CancellationToken, Task<GeneratedTestExecutionResult>>? executeVisibleTest = null,
+    IReadOnlyList<string>? workingCopySkipDirectories = null)
 {
-    private static readonly string[] SkipDirs = ["bin", "obj", ".git", ".vs", ".idea"];
+    /// <summary>Directories left out of the working copy. See
+    /// <see cref="HybridLens.Core.Models.FactorialCampaignManifest.WorkingCopySkipDirectories"/>:
+    /// a solution built with <c>--no-restore</c> must retain <c>obj</c>.</summary>
+    private readonly string[] _skipDirs = workingCopySkipDirectories is { Count: > 0 } declared
+        ? [.. declared] : FactorialSingleShotRunner.DefaultSkipDirs;
 
     /// <summary>The compiler tool. Defaults to a real <c>dotnet build</c>; overridable for tests.</summary>
     private readonly Func<string, int, CancellationToken, Task<(bool Ok, string Output)>> _build
@@ -985,7 +990,7 @@ public sealed class AgenticRunner(
 
     // ── Working-copy helpers (mirror RepairVerifier) ─────────────────────────
 
-    private static void CopyTree(string src, string dst)
+    private void CopyTree(string src, string dst)
     {
         src = Path.GetFullPath(src);
         Directory.CreateDirectory(dst);
@@ -999,10 +1004,10 @@ public sealed class AgenticRunner(
         }
     }
 
-    private static bool IsSkipped(string relativePath)
+    private bool IsSkipped(string relativePath)
         => relativePath
             .Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)
-            .Any(part => SkipDirs.Contains(part, StringComparer.OrdinalIgnoreCase));
+            .Any(part => _skipDirs.Contains(part, StringComparer.OrdinalIgnoreCase));
 
     private static void TryDeleteTree(string path)
     {

@@ -35,6 +35,17 @@ public sealed record FactorialCampaignManifest
     public IReadOnlyList<string>? BuildArguments { get; init; }
 
     /// <summary>
+    /// Directories excluded when an assignment's isolated working copy is made, matched on any path
+    /// segment. Null keeps the default <c>bin obj .git .vs .idea</c>.
+    ///
+    /// A solution built with <c>--no-restore</c> must retain <c>obj</c>, because that is where
+    /// <c>project.assets.json</c> lives and MSBuild fails with NETSDK1004 without it. Retaining it is
+    /// safe: the copied assets file points at the machine-wide package cache, while the compiled
+    /// sources and project files are the copy's own, so the repair under test is what gets built.
+    /// </summary>
+    public IReadOnlyList<string>? WorkingCopySkipDirectories { get; init; }
+
+    /// <summary>
     /// Free-text label for the experiment this manifest belongs to, recorded so a reduced design is
     /// never mistaken for the confirmatory factorial during analysis.
     /// </summary>

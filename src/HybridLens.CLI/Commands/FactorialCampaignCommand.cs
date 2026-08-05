@@ -117,6 +117,9 @@ public static class FactorialCampaignCommand
             // A manifest may carry extra dotnet build arguments for solutions that cannot restore
             // in this environment. Absent them the gate keeps its default command line.
             var buildArguments = manifest.BuildArguments is { Count: > 0 } extra ? extra : null;
+            // A solution built with --no-restore must keep obj/ in the working copy, or MSBuild
+            // fails with NETSDK1004 before the repair is ever compiled.
+            var skipDirectories = manifest.WorkingCopySkipDirectories;
             Func<string, int, CancellationToken, Task<(bool Ok, string Output)>>? build = buildArguments is null
                 ? null
                 : (solution, timeout, token) => DotnetBuilder.BuildAsync(solution, timeout, buildArguments, token);
@@ -125,6 +128,8 @@ public static class FactorialCampaignCommand
                 + (manifest.Kind is null ? "" : $"  kind: {manifest.Kind}"));
             if (buildArguments is not null)
                 Console.Error.WriteLine($"Build arguments: {string.Join(' ', buildArguments)}");
+            Console.Error.WriteLine("Working copy omits: "
+                + string.Join(' ', skipDirectories ?? FactorialSingleShotRunner.DefaultSkipDirs));
             Console.Error.WriteLine(
                 $"Design: {string.Join(", ", FactorialCampaignPlanner.ExpectedSignatures(manifest))}");
             Console.Error.WriteLine($"Manifest SHA-256: {FactorialCampaignPlanner.Sha256File(manifestFile.FullName)}");
@@ -177,7 +182,8 @@ public static class FactorialCampaignCommand
                             measurer,
                             manifest.TargetSolution,
                             manifest.BuildTimeoutSeconds,
-                            build);
+                            build,
+                            workingCopySkipDirectories: skipDirectories);
                         var record = await runner.RunAttemptAsync(
                             known,
                             assignment.RunNumber,
@@ -212,7 +218,8 @@ public static class FactorialCampaignCommand
                             manifest.IterationBudget,
                             manifest.BuildTimeoutSeconds,
                             build,
-                            architecture: architecture);
+                            architecture: architecture,
+                            workingCopySkipDirectories: skipDirectories);
                         await runner.RunAsync(
                             [known],
                             runs: 1,

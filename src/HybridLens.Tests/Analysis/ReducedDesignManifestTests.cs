@@ -89,6 +89,38 @@ public sealed class ReducedDesignManifestTests
     }
 
     [Fact]
+    public void Validate_rejects_a_no_restore_manifest_that_omits_obj_from_the_working_copy()
+    {
+        // Left unchecked this produces a whole campaign of NETSDK1004 build failures that look like
+        // the model's, so it is refused at preflight rather than after the model calls are spent.
+        var manifest = Manifest(
+        [
+            Assignment(1, "b1", grounded: false, "single_shot", tests: false),
+            Assignment(2, "b1", grounded: true,  "single_shot", tests: false),
+        ], GroundingOnly) with { BuildArguments = ["--no-restore", "-p:NuGetAudit=false"] };
+
+        var ex = Assert.Throws<InvalidDataException>(
+            () => FactorialCampaignPlanner.Validate(manifest, verifyFiles: false));
+        Assert.Contains("must retain obj", ex.Message);
+    }
+
+    [Fact]
+    public void Validate_accepts_a_no_restore_manifest_that_retains_obj()
+    {
+        var manifest = Manifest(
+        [
+            Assignment(1, "b1", grounded: false, "single_shot", tests: false),
+            Assignment(2, "b1", grounded: true,  "single_shot", tests: false),
+        ], GroundingOnly) with
+        {
+            BuildArguments = ["--no-restore", "-p:NuGetAudit=false"],
+            WorkingCopySkipDirectories = ["bin", ".git", ".vs", ".idea"]
+        };
+
+        FactorialCampaignPlanner.Validate(manifest, verifyFiles: false);
+    }
+
+    [Fact]
     public void Validate_still_rejects_a_two_condition_block_without_a_declared_design()
     {
         var manifest = Manifest(

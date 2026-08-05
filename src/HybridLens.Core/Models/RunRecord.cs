@@ -128,6 +128,12 @@ public sealed record RunRecord
     public          string?          RepairUnapplicableReason { get; init; }
     /// <summary>True when the applied solution compiled (the build gate). Null when unapplicable or not a verification row.</summary>
     public          bool?            BuildPassed              { get; init; }
+    /// <summary>
+    /// Tail of the compiler output when the build gate rejected the repair; null when it passed.
+    /// Recorded because a bare false cannot distinguish a genuinely broken repair from a defective
+    /// harness, and reconstructing the difference afterwards means rebuilding by hand.
+    /// </summary>
+    public          string?          BuildOutputTail          { get; init; }
     /// <summary>Triggering metric re-measured on the applied source. Null when the build failed, the repair was unapplicable, or the instance resolved away.</summary>
     public          IReadOnlyDictionary<string, double>? RemeasuredMetrics { get; init; }
     /// <summary>Ordinal ladder: unapplicable &lt; build_fails &lt; builds_unresolved &lt; resolved (§4.5.1).</summary>
