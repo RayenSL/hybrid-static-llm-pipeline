@@ -1,0 +1,112 @@
+{
+  "method": "Strip only lines preceding the unique class/record/struct declaration in each God Class analyser snippet; retain all finding fields and metrics.",
+  "uses_ground_truth": false,
+  "rows_total": 36,
+  "god_class_rows_normalised": 13,
+  "instances": [
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Fulfilment\\FulfilmentCoordinator.cs",
+      "symbol_name": "Fulfilment.FulfilmentCoordinator",
+      "target_start_line": 3,
+      "target_end_line": 115,
+      "leading_trivia_lines_removed": 1,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\CycleCountService.cs",
+      "symbol_name": "Inventory.CycleCountService",
+      "target_start_line": 6,
+      "target_end_line": 132,
+      "leading_trivia_lines_removed": 4,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\StockController.cs",
+      "symbol_name": "Inventory.StockController",
+      "target_start_line": 7,
+      "target_end_line": 206,
+      "leading_trivia_lines_removed": 5,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\BillingManager.cs",
+      "symbol_name": "Invoicing.BillingManager",
+      "target_start_line": 6,
+      "target_end_line": 206,
+      "leading_trivia_lines_removed": 4,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\StatementBuilder.cs",
+      "symbol_name": "Invoicing.StatementBuilder",
+      "target_start_line": 6,
+      "target_end_line": 159,
+      "leading_trivia_lines_removed": 4,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\NotificationCenter.cs",
+      "symbol_name": "Notifications.NotificationCenter",
+      "target_start_line": 6,
+      "target_end_line": 112,
+      "leading_trivia_lines_removed": 4,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\CheckoutCoordinator.cs",
+      "symbol_name": "Ordering.CheckoutCoordinator",
+      "target_start_line": 6,
+      "target_end_line": 205,
+      "leading_trivia_lines_removed": 4,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\OrderProcessor.cs",
+      "symbol_name": "Ordering.OrderProcessor",
+      "target_start_line": 6,
+      "target_end_line": 225,
+      "leading_trivia_lines_removed": 4,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\ReturnsHandler.cs",
+      "symbol_name": "Ordering.ReturnsHandler",
+      "target_start_line": 4,
+      "target_end_line": 133,
+      "leading_trivia_lines_removed": 2,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\RecurrenceEngine.cs",
+      "symbol_name": "Scheduling.RecurrenceEngine",
+      "target_start_line": 6,
+      "target_end_line": 121,
+      "leading_trivia_lines_removed": 4,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\ScheduleManager.cs",
+      "symbol_name": "Scheduling.ScheduleManager",
+      "target_start_line": 6,
+      "target_end_line": 203,
+      "leading_trivia_lines_removed": 4,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\ServiceDesk\\CaseOperationsManager.cs",
+      "symbol_name": "ServiceDesk.CaseOperationsManager",
+      "target_start_line": 3,
+      "target_end_line": 117,
+      "leading_trivia_lines_removed": 1,
+      "trailing_blank_lines_removed": 1
+    },
+    {
+      "file_path": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Subscriptions\\SubscriptionAccountService.cs",
+      "symbol_name": "Subscriptions.SubscriptionAccountService",
+      "target_start_line": 3,
+      "target_end_line": 116,
+      "leading_trivia_lines_removed": 1,
+      "trailing_blank_lines_removed": 1
+    }
+  ]
+}

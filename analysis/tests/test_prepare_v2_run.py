@@ -163,6 +163,7 @@ class PrepareV2RunTests(unittest.TestCase):
                 "file_path": target["source_file"],
                 "symbol_name": target["symbol_name"],
                 "line": target["start_line"],
+                "snippet": "public class Target {}",
             }
             for target in spec["targets"]
         ]
@@ -186,6 +187,33 @@ class PrepareV2RunTests(unittest.TestCase):
         output.mkdir()
         (output / "baseline.jsonl").write_text("{}\n", encoding="utf-8")
         (output / "generated-tests").mkdir()
+
+        report = assess_readiness(self.corpus, self.pipeline, output)
+
+        self.assertFalse(report["preparation_gates"]["baseline_frozen"])
+
+    def test_baseline_with_trivia_inflated_target_range_does_not_pass(self):
+        output = self.root / "experiment"
+        output.mkdir()
+        (output / "generated-tests").mkdir()
+        rows = []
+        for record_path in sorted((self.corpus / "ground-truth" / "records").glob("*.json")):
+            record = json.loads(record_path.read_text(encoding="utf-8"))
+            if record["anti_pattern"] not in {"GodClass", "LongMethod"}:
+                continue
+            source = self.corpus / "corpus" / record["location"]["file"]
+            rows.append(
+                {
+                    "anti_pattern_type": "god_class" if record["anti_pattern"] == "GodClass" else "long_method",
+                    "file_path": str(source.resolve()),
+                    "symbol_name": record["location"]["symbol"],
+                    "line": 1,
+                    "snippet": "/// documentation\npublic class Target {}" if record["instance_id"] == "GC-01" else "public class Target {}",
+                }
+            )
+        (output / "baseline.jsonl").write_text(
+            "".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8"
+        )
 
         report = assess_readiness(self.corpus, self.pipeline, output)
 

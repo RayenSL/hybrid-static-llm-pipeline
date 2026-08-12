@@ -90,6 +90,12 @@ def _baseline_matches_targets(path: Path, corpus_root: Path) -> bool:
         )
         if match is None:
             return False
+        snippet = match.get("snippet")
+        if not isinstance(snippet, str) or not snippet.strip("\r\n"):
+            return False
+        declaration_lines = len(snippet.strip("\r\n").replace("\r\n", "\n").split("\n"))
+        if int(match["line"]) + declaration_lines - 1 != target["end_line"]:
+            return False
         unmatched.remove(match)
     return not unmatched
 
