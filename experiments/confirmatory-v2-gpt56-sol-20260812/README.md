@@ -2,8 +2,8 @@
 
 This directory is the pre-run package for the full rerun on the balanced v2
 corpus. It is pinned to corpus revision
-`cc26ad1e78bc84198baf867c4292ab092df6c8d5` and pipeline implementation
-revision `20aff5b332bd8576e08a0069b01397c238d17bef`.
+`20e22649fe8276507c2e760c9d3e48f40e111241` and pipeline implementation
+revision `62955d325db8abb43d5d71c093cf8580f795b44c`.
 
 The fixed design contains 26 evaluated targets, three repetitions and eight
 factorial conditions (624 repair assignments). The Hybrid comparator is
@@ -18,16 +18,16 @@ Current state:
 - corpus band agreement: 36/36;
 - private oracle: 270/270 on the pristine candidate;
 - repair model calls: not started;
-- R1 and blind R2 semantic review: pending;
-- visible-test generation: pending;
-- factorial manifest: pending until the review and visible-test gates pass.
+- R1 and blind automated R2 semantic review: complete, with 6/6 agreement;
+- visible-test generation: complete, with 25/26 suites admitted and the first
+  outcome retained for the rejected suite;
+- factorial manifest: pending final freeze and dry-run validation.
 
-After the two reviewers have independently completed their worksheets, run
-`GENERATE_VISIBLE_TESTS.ps1` once. It is restart-safe: a target with a persisted
-artefact is skipped, so a rejected suite is retained as its intention-to-treat
-outcome rather than regenerated. Then run `FREEZE_CAMPAIGN.ps1`; it refuses to
-create a manifest while any review, baseline or artefact gate is closed and
-verifies the final assignment count is exactly 624.
+`GENERATE_VISIBLE_TESTS.ps1` is restart-safe: a target with a persisted artefact
+is skipped, so a rejected suite is retained as its intention-to-treat outcome
+rather than regenerated. Run `FREEZE_CAMPAIGN.ps1` once; it refuses to create a
+manifest while any review, baseline or artefact gate is closed and verifies the
+final assignment count is exactly 624.
 
 There is deliberately no launch script. Executing `factorial-campaign` is a
 separate, explicit decision after the frozen manifest and readiness report have
