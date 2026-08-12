@@ -54,6 +54,46 @@ def _oracle_counts(pipeline_root: Path) -> tuple[int, int, int, int]:
     return evaluated_count, cases_per_target, planned_cases, golden_count
 
 
+def _baseline_matches_targets(path: Path, corpus_root: Path) -> bool:
+    if not path.is_file() or path.stat().st_size == 0:
+        return False
+    rows = []
+    try:
+        for raw in path.read_text(encoding="utf-8-sig").splitlines():
+            if not raw.strip():
+                continue
+            row = json.loads(raw)
+            if row.get("anti_pattern_type") in {"god_class", "long_method"}:
+                rows.append(row)
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        return False
+    if len(rows) != 26:
+        return False
+
+    expected = _target_records(corpus_root)
+    unmatched = rows.copy()
+    for target in expected:
+        target_path = str(Path(target["source_file"]).resolve()).lower()
+        target_symbol = target["symbol_name"]
+        match = next(
+            (
+                row
+                for row in unmatched
+                if str(Path(str(row.get("file_path", ""))).resolve()).lower() == target_path
+                and (
+                    target_symbol.endswith(str(row.get("symbol_name", "")))
+                    or str(row.get("symbol_name", "")).endswith(target_symbol)
+                )
+                and row.get("line") == target["start_line"]
+            ),
+            None,
+        )
+        if match is None:
+            return False
+        unmatched.remove(match)
+    return not unmatched
+
+
 def assess_readiness(
     corpus_root: Path,
     pipeline_root: Path,
@@ -105,7 +145,7 @@ def assess_readiness(
         artefacts = list(generated.glob("*.json")) if generated.is_dir() else []
         factorial = experiment_root / "factorial-manifest.json"
         preparation_gates = {
-            "baseline_frozen": baseline.is_file() and baseline.stat().st_size > 0,
+            "baseline_frozen": _baseline_matches_targets(baseline, corpus_root),
             "visible_test_generation_complete": len(artefacts) == 26,
             "factorial_manifest_frozen": factorial.is_file() and factorial.stat().st_size > 0,
         }
@@ -252,16 +292,45 @@ def write_preparation(spec: dict[str, Any], output: Path, readiness: dict[str, A
     write_json(output / "RUN_READINESS.json", readiness)
 
 
+def refresh_readiness(corpus_root: Path, pipeline_root: Path, experiment_root: Path) -> dict[str, Any]:
+    """Re-evaluate the hard gates and replace only the derived readiness report."""
+    report = assess_readiness(corpus_root, pipeline_root, experiment_root)
+    path = experiment_root.resolve() / "RUN_READINESS.json"
+    if not path.parent.is_dir():
+        raise FileNotFoundError(f"experiment directory is missing: {path.parent}")
+    path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    return report
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--corpus", type=Path, required=True)
     parser.add_argument("--pipeline", type=Path, required=True)
-    parser.add_argument("--corpus-revision", required=True)
-    parser.add_argument("--pipeline-revision", required=True)
-    parser.add_argument("--model", required=True)
-    parser.add_argument("--seed", type=int, required=True)
+    parser.add_argument("--corpus-revision")
+    parser.add_argument("--pipeline-revision")
+    parser.add_argument("--model")
+    parser.add_argument("--seed", type=int)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--refresh", action="store_true")
     args = parser.parse_args()
+
+    if args.refresh:
+        readiness = refresh_readiness(args.corpus, args.pipeline, args.out)
+        print(json.dumps({"output": str(args.out.resolve()), "failed_gates": readiness["failed_gates"]}))
+        return 0
+
+    missing = [
+        name
+        for name, value in (
+            ("--corpus-revision", args.corpus_revision),
+            ("--pipeline-revision", args.pipeline_revision),
+            ("--model", args.model),
+            ("--seed", args.seed),
+        )
+        if value is None or value == ""
+    ]
+    if missing:
+        parser.error(f"required unless --refresh: {', '.join(missing)}")
 
     spec = build_run_spec(
         args.corpus,

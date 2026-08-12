@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from analysis.prepare_v2_run import assess_readiness, build_run_spec
+from analysis.prepare_v2_run import assess_readiness, build_run_spec, refresh_readiness, write_preparation
 
 
 class PrepareV2RunTests(unittest.TestCase):
@@ -144,6 +144,52 @@ class PrepareV2RunTests(unittest.TestCase):
 
         self.assertFalse(report["campaign_ready"])
         self.assertIn("semantic_review_agreement", report["failed_gates"])
+
+    def test_refresh_records_completed_preparation_artefacts(self):
+        output = self.root / "experiment"
+        spec = build_run_spec(
+            self.corpus,
+            self.pipeline,
+            corpus_revision="a" * 40,
+            pipeline_revision="b" * 40,
+            model_name="gpt-5.6-sol",
+            randomization_seed=20260812,
+        )
+        initial = assess_readiness(self.corpus, self.pipeline, output)
+        write_preparation(spec, output, initial)
+        baseline_rows = [
+            {
+                "anti_pattern_type": "god_class" if target["anti_pattern"] == "GodClass" else "long_method",
+                "file_path": target["source_file"],
+                "symbol_name": target["symbol_name"],
+                "line": target["start_line"],
+            }
+            for target in spec["targets"]
+        ]
+        (output / "baseline.jsonl").write_text(
+            "".join(json.dumps(row) + "\n" for row in baseline_rows), encoding="utf-8"
+        )
+        for number in range(26):
+            (output / "generated-tests" / f"{number:02d}.json").write_text("{}\n", encoding="utf-8")
+        (output / "factorial-manifest.json").write_text("{}\n", encoding="utf-8")
+
+        refreshed = refresh_readiness(self.corpus, self.pipeline, output)
+
+        self.assertTrue(refreshed["campaign_ready"])
+        stored = json.loads((output / "RUN_READINESS.json").read_text(encoding="utf-8"))
+        self.assertTrue(stored["preparation_gates"]["baseline_frozen"])
+        self.assertTrue(stored["preparation_gates"]["visible_test_generation_complete"])
+        self.assertTrue(stored["preparation_gates"]["factorial_manifest_frozen"])
+
+    def test_nonempty_but_incomplete_baseline_does_not_pass(self):
+        output = self.root / "experiment"
+        output.mkdir()
+        (output / "baseline.jsonl").write_text("{}\n", encoding="utf-8")
+        (output / "generated-tests").mkdir()
+
+        report = assess_readiness(self.corpus, self.pipeline, output)
+
+        self.assertFalse(report["preparation_gates"]["baseline_frozen"])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,162 @@
+{
+  "status": "not_started",
+  "cases_per_target": 5,
+  "targets": [
+    {
+      "instance_id": "GC-01",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\OrderProcessor.cs",
+      "symbol_name": "Ordering.OrderProcessor",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-02",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\CheckoutCoordinator.cs",
+      "symbol_name": "Ordering.CheckoutCoordinator",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-03",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\ReturnsHandler.cs",
+      "symbol_name": "Ordering.ReturnsHandler",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-04",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\BillingManager.cs",
+      "symbol_name": "Invoicing.BillingManager",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-05",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\StatementBuilder.cs",
+      "symbol_name": "Invoicing.StatementBuilder",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-06",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\StockController.cs",
+      "symbol_name": "Inventory.StockController",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-07",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\CycleCountService.cs",
+      "symbol_name": "Inventory.CycleCountService",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-08",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\ScheduleManager.cs",
+      "symbol_name": "Scheduling.ScheduleManager",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-09",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\RecurrenceEngine.cs",
+      "symbol_name": "Scheduling.RecurrenceEngine",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-10",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\NotificationCenter.cs",
+      "symbol_name": "Notifications.NotificationCenter",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-11",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Fulfilment\\FulfilmentCoordinator.cs",
+      "symbol_name": "Fulfilment.FulfilmentCoordinator",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-12",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Subscriptions\\SubscriptionAccountService.cs",
+      "symbol_name": "Subscriptions.SubscriptionAccountService",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "GC-13",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\ServiceDesk\\CaseOperationsManager.cs",
+      "symbol_name": "ServiceDesk.CaseOperationsManager",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-01",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\OrderImporter.cs",
+      "symbol_name": "Ordering.OrderImporter.ImportBatch",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-02",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\PricingRules.cs",
+      "symbol_name": "Ordering.PricingRules.ApplyAdjustments",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-03",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\InvoiceRenderer.cs",
+      "symbol_name": "Invoicing.InvoiceRenderer.Render",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-04",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\VatResolver.cs",
+      "symbol_name": "Invoicing.VatResolver.Resolve",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-05",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\ReplenishmentPlanner.cs",
+      "symbol_name": "Inventory.ReplenishmentPlanner.BuildPlan",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-06",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\AllocationCalculator.cs",
+      "symbol_name": "Inventory.AllocationCalculator.Allocate",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-07",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\Scheduler.cs",
+      "symbol_name": "Scheduling.Scheduler.PlaceJobs",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-08",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\SlotFinder.cs",
+      "symbol_name": "Scheduling.SlotFinder.FindFirstFit",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-09",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\DispatchPipeline.cs",
+      "symbol_name": "Notifications.DispatchPipeline.Run",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-10",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\RetryPolicy.cs",
+      "symbol_name": "Notifications.RetryPolicy.NextDelay",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-11",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Claims\\ClaimAdjudicator.cs",
+      "symbol_name": "Claims.ClaimAdjudicator.Evaluate",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-12",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Payments\\SettlementBatchProcessor.cs",
+      "symbol_name": "Payments.SettlementBatchProcessor.Process",
+      "artifact_status": "pending"
+    },
+    {
+      "instance_id": "LM-13",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\AccessControl\\AccessDecisionEngine.cs",
+      "symbol_name": "AccessControl.AccessDecisionEngine.Decide",
+      "artifact_status": "pending"
+    }
+  ]
+}

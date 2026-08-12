@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0.0",
+  "experiment_kind": "confirmatory_v2_full_rerun",
+  "status": "prepared_pending_hard_gates",
+  "corpus": {
+    "version": "v2.0",
+    "revision": "cc26ad1e78bc84198baf867c4292ab092df6c8d5",
+    "root": "Z:\\GitHub\\hybrid-pipeline-corpus",
+    "evaluated_inventory": {
+      "GodClass": 13,
+      "LongMethod": 13
+    },
+    "obsolete_inventory": 10
+  },
+  "pipeline": {
+    "revision": "20aff5b332bd8576e08a0069b01397c238d17bef",
+    "root": "Z:\\GitHub\\hybrid-static-llm-pipeline"
+  },
+  "model": {
+    "key": "gpt-5.6-sol"
+  },
+  "design": {
+    "evaluated_targets": 26,
+    "repetitions": 3,
+    "factorial_cells": 8,
+    "factorial_assignments": 624,
+    "hybrid_comparator_conditions": 2,
+    "hybrid_comparator_attempts": 156,
+    "randomization_seed": 20260812,
+    "iteration_budget": 6,
+    "build_timeout_seconds": 180,
+    "max_input_tokens": 120000
+  },
+  "visible_tests": {
+    "generation_calls_per_target": 2,
+    "compile_correction_calls_max": 1,
+    "cases_per_target": 5,
+    "pristine_baseline_runs": 3,
+    "generated_before_repair": true
+  },
+  "private_oracle": {
+    "plan": "Z:\\GitHub\\hybrid-static-llm-pipeline\\layer3\\ORACLE_PLAN_V2.json",
+    "plan_sha256": "783a4cc8bd98ff69f322735b78213e6be53f6b2474948ab15537fbe398309e7c",
+    "cases_per_evaluated_target": 10,
+    "evaluated_cases": 260,
+    "obsolete_smoke_cases": 10,
+    "total_cases": 270,
+    "visible_to_model": false
+  },
+  "release_gate": {
+    "r1": "Z:\\GitHub\\hybrid-pipeline-corpus\\ground-truth\\r1-worksheet-v2.0.json",
+    "r2": "Z:\\GitHub\\hybrid-pipeline-corpus\\ground-truth\\r2-worksheet-v2.0.json",
+    "band_agreement": "Z:\\GitHub\\hybrid-pipeline-corpus\\ground-truth\\band-agreement-v2.0.json"
+  },
+  "targets": [
+    {
+      "instance_id": "GC-01",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\OrderProcessor.cs",
+      "source_file_relative": "corpus/src/Ordering/OrderProcessor.cs",
+      "symbol_name": "Ordering.OrderProcessor",
+      "start_line": 6,
+      "end_line": 225,
+      "source_sha256": "17e10dcb71a0120608fe7d381e038a11a594cbd20e4bfae686f9d3a40c693e59"
+    },
+    {
+      "instance_id": "GC-02",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\CheckoutCoordinator.cs",
+      "source_file_relative": "corpus/src/Ordering/CheckoutCoordinator.cs",
+      "symbol_name": "Ordering.CheckoutCoordinator",
+      "start_line": 6,
+      "end_line": 205,
+      "source_sha256": "a19be02f75e7dd55a4c9913a4ef606a953495aecb52822604cabf783199e4b33"
+    },
+    {
+      "instance_id": "GC-03",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\ReturnsHandler.cs",
+      "source_file_relative": "corpus/src/Ordering/ReturnsHandler.cs",
+      "symbol_name": "Ordering.ReturnsHandler",
+      "start_line": 4,
+      "end_line": 133,
+      "source_sha256": "f60ac03a3d2419fdd66db27c75343fc27e62377ba53f14eb1aca258c30a2bac0"
+    },
+    {
+      "instance_id": "GC-04",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\BillingManager.cs",
+      "source_file_relative": "corpus/src/Invoicing/BillingManager.cs",
+      "symbol_name": "Invoicing.BillingManager",
+      "start_line": 6,
+      "end_line": 206,
+      "source_sha256": "830b194cfb95a16222bf144e982d7753896b6372df82794bc5a97635c9ebdec4"
+    },
+    {
+      "instance_id": "GC-05",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\StatementBuilder.cs",
+      "source_file_relative": "corpus/src/Invoicing/StatementBuilder.cs",
+      "symbol_name": "Invoicing.StatementBuilder",
+      "start_line": 6,
+      "end_line": 159,
+      "source_sha256": "2edd9cfb3df211681b81f108897251ea15b9bf2ce85f203ba554a847cebd0697"
+    },
+    {
+      "instance_id": "GC-06",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\StockController.cs",
+      "source_file_relative": "corpus/src/Inventory/StockController.cs",
+      "symbol_name": "Inventory.StockController",
+      "start_line": 7,
+      "end_line": 206,
+      "source_sha256": "9e53cca563cd49ee6d8c9fbf6e7795b4cbe50546caa38162fe0ebeec928da44a"
+    },
+    {
+      "instance_id": "GC-07",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\CycleCountService.cs",
+      "source_file_relative": "corpus/src/Inventory/CycleCountService.cs",
+      "symbol_name": "Inventory.CycleCountService",
+      "start_line": 6,
+      "end_line": 132,
+      "source_sha256": "8d1097ba6c610bd8bad82cfddd3258971b3b3bb3d38ee616175fdf984e3e7886"
+    },
+    {
+      "instance_id": "GC-08",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\ScheduleManager.cs",
+      "source_file_relative": "corpus/src/Scheduling/ScheduleManager.cs",
+      "symbol_name": "Scheduling.ScheduleManager",
+      "start_line": 6,
+      "end_line": 203,
+      "source_sha256": "97ac40a0c1ba523ae3ac344f156936c3ebfc356dc19f52e4712f6ef3059f51c2"
+    },
+    {
+      "instance_id": "GC-09",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\RecurrenceEngine.cs",
+      "source_file_relative": "corpus/src/Scheduling/RecurrenceEngine.cs",
+      "symbol_name": "Scheduling.RecurrenceEngine",
+      "start_line": 6,
+      "end_line": 121,
+      "source_sha256": "75a8f0885935e80f688a05f43ebb6b3495acdd4934d8bf5b4ea2598e80b2d5e6"
+    },
+    {
+      "instance_id": "GC-10",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\NotificationCenter.cs",
+      "source_file_relative": "corpus/src/Notifications/NotificationCenter.cs",
+      "symbol_name": "Notifications.NotificationCenter",
+      "start_line": 6,
+      "end_line": 112,
+      "source_sha256": "08176d2d845328e2a5bc9154c59f4bec610b8814970da4036ad7a17b868583a0"
+    },
+    {
+      "instance_id": "GC-11",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Fulfilment\\FulfilmentCoordinator.cs",
+      "source_file_relative": "corpus/src/Fulfilment/FulfilmentCoordinator.cs",
+      "symbol_name": "Fulfilment.FulfilmentCoordinator",
+      "start_line": 3,
+      "end_line": 115,
+      "source_sha256": "618c9d3319685694be2105c2a15c900c607c57d7c7c45953bbaf0cb5cee0eb73"
+    },
+    {
+      "instance_id": "GC-12",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Subscriptions\\SubscriptionAccountService.cs",
+      "source_file_relative": "corpus/src/Subscriptions/SubscriptionAccountService.cs",
+      "symbol_name": "Subscriptions.SubscriptionAccountService",
+      "start_line": 3,
+      "end_line": 116,
+      "source_sha256": "89e5c23535cef08dc8d19fac6f8cb2be4dae62420ac8b84213713441c03d172a"
+    },
+    {
+      "instance_id": "GC-13",
+      "anti_pattern": "GodClass",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\ServiceDesk\\CaseOperationsManager.cs",
+      "source_file_relative": "corpus/src/ServiceDesk/CaseOperationsManager.cs",
+      "symbol_name": "ServiceDesk.CaseOperationsManager",
+      "start_line": 3,
+      "end_line": 117,
+      "source_sha256": "65936e0b0cef819b9d3458e7e4510ab1989f15896b86aa80ca8899ff7e5a95db"
+    },
+    {
+      "instance_id": "LM-01",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\OrderImporter.cs",
+      "source_file_relative": "corpus/src/Ordering/OrderImporter.cs",
+      "symbol_name": "Ordering.OrderImporter.ImportBatch",
+      "start_line": 10,
+      "end_line": 67,
+      "source_sha256": "cef154fd2b6d97635a2bd00d49d4883afbca3e93c96605f7c29ec5a5a6af4a43"
+    },
+    {
+      "instance_id": "LM-02",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Ordering\\PricingRules.cs",
+      "source_file_relative": "corpus/src/Ordering/PricingRules.cs",
+      "symbol_name": "Ordering.PricingRules.ApplyAdjustments",
+      "start_line": 6,
+      "end_line": 34,
+      "source_sha256": "79568f36d14e3ef88af18e25f0a529460d6d2fb2a6a86e92c4f62c8564ef7640"
+    },
+    {
+      "instance_id": "LM-03",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\InvoiceRenderer.cs",
+      "source_file_relative": "corpus/src/Invoicing/InvoiceRenderer.cs",
+      "symbol_name": "Invoicing.InvoiceRenderer.Render",
+      "start_line": 8,
+      "end_line": 61,
+      "source_sha256": "c5b23d2cf3525a3fae86707434c843330da20ff1ac500f158738efe9a8652fb1"
+    },
+    {
+      "instance_id": "LM-04",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Invoicing\\VatResolver.cs",
+      "source_file_relative": "corpus/src/Invoicing/VatResolver.cs",
+      "symbol_name": "Invoicing.VatResolver.Resolve",
+      "start_line": 6,
+      "end_line": 40,
+      "source_sha256": "f466b81fe1694b8d9350856bc67db4b7191f1a941edb1d420a9cae384f439659"
+    },
+    {
+      "instance_id": "LM-05",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\ReplenishmentPlanner.cs",
+      "source_file_relative": "corpus/src/Inventory/ReplenishmentPlanner.cs",
+      "symbol_name": "Inventory.ReplenishmentPlanner.BuildPlan",
+      "start_line": 6,
+      "end_line": 47,
+      "source_sha256": "e874b8a86247988285850906d99c23614b9026f85cb05d2351503e51ba0f2757"
+    },
+    {
+      "instance_id": "LM-06",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Inventory\\AllocationCalculator.cs",
+      "source_file_relative": "corpus/src/Inventory/AllocationCalculator.cs",
+      "symbol_name": "Inventory.AllocationCalculator.Allocate",
+      "start_line": 6,
+      "end_line": 39,
+      "source_sha256": "8bbae5d49e4f91950f09efb4522bd9bbeedcb8ca10c3b14506e4855533d7a7f7"
+    },
+    {
+      "instance_id": "LM-07",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\Scheduler.cs",
+      "source_file_relative": "corpus/src/Scheduling/Scheduler.cs",
+      "symbol_name": "Scheduling.Scheduler.PlaceJobs",
+      "start_line": 6,
+      "end_line": 45,
+      "source_sha256": "0d3c08744b8e8d8c5dfbe6e5c164af52e0181210e68772f31521e4f8b03f8222"
+    },
+    {
+      "instance_id": "LM-08",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Scheduling\\SlotFinder.cs",
+      "source_file_relative": "corpus/src/Scheduling/SlotFinder.cs",
+      "symbol_name": "Scheduling.SlotFinder.FindFirstFit",
+      "start_line": 6,
+      "end_line": 29,
+      "source_sha256": "f08b22ff8e4098833813dceb17d17fb47eb61004eb7527e0909fb7fd4e9acad1"
+    },
+    {
+      "instance_id": "LM-09",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\DispatchPipeline.cs",
+      "source_file_relative": "corpus/src/Notifications/DispatchPipeline.cs",
+      "symbol_name": "Notifications.DispatchPipeline.Run",
+      "start_line": 15,
+      "end_line": 57,
+      "source_sha256": "6f0efa6f6f5be82727add824ba7bcb1390586833577e90bea2536f1d5000d6f7"
+    },
+    {
+      "instance_id": "LM-10",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\RetryPolicy.cs",
+      "source_file_relative": "corpus/src/Notifications/RetryPolicy.cs",
+      "symbol_name": "Notifications.RetryPolicy.NextDelay",
+      "start_line": 6,
+      "end_line": 40,
+      "source_sha256": "ddb4958a7b93f0eef7fb4a2af22207490a9906e12a2b9666499fabb2658cac0a"
+    },
+    {
+      "instance_id": "LM-11",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Claims\\ClaimAdjudicator.cs",
+      "source_file_relative": "corpus/src/Claims/ClaimAdjudicator.cs",
+      "symbol_name": "Claims.ClaimAdjudicator.Evaluate",
+      "start_line": 5,
+      "end_line": 54,
+      "source_sha256": "2ace810faebe3d5f55b2f47b4668f92ffbb5808f95d6afbfe4b5030c987de11b"
+    },
+    {
+      "instance_id": "LM-12",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Payments\\SettlementBatchProcessor.cs",
+      "source_file_relative": "corpus/src/Payments/SettlementBatchProcessor.cs",
+      "symbol_name": "Payments.SettlementBatchProcessor.Process",
+      "start_line": 5,
+      "end_line": 72,
+      "source_sha256": "7f40c47530cedd395d645ec13637ecb91b6bc7ba7f8d663bb674e32e1ac88977"
+    },
+    {
+      "instance_id": "LM-13",
+      "anti_pattern": "LongMethod",
+      "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\AccessControl\\AccessDecisionEngine.cs",
+      "source_file_relative": "corpus/src/AccessControl/AccessDecisionEngine.cs",
+      "symbol_name": "AccessControl.AccessDecisionEngine.Decide",
+      "start_line": 5,
+      "end_line": 49,
+      "source_sha256": "02a45f7986e82960dfc7a8ec976a82d18f4003944e5653ea2ccd012b6214f725"
+    }
+  ]
+}

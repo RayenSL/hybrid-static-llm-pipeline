@@ -5,6 +5,7 @@ Manifest version: 2.0.0
 Baseline date: 2026-08-12
 Corpus: `Z:\GitHub\hybrid-pipeline-corpus\corpus`
 Corpus candidate revision: `cc26ad1e78bc84198baf867c4292ab092df6c8d5`
+Pipeline implementation revision: `20aff5b332bd8576e08a0069b01397c238d17bef`
 
 ## v1 archived baseline
 
@@ -98,7 +99,7 @@ f18916ed667cb59bceda794f8999a0fb5108a8fc9dffa9123cb98fac15c3f1d8  layer3/golden/
 ## Freeze completion checklist
 
 - [x] Confirm the current working-tree oracle is the intended canonical version.
-- [ ] Record the pipeline Git revision.
+- [x] Record the pipeline Git revision.
 - [x] Record the corpus Git revision or immutable release tag.
 - [ ] Recompute hashes after any intentional oracle edit.
 - [ ] Rerun the pristine baseline after any intentional oracle edit.

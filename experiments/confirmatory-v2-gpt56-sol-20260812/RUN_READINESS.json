@@ -1,0 +1,31 @@
+{
+  "checked_at_utc": "2026-08-12T10:09:28.086766+00:00",
+  "gates": {
+    "corpus_version_v2": true,
+    "balanced_target_inventory": true,
+    "ground_truth_band_agreement": true,
+    "r1_semantic_review_complete": false,
+    "r2_semantic_review_complete": false,
+    "semantic_review_agreement": false,
+    "semantic_review_validity": false,
+    "private_oracle_plan": true,
+    "private_oracle_files": true
+  },
+  "preparation_gates": {
+    "baseline_frozen": true,
+    "visible_test_generation_complete": false,
+    "factorial_manifest_frozen": false
+  },
+  "failed_gates": [
+    "r1_semantic_review_complete",
+    "r2_semantic_review_complete",
+    "semantic_review_agreement",
+    "semantic_review_validity",
+    "visible_test_generation_complete",
+    "factorial_manifest_frozen"
+  ],
+  "final_release_ready": false,
+  "campaign_ready": false,
+  "repair_execution_authorised": false,
+  "repair_execution_note": "Preparation never authorises model calls; launch requires an explicit subsequent decision."
+}
