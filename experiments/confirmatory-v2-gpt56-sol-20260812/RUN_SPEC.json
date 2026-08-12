@@ -13,7 +13,7 @@
     "obsolete_inventory": 10
   },
   "pipeline": {
-    "revision": "20aff5b332bd8576e08a0069b01397c238d17bef",
+    "revision": "62955d325db8abb43d5d71c093cf8580f795b44c",
     "root": "Z:\\GitHub\\hybrid-static-llm-pipeline"
   },
   "model": {

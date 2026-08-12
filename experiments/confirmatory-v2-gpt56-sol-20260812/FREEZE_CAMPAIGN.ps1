@@ -27,7 +27,7 @@ if (Test-Path -LiteralPath $manifestPath) { throw 'Refusing to overwrite an exis
     --target (Join-Path $corpus 'corpus\Corpus.sln') `
     --visible-tests (Join-Path $experiment 'generated-tests') `
     --model 'gpt-5.6-sol' `
-    --code-revision '20aff5b332bd8576e08a0069b01397c238d17bef' `
+    --code-revision '62955d325db8abb43d5d71c093cf8580f795b44c' `
     --runs 3 `
     --budget 6 `
     --build-timeout 180 `

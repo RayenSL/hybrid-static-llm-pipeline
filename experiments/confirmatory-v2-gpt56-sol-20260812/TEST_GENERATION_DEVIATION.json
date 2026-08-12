@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0.0",
+  "deviation_id": "visible-test-structured-plan-parser-20260812",
+  "scope": "visible behavioural-test generation",
+  "detected_at": "2026-08-12T12:55:49.515701+02:00",
+  "planning_controller_revision": "dad6b530854a1b97a0013e556bf5af96d82d8fdf",
+  "resumption_controller_revision": "62955d325db8abb43d5d71c093cf8580f795b44c",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "2.0.0",
+  "cause": "The planning prompt permitted JSON values for inputs and expected_observation without prescribing scalar-only values. Seven valid plans used structured JSON objects. The original parser accepted only an array of strings for inputs and a string for expected_observation, and therefore rejected those plans before implementation generation.",
+  "impact": {
+    "affected_targets": 7,
+    "planning_calls_completed": 7,
+    "implementation_calls_completed": 0,
+    "compile_correction_calls_completed": 0,
+    "repairs_started": 0,
+    "oracle_accessed": false
+  },
+  "corrective_action": "The parser was extended to accept the structured JSON representations already allowed by the prompt. A guarded resume path reparses each persisted raw plan and proceeds directly to implementation generation. It does not repeat the planning call. The prompt, model, target source, neutral dependency context and five-case requirements are unchanged.",
+  "comparability_assessment": "The correction changes transport parsing, not the experimental treatment or requested test design. Each affected raw response remains preserved in its original artefact. Reuse prevents selective replanning and avoids granting the affected targets an additional planning attempt.",
+  "verification": {
+    "test_suite_result": "128 passed, 0 failed",
+    "resume_guard": "Requires one planning call, parse_failed status, no implementation output, matching model and prompt version, pristine source hash, identical target range, identical project and identical neutral dependency-context hash."
+  },
+  "affected_artefacts": [
+    {
+      "artifact_id": "5d6c8b82b1c0454295958be84f9ac2bf",
+      "target_symbol": "Inventory.CycleCountService",
+      "raw_plan_sha256": "54ed22b8a3746d043d77b34a7328a7a04629ff1714b6d4e79a73108ea4554721"
+    },
+    {
+      "artifact_id": "d7983021aabc4f02be1e1f4351a165d8",
+      "target_symbol": "Inventory.StockController",
+      "raw_plan_sha256": "728b6daeca28c86a86b43661c7806c914b3e995ef6f83513a68dc6a087198397"
+    },
+    {
+      "artifact_id": "00b02f628eb446a1a4dfc405db98533b",
+      "target_symbol": "Invoicing.BillingManager",
+      "raw_plan_sha256": "535014b778bccc02b0960150a9941a423504f613787e8513fdee88bcf1a0f710"
+    },
+    {
+      "artifact_id": "8684fb7cbd82470d89ef0973de89b2e6",
+      "target_symbol": "Invoicing.StatementBuilder",
+      "raw_plan_sha256": "3afb1a66039bca5332df63ec7d3581489d0dd9eb3bf1f953820808b8fd40001b"
+    },
+    {
+      "artifact_id": "e6e881742c3c42daaddf89ebbec1e76f",
+      "target_symbol": "Ordering.CheckoutCoordinator",
+      "raw_plan_sha256": "c9c4d9c55ddefc3b77f752f6332562a2c55cb388266d001eb5155f249c9eae6e"
+    },
+    {
+      "artifact_id": "bd322be7b8a04c12b001742ddcbde117",
+      "target_symbol": "Ordering.OrderProcessor",
+      "raw_plan_sha256": "a60152b2bbab6b2ecfd61ec1ce214aff781874af7bc598ad2e191f1660532ccf"
+    },
+    {
+      "artifact_id": "609450604af34fe595f8620766513f4b",
+      "target_symbol": "Ordering.ReturnsHandler",
+      "raw_plan_sha256": "39dd1201c4b2b3ff38c84b03765ddb23026539ebf94c0148ba9fd6f197aca287"
+    }
+  ]
+}
