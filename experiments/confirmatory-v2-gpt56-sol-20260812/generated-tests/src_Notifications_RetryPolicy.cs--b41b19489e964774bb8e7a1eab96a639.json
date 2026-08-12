@@ -1,0 +1,146 @@
+{
+  "artifact_id": "b41b19489e964774bb8e7a1eab96a639",
+  "artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Notifications_RetryPolicy.cs--b41b19489e964774bb8e7a1eab96a639.json",
+  "timestamp": "2026-08-12T11:26:33.0594345+00:00",
+  "source_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\RetryPolicy.cs",
+  "source_sha256": "ddb4958a7b93f0eef7fb4a2af22207490a9906e12a2b9666499fabb2658cac0a",
+  "dependency_context_sha256": "2d6cb1752155f4879c02c5285207340cbec5a81e780ff367ea37b8f1fa05127a",
+  "target_symbol_name": "RetryPolicy.NextDelay",
+  "target_start_line": 6,
+  "target_end_line": 40,
+  "project_file": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj",
+  "model_name": "gpt-5.6-sol",
+  "prompt_version": "v2.0.0",
+  "raw_system_prompt": "You are implementing a frozen regression characterisation-test plan for existing C# code.\nCapture observable behaviour through public members exactly as it exists. Do not improve,\nrefactor, repair or diagnose production code, and do not infer intended behaviour.\n\nThe pipeline supplies Check.True, Check.False, Check.Null, Check.NotNull, Check.Equal,\nCheck.SequenceEqual and Check.Throws\u003CTException\u003E(Action). Return ONLY one JSON object:\n{\n  \u0022suite_name\u0022: \u0022short neutral name\u0022,\n  \u0022using_directives\u0022: [\u0022using Namespace;\u0022],\n  \u0022helper_code\u0022: \u0022optional deterministic in-memory fake types\u0022,\n  \u0022cases\u0022: [\n    {\u0022case_id\u0022:\u0022H1\u0022,\u0022category\u0022:\u0022happy_path\u0022,\u0022test_name\u0022:\u0022...\u0022,\u0022test_body\u0022:\u0022...\u0022},\n    {\u0022case_id\u0022:\u0022E1\u0022,\u0022category\u0022:\u0022empty_or_invalid\u0022,\u0022test_name\u0022:\u0022...\u0022,\u0022test_body\u0022:\u0022...\u0022},\n    {\u0022case_id\u0022:\u0022B1\u0022,\u0022category\u0022:\u0022boundary_values\u0022,\u0022test_name\u0022:\u0022...\u0022,\u0022test_body\u0022:\u0022...\u0022},\n    {\u0022case_id\u0022:\u0022A1\u0022,\u0022category\u0022:\u0022alternative_path\u0022,\u0022test_name\u0022:\u0022...\u0022,\u0022test_body\u0022:\u0022...\u0022},\n    {\u0022case_id\u0022:\u0022D1\u0022,\u0022category\u0022:\u0022dependency_or_state\u0022,\u0022test_name\u0022:\u0022...\u0022,\u0022test_body\u0022:\u0022...\u0022}\n  ]\n}\n\nRequirements:\n- Implement exactly five cases and preserve the plan identifiers and categories.\n- Give each case fresh setup, invoke production code and include a meaningful assertion.\n- B1 must exercise the plan\u0027s below, at and above stimuli in the same case.\n- helper_code may declare only deterministic in-memory fakes needed by these cases.\n- Fakes may record calls and return fixed values; do not use mocking packages.\n- Do not assert constants against themselves or use Check.True(true).\n- Do not use reflection, file or network I/O, processes, environment variables, clocks,\n  sleeps, randomness, package installation or mutable external state.\n- Do not declare a namespace or Main method and do not modify production code or projects.",
+  "raw_user_prompt": "## Production project\nNotifications\n\n## Target declaration\nSymbol: RetryPolicy.NextDelay\nSource lines: 6-40\nThese coordinates identify the common test unit but contain no diagnosis.\n\n## Pristine source file: src/Notifications/RetryPolicy.cs\n\u0060\u0060\u0060csharp\nnamespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n        if (attempt \u003E 10)\n            return 3600;\n\n        int baseDelay;\n        switch (channel)\n        {\n            case Channel.Email:\n                baseDelay = 30;\n                break;\n            case Channel.Sms:\n                baseDelay = 10;\n                break;\n            case Channel.Push:\n                baseDelay = 5;\n                break;\n            default:\n                baseDelay = 15;\n                break;\n        }\n\n        int delay = baseDelay * attempt;\n        if (serverBusy \u0026\u0026 delay \u003C 600)\n            delay *= 2;\n        if (delay \u003E 3600)\n            delay = 3600;\n        else if (delay \u003C 1)\n            delay = 1;\n        else if (attempt \u003E 7)\n            delay \u002B= 100;\n        return delay;\n    }\n}\n\n\u0060\u0060\u0060\n\n## Neutral public dependency context\n### Message.cs\r\n\u0060\u0060\u0060csharp\r\nnamespace Notifications;\npublic enum Channel\r\n{\r\n    Email,\r\n    Sms,\r\n    Push,\r\n}\r\n\r\n\u0060\u0060\u0060\n\n## Frozen five-case plan\n{\r\n  \u0022suite_name\u0022: \u0022RetryPolicy.NextDelay regression characterization\u0022,\r\n  \u0022cases\u0022: [\r\n    {\r\n      \u0022case_id\u0022: \u0022H1\u0022,\r\n      \u0022category\u0022: \u0022happy_path\u0022,\r\n      \u0022source_evidence\u0022: \u0022For Channel.Sms, the switch selects a base delay of 10. A positive attempt not exceeding 10 is multiplied by that base delay; with serverBusy false, no doubling occurs.\u0022,\r\n      \u0022input_partition\u0022: \u0022ordinary positive attempt with a recognized channel and server not busy\u0022,\r\n      \u0022inputs\u0022: [\r\n        \u0022attempt=3\u0022,\r\n        \u0022channel=Sms\u0022,\r\n        \u0022serverBusy=false\u0022\r\n      ],\r\n      \u0022expected_observation\u0022: \u0022NextDelay returns 30.\u0022\r\n    },\r\n    {\r\n      \u0022case_id\u0022: \u0022E1\u0022,\r\n      \u0022category\u0022: \u0022empty_or_invalid\u0022,\r\n      \u0022source_evidence\u0022: \u0022The first condition returns 0 whenever attempt is less than or equal to 0, before channel or serverBusy processing.\u0022,\r\n      \u0022input_partition\u0022: \u0022non-positive attempt handled by the initial early return\u0022,\r\n      \u0022inputs\u0022: [\r\n        \u0022attempt=0\u0022,\r\n        \u0022channel=Email\u0022,\r\n        \u0022serverBusy=true\u0022\r\n      ],\r\n      \u0022expected_observation\u0022: \u0022NextDelay returns 0.\u0022\r\n    },\r\n    {\r\n      \u0022case_id\u0022: \u0022B1\u0022,\r\n      \u0022category\u0022: \u0022boundary_values\u0022,\r\n      \u0022source_evidence\u0022: \u0022Attempts through 10 use channel-based calculation, while an attempt greater than 10 returns 3600 immediately. For Email without server busy, attempts greater than 7 also receive 100 after multiplication.\u0022,\r\n      \u0022input_partition\u0022: \u0022attempt values immediately below, at, and above the upper early-return threshold of 10\u0022,\r\n      \u0022inputs\u0022: [\r\n        \u0022{\\u0022attempt\\u0022:9,\\u0022channel\\u0022:\\u0022Email\\u0022,\\u0022serverBusy\\u0022:false}\u0022,\r\n        \u0022{\\u0022attempt\\u0022:10,\\u0022channel\\u0022:\\u0022Email\\u0022,\\u0022serverBusy\\u0022:false}\u0022,\r\n        \u0022{\\u0022attempt\\u0022:11,\\u0022channel\\u0022:\\u0022Email\\u0022,\\u0022serverBusy\\u0022:false}\u0022\r\n      ],\r\n      \u0022expected_observation\u0022: \u0022The three calls return 370, 400, and 3600 respectively.\u0022\r\n    },\r\n    {\r\n      \u0022case_id\u0022: \u0022A1\u0022,\r\n      \u0022category\u0022: \u0022alternative_path\u0022,\r\n      \u0022source_evidence\u0022: \u0022For Channel.Push, the base delay is 5. When serverBusy is true and the calculated delay is below 600, the delay is doubled.\u0022,\r\n      \u0022input_partition\u0022: \u0022recognized Push channel with the server-busy doubling branch active\u0022,\r\n      \u0022inputs\u0022: [\r\n        \u0022attempt=4\u0022,\r\n        \u0022channel=Push\u0022,\r\n        \u0022serverBusy=true\u0022\r\n      ],\r\n      \u0022expected_observation\u0022: \u0022NextDelay returns 40.\u0022\r\n    },\r\n    {\r\n      \u0022case_id\u0022: \u0022D1\u0022,\r\n      \u0022category\u0022: \u0022dependency_or_state\u0022,\r\n      \u0022source_evidence\u0022: \u0022NextDelay reads no external dependency or mutable state. For Email attempt 8 without server busy, it calculates 30 times 8 and then adds 100 because attempt is greater than 7.\u0022,\r\n      \u0022input_partition\u0022: \u0022repeated invocation with identical arguments\u0022,\r\n      \u0022inputs\u0022: [\r\n        \u0022invocations=[{\\u0022attempt\\u0022:8,\\u0022channel\\u0022:\\u0022Email\\u0022,\\u0022serverBusy\\u0022:false},{\\u0022attempt\\u0022:8,\\u0022channel\\u0022:\\u0022Email\\u0022,\\u0022serverBusy\\u0022:false}]\u0022\r\n      ],\r\n      \u0022expected_observation\u0022: \u0022Both invocations return 340.\u0022\r\n    }\r\n  ]\r\n}",
+  "raw_llm_output": "{\n  \u0022suite_name\u0022: \u0022RetryPolicy.NextDelay regression characterization\u0022,\n  \u0022using_directives\u0022: [\n    \u0022using Notifications;\u0022\n  ],\n  \u0022helper_code\u0022: \u0022\u0022,\n  \u0022cases\u0022: [\n    {\n      \u0022case_id\u0022: \u0022H1\u0022,\n      \u0022category\u0022: \u0022happy_path\u0022,\n      \u0022test_name\u0022: \u0022Sms_attempt_three_when_not_busy_returns_thirty\u0022,\n      \u0022test_body\u0022: \u0022var policy = new RetryPolicy();\\n\\nvar delay = policy.NextDelay(3, Channel.Sms, false);\\n\\nCheck.Equal(30, delay);\u0022\n    },\n    {\n      \u0022case_id\u0022: \u0022E1\u0022,\n      \u0022category\u0022: \u0022empty_or_invalid\u0022,\n      \u0022test_name\u0022: \u0022Zero_attempt_returns_zero\u0022,\n      \u0022test_body\u0022: \u0022var policy = new RetryPolicy();\\n\\nvar delay = policy.NextDelay(0, Channel.Email, true);\\n\\nCheck.Equal(0, delay);\u0022\n    },\n    {\n      \u0022case_id\u0022: \u0022B1\u0022,\n      \u0022category\u0022: \u0022boundary_values\u0022,\n      \u0022test_name\u0022: \u0022Attempts_below_at_and_above_ten_return_observed_delays\u0022,\n      \u0022test_body\u0022: \u0022var policy = new RetryPolicy();\\n\\nvar below = policy.NextDelay(9, Channel.Email, false);\\nvar at = policy.NextDelay(10, Channel.Email, false);\\nvar above = policy.NextDelay(11, Channel.Email, false);\\n\\nCheck.Equal(370, below);\\nCheck.Equal(400, at);\\nCheck.Equal(3600, above);\u0022\n    },\n    {\n      \u0022case_id\u0022: \u0022A1\u0022,\n      \u0022category\u0022: \u0022alternative_path\u0022,\n      \u0022test_name\u0022: \u0022Busy_push_attempt_four_returns_forty\u0022,\n      \u0022test_body\u0022: \u0022var policy = new RetryPolicy();\\n\\nvar delay = policy.NextDelay(4, Channel.Push, true);\\n\\nCheck.Equal(40, delay);\u0022\n    },\n    {\n      \u0022case_id\u0022: \u0022D1\u0022,\n      \u0022category\u0022: \u0022dependency_or_state\u0022,\n      \u0022test_name\u0022: \u0022Repeated_email_attempt_eight_calls_return_same_delay\u0022,\n      \u0022test_body\u0022: \u0022var policy = new RetryPolicy();\\n\\nvar first = policy.NextDelay(8, Channel.Email, false);\\nvar second = policy.NextDelay(8, Channel.Email, false);\\n\\nCheck.Equal(340, first);\\nCheck.Equal(340, second);\u0022\n    }\n  ]\n}",
+  "raw_plan_system_prompt": "You are planning regression characterisation tests for existing C# production code.\nWork only from observable public behaviour in the pristine source and neutral dependency\ncontext. Do not diagnose, improve, refactor or repair the production code.\n\nReturn ONLY one JSON object with suite_name and exactly five cases. Use these identifiers\nand categories once each, in this order:\n- H1 / happy_path: one representative valid end-to-end flow.\n- E1 / empty_or_invalid: the most relevant empty, minimal, null or invalid-input flow.\n- B1 / boundary_values: below, at and above one source-supported boundary. Put all three\n  stimuli in inputs. If there is no numeric threshold, use the closest three-point\n  cardinality or ordering boundary supported by the public contract.\n- A1 / alternative_path: a materially different valid branch, mode or input partition.\n- D1 / dependency_or_state: a deterministic dependency outcome, repeated invocation,\n  duplicate input or state transition, choosing the first applicable option in that order.\n\nEach case must contain case_id, category, source_evidence, input_partition, inputs and\nexpected_observation. Every input partition must differ. Evidence and expected observations\nmust describe behaviour visible in the supplied pristine code; do not invent requirements.\nDo not include C# test code in this planning response.",
+  "raw_plan_user_prompt": "## Production project\nNotifications\n\n## Target declaration\nSymbol: RetryPolicy.NextDelay\nSource lines: 6-40\nThese coordinates identify the common test unit but contain no diagnosis.\n\n## Pristine source file: src/Notifications/RetryPolicy.cs\n\u0060\u0060\u0060csharp\nnamespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n        if (attempt \u003E 10)\n            return 3600;\n\n        int baseDelay;\n        switch (channel)\n        {\n            case Channel.Email:\n                baseDelay = 30;\n                break;\n            case Channel.Sms:\n                baseDelay = 10;\n                break;\n            case Channel.Push:\n                baseDelay = 5;\n                break;\n            default:\n                baseDelay = 15;\n                break;\n        }\n\n        int delay = baseDelay * attempt;\n        if (serverBusy \u0026\u0026 delay \u003C 600)\n            delay *= 2;\n        if (delay \u003E 3600)\n            delay = 3600;\n        else if (delay \u003C 1)\n            delay = 1;\n        else if (attempt \u003E 7)\n            delay \u002B= 100;\n        return delay;\n    }\n}\n\n\u0060\u0060\u0060\n\n## Neutral public dependency context\n### Message.cs\r\n\u0060\u0060\u0060csharp\r\nnamespace Notifications;\npublic enum Channel\r\n{\r\n    Email,\r\n    Sms,\r\n    Push,\r\n}\r\n\r\n\u0060\u0060\u0060",
+  "raw_plan_llm_output": "{\n  \u0022suite_name\u0022: \u0022RetryPolicy.NextDelay regression characterization\u0022,\n  \u0022cases\u0022: [\n    {\n      \u0022case_id\u0022: \u0022H1\u0022,\n      \u0022category\u0022: \u0022happy_path\u0022,\n      \u0022source_evidence\u0022: \u0022For Channel.Sms, the switch selects a base delay of 10. A positive attempt not exceeding 10 is multiplied by that base delay; with serverBusy false, no doubling occurs.\u0022,\n      \u0022input_partition\u0022: \u0022ordinary positive attempt with a recognized channel and server not busy\u0022,\n      \u0022inputs\u0022: {\n        \u0022attempt\u0022: 3,\n        \u0022channel\u0022: \u0022Sms\u0022,\n        \u0022serverBusy\u0022: false\n      },\n      \u0022expected_observation\u0022: \u0022NextDelay returns 30.\u0022\n    },\n    {\n      \u0022case_id\u0022: \u0022E1\u0022,\n      \u0022category\u0022: \u0022empty_or_invalid\u0022,\n      \u0022source_evidence\u0022: \u0022The first condition returns 0 whenever attempt is less than or equal to 0, before channel or serverBusy processing.\u0022,\n      \u0022input_partition\u0022: \u0022non-positive attempt handled by the initial early return\u0022,\n      \u0022inputs\u0022: {\n        \u0022attempt\u0022: 0,\n        \u0022channel\u0022: \u0022Email\u0022,\n        \u0022serverBusy\u0022: true\n      },\n      \u0022expected_observation\u0022: \u0022NextDelay returns 0.\u0022\n    },\n    {\n      \u0022case_id\u0022: \u0022B1\u0022,\n      \u0022category\u0022: \u0022boundary_values\u0022,\n      \u0022source_evidence\u0022: \u0022Attempts through 10 use channel-based calculation, while an attempt greater than 10 returns 3600 immediately. For Email without server busy, attempts greater than 7 also receive 100 after multiplication.\u0022,\n      \u0022input_partition\u0022: \u0022attempt values immediately below, at, and above the upper early-return threshold of 10\u0022,\n      \u0022inputs\u0022: [\n        {\n          \u0022attempt\u0022: 9,\n          \u0022channel\u0022: \u0022Email\u0022,\n          \u0022serverBusy\u0022: false\n        },\n        {\n          \u0022attempt\u0022: 10,\n          \u0022channel\u0022: \u0022Email\u0022,\n          \u0022serverBusy\u0022: false\n        },\n        {\n          \u0022attempt\u0022: 11,\n          \u0022channel\u0022: \u0022Email\u0022,\n          \u0022serverBusy\u0022: false\n        }\n      ],\n      \u0022expected_observation\u0022: \u0022The three calls return 370, 400, and 3600 respectively.\u0022\n    },\n    {\n      \u0022case_id\u0022: \u0022A1\u0022,\n      \u0022category\u0022: \u0022alternative_path\u0022,\n      \u0022source_evidence\u0022: \u0022For Channel.Push, the base delay is 5. When serverBusy is true and the calculated delay is below 600, the delay is doubled.\u0022,\n      \u0022input_partition\u0022: \u0022recognized Push channel with the server-busy doubling branch active\u0022,\n      \u0022inputs\u0022: {\n        \u0022attempt\u0022: 4,\n        \u0022channel\u0022: \u0022Push\u0022,\n        \u0022serverBusy\u0022: true\n      },\n      \u0022expected_observation\u0022: \u0022NextDelay returns 40.\u0022\n    },\n    {\n      \u0022case_id\u0022: \u0022D1\u0022,\n      \u0022category\u0022: \u0022dependency_or_state\u0022,\n      \u0022source_evidence\u0022: \u0022NextDelay reads no external dependency or mutable state. For Email attempt 8 without server busy, it calculates 30 times 8 and then adds 100 because attempt is greater than 7.\u0022,\n      \u0022input_partition\u0022: \u0022repeated invocation with identical arguments\u0022,\n      \u0022inputs\u0022: {\n        \u0022invocations\u0022: [\n          {\n            \u0022attempt\u0022: 8,\n            \u0022channel\u0022: \u0022Email\u0022,\n            \u0022serverBusy\u0022: false\n          },\n          {\n            \u0022attempt\u0022: 8,\n            \u0022channel\u0022: \u0022Email\u0022,\n            \u0022serverBusy\u0022: false\n          }\n        ]\n      },\n      \u0022expected_observation\u0022: \u0022Both invocations return 340.\u0022\n    }\n  ]\n}",
+  "raw_correction_prompt": null,
+  "raw_correction_llm_output": null,
+  "input_tokens": 2098,
+  "output_tokens": 1756,
+  "generation_call_count": 2,
+  "plan_input_tokens": 591,
+  "plan_output_tokens": 1253,
+  "implementation_input_tokens": 1507,
+  "implementation_output_tokens": 503,
+  "correction_input_tokens": 0,
+  "correction_output_tokens": 0,
+  "duration_ms": 25202.4458,
+  "test_name": "RetryPolicy.NextDelay regression characterization",
+  "using_directives": [
+    "using Notifications;"
+  ],
+  "test_body": "{ // H1: Sms_attempt_three_when_not_busy_returns_thirty\nvar policy = new RetryPolicy();\n\nvar delay = policy.NextDelay(3, Channel.Sms, false);\n\nCheck.Equal(30, delay);\n}\r\n{ // E1: Zero_attempt_returns_zero\nvar policy = new RetryPolicy();\n\nvar delay = policy.NextDelay(0, Channel.Email, true);\n\nCheck.Equal(0, delay);\n}\r\n{ // B1: Attempts_below_at_and_above_ten_return_observed_delays\nvar policy = new RetryPolicy();\n\nvar below = policy.NextDelay(9, Channel.Email, false);\nvar at = policy.NextDelay(10, Channel.Email, false);\nvar above = policy.NextDelay(11, Channel.Email, false);\n\nCheck.Equal(370, below);\nCheck.Equal(400, at);\nCheck.Equal(3600, above);\n}\r\n{ // A1: Busy_push_attempt_four_returns_forty\nvar policy = new RetryPolicy();\n\nvar delay = policy.NextDelay(4, Channel.Push, true);\n\nCheck.Equal(40, delay);\n}\r\n{ // D1: Repeated_email_attempt_eight_calls_return_same_delay\nvar policy = new RetryPolicy();\n\nvar first = policy.NextDelay(8, Channel.Email, false);\nvar second = policy.NextDelay(8, Channel.Email, false);\n\nCheck.Equal(340, first);\nCheck.Equal(340, second);\n}",
+  "helper_code": "",
+  "test_cases": [
+    {
+      "case_id": "H1",
+      "category": "happy_path",
+      "test_name": "Sms_attempt_three_when_not_busy_returns_thirty",
+      "test_body": "var policy = new RetryPolicy();\n\nvar delay = policy.NextDelay(3, Channel.Sms, false);\n\nCheck.Equal(30, delay);"
+    },
+    {
+      "case_id": "E1",
+      "category": "empty_or_invalid",
+      "test_name": "Zero_attempt_returns_zero",
+      "test_body": "var policy = new RetryPolicy();\n\nvar delay = policy.NextDelay(0, Channel.Email, true);\n\nCheck.Equal(0, delay);"
+    },
+    {
+      "case_id": "B1",
+      "category": "boundary_values",
+      "test_name": "Attempts_below_at_and_above_ten_return_observed_delays",
+      "test_body": "var policy = new RetryPolicy();\n\nvar below = policy.NextDelay(9, Channel.Email, false);\nvar at = policy.NextDelay(10, Channel.Email, false);\nvar above = policy.NextDelay(11, Channel.Email, false);\n\nCheck.Equal(370, below);\nCheck.Equal(400, at);\nCheck.Equal(3600, above);"
+    },
+    {
+      "case_id": "A1",
+      "category": "alternative_path",
+      "test_name": "Busy_push_attempt_four_returns_forty",
+      "test_body": "var policy = new RetryPolicy();\n\nvar delay = policy.NextDelay(4, Channel.Push, true);\n\nCheck.Equal(40, delay);"
+    },
+    {
+      "case_id": "D1",
+      "category": "dependency_or_state",
+      "test_name": "Repeated_email_attempt_eight_calls_return_same_delay",
+      "test_body": "var policy = new RetryPolicy();\n\nvar first = policy.NextDelay(8, Channel.Email, false);\nvar second = policy.NextDelay(8, Channel.Email, false);\n\nCheck.Equal(340, first);\nCheck.Equal(340, second);"
+    }
+  ],
+  "test_plan": {
+    "suite_name": "RetryPolicy.NextDelay regression characterization",
+    "cases": [
+      {
+        "case_id": "H1",
+        "category": "happy_path",
+        "source_evidence": "For Channel.Sms, the switch selects a base delay of 10. A positive attempt not exceeding 10 is multiplied by that base delay; with serverBusy false, no doubling occurs.",
+        "input_partition": "ordinary positive attempt with a recognized channel and server not busy",
+        "inputs": [
+          "attempt=3",
+          "channel=Sms",
+          "serverBusy=false"
+        ],
+        "expected_observation": "NextDelay returns 30."
+      },
+      {
+        "case_id": "E1",
+        "category": "empty_or_invalid",
+        "source_evidence": "The first condition returns 0 whenever attempt is less than or equal to 0, before channel or serverBusy processing.",
+        "input_partition": "non-positive attempt handled by the initial early return",
+        "inputs": [
+          "attempt=0",
+          "channel=Email",
+          "serverBusy=true"
+        ],
+        "expected_observation": "NextDelay returns 0."
+      },
+      {
+        "case_id": "B1",
+        "category": "boundary_values",
+        "source_evidence": "Attempts through 10 use channel-based calculation, while an attempt greater than 10 returns 3600 immediately. For Email without server busy, attempts greater than 7 also receive 100 after multiplication.",
+        "input_partition": "attempt values immediately below, at, and above the upper early-return threshold of 10",
+        "inputs": [
+          "{\u0022attempt\u0022:9,\u0022channel\u0022:\u0022Email\u0022,\u0022serverBusy\u0022:false}",
+          "{\u0022attempt\u0022:10,\u0022channel\u0022:\u0022Email\u0022,\u0022serverBusy\u0022:false}",
+          "{\u0022attempt\u0022:11,\u0022channel\u0022:\u0022Email\u0022,\u0022serverBusy\u0022:false}"
+        ],
+        "expected_observation": "The three calls return 370, 400, and 3600 respectively."
+      },
+      {
+        "case_id": "A1",
+        "category": "alternative_path",
+        "source_evidence": "For Channel.Push, the base delay is 5. When serverBusy is true and the calculated delay is below 600, the delay is doubled.",
+        "input_partition": "recognized Push channel with the server-busy doubling branch active",
+        "inputs": [
+          "attempt=4",
+          "channel=Push",
+          "serverBusy=true"
+        ],
+        "expected_observation": "NextDelay returns 40."
+      },
+      {
+        "case_id": "D1",
+        "category": "dependency_or_state",
+        "source_evidence": "NextDelay reads no external dependency or mutable state. For Email attempt 8 without server busy, it calculates 30 times 8 and then adds 100 because attempt is greater than 7.",
+        "input_partition": "repeated invocation with identical arguments",
+        "inputs": [
+          "invocations=[{\u0022attempt\u0022:8,\u0022channel\u0022:\u0022Email\u0022,\u0022serverBusy\u0022:false},{\u0022attempt\u0022:8,\u0022channel\u0022:\u0022Email\u0022,\u0022serverBusy\u0022:false}]"
+        ],
+        "expected_observation": "Both invocations return 340."
+      }
+    ]
+  },
+  "test_sha256": "a9079d81a00fb73d571c92ed5db214b06a19db3f586fe9913ab841341dd65e49",
+  "admission_status": "admitted",
+  "admission_reason": null,
+  "parse_passed": true,
+  "assertion_gate_passed": true,
+  "build_passed": true,
+  "baseline_runs_passed": [
+    true,
+    true,
+    true
+  ],
+  "admission_output_tail": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json. [C:\\Users\\RayenSyal\\AppData\\Local\\Temp\\hybridlens-generated-test-502ea47d540147dbbff75ff6bb75174f\\GeneratedCharacterization.csproj]\r\nZ:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json. [C:\\Users\\RayenSyal\\AppData\\Local\\Temp\\hybridlens-generated-test-502ea47d540147dbbff75ff6bb75174f\\GeneratedCharacterization.csproj]\r\nZ:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json.\r\nZ:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json.\r\n\r\nBuild succeeded.\r\n\r\nZ:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json. [C:\\Users\\RayenSyal\\AppData\\Local\\Temp\\hybridlens-generated-test-502ea47d540147dbbff75ff6bb75174f\\GeneratedCharacterization.csproj]\r\nZ:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json. [C:\\Users\\RayenSyal\\AppData\\Local\\Temp\\hybridlens-generated-test-502ea47d540147dbbff75ff6bb75174f\\GeneratedCharacterization.csproj]\r\nZ:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json.\r\nZ:\\GitHub\\hybrid-pipeline-corpus\\corpus\\src\\Notifications\\Notifications.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json.\r\n    4 Warning(s)\r\n    0 Error(s)\r\n\r\nTime Elapsed 00:00:01.03\r\nPASS\r\n\r\nPASS\r\n\r\nPASS\r\n\r\n",
+  "admitted": true
+}

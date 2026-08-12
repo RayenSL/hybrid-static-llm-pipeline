@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-08-12T10:51:08.012176+00:00",
+  "checked_at_utc": "2026-08-12T11:30:28.205449+00:00",
   "gates": {
     "corpus_version_v2": true,
     "balanced_target_inventory": true,
@@ -13,7 +13,7 @@
   },
   "preparation_gates": {
     "baseline_frozen": true,
-    "visible_test_generation_complete": false,
+    "visible_test_generation_complete": true,
     "factorial_manifest_frozen": false
   },
   "failed_gates": [
@@ -21,7 +21,6 @@
     "r2_semantic_review_complete",
     "semantic_review_agreement",
     "semantic_review_validity",
-    "visible_test_generation_complete",
     "factorial_manifest_frozen"
   ],
   "final_release_ready": false,
