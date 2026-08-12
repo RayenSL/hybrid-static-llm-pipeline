@@ -216,6 +216,149 @@ public sealed class CharacterizationTestGenerator(
         return new GeneratedTestGenerationResult(artifact, Path.GetFullPath(artifactPath));
     }
 
+    public async Task<GeneratedTestGenerationResult> ResumeAsync(
+        string artifactPath,
+        string solutionPath,
+        int baselineRuns,
+        int timeoutSeconds,
+        CancellationToken cancellationToken)
+    {
+        var artifactFull = Path.GetFullPath(artifactPath);
+        var solutionFull = Path.GetFullPath(solutionPath);
+        if (!File.Exists(artifactFull)) throw new FileNotFoundException("generated-test artefact not found", artifactFull);
+        if (!File.Exists(solutionFull)) throw new FileNotFoundException("solution file not found", solutionFull);
+        var artifact = JsonSerializer.Deserialize<GeneratedTestArtifact>(
+            await File.ReadAllTextAsync(artifactFull, cancellationToken), JsonOptions)
+            ?? throw new InvalidDataException("generated-test artefact is empty or invalid");
+        if (artifact.AdmissionStatus != GeneratedTestAdmissionStatus.ParseFailed || artifact.GenerationCallCount != 1 ||
+            string.IsNullOrWhiteSpace(artifact.RawPlanLlmOutput) || !string.IsNullOrWhiteSpace(artifact.RawLlmOutput))
+            throw new InvalidDataException("only a plan-only parse-failed artefact can be resumed");
+        if (!string.Equals(artifact.ModelName, modelName, StringComparison.Ordinal) ||
+            !string.Equals(artifact.PromptVersion, CharacterizationTestPrompt.Version, StringComparison.Ordinal))
+            throw new InvalidDataException("artefact model or prompt version does not match the generator");
+
+        var sourceFull = Path.GetFullPath(artifact.SourceFile);
+        var pristineSource = await File.ReadAllTextAsync(sourceFull, cancellationToken);
+        if (!string.Equals(Sha256(pristineSource), artifact.SourceSha256, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidDataException("pristine source changed after the planning call");
+        var target = BlindedTargetDescriptor.Create(
+            artifact.TargetSymbolName, artifact.TargetStartLine, artifact.TargetEndLine);
+        ValidateTarget(target, pristineSource);
+        var solutionRoot = Path.GetDirectoryName(solutionFull)!;
+        var relative = Path.GetRelativePath(solutionRoot, sourceFull);
+        if (relative.StartsWith("..", StringComparison.Ordinal) || Path.IsPathRooted(relative))
+            throw new InvalidDataException("artefact source is outside the supplied solution");
+        var projectFile = FindContainingProject(sourceFull, solutionRoot)
+            ?? throw new InvalidOperationException($"no containing .csproj found for {sourceFull}");
+        if (!Path.GetFullPath(projectFile).Equals(Path.GetFullPath(artifact.ProjectFile), StringComparison.OrdinalIgnoreCase))
+            throw new InvalidDataException("artefact project does not match the pristine source");
+        var dependencyContext = await NeutralDependencyContextBuilder.BuildAsync(
+            sourceFull, projectFile, pristineSource, cancellationToken);
+        if (!string.Equals(Sha256(dependencyContext), artifact.DependencyContextSha256, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidDataException("neutral dependency context changed after the planning call");
+        var plan = ParsePlan(artifact.RawPlanLlmOutput, out var failure)
+            ?? throw new InvalidDataException($"persisted plan is still invalid: {failure}");
+
+        var implementationUserPrompt = CharacterizationTestPrompt.BuildImplementationUserPrompt(
+            relative.Replace('\\', '/'), Path.GetFileNameWithoutExtension(projectFile),
+            pristineSource, dependencyContext, target, plan);
+        LlmResponse? implementationResponse = null;
+        LlmResponse? correctionResponse = null;
+        GeneratedTestSource? parsed = null;
+        GeneratedTestAdmissionResult? admission = null;
+        string? correctionPrompt = null;
+        var status = GeneratedTestAdmissionStatus.GenerationFailed;
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            implementationResponse = await adapter.CompleteAsync(new LlmRequest
+            {
+                SystemPrompt = CharacterizationTestPrompt.SystemPrompt,
+                UserPrompt = implementationUserPrompt,
+                PromptVersion = CharacterizationTestPrompt.ImplementationVersion
+            }, cancellationToken);
+            parsed = Parse(implementationResponse.Content, out failure);
+            if (parsed is null || !MatchesPlan(parsed, plan, out failure))
+            {
+                parsed = null;
+                status = GeneratedTestAdmissionStatus.ParseFailed;
+            }
+            else
+            {
+                admission = await _admit(parsed, projectFile, baselineRuns, timeoutSeconds, cancellationToken);
+                status = admission.Status;
+                failure = admission.Reason;
+                if (admission.Status == GeneratedTestAdmissionStatus.BuildFailed)
+                {
+                    correctionPrompt = CharacterizationTestPrompt.BuildCompileCorrectionUserPrompt(
+                        plan, implementationResponse.Content, admission.OutputTail);
+                    correctionResponse = await adapter.CompleteAsync(new LlmRequest
+                    {
+                        SystemPrompt = CharacterizationTestPrompt.CompileCorrectionSystemPrompt,
+                        UserPrompt = correctionPrompt,
+                        PromptVersion = CharacterizationTestPrompt.CompileCorrectionVersion
+                    }, cancellationToken);
+                    var corrected = Parse(correctionResponse.Content, out failure);
+                    if (corrected is null || !MatchesPlan(corrected, plan, out failure) ||
+                        !PreservesCases(parsed, corrected, out failure))
+                    {
+                        status = GeneratedTestAdmissionStatus.ParseFailed;
+                    }
+                    else
+                    {
+                        parsed = corrected;
+                        admission = await _admit(parsed, projectFile, baselineRuns, timeoutSeconds, cancellationToken);
+                        status = admission.Status;
+                        failure = admission.Reason;
+                    }
+                }
+            }
+        }
+        catch (OperationCanceledException) { throw; }
+        catch (Exception ex)
+        {
+            status = GeneratedTestAdmissionStatus.GenerationFailed;
+            failure = ex.Message;
+        }
+        stopwatch.Stop();
+
+        var responses = new[] { implementationResponse, correctionResponse }.Where(response => response is not null).ToList();
+        var updated = artifact with
+        {
+            RawSystemPrompt = CharacterizationTestPrompt.SystemPrompt,
+            RawUserPrompt = implementationUserPrompt,
+            RawLlmOutput = implementationResponse?.Content,
+            RawCorrectionPrompt = correctionPrompt,
+            RawCorrectionLlmOutput = correctionResponse?.Content,
+            InputTokens = artifact.InputTokens + responses.Sum(response => response!.InputTokens),
+            OutputTokens = artifact.OutputTokens + responses.Sum(response => response!.OutputTokens),
+            GenerationCallCount = artifact.GenerationCallCount + responses.Count,
+            ImplementationInputTokens = artifact.ImplementationInputTokens + (implementationResponse?.InputTokens ?? 0),
+            ImplementationOutputTokens = artifact.ImplementationOutputTokens + (implementationResponse?.OutputTokens ?? 0),
+            CorrectionInputTokens = artifact.CorrectionInputTokens + (correctionResponse?.InputTokens ?? 0),
+            CorrectionOutputTokens = artifact.CorrectionOutputTokens + (correctionResponse?.OutputTokens ?? 0),
+            DurationMs = artifact.DurationMs + stopwatch.Elapsed.TotalMilliseconds,
+            TestName = parsed?.TestName,
+            UsingDirectives = parsed?.UsingDirectives ?? [],
+            TestBody = parsed?.TestBody,
+            HelperCode = parsed?.HelperCode ?? string.Empty,
+            TestCases = parsed?.Cases ?? [],
+            TestPlan = plan,
+            TestSha256 = parsed is null ? null : GeneratedTestSourceCanonicalizer.Hash(parsed),
+            AdmissionStatus = status,
+            AdmissionReason = failure,
+            ParsePassed = parsed is not null,
+            AssertionGatePassed = admission?.AssertionGatePassed ?? false,
+            BuildPassed = admission?.BuildPassed,
+            BaselineRunsPassed = admission?.BaselineRunsPassed ?? [],
+            AdmissionOutputTail = admission?.OutputTail
+        };
+        await File.WriteAllTextAsync(
+            artifactFull, JsonSerializer.Serialize(updated, JsonOptions),
+            new UTF8Encoding(false), cancellationToken);
+        return new GeneratedTestGenerationResult(updated, artifactFull);
+    }
+
     public static GeneratedTestPlan? ParsePlan(string raw, out string? reason)
     {
         try
@@ -239,13 +382,13 @@ public sealed class CharacterizationTestGenerator(
             foreach (var element in casesElement.EnumerateArray())
             {
                 if (!TryReadIdentity(element, out var id, out var category, out reason)) return null;
-                var inputs = StringArray(element, "inputs");
+                var inputs = PlanInputs(element);
                 var item = new GeneratedTestPlanCase(
                     id!, category,
                     StringProperty(element, "source_evidence") ?? string.Empty,
                     StringProperty(element, "input_partition") ?? string.Empty,
                     inputs,
-                    StringProperty(element, "expected_observation") ?? string.Empty);
+                    PlanObservation(element));
                 if (string.IsNullOrWhiteSpace(item.SourceEvidence) || string.IsNullOrWhiteSpace(item.InputPartition) ||
                     string.IsNullOrWhiteSpace(item.ExpectedObservation) || item.Inputs.Count == 0)
                 {
@@ -456,6 +599,41 @@ public sealed class CharacterizationTestGenerator(
                 values.Add(value.Trim());
         return values;
     }
+
+    private static List<string> PlanInputs(JsonElement element)
+    {
+        if (!element.TryGetProperty("inputs", out var inputs)) return [];
+        if (inputs.ValueKind == JsonValueKind.Array)
+            return inputs.EnumerateArray().Select(PlanValue).Where(value => value.Length > 0).ToList();
+        if (inputs.ValueKind != JsonValueKind.Object) return [];
+
+        var values = new List<string>();
+        foreach (var property in inputs.EnumerateObject())
+        {
+            if (property.NameEquals("stimuli") && property.Value.ValueKind == JsonValueKind.Array)
+            {
+                var index = 0;
+                foreach (var stimulus in property.Value.EnumerateArray())
+                    values.Add($"stimuli[{index++}]={PlanValue(stimulus)}");
+            }
+            else
+            {
+                values.Add($"{property.Name}={PlanValue(property.Value)}");
+            }
+        }
+        return values.Where(value => !value.EndsWith('=')).ToList();
+    }
+
+    private static string PlanObservation(JsonElement element) =>
+        element.TryGetProperty("expected_observation", out var observation)
+            ? PlanValue(observation)
+            : string.Empty;
+
+    private static string PlanValue(JsonElement value) => value.ValueKind == JsonValueKind.String
+        ? value.GetString()?.Trim() ?? string.Empty
+        : value.ValueKind is JsonValueKind.Null or JsonValueKind.Undefined
+            ? string.Empty
+            : JsonSerializer.Serialize(value);
 
     private static void ValidateTarget(BlindedTargetDescriptor target, string pristineSource)
     {

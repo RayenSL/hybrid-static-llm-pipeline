@@ -2,12 +2,21 @@ using HybridLens.Core.Abstractions;
 using HybridLens.Core.Models;
 using HybridLens.ContextBuilder;
 using HybridLens.Pipeline;
+using System.Text.Json.Nodes;
 
 namespace HybridLens.Tests.GeneratedTests;
 
 public sealed class CharacterizationTestGeneratorTests : IDisposable
 {
     private readonly List<string> _tempDirs = [];
+
+    [Fact]
+    public void Generator_ExposesResumeForAPersistedPlanOnlyArtifact()
+    {
+        var method = typeof(CharacterizationTestGenerator).GetMethod("ResumeAsync");
+
+        Assert.NotNull(method);
+    }
 
     [Fact]
     public void Prompt_RequiresOneHappyPathAndFourFixedEdgeCaseObligations()
@@ -217,6 +226,40 @@ public sealed class CharacterizationTestGeneratorTests : IDisposable
         Assert.True(File.Exists(result.ArtifactPath));
     }
 
+    [Fact]
+    public async Task ResumeAsync_ReusesThePersistedPlanWithoutAnotherPlanningCall()
+    {
+        var (solution, source, output) = MakeCorpus();
+        var failed = await new CharacterizationTestGenerator(new SingleShotAdapter("not-json"), "gpt-5.4")
+            .GenerateAsync(
+                source, solution, output,
+                BlindedTargetDescriptor.Create("Demo.Calculator.Add", 1, 1),
+                3, 30, CancellationToken.None);
+        var document = JsonNode.Parse(File.ReadAllText(failed.ArtifactPath))!.AsObject();
+        document["raw_plan_llm_output"] = ValidPlanJson();
+        File.WriteAllText(failed.ArtifactPath, document.ToJsonString());
+
+        var adapter = new QueuedAdapter(FiveCaseSuiteJson());
+        var generator = new CharacterizationTestGenerator(
+            adapter,
+            "gpt-5.4",
+            (test, project, runs, timeout, ct) => Task.FromResult(new GeneratedTestAdmissionResult(
+                GeneratedTestAdmissionStatus.Admitted, null, true, true, [true, true, true], "PASS")));
+
+        var resumed = await generator.ResumeAsync(
+            failed.ArtifactPath, solution, 3, 30, CancellationToken.None);
+
+        Assert.True(resumed.Artifact.Admitted, resumed.Artifact.AdmissionReason);
+        Assert.Equal(failed.Artifact.ArtifactId, resumed.Artifact.ArtifactId);
+        Assert.Single(adapter.Requests);
+        Assert.Contains("implementation", adapter.Requests[0].PromptVersion, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(2, resumed.Artifact.GenerationCallCount);
+        Assert.Equal(17, resumed.Artifact.PlanInputTokens);
+        Assert.Equal(23, resumed.Artifact.PlanOutputTokens);
+        Assert.Equal(17, resumed.Artifact.ImplementationInputTokens);
+        Assert.Equal(23, resumed.Artifact.ImplementationOutputTokens);
+    }
+
     [Theory]
     [InlineData("Check.True(true);")]
     [InlineData("var x = File.ReadAllText(\"secret\"); Check.NotNull(x);")]
@@ -247,6 +290,32 @@ public sealed class CharacterizationTestGeneratorTests : IDisposable
 
         Assert.Null(CharacterizationTestGenerator.ParsePlan(invalid, out var reason));
         Assert.Contains("below, at and above", reason, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ParsePlan_AcceptsStructuredInputsAndObservations()
+    {
+        var structured = ValidPlanJson()
+            .Replace(
+                "\"inputs\":[\"2 and 3\"]",
+                "\"inputs\":{\"left\":2,\"right\":3}",
+                StringComparison.Ordinal)
+            .Replace(
+                "\"expected_observation\":\"returns their sum\"",
+                "\"expected_observation\":{\"result\":5}",
+                StringComparison.Ordinal)
+            .Replace(
+                "\"inputs\":[\"-1\",\"0\",\"1\"]",
+                "\"inputs\":{\"shared\":{\"right\":0},\"stimuli\":[{\"left\":-1},{\"left\":0},{\"left\":1}]}",
+                StringComparison.Ordinal);
+
+        var parsed = CharacterizationTestGenerator.ParsePlan(structured, out var reason);
+
+        Assert.NotNull(parsed);
+        Assert.Null(reason);
+        Assert.NotEmpty(parsed.Cases.Single(item => item.CaseId == "H1").Inputs);
+        Assert.Contains("\"result\":5", parsed.Cases.Single(item => item.CaseId == "H1").ExpectedObservation);
+        Assert.True(parsed.Cases.Single(item => item.CaseId == "B1").Inputs.Count >= 3);
     }
 
     [Theory]

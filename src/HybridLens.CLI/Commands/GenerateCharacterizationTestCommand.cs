@@ -42,11 +42,15 @@ public static class GenerateCharacterizationTestCommand
         {
             Description = "Per build or execution timeout in seconds (default: 180)."
         };
+        var resumeOption = new Option<FileInfo?>("--resume-artifact")
+        {
+            Description = "Resume a persisted plan-only artefact after a parser correction; no second planning call is made."
+        };
 
         var command = new Command("generate-characterization-test",
             "Generate, baseline-check, and freeze one visible pre-repair five-case characterization suite.")
         {
-            fromOption, targetOption, sourceOption, modelOption, outOption, baselineRunsOption, timeoutOption
+            fromOption, targetOption, sourceOption, modelOption, outOption, baselineRunsOption, timeoutOption, resumeOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -57,6 +61,7 @@ public static class GenerateCharacterizationTestCommand
             var model = parseResult.GetValue(modelOption) is { Length: > 0 } m ? m : "gpt-5.4";
             var baselineRuns = Math.Max(3, parseResult.GetValue(baselineRunsOption));
             var timeout = parseResult.GetValue(timeoutOption);
+            var resume = parseResult.GetValue(resumeOption);
             if (timeout <= 0) timeout = 180;
             var output = parseResult.GetValue(outOption)?.FullName
                          ?? Path.Combine("runs", $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}-generated-tests");
@@ -100,14 +105,21 @@ public static class GenerateCharacterizationTestCommand
             }
 
             var generator = new CharacterizationTestGenerator(adapter, model);
-            var result = await generator.GenerateAsync(
-                source.FullName,
-                target.FullName,
-                output,
-                targetDescriptor,
-                baselineRuns,
-                timeout,
-                cancellationToken);
+            var result = resume is null
+                ? await generator.GenerateAsync(
+                    source.FullName,
+                    target.FullName,
+                    output,
+                    targetDescriptor,
+                    baselineRuns,
+                    timeout,
+                    cancellationToken)
+                : await generator.ResumeAsync(
+                    resume.FullName,
+                    target.FullName,
+                    baselineRuns,
+                    timeout,
+                    cancellationToken);
 
             Console.WriteLine($"target: {targetDescriptor.SymbolName}:{targetDescriptor.StartLine}-{targetDescriptor.EndLine}");
             Console.WriteLine($"status: {result.Artifact.AdmissionStatus}");
