@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "audited_at_utc": "2026-08-12T12:00:14.5072071+00:00",
+  "campaign_id": "6b28bd73dce3f9fe5ee9ed17",
+  "manifest_sha256": "67e5d373b54fa7a0b690883ddb79ddec2fc4d76afed9076f6e8cf7a6b0f705a8",
+  "corpus_revision": "20e22649fe8276507c2e760c9d3e48f40e111241",
+  "pipeline_implementation_revision": "62955d325db8abb43d5d71c093cf8580f795b44c",
+  "model": "gpt-5.6-sol",
+  "design": {
+    "targets": 26,
+    "repetitions": 3,
+    "conditions": 8,
+    "assignments": 624,
+    "assignments_per_condition": 78,
+    "randomization_seed": 20260812,
+    "iteration_budget": 6,
+    "build_timeout_seconds": 180,
+    "max_input_tokens": 120000
+  },
+  "visible_tests": {
+    "generated_artefacts": 26,
+    "admitted_suites": 25,
+    "test_enabled_assignments": 312,
+    "test_available_assignments": 300,
+    "intention_to_treat_unavailable_assignments": 12,
+    "selection_policy": "The first generated outcome is retained. The rejected InvoiceRenderer.Render suite remains unavailable in its twelve test-enabled assignments and is not regenerated."
+  },
+  "release_gates": {
+    "all_passed": true,
+    "r1_r2_agreement": "6/6 added targets",
+    "r2_rater_nature": "blind automated LLM rater using a different anonymised model; not a human reviewer",
+    "band_agreement": "36/36",
+    "private_oracle_cases": 270,
+    "baseline_frozen": true,
+    "manifest_frozen": true
+  },
+  "dry_run": {
+    "passed": true,
+    "manifest_verified": true,
+    "solution_verified": true,
+    "baseline_hash_verified": true,
+    "pristine_source_hashes_verified": true,
+    "campaign_output_files_before_launch": 0,
+    "model_calls_made": 0
+  },
+  "launch_authorisation": {
+    "authorised_by_user": true,
+    "authorising_message": "okay letsgo",
+    "authorised_at_utc": "2026-08-12T12:00:14.5072071+00:00"
+  }
+}

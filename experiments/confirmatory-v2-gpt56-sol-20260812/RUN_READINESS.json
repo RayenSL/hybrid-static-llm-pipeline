@@ -1,5 +1,5 @@
 {
-  "checked_at_utc": "2026-08-12T11:58:44.752000+00:00",
+  "checked_at_utc": "2026-08-12T11:59:31.434471+00:00",
   "gates": {
     "corpus_version_v2": true,
     "balanced_target_inventory": true,
@@ -14,13 +14,11 @@
   "preparation_gates": {
     "baseline_frozen": true,
     "visible_test_generation_complete": true,
-    "factorial_manifest_frozen": false
+    "factorial_manifest_frozen": true
   },
-  "failed_gates": [
-    "factorial_manifest_frozen"
-  ],
+  "failed_gates": [],
   "final_release_ready": true,
-  "campaign_ready": false,
+  "campaign_ready": true,
   "repair_execution_authorised": false,
   "repair_execution_note": "Preparation never authorises model calls; launch requires an explicit subsequent decision."
 }
