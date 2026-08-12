@@ -134,6 +134,11 @@ internal static class SchedulingDrivers
             new Job { Id = "J4", RequiredSkill = "weld",    Priority = 3, Duration = TimeSpan.FromHours(10) }, // SMALL, OT (duration)
             new Job { Id = "J5", RequiredSkill = "heavy",   Priority = 6, Duration = TimeSpan.FromHours(1) },  // BIG, OT (busy calendar)
             new Job { Id = "J6", RequiredSkill = "missing", Priority = 1, Duration = TimeSpan.FromHours(1) },  // UNPLACED
+            new Job { Id = "J7", RequiredSkill = "paint",   Priority = 1, Duration = TimeSpan.FromHours(1) },
+            new Job { Id = "J8", RequiredSkill = "heavy",   Priority = 9, Duration = TimeSpan.FromHours(2) },
+            new Job { Id = "J9", RequiredSkill = "weld",    Priority = 1, Duration = TimeSpan.FromMinutes(30) },
+            new Job { Id = "J10", RequiredSkill = "paint",  Priority = 8, Duration = TimeSpan.FromHours(9) },
+            new Job { Id = "J11", RequiredSkill = "none",   Priority = 2, Duration = TimeSpan.FromHours(1) },
         };
         return string.Join("\n", scheduler.PlaceJobs(jobs, resources));
     }
@@ -169,7 +174,14 @@ internal static class SchedulingDrivers
         sb.Append("Fit.empty=").Append(empty == null ? "null" : "hit").Append('\n');
 
         var bad = finder.FindFirstFit(resource, TimeSpan.Zero, new DateTime(2024, 1, 15, 8, 0, 0));
-        sb.Append("Fit.badDuration=").Append(bad == null ? "null" : "hit");
+        sb.Append("Fit.badDuration=").Append(bad == null ? "null" : "hit").Append('\n');
+        Slot? Find(TimeSpan duration, DateTime earliest) => finder.FindFirstFit(resource, duration, earliest);
+        sb.Append("Fit.below=").Append(Find(TimeSpan.FromMinutes(59), new DateTime(2024, 1, 15, 8, 0, 0)) is null ? "null" : "hit").Append('\n');
+        sb.Append("Fit.at=").Append(Find(TimeSpan.FromHours(1), new DateTime(2024, 1, 15, 9, 0, 0)) is null ? "null" : "hit").Append('\n');
+        sb.Append("Fit.above=").Append(Find(TimeSpan.FromHours(2).Add(TimeSpan.FromMinutes(1)), new DateTime(2024, 1, 15, 8, 0, 0)) is null ? "null" : "hit").Append('\n');
+        sb.Append("Fit.after=").Append(Find(TimeSpan.FromHours(1), new DateTime(2024, 1, 15, 11, 30, 0)) is null ? "null" : "hit").Append('\n');
+        sb.Append("Fit.repeat=").Append(Find(TimeSpan.FromHours(1), new DateTime(2024, 1, 15, 8, 0, 0)) is null ? "null" : "hit").Append('\n');
+        sb.Append("Fit.compound=").Append(finder.FindFirstFit(lateOnly, TimeSpan.FromHours(3), new DateTime(2024, 1, 15, 20, 0, 0)) is null ? "null" : "hit");
         return sb.ToString();
     }
 

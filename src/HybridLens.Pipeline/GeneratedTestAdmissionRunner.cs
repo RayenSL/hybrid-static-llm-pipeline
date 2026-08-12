@@ -24,7 +24,7 @@ public static class GeneratedTestAdmissionRunner
         int timeoutSeconds,
         CancellationToken cancellationToken)
     {
-        if (!HasNonVacuousAssertion(source.TestBody, out var assertionReason))
+        if (!ValidateAssertions(source, out var assertionReason))
             return new GeneratedTestAdmissionResult(
                 GeneratedTestAdmissionStatus.AssertionGateFailed,
                 assertionReason,
@@ -55,7 +55,7 @@ public static class GeneratedTestAdmissionRunner
                     [],
                     Tail(build.Output, 4000));
 
-            var requiredRuns = Math.Max(2, baselineRuns);
+            var requiredRuns = Math.Max(3, baselineRuns);
             var runResults = new List<bool>(requiredRuns);
             var output = new StringBuilder(build.Output);
             for (var i = 0; i < requiredRuns; i++)
@@ -171,9 +171,46 @@ public static class GeneratedTestAdmissionRunner
         return true;
     }
 
+    private static bool ValidateAssertions(GeneratedTestSource source, out string? reason)
+    {
+        if (ForbiddenFragments.Any(source.HelperCode.Contains))
+        {
+            reason = "test helpers use a forbidden nondeterministic or external-state API";
+            return false;
+        }
+        if (!source.IsStructuredSuite)
+            return HasNonVacuousAssertion(source.TestBody, out reason);
+        if (source.Cases.Count != 5)
+        {
+            reason = "structured suite does not contain exactly five cases";
+            return false;
+        }
+        foreach (var test in source.Cases)
+        {
+            if (!HasNonVacuousAssertion(test.TestBody, out var caseReason))
+            {
+                reason = $"{test.CaseId} failed assertion admission: {caseReason}";
+                return false;
+            }
+        }
+        reason = null;
+        return true;
+    }
+
     public static string BuildProgram(GeneratedTestSource source)
     {
         var usings = string.Join(Environment.NewLine, source.UsingDirectives);
+        var generatedClass = source.IsStructuredSuite
+            ? BuildStructuredClass(source)
+            : $$"""
+                static class GeneratedCharacterization
+                {
+                    public static void Run()
+                    {
+                {{Indent(source.TestBody, 8)}}
+                    }
+                }
+                """;
         return $$"""
             {{usings}}
             using System.Collections.Generic;
@@ -191,13 +228,7 @@ public static class GeneratedTestAdmissionRunner
                 return 1;
             }
 
-            static class GeneratedCharacterization
-            {
-                public static void Run()
-                {
-            {{Indent(source.TestBody, 8)}}
-                }
-            }
+            {{generatedClass}}
 
             static class Check
             {
@@ -216,6 +247,11 @@ public static class GeneratedTestAdmissionRunner
                     if (value is null) throw new InvalidOperationException("expected non-null value");
                 }
 
+                public static void Null(object? value)
+                {
+                    if (value is not null) throw new InvalidOperationException("expected null value");
+                }
+
                 public static void Equal<T>(T expected, T actual)
                 {
                     if (!EqualityComparer<T>.Default.Equals(expected, actual))
@@ -227,6 +263,57 @@ public static class GeneratedTestAdmissionRunner
                     if (!expected.SequenceEqual(actual))
                         throw new InvalidOperationException("sequences differ");
                 }
+
+                public static void Throws<TException>(Action action) where TException : Exception
+                {
+                    try
+                    {
+                        action();
+                    }
+                    catch (TException)
+                    {
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new InvalidOperationException(
+                            $"expected {typeof(TException).Name}, actual {ex.GetType().Name}");
+                    }
+                    throw new InvalidOperationException($"expected {typeof(TException).Name}");
+                }
+            }
+            """;
+    }
+
+    private static string BuildStructuredClass(GeneratedTestSource source)
+    {
+        var calls = string.Join(Environment.NewLine,
+            source.Cases.Select(test => $"        RunCase(\"{test.CaseId}\", Case_{test.CaseId});"));
+        var methods = string.Join(Environment.NewLine + Environment.NewLine,
+            source.Cases.Select(test => $$"""
+                    private static void Case_{{test.CaseId}}()
+                    {
+                {{Indent(test.TestBody, 8)}}
+                    }
+                """));
+        var helpers = string.IsNullOrWhiteSpace(source.HelperCode)
+            ? string.Empty
+            : Environment.NewLine + Indent(source.HelperCode, 4) + Environment.NewLine;
+        return $$"""
+            static class GeneratedCharacterization
+            {
+                public static void Run()
+                {
+            {{calls}}
+                }
+
+                private static void RunCase(string id, Action action)
+                {
+                    try { action(); }
+                    catch (Exception ex) { throw new InvalidOperationException($"{id}: {ex.Message}", ex); }
+                }
+            {{helpers}}
+            {{methods}}
             }
             """;
     }

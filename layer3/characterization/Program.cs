@@ -5,12 +5,14 @@ using Characterization;
 //   dotnet run -- --check   <goldenDir>   (compare the current build to the frozen goldens)
 // Exit code 0 = all pass; 1 = at least one behavioural regression / missing golden.
 
-var drivers = new List<(string Key, Func<string> Drive)>();
-drivers.AddRange(OrderingDrivers.All);
-drivers.AddRange(InventoryDrivers.All);
-drivers.AddRange(InvoicingDrivers.All);
-drivers.AddRange(NotificationsDrivers.All);
-drivers.AddRange(SchedulingDrivers.All);
+var rawDrivers = new List<(string Key, Func<string> Drive)>();
+rawDrivers.AddRange(OrderingDrivers.All);
+rawDrivers.AddRange(InventoryDrivers.All);
+rawDrivers.AddRange(InvoicingDrivers.All);
+rawDrivers.AddRange(NotificationsDrivers.All);
+rawDrivers.AddRange(SchedulingDrivers.All);
+rawDrivers.AddRange(V2Drivers.All);
+var drivers = PrivateCaseCatalog.Expand(rawDrivers).ToList();
 drivers.Sort((a, b) => string.CompareOrdinal(a.Key, b.Key));
 
 var mode = args.Length > 0 ? args[0] : "--check";

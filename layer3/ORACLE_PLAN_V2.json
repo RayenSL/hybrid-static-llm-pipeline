@@ -1,0 +1,1298 @@
+{
+  "plan_version": "2.0.0",
+  "corpus_version": "v2.0",
+  "visibility": "private",
+  "methodology": {
+    "evaluated_target_rule": "Exactly ten independently keyed cases per evaluated God Class or Long Method target.",
+    "case_taxonomy": [
+      "P01-happy-flow",
+      "P02-empty-or-minimal",
+      "P03-invalid-input",
+      "P04-below-boundary",
+      "P05-at-boundary",
+      "P06-above-boundary",
+      "P07-alternate-valid-mode",
+      "P08-collaborator-outcome",
+      "P09-repeat-or-state-transition",
+      "P10-compound-ordering"
+    ],
+    "generated_visible_suite_cases": 5,
+    "private_oracle_cases_per_target": 10
+  },
+  "evaluated_targets": [
+    {
+      "instance_id": "GC-01",
+      "anti_pattern": "GodClass",
+      "symbol": "Ordering.OrderProcessor",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Ordering.OrderProcessor with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Ordering.OrderProcessor with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Ordering.OrderProcessor with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Ordering.OrderProcessor immediately below the minimum-order value."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Ordering.OrderProcessor exactly at the minimum-order value."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Ordering.OrderProcessor immediately above the minimum-order value."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the wholesale and overseas order path of Ordering.OrderProcessor."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Ordering.OrderProcessor with the shipper result taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Ordering.OrderProcessor through duplicate dispatch and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Ordering.OrderProcessor with invalid address with blocked customer so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-02",
+      "anti_pattern": "GodClass",
+      "symbol": "Ordering.CheckoutCoordinator",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Ordering.CheckoutCoordinator with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Ordering.CheckoutCoordinator with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Ordering.CheckoutCoordinator with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Ordering.CheckoutCoordinator immediately below the seat/order charge threshold."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Ordering.CheckoutCoordinator exactly at the seat/order charge threshold."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Ordering.CheckoutCoordinator immediately above the seat/order charge threshold."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the marketplace checkout with promotion path of Ordering.CheckoutCoordinator."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Ordering.CheckoutCoordinator with the fulfilment scheduling taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Ordering.CheckoutCoordinator through repeated checkout step and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Ordering.CheckoutCoordinator with complete checkout before begin so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-03",
+      "anti_pattern": "GodClass",
+      "symbol": "Ordering.ReturnsHandler",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Ordering.ReturnsHandler with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Ordering.ReturnsHandler with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Ordering.ReturnsHandler with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Ordering.ReturnsHandler immediately below the return quantity limit."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Ordering.ReturnsHandler exactly at the return quantity limit."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Ordering.ReturnsHandler immediately above the return quantity limit."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the blocked-customer return path of Ordering.ReturnsHandler."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Ordering.ReturnsHandler with the refund and restock state taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Ordering.ReturnsHandler through duplicate return and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Ordering.ReturnsHandler with large refund with repeated processing so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-04",
+      "anti_pattern": "GodClass",
+      "symbol": "Invoicing.BillingManager",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Invoicing.BillingManager with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Invoicing.BillingManager with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Invoicing.BillingManager with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Invoicing.BillingManager immediately below the late-fee cap."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Invoicing.BillingManager exactly at the late-fee cap."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Invoicing.BillingManager immediately above the late-fee cap."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the government-account invoice path of Invoicing.BillingManager."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Invoicing.BillingManager with the ledger posting taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Invoicing.BillingManager through repeated reminder and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Invoicing.BillingManager with settlement after debit and credit so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-05",
+      "anti_pattern": "GodClass",
+      "symbol": "Invoicing.StatementBuilder",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Invoicing.StatementBuilder with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Invoicing.StatementBuilder with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Invoicing.StatementBuilder with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Invoicing.StatementBuilder immediately below the statement line count."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Invoicing.StatementBuilder exactly at the statement line count."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Invoicing.StatementBuilder immediately above the statement line count."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the alternate currency/account kind path of Invoicing.StatementBuilder."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Invoicing.StatementBuilder with the contact resolution taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Invoicing.StatementBuilder through repeated statement build and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Invoicing.StatementBuilder with missing contact with mixed invoice lines so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-06",
+      "anti_pattern": "GodClass",
+      "symbol": "Inventory.StockController",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Inventory.StockController with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Inventory.StockController with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Inventory.StockController with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Inventory.StockController immediately below the reorder threshold."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Inventory.StockController exactly at the reorder threshold."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Inventory.StockController immediately above the reorder threshold."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the warehouse-zone allocation path of Inventory.StockController."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Inventory.StockController with the supplier order outcome taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Inventory.StockController through repeated stock movement and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Inventory.StockController with reservation plus reorder and delivery so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-07",
+      "anti_pattern": "GodClass",
+      "symbol": "Inventory.CycleCountService",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Inventory.CycleCountService with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Inventory.CycleCountService with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Inventory.CycleCountService with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Inventory.CycleCountService immediately below the variance limit."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Inventory.CycleCountService exactly at the variance limit."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Inventory.CycleCountService immediately above the variance limit."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the negative and excess variance path of Inventory.CycleCountService."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Inventory.CycleCountService with the valuation update taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Inventory.CycleCountService through repeated discrepancy flag and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Inventory.CycleCountService with count then reconcile then value so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-08",
+      "anti_pattern": "GodClass",
+      "symbol": "Scheduling.ScheduleManager",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Scheduling.ScheduleManager with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Scheduling.ScheduleManager with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Scheduling.ScheduleManager with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Scheduling.ScheduleManager immediately below the resource capacity."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Scheduling.ScheduleManager exactly at the resource capacity."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Scheduling.ScheduleManager immediately above the resource capacity."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the priority scheduling mode path of Scheduling.ScheduleManager."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Scheduling.ScheduleManager with the calendar availability taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Scheduling.ScheduleManager through duplicate booking and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Scheduling.ScheduleManager with conflicting jobs with cancellation so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-09",
+      "anti_pattern": "GodClass",
+      "symbol": "Scheduling.RecurrenceEngine",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Scheduling.RecurrenceEngine with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Scheduling.RecurrenceEngine with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Scheduling.RecurrenceEngine with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Scheduling.RecurrenceEngine immediately below the occurrence limit."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Scheduling.RecurrenceEngine exactly at the occurrence limit."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Scheduling.RecurrenceEngine immediately above the occurrence limit."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the weekly versus monthly recurrence path of Scheduling.RecurrenceEngine."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Scheduling.RecurrenceEngine with the calendar exclusion taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Scheduling.RecurrenceEngine through repeated expansion and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Scheduling.RecurrenceEngine with boundary date with exclusions so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-10",
+      "anti_pattern": "GodClass",
+      "symbol": "Notifications.NotificationCenter",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Notifications.NotificationCenter with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Notifications.NotificationCenter with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Notifications.NotificationCenter with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Notifications.NotificationCenter immediately below the retry limit."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Notifications.NotificationCenter exactly at the retry limit."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Notifications.NotificationCenter immediately above the retry limit."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the email versus push channel path of Notifications.NotificationCenter."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Notifications.NotificationCenter with the template and delivery outcome taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Notifications.NotificationCenter through duplicate notification and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Notifications.NotificationCenter with unsubscribed recipient with fallback so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-11",
+      "anti_pattern": "GodClass",
+      "symbol": "Fulfilment.FulfilmentCoordinator",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Fulfilment.FulfilmentCoordinator with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Fulfilment.FulfilmentCoordinator with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Fulfilment.FulfilmentCoordinator with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Fulfilment.FulfilmentCoordinator immediately below the available stock and carrier transit limit."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Fulfilment.FulfilmentCoordinator exactly at the available stock and carrier transit limit."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Fulfilment.FulfilmentCoordinator immediately above the available stock and carrier transit limit."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the priority fragile fulfilment path of Fulfilment.FulfilmentCoordinator."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Fulfilment.FulfilmentCoordinator with the carrier handover outcome taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Fulfilment.FulfilmentCoordinator through reserve and dispatch repetition and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Fulfilment.FulfilmentCoordinator with split pick followed by warehouse exception so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-12",
+      "anti_pattern": "GodClass",
+      "symbol": "Subscriptions.SubscriptionAccountService",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Subscriptions.SubscriptionAccountService with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Subscriptions.SubscriptionAccountService with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Subscriptions.SubscriptionAccountService with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Subscriptions.SubscriptionAccountService immediately below the seat and metered-entitlement limits."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Subscriptions.SubscriptionAccountService exactly at the seat and metered-entitlement limits."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Subscriptions.SubscriptionAccountService immediately above the seat and metered-entitlement limits."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the trial versus paid plan path of Subscriptions.SubscriptionAccountService."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Subscriptions.SubscriptionAccountService with the payment acceptance taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Subscriptions.SubscriptionAccountService through repeat grant or notice and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Subscriptions.SubscriptionAccountService with arrears plus plan change and payment so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "GC-13",
+      "anti_pattern": "GodClass",
+      "symbol": "ServiceDesk.CaseOperationsManager",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of ServiceDesk.CaseOperationsManager with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise ServiceDesk.CaseOperationsManager with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise ServiceDesk.CaseOperationsManager with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise ServiceDesk.CaseOperationsManager immediately below the SLA deadline and agent capacity."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise ServiceDesk.CaseOperationsManager exactly at the SLA deadline and agent capacity."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise ServiceDesk.CaseOperationsManager immediately above the SLA deadline and agent capacity."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the security versus ordinary case path of ServiceDesk.CaseOperationsManager."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise ServiceDesk.CaseOperationsManager with the agent availability taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise ServiceDesk.CaseOperationsManager through reassignment or repeat escalation and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise ServiceDesk.CaseOperationsManager with deadline warning with security escalation so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-01",
+      "anti_pattern": "LongMethod",
+      "symbol": "Ordering.OrderImporter.ImportBatch",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Ordering.OrderImporter.ImportBatch with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Ordering.OrderImporter.ImportBatch with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Ordering.OrderImporter.ImportBatch with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Ordering.OrderImporter.ImportBatch immediately below the row field and quantity boundary."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Ordering.OrderImporter.ImportBatch exactly at the row field and quantity boundary."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Ordering.OrderImporter.ImportBatch immediately above the row field and quantity boundary."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the marketplace row type path of Ordering.OrderImporter.ImportBatch."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Ordering.OrderImporter.ImportBatch with the repository insertion taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Ordering.OrderImporter.ImportBatch through duplicate reference and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Ordering.OrderImporter.ImportBatch with mixed valid, invalid and duplicate rows so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-02",
+      "anti_pattern": "LongMethod",
+      "symbol": "Ordering.PricingRules.ApplyAdjustments",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Ordering.PricingRules.ApplyAdjustments with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Ordering.PricingRules.ApplyAdjustments with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Ordering.PricingRules.ApplyAdjustments with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Ordering.PricingRules.ApplyAdjustments immediately below the order subtotal threshold."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Ordering.PricingRules.ApplyAdjustments exactly at the order subtotal threshold."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Ordering.PricingRules.ApplyAdjustments immediately above the order subtotal threshold."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the wholesale and marketplace pricing path of Ordering.PricingRules.ApplyAdjustments."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Ordering.PricingRules.ApplyAdjustments with the discount override taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Ordering.PricingRules.ApplyAdjustments through repeat calculation and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Ordering.PricingRules.ApplyAdjustments with override plus threshold plus channel adjustment so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-03",
+      "anti_pattern": "LongMethod",
+      "symbol": "Invoicing.InvoiceRenderer.Render",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Invoicing.InvoiceRenderer.Render with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Invoicing.InvoiceRenderer.Render with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Invoicing.InvoiceRenderer.Render with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Invoicing.InvoiceRenderer.Render immediately below the invoice line and total threshold."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Invoicing.InvoiceRenderer.Render exactly at the invoice line and total threshold."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Invoicing.InvoiceRenderer.Render immediately above the invoice line and total threshold."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the government account rendering path of Invoicing.InvoiceRenderer.Render."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Invoicing.InvoiceRenderer.Render with the line formatting data taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Invoicing.InvoiceRenderer.Render through repeat rendering and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Invoicing.InvoiceRenderer.Render with negative, taxable and exempt lines together so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-04",
+      "anti_pattern": "LongMethod",
+      "symbol": "Invoicing.VatResolver.Resolve",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Invoicing.VatResolver.Resolve with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Invoicing.VatResolver.Resolve with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Invoicing.VatResolver.Resolve with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Invoicing.VatResolver.Resolve immediately below the taxable net threshold."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Invoicing.VatResolver.Resolve exactly at the taxable net threshold."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Invoicing.VatResolver.Resolve immediately above the taxable net threshold."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the jurisdiction and account kind path of Invoicing.VatResolver.Resolve."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Invoicing.VatResolver.Resolve with the rate lookup taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Invoicing.VatResolver.Resolve through repeat resolution and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Invoicing.VatResolver.Resolve with unknown country with capped adjustment so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-05",
+      "anti_pattern": "LongMethod",
+      "symbol": "Inventory.ReplenishmentPlanner.BuildPlan",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Inventory.ReplenishmentPlanner.BuildPlan with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Inventory.ReplenishmentPlanner.BuildPlan with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Inventory.ReplenishmentPlanner.BuildPlan with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Inventory.ReplenishmentPlanner.BuildPlan immediately below the reorder deficit boundary."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Inventory.ReplenishmentPlanner.BuildPlan exactly at the reorder deficit boundary."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Inventory.ReplenishmentPlanner.BuildPlan immediately above the reorder deficit boundary."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the seasonal planning mode path of Inventory.ReplenishmentPlanner.BuildPlan."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Inventory.ReplenishmentPlanner.BuildPlan with the supplier acceptance taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Inventory.ReplenishmentPlanner.BuildPlan through repeat plan generation and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Inventory.ReplenishmentPlanner.BuildPlan with mixed stock states with failed supplier so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-06",
+      "anti_pattern": "LongMethod",
+      "symbol": "Inventory.AllocationCalculator.Allocate",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Inventory.AllocationCalculator.Allocate with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Inventory.AllocationCalculator.Allocate with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Inventory.AllocationCalculator.Allocate with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Inventory.AllocationCalculator.Allocate immediately below the zone capacity boundary."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Inventory.AllocationCalculator.Allocate exactly at the zone capacity boundary."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Inventory.AllocationCalculator.Allocate immediately above the zone capacity boundary."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the alternate zone priority path of Inventory.AllocationCalculator.Allocate."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Inventory.AllocationCalculator.Allocate with the remaining-capacity data taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Inventory.AllocationCalculator.Allocate through repeat allocation and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Inventory.AllocationCalculator.Allocate with several zones around exact capacity so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-07",
+      "anti_pattern": "LongMethod",
+      "symbol": "Scheduling.Scheduler.PlaceJobs",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Scheduling.Scheduler.PlaceJobs with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Scheduling.Scheduler.PlaceJobs with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Scheduling.Scheduler.PlaceJobs with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Scheduling.Scheduler.PlaceJobs immediately below the job duration and capacity boundary."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Scheduling.Scheduler.PlaceJobs exactly at the job duration and capacity boundary."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Scheduling.Scheduler.PlaceJobs immediately above the job duration and capacity boundary."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the priority scheduling path of Scheduling.Scheduler.PlaceJobs."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Scheduling.Scheduler.PlaceJobs with the resource placement taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Scheduling.Scheduler.PlaceJobs through repeat placement and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Scheduling.Scheduler.PlaceJobs with conflicting jobs across resources so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-08",
+      "anti_pattern": "LongMethod",
+      "symbol": "Scheduling.SlotFinder.FindFirstFit",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Scheduling.SlotFinder.FindFirstFit with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Scheduling.SlotFinder.FindFirstFit with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Scheduling.SlotFinder.FindFirstFit with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Scheduling.SlotFinder.FindFirstFit immediately below the slot duration boundary."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Scheduling.SlotFinder.FindFirstFit exactly at the slot duration boundary."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Scheduling.SlotFinder.FindFirstFit immediately above the slot duration boundary."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the alternate resource calendar path of Scheduling.SlotFinder.FindFirstFit."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Scheduling.SlotFinder.FindFirstFit with the availability lookup taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Scheduling.SlotFinder.FindFirstFit through repeat search and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Scheduling.SlotFinder.FindFirstFit with blocked slots around exact fit so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-09",
+      "anti_pattern": "LongMethod",
+      "symbol": "Notifications.DispatchPipeline.Run",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Notifications.DispatchPipeline.Run with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Notifications.DispatchPipeline.Run with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Notifications.DispatchPipeline.Run with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Notifications.DispatchPipeline.Run immediately below the retry and throttle boundary."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Notifications.DispatchPipeline.Run exactly at the retry and throttle boundary."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Notifications.DispatchPipeline.Run immediately above the retry and throttle boundary."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the alternate delivery channel path of Notifications.DispatchPipeline.Run."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Notifications.DispatchPipeline.Run with the template and delivery outcome taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Notifications.DispatchPipeline.Run through repeat dispatch and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Notifications.DispatchPipeline.Run with unsubscribed recipient with retry pressure so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-10",
+      "anti_pattern": "LongMethod",
+      "symbol": "Notifications.RetryPolicy.NextDelay",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Notifications.RetryPolicy.NextDelay with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Notifications.RetryPolicy.NextDelay with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Notifications.RetryPolicy.NextDelay with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Notifications.RetryPolicy.NextDelay immediately below the attempt and delay cap."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Notifications.RetryPolicy.NextDelay exactly at the attempt and delay cap."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Notifications.RetryPolicy.NextDelay immediately above the attempt and delay cap."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the email versus push channel path of Notifications.RetryPolicy.NextDelay."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Notifications.RetryPolicy.NextDelay with the busy-server signal taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Notifications.RetryPolicy.NextDelay through repeat calculation and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Notifications.RetryPolicy.NextDelay with high attempt with busy server and cap so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-11",
+      "anti_pattern": "LongMethod",
+      "symbol": "Claims.ClaimAdjudicator.Evaluate",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Claims.ClaimAdjudicator.Evaluate with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Claims.ClaimAdjudicator.Evaluate with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Claims.ClaimAdjudicator.Evaluate with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Claims.ClaimAdjudicator.Evaluate immediately below the deductible and remaining policy limit."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Claims.ClaimAdjudicator.Evaluate exactly at the deductible and remaining policy limit."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Claims.ClaimAdjudicator.Evaluate immediately above the deductible and remaining policy limit."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the theft versus ordinary claim path of Claims.ClaimAdjudicator.Evaluate."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Claims.ClaimAdjudicator.Evaluate with the coverage and risk outcomes taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Claims.ClaimAdjudicator.Evaluate through repeat adjudication and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Claims.ClaimAdjudicator.Evaluate with late incomplete claim near the policy limit so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-12",
+      "anti_pattern": "LongMethod",
+      "symbol": "Payments.SettlementBatchProcessor.Process",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of Payments.SettlementBatchProcessor.Process with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise Payments.SettlementBatchProcessor.Process with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise Payments.SettlementBatchProcessor.Process with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise Payments.SettlementBatchProcessor.Process immediately below the cumulative submission limit."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise Payments.SettlementBatchProcessor.Process exactly at the cumulative submission limit."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise Payments.SettlementBatchProcessor.Process immediately above the cumulative submission limit."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the partial mixed batch path of Payments.SettlementBatchProcessor.Process."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise Payments.SettlementBatchProcessor.Process with the gateway acceptance taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise Payments.SettlementBatchProcessor.Process through duplicate payment reference and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise Payments.SettlementBatchProcessor.Process with fee, currency mismatch and limit interaction so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    },
+    {
+      "instance_id": "LM-13",
+      "anti_pattern": "LongMethod",
+      "symbol": "AccessControl.AccessDecisionEngine.Decide",
+      "cases": [
+        {
+          "case_id": "P01-happy-flow",
+          "obligation": "Exercise the nominal successful behaviour of AccessControl.AccessDecisionEngine.Decide with representative valid data."
+        },
+        {
+          "case_id": "P02-empty-or-minimal",
+          "obligation": "Exercise AccessControl.AccessDecisionEngine.Decide with its empty or smallest meaningful input."
+        },
+        {
+          "case_id": "P03-invalid-input",
+          "obligation": "Exercise AccessControl.AccessDecisionEngine.Decide with a structurally invalid input and preserve its rejection contract."
+        },
+        {
+          "case_id": "P04-below-boundary",
+          "obligation": "Exercise AccessControl.AccessDecisionEngine.Decide immediately below the business-hours and failed-challenge boundary."
+        },
+        {
+          "case_id": "P05-at-boundary",
+          "obligation": "Exercise AccessControl.AccessDecisionEngine.Decide exactly at the business-hours and failed-challenge boundary."
+        },
+        {
+          "case_id": "P06-above-boundary",
+          "obligation": "Exercise AccessControl.AccessDecisionEngine.Decide immediately above the business-hours and failed-challenge boundary."
+        },
+        {
+          "case_id": "P07-alternate-valid-mode",
+          "obligation": "Exercise the read, write and delete modes path of AccessControl.AccessDecisionEngine.Decide."
+        },
+        {
+          "case_id": "P08-collaborator-outcome",
+          "obligation": "Exercise AccessControl.AccessDecisionEngine.Decide with the delegation outcome taking its non-default outcome."
+        },
+        {
+          "case_id": "P09-repeat-or-state-transition",
+          "obligation": "Exercise AccessControl.AccessDecisionEngine.Decide through repeat decision and observe the second outcome."
+        },
+        {
+          "case_id": "P10-compound-ordering",
+          "obligation": "Exercise AccessControl.AccessDecisionEngine.Decide with break-glass with tenant and network restrictions so rule ordering and cross-step data flow are observable."
+        }
+      ]
+    }
+  ],
+  "obsolete_smoke_cases": [
+    {
+      "instance_id": "OB-01",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    },
+    {
+      "instance_id": "OB-02",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    },
+    {
+      "instance_id": "OB-03",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    },
+    {
+      "instance_id": "OB-04",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    },
+    {
+      "instance_id": "OB-05",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    },
+    {
+      "instance_id": "OB-06",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    },
+    {
+      "instance_id": "OB-07",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    },
+    {
+      "instance_id": "OB-08",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    },
+    {
+      "instance_id": "OB-09",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    },
+    {
+      "instance_id": "OB-10",
+      "case_id": "SMOKE-modern-equivalence",
+      "obligation": "Exercise the legacy call on a representative input and preserve its externally visible result during migration."
+    }
+  ]
+}

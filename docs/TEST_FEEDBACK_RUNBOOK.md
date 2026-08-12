@@ -13,9 +13,9 @@ final corpus experiment must use `factorial-manifest` followed by
 flowchart LR
   P["Pristine source"] --> D["Static detector"]
   D --> M["Frozen instance manifest"]
-  P --> G["Separate test-authoring call"]
+  P --> G["Separate plan and implementation calls"]
   M -. "symbol + line range only" .-> G
-  G --> A["Admission: assertion, build, two pristine runs"]
+  G --> A["Admission: five assertion gates, build, three pristine runs"]
   A --> F["Frozen visible-test artifact"]
   P --> R["Assigned repair condition"]
   F --> R
@@ -54,7 +54,9 @@ The suite includes a hash check against
 ## 3. Generate visible tests before repair
 
 Invoke the generator once for every distinct Long Method/God Class source file.
-All artefacts, including rejected admissions, are retained. There is no retry.
+Each invocation contains a planning call and an implementation call. A single
+diagnostics-only correction is made only when the implemented suite does not
+compile. All artefacts, including rejected admissions, are retained.
 
 ```powershell
 dotnet run --project $cli -- generate-characterization-test `
@@ -63,14 +65,15 @@ dotnet run --project $cli -- generate-characterization-test `
   --source 'Z:\path\to\non-evaluation-fixture\Proj\Example.cs' `
   --model '<frozen-model-key>' `
   --out "$pilot\generated-tests" `
-  --baseline-runs 2 `
+  --baseline-runs 3 `
   --timeout 180
 ```
 
 The CLI reads the frozen analyzer JSONL only in the experiment controller. It
 requires exactly one included Long Method/God Class instance for `--source` and
 places only its symbol and declaration line range in the test-authoring prompt.
-It never places the anti-pattern label, severity, metrics, thresholds, finding
+The prompt also contains the neutral public surface of project-local types named
+by that source file. It never places the anti-pattern label, severity, metrics, thresholds, finding
 text, reference repair, or private oracle in that prompt.
 
 ## 4. Pilot the eight cells

@@ -14,8 +14,8 @@ public sealed record GeneratedTestGenerationResult(
     string ArtifactPath);
 
 /// <summary>
-/// Executes one separate, stateless pre-repair test-authoring call, admits the returned test against
-/// the pristine production project, and freezes the complete artefact as JSON.
+/// Plans and implements one diagnosis-blind five-case suite before repair, admits it against the
+/// pristine project, and permits at most one correction based solely on compiler diagnostics.
 /// </summary>
 public sealed class CharacterizationTestGenerator(
     ILlmAdapter adapter,
@@ -24,6 +24,15 @@ public sealed class CharacterizationTestGenerator(
 {
     private readonly Func<GeneratedTestSource, string, int, int, CancellationToken, Task<GeneratedTestAdmissionResult>> _admit
         = admit ?? GeneratedTestAdmissionRunner.RunAsync;
+
+    private static readonly (string Id, GeneratedTestCaseCategory Category)[] RequiredCases =
+    [
+        ("H1", GeneratedTestCaseCategory.HappyPath),
+        ("E1", GeneratedTestCaseCategory.EmptyOrInvalid),
+        ("B1", GeneratedTestCaseCategory.BoundaryValues),
+        ("A1", GeneratedTestCaseCategory.AlternativePath),
+        ("D1", GeneratedTestCaseCategory.DependencyOrState)
+    ];
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -55,42 +64,90 @@ public sealed class CharacterizationTestGenerator(
             ?? throw new InvalidOperationException($"no containing .csproj found for {sourceFull}");
         var pristineSource = await File.ReadAllTextAsync(sourceFull, cancellationToken);
         ValidateTarget(target, pristineSource);
+        var dependencyContext = await NeutralDependencyContextBuilder.BuildAsync(
+            sourceFull, projectFile, pristineSource, cancellationToken);
+        var projectName = Path.GetFileNameWithoutExtension(projectFile);
+        var relativeUnix = relative.Replace('\\', '/');
+        var planUserPrompt = CharacterizationTestPrompt.BuildPlanUserPrompt(
+            relativeUnix, projectName, pristineSource, dependencyContext, target);
+
         var sourceHash = Sha256(pristineSource);
         var artifactId = Guid.NewGuid().ToString("N");
         Directory.CreateDirectory(outputDirectory);
         var artifactPath = Path.Combine(outputDirectory, $"{SafeName(relative)}--{artifactId}.json");
-        var systemPrompt = CharacterizationTestPrompt.SystemPrompt;
-        var userPrompt = CharacterizationTestPrompt.BuildUserPrompt(
-            relative.Replace('\\', '/'),
-            Path.GetFileNameWithoutExtension(projectFile),
-            pristineSource,
-            target);
 
-        var sw = Stopwatch.StartNew();
-        LlmResponse? response = null;
+        var stopwatch = Stopwatch.StartNew();
+        LlmResponse? planResponse = null;
+        LlmResponse? implementationResponse = null;
+        LlmResponse? correctionResponse = null;
+        GeneratedTestPlan? plan = null;
         GeneratedTestSource? parsed = null;
         GeneratedTestAdmissionResult? admission = null;
+        string? implementationUserPrompt = null;
+        string? correctionPrompt = null;
         string? failure = null;
         var status = GeneratedTestAdmissionStatus.GenerationFailed;
+
         try
         {
-            response = await adapter.CompleteAsync(new LlmRequest
+            planResponse = await adapter.CompleteAsync(new LlmRequest
             {
-                SystemPrompt = systemPrompt,
-                UserPrompt = userPrompt,
-                PromptVersion = CharacterizationTestPrompt.Version
+                SystemPrompt = CharacterizationTestPrompt.PlanSystemPrompt,
+                UserPrompt = planUserPrompt,
+                PromptVersion = CharacterizationTestPrompt.PlanVersion
             }, cancellationToken);
-
-            parsed = Parse(response.Content, out failure);
-            if (parsed is null)
+            plan = ParsePlan(planResponse.Content, out failure);
+            if (plan is null)
             {
                 status = GeneratedTestAdmissionStatus.ParseFailed;
             }
             else
             {
-                admission = await _admit(parsed, projectFile, baselineRuns, timeoutSeconds, cancellationToken);
-                status = admission.Status;
-                failure = admission.Reason;
+                implementationUserPrompt = CharacterizationTestPrompt.BuildImplementationUserPrompt(
+                    relativeUnix, projectName, pristineSource, dependencyContext, target, plan);
+                implementationResponse = await adapter.CompleteAsync(new LlmRequest
+                {
+                    SystemPrompt = CharacterizationTestPrompt.SystemPrompt,
+                    UserPrompt = implementationUserPrompt,
+                    PromptVersion = CharacterizationTestPrompt.ImplementationVersion
+                }, cancellationToken);
+                parsed = Parse(implementationResponse.Content, out failure);
+                if (parsed is null || !MatchesPlan(parsed, plan, out failure))
+                {
+                    parsed = null;
+                    status = GeneratedTestAdmissionStatus.ParseFailed;
+                }
+                else
+                {
+                    admission = await _admit(parsed, projectFile, baselineRuns, timeoutSeconds, cancellationToken);
+                    status = admission.Status;
+                    failure = admission.Reason;
+
+                    if (admission.Status == GeneratedTestAdmissionStatus.BuildFailed)
+                    {
+                        correctionPrompt = CharacterizationTestPrompt.BuildCompileCorrectionUserPrompt(
+                            plan, implementationResponse.Content, admission.OutputTail);
+                        correctionResponse = await adapter.CompleteAsync(new LlmRequest
+                        {
+                            SystemPrompt = CharacterizationTestPrompt.CompileCorrectionSystemPrompt,
+                            UserPrompt = correctionPrompt,
+                            PromptVersion = CharacterizationTestPrompt.CompileCorrectionVersion
+                        }, cancellationToken);
+                        var corrected = Parse(correctionResponse.Content, out failure);
+                        if (corrected is null || !MatchesPlan(corrected, plan, out failure) ||
+                            !PreservesCases(parsed, corrected, out failure))
+                        {
+                            status = GeneratedTestAdmissionStatus.ParseFailed;
+                        }
+                        else
+                        {
+                            parsed = corrected;
+                            admission = await _admit(parsed, projectFile, baselineRuns, timeoutSeconds, cancellationToken);
+                            status = admission.Status;
+                            failure = admission.Reason;
+                        }
+                    }
+                }
             }
         }
         catch (OperationCanceledException) { throw; }
@@ -99,11 +156,10 @@ public sealed class CharacterizationTestGenerator(
             status = GeneratedTestAdmissionStatus.GenerationFailed;
             failure = ex.Message;
         }
-        sw.Stop();
+        stopwatch.Stop();
 
-        var testHash = parsed is null
-            ? null
-            : Sha256(string.Join("\n", parsed.UsingDirectives) + "\n" + parsed.TestBody);
+        var testHash = parsed is null ? null : GeneratedTestSourceCanonicalizer.Hash(parsed);
+        var responses = new[] { planResponse, implementationResponse, correctionResponse }.Where(r => r is not null).ToList();
         var artifact = new GeneratedTestArtifact
         {
             ArtifactId = artifactId,
@@ -111,21 +167,37 @@ public sealed class CharacterizationTestGenerator(
             Timestamp = DateTimeOffset.UtcNow,
             SourceFile = sourceFull,
             SourceSha256 = sourceHash,
+            DependencyContextSha256 = Sha256(dependencyContext),
             TargetSymbolName = target.SymbolName,
             TargetStartLine = target.StartLine,
             TargetEndLine = target.EndLine,
             ProjectFile = projectFile,
             ModelName = modelName,
             PromptVersion = CharacterizationTestPrompt.Version,
-            RawSystemPrompt = systemPrompt,
-            RawUserPrompt = userPrompt,
-            RawLlmOutput = response?.Content,
-            InputTokens = response?.InputTokens ?? 0,
-            OutputTokens = response?.OutputTokens ?? 0,
-            DurationMs = sw.Elapsed.TotalMilliseconds,
+            RawSystemPrompt = CharacterizationTestPrompt.SystemPrompt,
+            RawUserPrompt = implementationUserPrompt ?? planUserPrompt,
+            RawLlmOutput = implementationResponse?.Content,
+            RawPlanSystemPrompt = CharacterizationTestPrompt.PlanSystemPrompt,
+            RawPlanUserPrompt = planUserPrompt,
+            RawPlanLlmOutput = planResponse?.Content,
+            RawCorrectionPrompt = correctionPrompt,
+            RawCorrectionLlmOutput = correctionResponse?.Content,
+            InputTokens = responses.Sum(r => r!.InputTokens),
+            OutputTokens = responses.Sum(r => r!.OutputTokens),
+            GenerationCallCount = responses.Count,
+            PlanInputTokens = planResponse?.InputTokens ?? 0,
+            PlanOutputTokens = planResponse?.OutputTokens ?? 0,
+            ImplementationInputTokens = implementationResponse?.InputTokens ?? 0,
+            ImplementationOutputTokens = implementationResponse?.OutputTokens ?? 0,
+            CorrectionInputTokens = correctionResponse?.InputTokens ?? 0,
+            CorrectionOutputTokens = correctionResponse?.OutputTokens ?? 0,
+            DurationMs = stopwatch.Elapsed.TotalMilliseconds,
             TestName = parsed?.TestName,
             UsingDirectives = parsed?.UsingDirectives ?? [],
             TestBody = parsed?.TestBody,
+            HelperCode = parsed?.HelperCode ?? string.Empty,
+            TestCases = parsed?.Cases ?? [],
+            TestPlan = plan,
             TestSha256 = testHash,
             AdmissionStatus = status,
             AdmissionReason = failure,
@@ -136,55 +208,253 @@ public sealed class CharacterizationTestGenerator(
             AdmissionOutputTail = admission?.OutputTail
         };
 
-        var json = JsonSerializer.Serialize(artifact, JsonOptions);
-        await File.WriteAllTextAsync(artifactPath, json, new UTF8Encoding(false), cancellationToken);
+        await File.WriteAllTextAsync(
+            artifactPath,
+            JsonSerializer.Serialize(artifact, JsonOptions),
+            new UTF8Encoding(false),
+            cancellationToken);
         return new GeneratedTestGenerationResult(artifact, Path.GetFullPath(artifactPath));
+    }
+
+    public static GeneratedTestPlan? ParsePlan(string raw, out string? reason)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(Unfence(raw));
+            var root = document.RootElement;
+            if (root.ValueKind != JsonValueKind.Object)
+            {
+                reason = "test plan is not a JSON object";
+                return null;
+            }
+            var name = StringProperty(root, "suite_name");
+            if (string.IsNullOrWhiteSpace(name) || !root.TryGetProperty("cases", out var casesElement) ||
+                casesElement.ValueKind != JsonValueKind.Array)
+            {
+                reason = "test plan is missing suite_name or cases";
+                return null;
+            }
+
+            var cases = new List<GeneratedTestPlanCase>();
+            foreach (var element in casesElement.EnumerateArray())
+            {
+                if (!TryReadIdentity(element, out var id, out var category, out reason)) return null;
+                var inputs = StringArray(element, "inputs");
+                var item = new GeneratedTestPlanCase(
+                    id!, category,
+                    StringProperty(element, "source_evidence") ?? string.Empty,
+                    StringProperty(element, "input_partition") ?? string.Empty,
+                    inputs,
+                    StringProperty(element, "expected_observation") ?? string.Empty);
+                if (string.IsNullOrWhiteSpace(item.SourceEvidence) || string.IsNullOrWhiteSpace(item.InputPartition) ||
+                    string.IsNullOrWhiteSpace(item.ExpectedObservation) || item.Inputs.Count == 0)
+                {
+                    reason = $"plan case {item.CaseId} has incomplete evidence, partition, inputs or observation";
+                    return null;
+                }
+                cases.Add(item);
+            }
+            if (!ValidateRequiredCases(cases.Select(c => (c.CaseId, c.Category)).ToList(), out reason)) return null;
+            if (cases.Single(c => c.CaseId == "B1").Inputs.Count < 3)
+            {
+                reason = "B1 must specify below, at and above inputs";
+                return null;
+            }
+            if (cases.Select(c => c.InputPartition.Trim()).Distinct(StringComparer.OrdinalIgnoreCase).Count() != 5)
+            {
+                reason = "all five plan cases must use distinct input partitions";
+                return null;
+            }
+            reason = null;
+            return new GeneratedTestPlan(name.Trim(), cases);
+        }
+        catch (JsonException ex)
+        {
+            reason = $"test-plan JSON parse failed: {ex.Message}";
+            return null;
+        }
     }
 
     public static GeneratedTestSource? Parse(string raw, out string? reason)
     {
-        var json = raw.Trim();
-        if (json.StartsWith("```", StringComparison.Ordinal))
-        {
-            json = string.Join('\n', json.Split('\n').Skip(1));
-            var fence = json.LastIndexOf("```", StringComparison.Ordinal);
-            if (fence >= 0) json = json[..fence].Trim();
-        }
         try
         {
-            using var document = JsonDocument.Parse(json);
+            using var document = JsonDocument.Parse(Unfence(raw));
             var root = document.RootElement;
             if (root.ValueKind != JsonValueKind.Object)
             {
                 reason = "generated-test output is not a JSON object";
                 return null;
             }
-            var name = root.TryGetProperty("test_name", out var n) ? n.GetString() : null;
-            var body = root.TryGetProperty("test_body", out var b) ? b.GetString() : null;
-            var usings = new List<string>();
-            if (root.TryGetProperty("using_directives", out var u) && u.ValueKind == JsonValueKind.Array)
-                foreach (var item in u.EnumerateArray())
-                    if (item.ValueKind == JsonValueKind.String && item.GetString() is { } value)
-                        usings.Add(value.Trim());
-
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(body))
-            {
-                reason = "generated-test output is missing test_name or test_body";
-                return null;
-            }
+            var usings = StringArray(root, "using_directives");
             if (usings.Any(x => !x.StartsWith("using ", StringComparison.Ordinal) || !x.EndsWith(';')))
             {
                 reason = "using_directives contains an invalid directive";
                 return null;
             }
+            var suiteName = StringProperty(root, "suite_name");
+            if (string.IsNullOrWhiteSpace(suiteName) || !root.TryGetProperty("cases", out var casesElement) ||
+                casesElement.ValueKind != JsonValueKind.Array)
+            {
+                reason = "generated-test output is missing suite_name or cases";
+                return null;
+            }
+
+            var cases = new List<GeneratedTestCase>();
+            foreach (var element in casesElement.EnumerateArray())
+            {
+                if (!TryReadIdentity(element, out var id, out var category, out reason)) return null;
+                var testName = StringProperty(element, "test_name");
+                var body = StringProperty(element, "test_body");
+                if (string.IsNullOrWhiteSpace(testName) || string.IsNullOrWhiteSpace(body))
+                {
+                    reason = $"suite case {id} is missing test_name or test_body";
+                    return null;
+                }
+                cases.Add(new GeneratedTestCase(id!, category, testName.Trim(), body));
+            }
+            if (!ValidateRequiredCases(cases.Select(c => (c.CaseId, c.Category)).ToList(), out reason)) return null;
+            if (cases.Select(c => c.TestName).Distinct(StringComparer.OrdinalIgnoreCase).Count() != 5)
+            {
+                reason = "all five suite cases must have distinct test names";
+                return null;
+            }
+
+            var helper = StringProperty(root, "helper_code") ?? string.Empty;
+            var inlineBody = RenderInlineBody(cases);
             reason = null;
-            return new GeneratedTestSource(name.Trim(), usings, body);
+            return new GeneratedTestSource(suiteName.Trim(), usings, inlineBody)
+            {
+                HelperCode = helper,
+                Cases = cases
+            };
         }
         catch (JsonException ex)
         {
             reason = $"generated-test JSON parse failed: {ex.Message}";
             return null;
         }
+    }
+
+    private static bool MatchesPlan(GeneratedTestSource source, GeneratedTestPlan plan, out string? reason)
+    {
+        if (!string.Equals(source.TestName, plan.SuiteName, StringComparison.Ordinal))
+        {
+            reason = "implemented suite_name does not match the frozen plan";
+            return false;
+        }
+        for (var i = 0; i < RequiredCases.Length; i++)
+        {
+            if (source.Cases[i].CaseId != plan.Cases[i].CaseId || source.Cases[i].Category != plan.Cases[i].Category)
+            {
+                reason = "implemented cases do not match the frozen plan";
+                return false;
+            }
+        }
+        reason = null;
+        return true;
+    }
+
+    private static bool PreservesCases(GeneratedTestSource original, GeneratedTestSource corrected, out string? reason)
+    {
+        if (!original.Cases.SequenceEqual(corrected.Cases))
+        {
+            reason = "compile-only correction changed a frozen test case";
+            return false;
+        }
+        reason = null;
+        return true;
+    }
+
+    private static bool ValidateRequiredCases(
+        IReadOnlyList<(string Id, GeneratedTestCaseCategory Category)> cases,
+        out string? reason)
+    {
+        if (cases.Count != RequiredCases.Length)
+        {
+            reason = "generated suite must contain exactly five cases";
+            return false;
+        }
+        for (var i = 0; i < RequiredCases.Length; i++)
+        {
+            if (cases[i] != RequiredCases[i])
+            {
+                reason = $"case {i + 1} must be {RequiredCases[i].Id}/{CategoryName(RequiredCases[i].Category)}";
+                return false;
+            }
+        }
+        reason = null;
+        return true;
+    }
+
+    private static bool TryReadIdentity(
+        JsonElement element,
+        out string? id,
+        out GeneratedTestCaseCategory category,
+        out string? reason)
+    {
+        id = StringProperty(element, "case_id")?.Trim();
+        var rawCategory = StringProperty(element, "category");
+        category = default;
+        if (string.IsNullOrWhiteSpace(id) || !TryParseCategory(rawCategory, out category))
+        {
+            reason = "case is missing a valid case_id or category";
+            return false;
+        }
+        reason = null;
+        return true;
+    }
+
+    private static bool TryParseCategory(string? value, out GeneratedTestCaseCategory category)
+    {
+        category = value switch
+        {
+            "happy_path" => GeneratedTestCaseCategory.HappyPath,
+            "empty_or_invalid" => GeneratedTestCaseCategory.EmptyOrInvalid,
+            "boundary_values" => GeneratedTestCaseCategory.BoundaryValues,
+            "alternative_path" => GeneratedTestCaseCategory.AlternativePath,
+            "dependency_or_state" => GeneratedTestCaseCategory.DependencyOrState,
+            _ => (GeneratedTestCaseCategory)(-1)
+        };
+        return (int)category >= 0;
+    }
+
+    private static string CategoryName(GeneratedTestCaseCategory category) => category switch
+    {
+        GeneratedTestCaseCategory.HappyPath => "happy_path",
+        GeneratedTestCaseCategory.EmptyOrInvalid => "empty_or_invalid",
+        GeneratedTestCaseCategory.BoundaryValues => "boundary_values",
+        GeneratedTestCaseCategory.AlternativePath => "alternative_path",
+        GeneratedTestCaseCategory.DependencyOrState => "dependency_or_state",
+        _ => throw new ArgumentOutOfRangeException(nameof(category))
+    };
+
+    private static string RenderInlineBody(IEnumerable<GeneratedTestCase> cases) => string.Join(
+        Environment.NewLine,
+        cases.Select(test => $"{{ // {test.CaseId}: {test.TestName}\n{test.TestBody}\n}}"));
+
+    private static string Unfence(string raw)
+    {
+        var json = raw.Trim();
+        if (!json.StartsWith("```", StringComparison.Ordinal)) return json;
+        json = string.Join('\n', json.Split('\n').Skip(1));
+        var fence = json.LastIndexOf("```", StringComparison.Ordinal);
+        return fence >= 0 ? json[..fence].Trim() : json;
+    }
+
+    private static string? StringProperty(JsonElement element, string name) =>
+        element.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String
+            ? value.GetString()
+            : null;
+
+    private static List<string> StringArray(JsonElement element, string name)
+    {
+        var values = new List<string>();
+        if (!element.TryGetProperty(name, out var array) || array.ValueKind != JsonValueKind.Array) return values;
+        foreach (var item in array.EnumerateArray())
+            if (item.ValueKind == JsonValueKind.String && item.GetString() is { } value)
+                values.Add(value.Trim());
+        return values;
     }
 
     private static void ValidateTarget(BlindedTargetDescriptor target, string pristineSource)

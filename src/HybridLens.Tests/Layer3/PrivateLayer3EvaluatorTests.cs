@@ -80,7 +80,28 @@ public sealed class PrivateLayer3EvaluatorTests : IDisposable
     {
         var repositoryRoot = FindRepositoryRoot();
         var manifest = Path.Combine(repositoryRoot, "layer3", "PRIVATE_ORACLE_MANIFEST.md");
-        Assert.Equal("1.0.0", PrivateOracleManifestVerifier.Verify(manifest));
+        Assert.Equal("2.0.0", PrivateOracleManifestVerifier.Verify(manifest));
+    }
+
+    [Fact]
+    public void ManifestVerifier_ValidatesFilesListedByChecksumIndex()
+    {
+        var root = NewTemp();
+        var layer3 = Path.Combine(root, "layer3");
+        var golden = Path.Combine(layer3, "golden");
+        Directory.CreateDirectory(golden);
+        var valuePath = Path.Combine(golden, "case.golden");
+        File.WriteAllText(valuePath, "expected");
+        var valueHash = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(valuePath)));
+        var indexPath = Path.Combine(layer3, "GOLDEN_SHA256SUMS.txt");
+        File.WriteAllText(indexPath, $"{valueHash}  layer3/golden/case.golden\n");
+        var indexHash = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(indexPath)));
+        var manifest = Path.Combine(layer3, "PRIVATE_ORACLE_MANIFEST.md");
+        File.WriteAllText(manifest, $"Manifest version: 2.0.0\n{indexHash}  layer3/GOLDEN_SHA256SUMS.txt\n");
+
+        Assert.Equal("2.0.0", PrivateOracleManifestVerifier.Verify(manifest));
+        File.WriteAllText(valuePath, "tampered");
+        Assert.Throws<InvalidDataException>(() => PrivateOracleManifestVerifier.Verify(manifest));
     }
 
     private async Task<string> WriteArtifact(

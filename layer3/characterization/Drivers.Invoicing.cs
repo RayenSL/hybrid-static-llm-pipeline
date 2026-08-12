@@ -171,7 +171,9 @@ internal static class InvoicingDrivers
         sb.Append("deBizSmall=").Append(v.Resolve(business, 5000m, "DE").ToString(CultureInfo.InvariantCulture)).Append('\n');
         sb.Append("govZero=").Append(v.Resolve(government, 5000m, "GB").ToString(CultureInfo.InvariantCulture)).Append('\n');
         sb.Append("ieCapped=").Append(v.Resolve(consumer, 150000m, "IE").ToString(CultureInfo.InvariantCulture)).Append('\n');
-        sb.Append("unknown=").Append(v.Resolve(consumer, 500m, "ZZ").ToString(CultureInfo.InvariantCulture));
+        sb.Append("unknown=").Append(v.Resolve(consumer, 500m, "ZZ").ToString(CultureInfo.InvariantCulture)).Append('\n');
+        sb.Append("belowCap=").Append(v.Resolve(consumer, 99999m, "GB").ToString(CultureInfo.InvariantCulture)).Append('\n');
+        sb.Append("atCap=").Append(v.Resolve(consumer, 100000m, "GB").ToString(CultureInfo.InvariantCulture));
         return sb.ToString();
     }
 

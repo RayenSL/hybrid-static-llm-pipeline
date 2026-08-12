@@ -114,6 +114,10 @@ internal static class NotificationsDrivers
             ("smsBusy",       3,  Channel.Sms,   true),
             ("pushHighAttempt", 8, Channel.Push, false),
             ("emailBusyHigh", 9,  Channel.Email, true),
+            ("belowBoundary",  1, Channel.Email, false),
+            ("atBoundary",     5, Channel.Email, false),
+            ("alternateSms",   2, Channel.Sms, false),
+            ("repeatEmail",    2, Channel.Email, false),
         };
 
         var sb = new StringBuilder();

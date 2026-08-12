@@ -165,7 +165,13 @@ internal static class InventoryDrivers
         var last = calc.Allocate(Item("S4", 4, 0), Wh("W", ("Z1", 10)));
         sb.Append('[');
         for (int i = 0; i < last.Count; i++) { if (i > 0) sb.Append(','); sb.Append(last[i]); }
-        sb.Append(']');
+        sb.Append(']').Append('\n');
+        Run("below", Item("S5", 9, 0), Wh("W", ("Z1", 10)));
+        Run("at", Item("S6", 10, 0), Wh("W", ("Z1", 10)));
+        Run("above", Item("S7", 11, 0), Wh("W", ("Z1", 10)));
+        Run("reserved", Item("S8", 10, 10), Wh("W", ("Z1", 10)));
+        Run("negative", Item("S9", -1, 0), Wh("W", ("Z1", 10)));
+        Run("repeat", Item("S1", 30, 0), Wh("W", ("Z1", 10), ("Z2", 8), ("Z3", 20)));
         return sb.ToString();
     }
 
@@ -198,7 +204,19 @@ internal static class InventoryDrivers
         var winter = planner.BuildPlan(winterItems, new DefaultSupplier(), 1); // /2
         sb.Append("winter=[");
         for (int i = 0; i < winter.Count; i++) { if (i > 0) sb.Append(','); sb.Append(winter[i]); }
-        sb.Append(']');
+        sb.Append(']').Append('\n');
+        void One(string label, StockItem item, ISupplier supplier, int season = 2)
+        {
+            var result = planner.BuildPlan([item], supplier, season);
+            sb.Append(label).Append("=[").Append(string.Join(',', result)).Append("]\n");
+        }
+        One("empty", Item("OK", 100, 0, 10), new DefaultSupplier());
+        One("below", Item("B", 9, 0, 10), new DefaultSupplier());
+        One("at", Item("A", 10, 0, 10), new DefaultSupplier());
+        One("above", Item("U", 11, 0, 10), new DefaultSupplier());
+        One("failed", Item("F", 0, 0, 20), new RejectSupplier());
+        One("invalid", Item("", 0, 0, 20), new DefaultSupplier());
+        One("repeat", Item("R", 0, 0, 20), new DefaultSupplier());
         return sb.ToString();
     }
 
@@ -221,5 +239,11 @@ internal static class InventoryDrivers
         _ = sync.Reconcile(Item("SYNC1", 50, 0), 45);
         _ = sync.Reconcile(Item("SYNC2", 10, 0), 10);
         return "EXEC_OK";
+    }
+
+    private sealed class RejectSupplier : ISupplier
+    {
+        public string Name => "Reject";
+        public bool PlaceOrder(string sku, int quantity) => false;
     }
 }

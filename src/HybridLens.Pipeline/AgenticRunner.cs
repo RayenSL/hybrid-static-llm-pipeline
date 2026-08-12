@@ -309,7 +309,7 @@ public sealed class AgenticRunner(
         var visiblePrompt = visibleTest is null ? null : new LoadedVisibleTestPrompt(
             visibleTest.Source.TestName,
             visibleTest.Source.UsingDirectives,
-            visibleTest.Source.TestBody,
+            GeneratedTestSourceCanonicalizer.RenderForPrompt(visibleTest.Source),
             visibleTest.Artifact.TestSha256!);
         var userPrompt = PromptTemplate.AppendImmutableVisibleTest(baseUserPrompt, visiblePrompt);
         var promptVersion = PromptTemplate.AgenticPromptVersion(visibleTest is not null);

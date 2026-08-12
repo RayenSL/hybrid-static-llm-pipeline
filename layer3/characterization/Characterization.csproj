@@ -14,6 +14,12 @@
     <ProjectReference Include="..\Invoicing\Invoicing.csproj" />
     <ProjectReference Include="..\Notifications\Notifications.csproj" />
     <ProjectReference Include="..\Scheduling\Scheduling.csproj" />
+    <ProjectReference Include="..\Claims\Claims.csproj" />
+    <ProjectReference Include="..\Payments\Payments.csproj" />
+    <ProjectReference Include="..\AccessControl\AccessControl.csproj" />
+    <ProjectReference Include="..\Fulfilment\Fulfilment.csproj" />
+    <ProjectReference Include="..\Subscriptions\Subscriptions.csproj" />
+    <ProjectReference Include="..\ServiceDesk\ServiceDesk.csproj" />
   </ItemGroup>
 
 </Project>

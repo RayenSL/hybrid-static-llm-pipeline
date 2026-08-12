@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using HybridLens.Core.Models;
@@ -34,8 +32,12 @@ public static class GeneratedTestArtifactLoader
             artifact.TargetEndLine < artifact.TargetStartLine)
             throw new InvalidDataException("admitted generated-test artefact has no valid blinded target descriptor");
 
-        var source = new GeneratedTestSource(artifact.TestName, artifact.UsingDirectives, artifact.TestBody);
-        var actualHash = Sha256(string.Join("\n", source.UsingDirectives) + "\n" + source.TestBody);
+        var source = new GeneratedTestSource(artifact.TestName, artifact.UsingDirectives, artifact.TestBody)
+        {
+            HelperCode = artifact.HelperCode,
+            Cases = artifact.TestCases
+        };
+        var actualHash = GeneratedTestSourceCanonicalizer.Hash(source);
         if (!string.Equals(actualHash, artifact.TestSha256, StringComparison.OrdinalIgnoreCase))
             throw new InvalidDataException("generated-test artefact hash does not match its frozen source");
         return new LoadedGeneratedTest(artifact, source);
@@ -43,11 +45,8 @@ public static class GeneratedTestArtifactLoader
 
     public static void VerifyUnchanged(LoadedGeneratedTest loaded)
     {
-        var actualHash = Sha256(string.Join("\n", loaded.Source.UsingDirectives) + "\n" + loaded.Source.TestBody);
+        var actualHash = GeneratedTestSourceCanonicalizer.Hash(loaded.Source);
         if (!string.Equals(actualHash, loaded.Artifact.TestSha256, StringComparison.OrdinalIgnoreCase))
             throw new InvalidDataException("visible generated test changed during repair");
     }
-
-    private static string Sha256(string value) =>
-        Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(value)));
 }

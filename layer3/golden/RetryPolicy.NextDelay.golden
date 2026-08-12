@@ -1,6 +1,0 @@
-zeroAttempt=0
-overCap=3600
-emailNoBusy=60
-smsBusy=60
-pushHighAttempt=140
-emailBusyHigh=640

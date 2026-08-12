@@ -28,7 +28,7 @@ public static class GenerateCharacterizationTestCommand
         };
         var modelOption = new Option<string>("--model")
         {
-            Description = "Configured model key used for the separate test-authoring call (default: gpt-5.4)."
+            Description = "Configured model key used for the separate test-planning and implementation calls (default: gpt-5.4)."
         };
         var outOption = new Option<DirectoryInfo?>("--out")
         {
@@ -36,7 +36,7 @@ public static class GenerateCharacterizationTestCommand
         };
         var baselineRunsOption = new Option<int>("--baseline-runs")
         {
-            Description = "Pristine executions required by admission (minimum/default: 2)."
+            Description = "Pristine executions required by admission (minimum/default: 3)."
         };
         var timeoutOption = new Option<int>("--timeout")
         {
@@ -44,7 +44,7 @@ public static class GenerateCharacterizationTestCommand
         };
 
         var command = new Command("generate-characterization-test",
-            "Generate, baseline-check, and freeze one visible pre-repair characterization test.")
+            "Generate, baseline-check, and freeze one visible pre-repair five-case characterization suite.")
         {
             fromOption, targetOption, sourceOption, modelOption, outOption, baselineRunsOption, timeoutOption
         };
@@ -55,7 +55,7 @@ public static class GenerateCharacterizationTestCommand
             var target = parseResult.GetValue(targetOption)!;
             var source = parseResult.GetValue(sourceOption)!;
             var model = parseResult.GetValue(modelOption) is { Length: > 0 } m ? m : "gpt-5.4";
-            var baselineRuns = Math.Max(2, parseResult.GetValue(baselineRunsOption));
+            var baselineRuns = Math.Max(3, parseResult.GetValue(baselineRunsOption));
             var timeout = parseResult.GetValue(timeoutOption);
             if (timeout <= 0) timeout = 180;
             var output = parseResult.GetValue(outOption)?.FullName

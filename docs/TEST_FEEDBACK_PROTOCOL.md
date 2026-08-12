@@ -1,7 +1,7 @@
 # Generated Characterization Test Feedback Protocol
 
 Status: draft for protocol freeze  
-Protocol version: 0.1.0  
+Protocol version: 0.2.0
 Study: HybridLens generated-test extension  
 Applicable anti-patterns: Long Method and God Class
 
@@ -78,8 +78,11 @@ single-shot condition.
 ### 5.1 Timing and isolation
 
 Generated tests are produced before any repair for the corresponding corpus
-state. Test generation uses a separate, stateless model call. The test generator
-must not receive or retain a proposed repair.
+state. Test generation is confined to a separate pre-repair stage. It uses two
+stateless calls: a planning call followed by an implementation call. If, and
+only if, the resulting suite fails to compile, one further compile-correction
+call is permitted. The test generator must not receive or retain a proposed
+repair.
 
 The same model family and deployment may be used for test generation and repair
 because this is an experimental constraint. The calls must nevertheless use
@@ -92,9 +95,11 @@ The frozen generator context is target-localized but diagnosis-blind. The experi
 controller reads the frozen analyzer baseline, selects one included instance, and
 passes only:
 
-- the complete pristine source file being characterized;
+- the complete pristine source file being characterised;
 - its relative path and production-project name;
 - a neutral target descriptor: symbol name plus declaration start/end lines;
+- a deterministic project-local dependency slice containing only types named by
+  the target file and their externally accessible members;
 - a fixed test-project skeleton;
 - the instruction to characterize observable public behaviour through that target.
 
@@ -116,9 +121,37 @@ information.
 
 ### 5.3 Output contract
 
-The generator returns structured output containing test source for a fixed,
-pipeline-owned project skeleton. It may not create or modify project files,
-production source, dependencies, build settings, or private-test artefacts.
+The planning call returns exactly five test obligations. Their identifiers,
+categories and order are fixed before any target is inspected:
+
+1. `H1` (`happy_path`): a representative valid flow;
+2. `E1` (`empty_or_invalid`): the most relevant empty, minimal, null or invalid input;
+3. `B1` (`boundary_values`): three stimuli immediately below, at and above one
+   source-supported boundary, or the nearest three-point cardinality or ordering
+   equivalent;
+4. `A1` (`alternative_path`): a materially different valid branch or partition;
+5. `D1` (`dependency_or_state`): the first applicable of a deterministic
+   dependency outcome, repeat invocation, duplicate input or state transition.
+
+Five cases are a fixed experimental budget, not a claim of exhaustive testing.
+The allocation combines one representative equivalence partition with four
+predeclared edge obligations. In particular, `B1` contains three boundary
+stimuli rather than treating a single boundary value as an edge case. The
+allocation draws on equivalence partitioning in the [ISTQB Foundation Level
+syllabus](https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf)
+and three-value boundary-value analysis in the [ISTQB Test Analyst
+syllabus](https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTAL-TA_Syllabus_v3.1.2.pdf).
+Fixing the allocation before generation also prevents favourable cases from
+being selected after a repair result is known.
+
+Each planned obligation records its source evidence, input partition, concrete
+stimuli and expected observable result. The five partition descriptions must be
+distinct. The implementation call must preserve the identifiers and categories
+and returns structured source for all five cases. It may include deterministic,
+in-memory fake types, but may not use a mocking package or external state. The
+pipeline owns the project skeleton and the assertion helper. The generator may
+not create or modify project files, production source, dependencies, build
+settings, or private-test artefacts.
 
 Each frozen generated-test artefact records:
 
@@ -128,15 +161,16 @@ Each frozen generated-test artefact records:
 - prompt version;
 - raw system prompt, user prompt, and model output;
 - generated test source;
-- input and output token counts;
+- total and per-stage input and output token counts, and generation-call count;
 - generation duration;
 - admission status and reason;
 - baseline build and repeated execution results;
-- source and test SHA-256 hashes;
+- source, neutral dependency-context and test SHA-256 hashes;
 - the frozen target symbol and declaration line range.
 
-Exactly one characterization scenario is requested per source file. Generated-
-test coverage, mutation score, and subjective quality are not study outcomes.
+Exactly one five-case suite is requested per target source file. The fixed
+obligations standardise breadth without adapting the number of tests to a
+particular target. Generated-test coverage, mutation score, and subjective quality are not study outcomes.
 Admission checks only whether the artefact is executable, stable on the
 pristine state, constrained, and non-vacuous; the independent private suite
 judges behavioural preservation of the repair.
@@ -146,15 +180,20 @@ judges behavioural preservation of the repair.
 A generated suite is admitted only when it:
 
 1. parses into the required structured form;
-2. compiles in the fixed test-project skeleton;
-3. passes against the pristine corpus;
-4. passes a second pristine execution to screen obvious flakiness;
+2. contains a non-vacuous production assertion in every one of the five cases;
+3. compiles in the fixed test-project skeleton;
+4. passes against the pristine corpus on three consecutive executions;
 5. invokes production code;
-6. contains at least one non-vacuous assertion;
+6. admits all five cases together, without case deletion or selective pruning;
 7. does not require network access, wall-clock assumptions, uncontrolled
    randomness, or mutable external state.
 
-There is no repair-stage retry when generation or admission fails. The repair
+The optional compile-correction call receives only the frozen plan, the proposed
+suite and compiler diagnostics. It receives no execution or assertion result.
+It may alter only using directives and deterministic helper declarations; case
+identifiers, names and bodies must remain byte-for-byte unchanged. There is no
+correction after a pristine assertion failure, flaky execution, malformed plan
+or malformed implementation. If generation or admission still fails, the repair
 attempt continues without a visible test. The primary analysis retains the
 attempt in its assigned test-generation-enabled condition (intention-to-treat).
 A secondary per-protocol summary may describe cases in which an admitted suite
@@ -293,12 +332,12 @@ is excluded from the generated-test-factor analysis.
 
 For Long Method and God Class, the planned core volume is:
 
-`20 instances x 3 repetitions x 8 factorial cells = 480 repair trajectories`
+`26 instances x 3 repetitions x 8 factorial cells = 624 repair trajectories`
 
 The Hybrid deployed comparator may additionally be run with and without visible
 tests at the frozen architecture-comparison context:
 
-`20 instances x 3 repetitions x 2 test conditions = 120 Hybrid attempts`
+`26 instances x 3 repetitions x 2 test conditions = 156 Hybrid attempts`
 
 Before execution, a campaign manifest fixes:
 
@@ -401,20 +440,23 @@ frozen:
 
 Already fixed in the implementation:
 
-- generated-test prompt: `v1.1.0`;
-- generator context: one complete pristine source file, its relative path, project
-  name, and a neutral symbol/start-line/end-line descriptor; no anti-pattern
+- generated-test prompt family: `v2.0.0` (plan, implementation and optional
+  compile-correction stages);
+- generator context: one complete pristine source file, its neutral public
+  dependency slice, relative path, project name, and a neutral
+  symbol/start-line/end-line descriptor; no anti-pattern
   diagnosis, severity, metric, threshold, finding text, repair, or private oracle;
-- generated output: one characterization scenario;
+- generated output: one fixed five-case suite (`H1`, `E1`, `B1`, `A1`, `D1`);
 - fixed harness: package-free `net10.0` console project with pipeline-owned
   `Check` assertions;
-- admission: parse, non-vacuous assertion gate, compile, and two successful
-  pristine executions; no retry;
+- admission: plan/schema checks, a per-case non-vacuous assertion gate, compile,
+  and three successful pristine executions; at most one diagnostics-only compile
+  correction and no runtime-feedback retry;
 - single-shot repair prompt: `v1.1.0`;
 - iterative prompt: `v2.0.2` without an admitted test and `v2.1.2` with one;
 - iterative build budget default: 6 in every iterative cell;
 - build and visible-test timeout default: 180 seconds;
-- private oracle manifest: version `1.0.0`, verified before evaluation;
+- private oracle manifest: version `2.0.0`, verified before evaluation;
 - private evaluation: one execution per common final-source artefact, with no
   model, repair, detector feedback, or retry;
 - core analysis: Long Method and God Class final attempts only, ITT denominator,

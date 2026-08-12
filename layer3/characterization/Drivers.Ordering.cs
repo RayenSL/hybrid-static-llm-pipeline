@@ -249,7 +249,12 @@ internal static class OrderingDrivers
                 sb.Append(l.Sku).Append(':').Append(l.Quantity).Append(':').Append(l.UnitPrice.ToString(CultureInfo.InvariantCulture)).Append(';');
             sb.Append('\n');
         }
-        sb.Append("repoCount=").Append(repo.Count);
+        sb.Append("repoCount=").Append(repo.Count).Append('\n');
+        sb.Append("empty=").Append(new OrderImporter(new OrderRepository()).ImportBatch(Array.Empty<string>()).Count).Append('\n');
+        sb.Append("blank=").Append(new OrderImporter(new OrderRepository()).ImportBatch(["  "]).Count).Append('\n');
+        sb.Append("malformed=").Append(new OrderImporter(new OrderRepository()).ImportBatch(["H,ONLY"]).Count).Append('\n');
+        sb.Append("zeroQty=").Append(new OrderImporter(new OrderRepository()).ImportBatch(["H,ZERO,STD1,0"]).Count).Append('\n');
+        sb.Append("unitQty=").Append(new OrderImporter(new OrderRepository()).ImportBatch(["H,ONE,STD1,1"]).Count);
         return sb.ToString();
     }
 
@@ -278,7 +283,12 @@ internal static class OrderingDrivers
 
         // E: override drives result negative -> clamped to 0.
         var e = MakeOrder("E1", OrderChannel.Web, 10000m, ("V", 1, 50m));
-        sb.Append("E=").Append(Inv(pricing.ApplyAdjustments(e, CustomerTier.Standard)));
+        sb.Append("E=").Append(Inv(pricing.ApplyAdjustments(e, CustomerTier.Standard))).Append('\n');
+        sb.Append("empty=").Append(Inv(pricing.ApplyAdjustments(MakeOrder("F", OrderChannel.Web, null), CustomerTier.Standard))).Append('\n');
+        sb.Append("below500=").Append(Inv(pricing.ApplyAdjustments(MakeOrder("G", OrderChannel.Web, null, ("X", 1, 499m)), CustomerTier.Standard))).Append('\n');
+        sb.Append("at500=").Append(Inv(pricing.ApplyAdjustments(MakeOrder("H", OrderChannel.Web, null, ("X", 1, 500m)), CustomerTier.Standard))).Append('\n');
+        sb.Append("above500=").Append(Inv(pricing.ApplyAdjustments(MakeOrder("I", OrderChannel.Web, null, ("X", 1, 501m)), CustomerTier.Standard))).Append('\n');
+        sb.Append("repeat=").Append(Inv(pricing.ApplyAdjustments(a, CustomerTier.Standard)));
         return sb.ToString();
     }
 

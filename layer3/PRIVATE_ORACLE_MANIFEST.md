@@ -1,11 +1,12 @@
 # Private Layer-3 Oracle Manifest
 
-Status: frozen  
-Manifest version: 1.0.0  
-Baseline date: 2026-07-27  
+Status: candidate pending independent R1/R2 review
+Manifest version: 2.0.0
+Baseline date: 2026-08-12
 Corpus: `Z:\GitHub\hybrid-pipeline-corpus\corpus`
+Corpus candidate revision: `cc26ad1e78bc84198baf867c4292ab092df6c8d5`
 
-## Baseline result
+## v1 archived baseline
 
 The existing Layer-3 harness was copied into a temporary pristine corpus
 working tree and executed in `--check` mode against the golden directory.
@@ -22,7 +23,37 @@ are the canonical private oracle. The existing
 `InvoiceRenderer.Render.golden` difference relative to Git is line-ending-only;
 the frozen hash below intentionally identifies the confirmed CRLF version.
 
-## SHA-256
+## v2 baseline result
+
+- Evaluated targets: 26 (13 God Class, 13 Long Method)
+- Private behavioural cases: 260 (ten per evaluated target)
+- Obsolete-API smoke cases: 10
+- Drivers discovered: 270
+- Passing on the pristine v2 corpus: 270
+- Non-passing: 0
+- Ground-truth band agreement: 36/36
+
+The ten cases per evaluated target are independently keyed as P01--P10. Their
+pre-declared obligations are recorded in `layer3/ORACLE_PLAN_V2.json`. The
+generated visible suite remains a separate five-case instrument.
+
+## SHA-256 (active)
+
+```text
+0cf3dead611fff54f5cf32f297bdcf2dd5a2a1f107503b01b861fcb6f443eb17  layer3/characterization/Drivers.Inventory.cs
+961e53a0fc2ec1b8648fd024ab7517b18a1e5456f9d9d3b34e87ce62b8133607  layer3/characterization/Drivers.Invoicing.cs
+3e01e5c1a669cb1deed8a53ba4867301da33d80d061392124045a036568c71cd  layer3/characterization/Drivers.Notifications.cs
+558ca132e2374d6fe6056839297e4b66d2e693041ab65353e7d1f768820f0673  layer3/characterization/Drivers.Ordering.cs
+ccfa859247a7b1c460127aa871425a2c648fa3049814d08c730a7b6f6fcd9dc2  layer3/characterization/Drivers.Scheduling.cs
+4cde9d613fd02785141eb1cde2b5d38c181b43162a0496b0dd8bd9e16d831c64  layer3/characterization/Drivers.V2.cs
+180af3c604e98dba71614b5aa6dc81d4331381d246a39f36d48f7db27669d26b  layer3/characterization/PrivateCaseCatalog.cs
+f1f8f9f14b8ae57ff90a63c1218178339af95eee4a3b50dc94d60b7eb8b2c7be  layer3/characterization/Program.cs
+28243cb27f9fec16980e7e9ac5d5001d50bb59d734e9813ded34c54279901a74  layer3/characterization/Characterization.csproj
+783a4cc8bd98ff69f322735b78213e6be53f6b2474948ab15537fbe398309e7c  layer3/ORACLE_PLAN_V2.json
+b471ef1fffd8aa2d6317484e9b26aab771bc595f10816d1b8faae41e570ab626  layer3/GOLDEN_SHA256SUMS.txt
+```
+
+## SHA-256 (v1 archive; not active)
 
 ```text
 6914d568805bd654b8ecd185f94479f9aa838bdffb380cab1edba4b71d1782e9  layer3/characterization/Drivers.Inventory.cs
@@ -68,7 +99,7 @@ f18916ed667cb59bceda794f8999a0fb5108a8fc9dffa9123cb98fac15c3f1d8  layer3/golden/
 
 - [x] Confirm the current working-tree oracle is the intended canonical version.
 - [ ] Record the pipeline Git revision.
-- [ ] Record the corpus Git revision or immutable release tag.
+- [x] Record the corpus Git revision or immutable release tag.
 - [ ] Recompute hashes after any intentional oracle edit.
 - [ ] Rerun the pristine baseline after any intentional oracle edit.
-- [x] Change status to `frozen`.
+- [ ] Change status to `frozen` after the independent reviews pass.

@@ -61,7 +61,7 @@ Six stages, in an order the protocol fixes rather than one chosen for convenienc
 | stage | what it does | model calls |
 |---|---|---|
 | `baseline` | detector over the pristine solution | none |
-| `tests` | one diagnosis-blind characterisation test per target | one per target |
+| `tests` | one diagnosis-blind five-case characterisation suite per target | two per target, plus at most one compile-only correction |
 | `manifest` | freezes the randomised assignment schedule | none |
 | `campaign` | executes the assignments, sealing one final source each | one per assignment, or up to the budget when iterative |
 | `oracle` | private Layer-3 behavioural measurement | none |
