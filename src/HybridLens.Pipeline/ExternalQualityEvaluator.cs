@@ -103,28 +103,37 @@ public sealed class ExternalQualityEvaluator(
     }
 
     public async Task<IReadOnlyList<ExternalQualityResult>> EvaluateDirectoryAsync(
-        string artifactDirectory, TextWriter log, CancellationToken cancellationToken = default)
+        string artifactDirectory, TextWriter log, int maxDegreeOfParallelism = 1,
+        CancellationToken cancellationToken = default)
     {
         if (_baseline is null) await CaptureBaselineAsync(log, cancellationToken);
 
         var paths = Directory.EnumerateFiles(artifactDirectory, "*.json", SearchOption.TopDirectoryOnly)
             .OrderBy(p => p, StringComparer.Ordinal)
             .ToList();
-        var results = new List<ExternalQualityResult>(paths.Count);
-        var index = 0;
-        foreach (var path in paths)
+        var results = new ExternalQualityResult?[paths.Count];
+        using var gate = new SemaphoreSlim(Math.Max(1, maxDegreeOfParallelism));
+        var tasks = paths.Select(async (path, index) =>
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            index++;
-            var result = await EvaluateOneAsync(path, cancellationToken);
-            results.Add(result);
-            log.WriteLine($"[{index}/{paths.Count}] {result.Outcome,-24} "
-                + (result.CaHeadlineAfter is null
-                    ? Path.GetFileName(path)
-                    : $"CA headline {result.CaHeadlineBefore}->{result.CaHeadlineAfter}"
-                      + $"  smells {result.SmellTotalBefore}->{result.SmellTotalAfter}"));
-        }
-        return results;
+            await gate.WaitAsync(cancellationToken);
+            try
+            {
+                var result = await EvaluateOneAsync(path, cancellationToken);
+                results[index] = result;
+                lock (log)
+                    log.WriteLine($"[{index + 1}/{paths.Count}] {result.Outcome,-24} "
+                        + (result.CaHeadlineAfter is null
+                            ? Path.GetFileName(path)
+                            : $"CA headline {result.CaHeadlineBefore}->{result.CaHeadlineAfter}"
+                              + $"  smells {result.SmellTotalBefore}->{result.SmellTotalAfter}"));
+            }
+            finally
+            {
+                gate.Release();
+            }
+        });
+        await Task.WhenAll(tasks);
+        return results.Select(result => result!).ToList();
     }
 
     public async Task<ExternalQualityResult> EvaluateOneAsync(

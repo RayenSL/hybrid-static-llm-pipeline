@@ -168,6 +168,30 @@ public sealed class ExternalQualityEvaluatorTests : IDisposable
         Assert.Equal(1, scanner.Scans);
     }
 
+    [Fact]
+    public async Task Directory_evaluation_uses_bounded_parallelism_and_preserves_artifact_order()
+    {
+        WriteArtifact(true, "namespace Demo; // a\n");
+        WriteArtifact(true, "namespace Demo; // b\n");
+        WriteArtifact(true, "namespace Demo; // c\n");
+        var scanner = new ConcurrencyScanner(Scan([], [], 0, 0));
+        var evaluator = new ExternalQualityEvaluator(
+            scanner, _solution, ["--no-restore"], 30,
+            ["bin", ".git", ".vs", ".idea"],
+            (_, _, _) => Task.FromResult((true, "ok")));
+        await evaluator.CaptureBaselineAsync(TextWriter.Null);
+        var progress = new StringWriter();
+
+        var results = await evaluator.EvaluateDirectoryAsync(
+            _artifacts, progress, maxDegreeOfParallelism: 2);
+
+        Assert.Equal(2, scanner.MaximumActive);
+        Assert.Equal(
+            results.Select(result => result.ArtifactRef).Order(StringComparer.Ordinal),
+            results.Select(result => result.ArtifactRef));
+        Assert.Equal(3, progress.ToString().Split('\n', StringSplitOptions.RemoveEmptyEntries).Length);
+    }
+
     private static SolutionQualityScan Scan(
         IReadOnlyList<string> smellKeys, Dictionary<string, int> headline, int headlineTotal, int allTotal) =>
         new()
@@ -207,6 +231,37 @@ public sealed class ExternalQualityEvaluatorTests : IDisposable
         {
             Scans++;
             return Task.FromResult(Scans == 1 ? before : after);
+        }
+    }
+
+    private sealed class ConcurrencyScanner(SolutionQualityScan scan) : ISolutionQualityScanner
+    {
+        private int _scans;
+        private int _active;
+        private int _maximumActive;
+
+        public int MaximumActive => _maximumActive;
+
+        public Task<SolutionQualityScan> ScanAsync(
+            string solutionPath, string sarifRoot, CancellationToken cancellationToken = default) =>
+            throw new NotSupportedException();
+
+        public async Task<SolutionQualityScan> BuildAndScanAsync(
+            string solutionPath, string workingRoot,
+            Func<string, int, CancellationToken, Task<(bool Ok, string Output)>> build,
+            int buildTimeoutSeconds, CancellationToken cancellationToken = default)
+        {
+            if (Interlocked.Increment(ref _scans) == 1) return scan;
+            var now = Interlocked.Increment(ref _active);
+            int observed;
+            do
+            {
+                observed = _maximumActive;
+                if (observed >= now) break;
+            } while (Interlocked.CompareExchange(ref _maximumActive, now, observed) != observed);
+            await Task.Delay(100, cancellationToken);
+            Interlocked.Decrement(ref _active);
+            return scan;
         }
     }
 }

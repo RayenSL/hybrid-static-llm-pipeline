@@ -47,11 +47,15 @@ public static class ExternalQualityCommand
         {
             Description = "Per-artefact analyser build timeout in seconds (default: 900)."
         };
+        var parallelismOption = new Option<int>("--parallelism")
+        {
+            Description = "Maximum concurrent isolated quality scans (default: 1)."
+        };
 
         var command = new Command("external-quality",
             "Score whole-solution quality impact (Layer 2) for sealed final-source artefacts of an arbitrary solution.")
         {
-            artifactsOption, targetOption, buildArgOption, skipDirOption, outOption, timeoutOption
+            artifactsOption, targetOption, buildArgOption, skipDirOption, outOption, timeoutOption, parallelismOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -62,6 +66,8 @@ public static class ExternalQualityCommand
             var skipDirs = parseResult.GetValue(skipDirOption) ?? [];
             var timeout = parseResult.GetValue(timeoutOption);
             if (timeout <= 0) timeout = 900;
+            var parallelism = parseResult.GetValue(parallelismOption);
+            if (parallelism <= 0) parallelism = 1;
             var output = parseResult.GetValue(outOption)?.FullName
                          ?? Path.GetFullPath(Path.Combine(
                              "runs", $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}-external-quality.jsonl"));
@@ -97,7 +103,7 @@ public static class ExternalQualityCommand
                 scanner, target.FullName, buildArgs, timeout, skipDirs);
 
             var results = await evaluator.EvaluateDirectoryAsync(
-                artifacts.FullName, Console.Error, cancellationToken);
+                artifacts.FullName, Console.Error, parallelism, cancellationToken);
 
             Directory.CreateDirectory(Path.GetDirectoryName(output)!);
             var jsonOptions = new JsonSerializerOptions

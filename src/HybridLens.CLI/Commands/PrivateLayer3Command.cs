@@ -33,11 +33,15 @@ public static class PrivateLayer3Command
         {
             Description = "Per-artefact private-suite timeout in seconds (default: 180)."
         };
+        var parallelismOption = new Option<int>("--parallelism")
+        {
+            Description = "Maximum concurrent isolated evaluations (default: 1)."
+        };
 
         var command = new Command("private-layer3",
             "Evaluate frozen final-source artefacts with the private Layer-3 oracle after all repair conditions terminate.")
         {
-            artifactsOption, targetOption, manifestOption, outOption, timeoutOption
+            artifactsOption, targetOption, manifestOption, outOption, timeoutOption, parallelismOption
         };
 
         command.SetAction(async (parseResult, cancellationToken) =>
@@ -51,6 +55,8 @@ public static class PrivateLayer3Command
                              "runs", $"{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}-private-layer3.jsonl"));
             var timeout = parseResult.GetValue(timeoutOption);
             if (timeout <= 0) timeout = 180;
+            var parallelism = parseResult.GetValue(parallelismOption);
+            if (parallelism <= 0) parallelism = 1;
 
             if (!artifacts.Exists)
             {
@@ -88,7 +94,7 @@ public static class PrivateLayer3Command
             var evaluator = new PrivateLayer3Evaluator(
                 target.FullName, oracleRoot, manifestVersion, timeout);
             var results = await evaluator.EvaluateDirectoryAsync(
-                artifacts.FullName, Console.Error, cancellationToken);
+                artifacts.FullName, Console.Error, parallelism, cancellationToken);
 
             Directory.CreateDirectory(Path.GetDirectoryName(output)!);
             var jsonOptions = new JsonSerializerOptions

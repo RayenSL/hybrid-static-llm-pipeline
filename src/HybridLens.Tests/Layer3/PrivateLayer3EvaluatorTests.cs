@@ -76,6 +76,45 @@ public sealed class PrivateLayer3EvaluatorTests : IDisposable
     }
 
     [Fact]
+    public async Task DirectoryEvaluation_UsesBoundedParallelism_AndPreservesArtifactOrder()
+    {
+        var fixture = MakeFixture();
+        await WriteArtifact(fixture.Artifacts, fixture.RelativeFile, "// repaired-a", buildPassed: true);
+        await WriteArtifact(fixture.Artifacts, fixture.RelativeFile, "// repaired-b", buildPassed: true);
+        await WriteArtifact(fixture.Artifacts, fixture.RelativeFile, "// repaired-c", buildPassed: true);
+        var active = 0;
+        var maximumActive = 0;
+        var evaluator = new PrivateLayer3Evaluator(
+            fixture.Solution,
+            fixture.Oracle,
+            "1.0.0",
+            30,
+            async (_, _, _, ct) =>
+            {
+                var now = Interlocked.Increment(ref active);
+                int observed;
+                do
+                {
+                    observed = maximumActive;
+                    if (observed >= now) break;
+                } while (Interlocked.CompareExchange(ref maximumActive, now, observed) != observed);
+                await Task.Delay(100, ct);
+                Interlocked.Decrement(ref active);
+                return (true, "PASS  A\nALL PASS\n");
+            });
+        var progress = new StringWriter();
+
+        var results = await evaluator.EvaluateDirectoryAsync(
+            fixture.Artifacts, progress, maxDegreeOfParallelism: 2);
+
+        Assert.Equal(2, maximumActive);
+        Assert.Equal(
+            results.Select(result => result.ArtifactRef).Order(StringComparer.Ordinal),
+            results.Select(result => result.ArtifactRef));
+        Assert.Equal(3, progress.ToString().Split('\n', StringSplitOptions.RemoveEmptyEntries).Length);
+    }
+
+    [Fact]
     public void CanonicalPrivateOracle_MatchesFrozenManifest()
     {
         var repositoryRoot = FindRepositoryRoot();

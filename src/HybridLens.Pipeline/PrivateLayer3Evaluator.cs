@@ -29,21 +29,33 @@ public sealed class PrivateLayer3Evaluator(
     public async Task<IReadOnlyList<PrivateLayer3Result>> EvaluateDirectoryAsync(
         string artifactDirectory,
         TextWriter progress,
+        int maxDegreeOfParallelism = 1,
         CancellationToken cancellationToken = default)
     {
         var paths = Directory.EnumerateFiles(artifactDirectory, "*.json", SearchOption.TopDirectoryOnly)
             .Order(StringComparer.Ordinal)
             .ToList();
-        var results = new List<PrivateLayer3Result>(paths.Count);
-        for (var i = 0; i < paths.Count; i++)
+        var results = new PrivateLayer3Result?[paths.Count];
+        using var gate = new SemaphoreSlim(Math.Max(1, maxDegreeOfParallelism));
+        var tasks = paths.Select(async (path, index) =>
         {
-            var result = await EvaluateOneAsync(paths[i], cancellationToken);
-            results.Add(result);
-            progress.WriteLine(
-                $"[{i + 1}/{paths.Count}] {result.ArtifactId}: " +
-                (result.Evaluated ? result.Passed == true ? "PASS" : "REGRESSION" : $"NOT-RUN ({result.NotRunReason})"));
-        }
-        return results;
+            await gate.WaitAsync(cancellationToken);
+            try
+            {
+                var result = await EvaluateOneAsync(path, cancellationToken);
+                results[index] = result;
+                lock (progress)
+                    progress.WriteLine(
+                        $"[{index + 1}/{paths.Count}] {result.ArtifactId}: " +
+                        (result.Evaluated ? result.Passed == true ? "PASS" : "REGRESSION" : $"NOT-RUN ({result.NotRunReason})"));
+            }
+            finally
+            {
+                gate.Release();
+            }
+        });
+        await Task.WhenAll(tasks);
+        return results.Select(result => result!).ToList();
     }
 
     public async Task<PrivateLayer3Result> EvaluateOneAsync(
