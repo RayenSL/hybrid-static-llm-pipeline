@@ -1,0 +1,17 @@
+{
+  "artifact_id": "5a33cfcb9d3945e78c9e96b2cbe0786b",
+  "timestamp": "2026-08-13T10:03:56.5202578+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 3,
+  "relative_file": "src/Notifications/RetryPolicy.cs",
+  "source_sha256": "0cf7822520f9b07339d6b7732e2f23623e45b8239d41ed9353a1deccbeed1882",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n        if (attempt \u003E 10)\n            return 3600;\n\n        var delay = GetBaseDelay(channel) * attempt;\n        return AdjustDelay(delay, attempt, serverBusy);\n    }\n\n    private static int GetBaseDelay(Channel channel) =\u003E channel switch\n    {\n        Channel.Email =\u003E 30,\n        Channel.Sms =\u003E 10,\n        Channel.Push =\u003E 5,\n        _ =\u003E 15\n    };\n\n    private static int AdjustDelay(int delay, int attempt, bool serverBusy)\n    {\n        if (serverBusy \u0026\u0026 delay \u003C 600)\n            delay *= 2;\n\n        if (delay \u003E 3600)\n            return 3600;\n        if (delay \u003C 1)\n            return 1;\n        if (attempt \u003E 7)\n            delay \u002B= 100;\n\n        return delay;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Notifications_RetryPolicy.cs--b41b19489e964774bb8e7a1eab96a639.json",
+  "visible_test_sha256": "a9079d81a00fb73d571c92ed5db214b06a19db3f586fe9913ab841341dd65e49",
+  "build_passed": true,
+  "visible_test_passed": true
+}

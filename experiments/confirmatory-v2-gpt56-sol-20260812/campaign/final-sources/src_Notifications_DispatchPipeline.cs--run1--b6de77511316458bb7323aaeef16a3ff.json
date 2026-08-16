@@ -1,0 +1,17 @@
+{
+  "artifact_id": "b6de77511316458bb7323aaeef16a3ff",
+  "timestamp": "2026-08-13T08:04:37.2116211+00:00",
+  "architecture": "grounded_single_shot",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Notifications/DispatchPipeline.cs",
+  "source_sha256": "aa5135ecc924286246647a82a698d666dc9fea752c5aa1e18aa66a54f242ea13",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003ERuns a message through validation, throttling, rendering and delivery.\u003C/summary\u003E\npublic sealed class DispatchPipeline\n{\n    private readonly ITemplateStore _templates;\n    private readonly UnsubscribeList _unsubscribed;\n\n    public DispatchPipeline(ITemplateStore templates, UnsubscribeList unsubscribed)\n    {\n        _templates = templates;\n        _unsubscribed = unsubscribed;\n    }\n\n    public string Run(Message message, int attempt)\n    {\n        var validationResult = Validate(message);\n        if (validationResult != null)\n            return validationResult;\n\n        if (attempt \u003E 5)\n            return \u0022throttled\u0022;\n\n        var template = _templates.Get(message.Subject);\n        if (template == null)\n            return \u0022no template\u0022;\n\n        var body = Render(message, template);\n        return GetDeliveryResult(body, attempt);\n    }\n\n    private string? Validate(Message message)\n    {\n        if (string.IsNullOrEmpty(message.Body))\n            return \u0022empty body\u0022;\n\n        var recipient = message.Recipient;\n        if (message.Channel == Channel.Email \u0026\u0026 !recipient.EmailAddress.Contains(\u0027@\u0027))\n            return \u0022invalid email\u0022;\n        if (message.Channel == Channel.Sms \u0026\u0026 recipient.Phone.Length \u003C 5)\n            return \u0022invalid phone\u0022;\n        if (_unsubscribed.IsUnsubscribed(recipient.EmailAddress))\n            return \u0022unsubscribed\u0022;\n\n        return null;\n    }\n\n    private static string Render(Message message, string template)\n    {\n        switch (message.Channel)\n        {\n            case Channel.Email:\n                return template \u002B message.Body;\n            case Channel.Sms:\n                return message.Body;\n            case Channel.Push:\n                return message.Subject;\n            default:\n                return message.Body;\n        }\n    }\n\n    private static string GetDeliveryResult(string body, int attempt)\n    {\n        if (attempt \u003E 0 \u0026\u0026 body.Length \u003E 0)\n            return $\u0022retry:{attempt}:{body.Length}\u0022;\n        if (body.Length == 0)\n            return \u0022empty render\u0022;\n        return $\u0022sent:{body.Length}\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

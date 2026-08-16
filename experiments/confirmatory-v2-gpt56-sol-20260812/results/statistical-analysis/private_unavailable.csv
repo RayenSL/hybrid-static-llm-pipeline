@@ -1,0 +1,2 @@
+run_id,instance_key,anti_pattern_type,grounding_enabled,control_structure,visible_tests_enabled,strict_success,materialized_source_ref
+77a60d7d4fa841f4b8d72867eb6d9dd3,Z:\GitHub\hybrid-pipeline-corpus\corpus\src\Invoicing\StatementBuilder.cs::Invoicing.StatementBuilder::6,god_class,False,single_shot,True,False,

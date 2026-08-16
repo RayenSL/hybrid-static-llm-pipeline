@@ -1,0 +1,115 @@
+{
+  "audit_version": "1.0",
+  "created_at": "2026-08-13T16:00:05.6360321+02:00",
+  "campaign_id": "6b28bd73dce3f9fe5ee9ed17",
+  "scope": {
+    "input": "campaign/final-sources",
+    "target_solution": "Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\Corpus.sln",
+    "artifact_files": 623,
+    "result_rows": 623,
+    "unique_artifact_ids": 623,
+    "unique_evaluation_ids": 623,
+    "missing_artifacts": 0,
+    "artifact_identity_mismatches": 0,
+    "source_hash_mismatches": 0,
+    "outcomes": {
+      "scored": 623,
+      "scored_without_ca": 0,
+      "not_scored": 0
+    }
+  },
+  "execution": {
+    "command": "external-quality --artifacts campaign/final-sources --target Z:\\GitHub\\hybrid-pipeline-corpus\\corpus\\Corpus.sln --out quality-results/layer2-quality.jsonl --timeout 300 --parallelism 4",
+    "parallelism": 4,
+    "per_artifact_timeout_seconds": 300,
+    "nuget_audit_disabled": true,
+    "wall_time_seconds": 1445.8,
+    "mean_artifact_duration_seconds": 9.05,
+    "result_sha256": "a3d7dc96ad3b4e52116d8b88d9df3bf46fa803da4264e87233816ef0ca30701e",
+    "progress_log_sha256": "a1100986d752d836b019eda5d808278ff934174ec1891dcef2a6a4f32207792a"
+  },
+  "baseline": {
+    "smell_total": 36,
+    "ca_headline": 67,
+    "ca_all": 263,
+    "consistent_across_all_rows": true
+  },
+  "quality_results": {
+    "smell_delta": {
+      "mean": -0.931,
+      "minus_one": 587,
+      "zero": 29,
+      "plus_one": 7,
+      "smells_resolved_total": 601,
+      "smells_introduced_total": 21
+    },
+    "ca_headline_delta": {
+      "mean": 0.055,
+      "improved": 16,
+      "unchanged": 567,
+      "worsened": 40,
+      "distribution": {
+        "-3": 6,
+        "-2": 1,
+        "-1": 9,
+        "0": 567,
+        "+1": 21,
+        "+2": 16,
+        "+3": 2,
+        "+4": 1
+      }
+    },
+    "ca_all_delta": {
+      "mean": -0.289,
+      "improved": 98,
+      "unchanged": 478,
+      "worsened": 47
+    },
+    "documentation": {
+      "doc_comment_line_count_changed": 31,
+      "comment_line_count_changed": 120
+    }
+  },
+  "condition_summary": [
+    { "condition": "agentic|visible=false", "n": 78, "smell_improved": 74, "smell_same": 3, "smell_worse": 1, "smell_mean": -0.936, "ca_headline_mean": 0.000, "ca_all_mean": -0.231 },
+    { "condition": "agentic|visible=true", "n": 78, "smell_improved": 75, "smell_same": 0, "smell_worse": 3, "smell_mean": -0.923, "ca_headline_mean": 0.077, "ca_all_mean": 0.090 },
+    { "condition": "grounded_iterative|visible=false", "n": 78, "smell_improved": 76, "smell_same": 2, "smell_worse": 0, "smell_mean": -0.974, "ca_headline_mean": -0.077, "ca_all_mean": -0.487 },
+    { "condition": "grounded_iterative|visible=true", "n": 78, "smell_improved": 77, "smell_same": 1, "smell_worse": 0, "smell_mean": -0.987, "ca_headline_mean": 0.026, "ca_all_mean": -0.744 },
+    { "condition": "grounded_single_shot|visible=false", "n": 78, "smell_improved": 77, "smell_same": 1, "smell_worse": 0, "smell_mean": -0.987, "ca_headline_mean": 0.051, "ca_all_mean": -0.410 },
+    { "condition": "grounded_single_shot|visible=true", "n": 78, "smell_improved": 76, "smell_same": 2, "smell_worse": 0, "smell_mean": -0.974, "ca_headline_mean": 0.167, "ca_all_mean": -0.769 },
+    { "condition": "ungrounded_single_shot|visible=false", "n": 78, "smell_improved": 62, "smell_same": 14, "smell_worse": 2, "smell_mean": -0.769, "ca_headline_mean": 0.141, "ca_all_mean": 0.205 },
+    { "condition": "ungrounded_single_shot|visible=true", "n": 77, "smell_improved": 70, "smell_same": 6, "smell_worse": 1, "smell_mean": -0.896, "ca_headline_mean": 0.052, "ca_all_mean": 0.039 }
+  ],
+  "targeted_smell_exceptions": [
+    { "target": "src/AccessControl/AccessDecisionEngine.cs", "n": 24, "improved": 6, "same": 11, "worse": 7 },
+    { "target": "src/Inventory/AllocationCalculator.cs", "n": 24, "improved": 22, "same": 2, "worse": 0 },
+    { "target": "src/Invoicing/StatementBuilder.cs", "n": 23, "improved": 22, "same": 1, "worse": 0 },
+    { "target": "src/Invoicing/VatResolver.cs", "n": 24, "improved": 21, "same": 3, "worse": 0 },
+    { "target": "src/Notifications/RetryPolicy.cs", "n": 24, "improved": 20, "same": 4, "worse": 0 },
+    { "target": "src/Ordering/PricingRules.cs", "n": 24, "improved": 22, "same": 2, "worse": 0 },
+    { "target": "src/Scheduling/SlotFinder.cs", "n": 24, "improved": 18, "same": 6, "worse": 0 }
+  ],
+  "private_oracle_cross_check": {
+    "private_pass": { "n": 612, "smell_improved": 576, "smell_same": 29, "smell_worse": 7, "ca_headline_mean": 0.056, "ca_all_mean": -0.294 },
+    "private_regression": { "n": 11, "smell_improved": 11, "smell_same": 0, "smell_worse": 0, "ca_headline_mean": 0.000, "ca_all_mean": 0.000 },
+    "interpretation": "All 11 private behavioural regressions reduced the targeted smell count. Layer 2 therefore measures structural quality but cannot replace Layer 3 behavioural verification."
+  },
+  "execution_amendment": {
+    "reason": "Each quality evaluation creates an isolated corpus copy, loads the solution and runs both smell and compiler-analyser scans. A four-artefact benchmark took 36.6 seconds, making sequential execution impractical.",
+    "change": "Added opt-in bounded parallelism to ExternalQualityEvaluator and --parallelism to the CLI. The default remains one; returned rows retain sorted artefact order.",
+    "methodological_effect": "None. Each artefact is still evaluated in its own working copy against the same immutable baseline. The scanner does not invoke the model, retry an assignment or alter final source.",
+    "pre_run_benchmark": "Four real artefacts at parallelism four: 4/4 fully scored with compiler-analyser data in 36.6 seconds.",
+    "test_evidence": "The concurrency test failed before implementation because the parallelism parameter did not exist, then passed after implementation. The full repository suite passed 130/130.",
+    "evaluator_source_sha256": "0851929d85288e9cc32876d56de3a1ef7fb0519c26798407f25ceded81cdb02b",
+    "command_source_sha256": "2ad430072e598bcd8840a37f00d8c4f74d5234abe7dda1df6c6a4ee7633c89e7",
+    "test_source_sha256": "7b5cdf83256177c18c7f73c6a9524aa8147a25731390613350ff10b6e4181cf2",
+    "cli_dll_sha256": "3b076f2e225c1e23a3975d259d89dd13f112a5538b10d1aa359f057d27906c0b"
+  },
+  "interpretation_limits": [
+    "Condition summaries are descriptive and are not inferential estimates.",
+    "A lower smell count records detector output; it does not by itself establish semantic preservation or general code quality.",
+    "Compiler-analyser counts are reported separately because the observed changes are mixed and small relative to the targeted smell effect.",
+    "One assigned StatementBuilder run has no final-source artefact because the campaign produced 623 artefacts from 624 assignments."
+  ],
+  "audit_result": "layer2_quality_complete_and_integrity_verified"
+}

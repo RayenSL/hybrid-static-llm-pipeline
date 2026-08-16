@@ -1,0 +1,17 @@
+{
+  "artifact_id": "06acd3dc164246fcaf9f4cc5b5b884f4",
+  "timestamp": "2026-08-12T13:35:23.2787189+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 2,
+  "relative_file": "src/Notifications/RetryPolicy.cs",
+  "source_sha256": "30c71d0c43bc6e5ef8d40af8dd2b33a31227efd72e665318351eec03a8c145bc",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n        if (attempt \u003E 10)\n            return 3600;\n\n        int delay = GetBaseDelay(channel) * attempt;\n        delay = ApplyServerBusyDelay(delay, serverBusy);\n        return ApplyLimitsAndLateAttemptBonus(delay, attempt);\n    }\n\n    private static int GetBaseDelay(Channel channel)\n    {\n        return channel switch\n        {\n            Channel.Email =\u003E 30,\n            Channel.Sms =\u003E 10,\n            Channel.Push =\u003E 5,\n            _ =\u003E 15\n        };\n    }\n\n    private static int ApplyServerBusyDelay(int delay, bool serverBusy)\n    {\n        return serverBusy \u0026\u0026 delay \u003C 600 ? delay * 2 : delay;\n    }\n\n    private static int ApplyLimitsAndLateAttemptBonus(int delay, int attempt)\n    {\n        if (delay \u003E 3600)\n            return 3600;\n        if (delay \u003C 1)\n            return 1;\n        if (attempt \u003E 7)\n            return delay \u002B 100;\n\n        return delay;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Notifications_RetryPolicy.cs--b41b19489e964774bb8e7a1eab96a639.json",
+  "visible_test_sha256": "a9079d81a00fb73d571c92ed5db214b06a19db3f586fe9913ab841341dd65e49",
+  "build_passed": true,
+  "visible_test_passed": true
+}

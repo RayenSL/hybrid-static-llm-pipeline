@@ -1,0 +1,55 @@
+{
+  "analysis_status": "complete_for_prespecified_instance_level_paired_estimands",
+  "attempts_sha256": "c4873a403f36466fd5571620a77d83b603bb519f891cecddae98496c00f84bb4",
+  "attempts": 624,
+  "independent_instances": 26,
+  "repetitions_per_cell": 3,
+  "strict_successes": 586,
+  "private_passes": 612,
+  "private_regressions": 11,
+  "private_unavailable": 1,
+  "method": {
+    "aggregation": "three repetitions averaged within instance and factorial cell",
+    "confidence_interval": "paired instance-level Student-t interval, df=25",
+    "hypothesis_test": "two-sided exact sign-flip randomization test over all 2^26 cluster signs, evaluated by discrete dynamic programming",
+    "multiplicity": "Holm adjustment within each four-cell simple-effect family and the three test-interaction family",
+    "power_classification": "visible-test main effect confirmatory; cell-specific test effects and test interactions exploratory"
+  },
+  "private_regressions_by_arm": [
+    {
+      "grounding_enabled": false,
+      "control_structure": "iterative",
+      "visible_tests_enabled": false,
+      "regressions": 3
+    },
+    {
+      "grounding_enabled": false,
+      "control_structure": "iterative",
+      "visible_tests_enabled": true,
+      "regressions": 3
+    },
+    {
+      "grounding_enabled": false,
+      "control_structure": "single_shot",
+      "visible_tests_enabled": true,
+      "regressions": 1
+    },
+    {
+      "grounding_enabled": true,
+      "control_structure": "iterative",
+      "visible_tests_enabled": false,
+      "regressions": 3
+    },
+    {
+      "grounding_enabled": true,
+      "control_structure": "iterative",
+      "visible_tests_enabled": true,
+      "regressions": 1
+    }
+  ],
+  "mixed_effects_logistic_model": {
+    "prespecified_formula": "strict_success ~ grounding * control_structure * visible_test + anti_pattern + (1 | instance)",
+    "status": "model_ready_dataset_emitted; fit separately as a model-based sensitivity analysis",
+    "interpretation_rule": "paired instance-level risk differences remain the primary effect-scale analysis"
+  }
+}

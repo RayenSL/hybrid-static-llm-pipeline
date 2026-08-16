@@ -1,0 +1,17 @@
+{
+  "artifact_id": "e5ff524c19c34d4aba6facbbaa2f3529",
+  "timestamp": "2026-08-13T07:21:10.0876582+00:00",
+  "architecture": "grounded_single_shot",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 3,
+  "relative_file": "src/Invoicing/VatResolver.cs",
+  "source_sha256": "809f0053c91fb8589b9531a00bbbf7cc21d34030a58df1728ac0c303cc06762b",
+  "final_source": "namespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m)\n            return 0m;\n\n        var rate = ResolveJurisdictionRate(countryCode);\n        rate = ApplyAccountAdjustment(account, net, rate);\n        rate = ApplyHighValueCap(net, rate);\n\n        return net * rate;\n    }\n\n    private static decimal ResolveJurisdictionRate(string countryCode)\n    {\n        return countryCode switch\n        {\n            \u0022GB\u0022 =\u003E 0.20m,\n            \u0022DE\u0022 =\u003E 0.19m,\n            \u0022FR\u0022 =\u003E 0.20m,\n            \u0022IE\u0022 =\u003E 0.23m,\n            _ =\u003E 0.0m\n        };\n    }\n\n    private static decimal ApplyAccountAdjustment(Account account, decimal net, decimal rate)\n    {\n        if (account.Kind == AccountKind.Government)\n            return 0m;\n\n        if (account.Kind == AccountKind.Business \u0026\u0026 net \u003E 10000m)\n            return rate * 0.5m;\n\n        return rate;\n    }\n\n    private static decimal ApplyHighValueCap(decimal net, decimal rate)\n    {\n        if (rate \u003E 0m \u0026\u0026 net \u003E 100000m)\n            return Math.Min(rate, 0.15m);\n\n        return rate;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Invoicing_VatResolver.cs--c39ea451cb834c6a84acb69e157d06e6.json",
+  "visible_test_sha256": "bf97972acdb10708c38b87ddb71236464e842631ffe51f00ce073b615804b61d",
+  "build_passed": true,
+  "visible_test_passed": true
+}

@@ -1,0 +1,17 @@
+{
+  "artifact_id": "5cdc12f791a14500833f505e230d5bb7",
+  "timestamp": "2026-08-12T12:04:18.6244974+00:00",
+  "architecture": "ungrounded_single_shot",
+  "grounding_enabled": false,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 2,
+  "relative_file": "src/Notifications/DispatchPipeline.cs",
+  "source_sha256": "7fdc64836a06dc70d1242743f07786dbb2541958d2d42342614bb8ee53e24986",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003ERuns a message through validation, throttling, rendering and delivery.\u003C/summary\u003E\npublic sealed class DispatchPipeline\n{\n    private readonly ITemplateStore _templates;\n    private readonly UnsubscribeList _unsubscribed;\n\n    public DispatchPipeline(ITemplateStore templates, UnsubscribeList unsubscribed)\n    {\n        _templates = templates;\n        _unsubscribed = unsubscribed;\n    }\n\n    public string Run(Message message, int attempt)\n    {\n        var validationError = Validate(message);\n        if (validationError != null)\n            return validationError;\n\n        if (attempt \u003E 5)\n            return \u0022throttled\u0022;\n\n        var template = _templates.Get(message.Subject);\n        if (template == null)\n            return \u0022no template\u0022;\n\n        var body = Render(message, template);\n        return GetDeliveryResult(body, attempt);\n    }\n\n    private string? Validate(Message message)\n    {\n        if (string.IsNullOrEmpty(message.Body))\n            return \u0022empty body\u0022;\n\n        var recipient = message.Recipient;\n        if (message.Channel == Channel.Email \u0026\u0026 !recipient.EmailAddress.Contains(\u0027@\u0027))\n            return \u0022invalid email\u0022;\n        if (message.Channel == Channel.Sms \u0026\u0026 recipient.Phone.Length \u003C 5)\n            return \u0022invalid phone\u0022;\n        if (_unsubscribed.IsUnsubscribed(recipient.EmailAddress))\n            return \u0022unsubscribed\u0022;\n\n        return null;\n    }\n\n    private static string Render(Message message, string template)\n    {\n        switch (message.Channel)\n        {\n            case Channel.Email:\n                return template \u002B message.Body;\n            case Channel.Sms:\n                return message.Body;\n            case Channel.Push:\n                return message.Subject;\n            default:\n                return message.Body;\n        }\n    }\n\n    private static string GetDeliveryResult(string body, int attempt)\n    {\n        if (attempt \u003E 0 \u0026\u0026 body.Length \u003E 0)\n            return $\u0022retry:{attempt}:{body.Length}\u0022;\n        if (body.Length == 0)\n            return \u0022empty render\u0022;\n        return $\u0022sent:{body.Length}\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Notifications_DispatchPipeline.cs--d643b6ea7e124ab5bfbf9e1820291282.json",
+  "visible_test_sha256": "8acfee91cdd644f0e513d490ae93d5afc4c16b323d0a2bd9d6d3a3249ceadd09",
+  "build_passed": true,
+  "visible_test_passed": true
+}

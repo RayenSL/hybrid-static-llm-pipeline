@@ -1,0 +1,17 @@
+{
+  "artifact_id": "06d191fa9d03489bbd2bb627ddd47587",
+  "timestamp": "2026-08-13T08:52:32.3822012+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Inventory/ReplenishmentPlanner.cs",
+  "source_sha256": "07ea61458e1e0f8c428fe0bd98395919dd504e0d9c555d8cf5cedf946cae2daa",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n\n        foreach (var item in items)\n        {\n            if (!TryGetOrderQuantity(item, season, out int orderQuantity))\n                continue;\n\n            plan.Add(PlaceOrderAndCreatePlanEntry(supplier, item.Sku, orderQuantity));\n        }\n\n        return plan;\n    }\n\n    private static bool TryGetOrderQuantity(StockItem item, int season, out int orderQuantity)\n    {\n        orderQuantity = 0;\n        if (item.OnHand \u003C 0)\n            return false;\n\n        int available = item.OnHand - item.Reserved;\n        if (available \u003E item.ReorderPoint)\n            return false;\n\n        orderQuantity = CalculateOrderQuantity(item.ReorderPoint - available, season);\n        return orderQuantity \u003E 0 \u0026\u0026 !string.IsNullOrEmpty(item.Sku);\n    }\n\n    private static int CalculateOrderQuantity(int deficit, int season)\n    {\n        int orderQuantity = deficit switch\n        {\n            \u003C= 0 =\u003E 0,\n            \u003C 10 =\u003E 10,\n            \u003C 100 =\u003E deficit,\n            _ =\u003E deficit \u002B 50\n        };\n\n        return season switch\n        {\n            4 when orderQuantity \u003E 0 =\u003E (int)(orderQuantity * 1.5),\n            1 =\u003E orderQuantity / 2,\n            _ =\u003E orderQuantity\n        };\n    }\n\n    private static string PlaceOrderAndCreatePlanEntry(\n        ISupplier supplier,\n        string sku,\n        int orderQuantity)\n    {\n        bool placed = supplier.PlaceOrder(sku, orderQuantity);\n        if (!placed)\n            return $\u0022{sku}:FAILED\u0022;\n\n        return orderQuantity \u003E 200\n            ? $\u0022{sku}:LARGE:{orderQuantity}\u0022\n            : $\u0022{sku}:{orderQuantity}\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

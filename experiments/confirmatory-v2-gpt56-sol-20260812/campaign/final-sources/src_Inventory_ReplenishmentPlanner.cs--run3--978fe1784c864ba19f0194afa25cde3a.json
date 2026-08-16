@@ -1,0 +1,17 @@
+{
+  "artifact_id": "978fe1784c864ba19f0194afa25cde3a",
+  "timestamp": "2026-08-13T08:36:41.6147773+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Inventory/ReplenishmentPlanner.cs",
+  "source_sha256": "72576796f984898ddd261144f517219691a63af5a3283aa43ddc75a1062368d5",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n\n        foreach (var item in items)\n        {\n            int orderQuantity = CalculateOrderQuantity(item, season);\n            if (orderQuantity \u003C= 0 || string.IsNullOrEmpty(item.Sku))\n                continue;\n\n            bool placed = supplier.PlaceOrder(item.Sku, orderQuantity);\n            plan.Add(FormatPlanEntry(item.Sku, orderQuantity, placed));\n        }\n\n        return plan;\n    }\n\n    private static int CalculateOrderQuantity(StockItem item, int season)\n    {\n        if (item.OnHand \u003C 0)\n            return 0;\n\n        int available = item.OnHand - item.Reserved;\n        if (available \u003E item.ReorderPoint)\n            return 0;\n\n        int deficit = item.ReorderPoint - available;\n        int baseQuantity = CalculateBaseQuantity(deficit);\n        return ApplySeasonalAdjustment(baseQuantity, season);\n    }\n\n    private static int CalculateBaseQuantity(int deficit)\n    {\n        if (deficit \u003C= 0)\n            return 0;\n        if (deficit \u003C 10)\n            return 10;\n        if (deficit \u003C 100)\n            return deficit;\n\n        return deficit \u002B 50;\n    }\n\n    private static int ApplySeasonalAdjustment(int quantity, int season)\n    {\n        if (season == 4 \u0026\u0026 quantity \u003E 0)\n            return (int)(quantity * 1.5);\n        if (season == 1)\n            return quantity / 2;\n\n        return quantity;\n    }\n\n    private static string FormatPlanEntry(string sku, int quantity, bool placed)\n    {\n        if (!placed)\n            return $\u0022{sku}:FAILED\u0022;\n\n        return quantity \u003E 200\n            ? $\u0022{sku}:LARGE:{quantity}\u0022\n            : $\u0022{sku}:{quantity}\u0022;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

@@ -1,0 +1,17 @@
+{
+  "artifact_id": "4a4a8095928c4ab390f95806d8c3f1b0",
+  "timestamp": "2026-08-13T07:43:51.1113196+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Inventory/AllocationCalculator.cs",
+  "source_sha256": "e4891fe4770c9d1cc298a1fc7eed73fa398a0e8afac6a44e932a702dce77643d",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EAllocates available stock across a warehouse\u0027s zones.\u003C/summary\u003E\npublic sealed class AllocationCalculator\n{\n    public IReadOnlyList\u003Cstring\u003E Allocate(StockItem item, Warehouse warehouse)\n    {\n        var allocations = new List\u003Cstring\u003E();\n        int remaining = item.OnHand - item.Reserved;\n\n        if (remaining \u003C= 0)\n            return allocations;\n\n        AllocateAcrossZones(warehouse, allocations, ref remaining);\n        AddOverflowAllocation(allocations, remaining);\n        return allocations;\n    }\n\n    private static void AllocateAcrossZones(\n        Warehouse warehouse,\n        List\u003Cstring\u003E allocations,\n        ref int remaining)\n    {\n        foreach (var zone in warehouse.Zones)\n        {\n            if (!TryCalculatePlacement(zone.Name, zone.Capacity, remaining, out int placement))\n                continue;\n\n            allocations.Add($\u0022{zone.Name}:{placement}\u0022);\n            remaining -= placement;\n\n            if (remaining \u003C= 0)\n                break;\n        }\n    }\n\n    private static bool TryCalculatePlacement(\n        string? zoneName,\n        int capacity,\n        int remaining,\n        out int placement)\n    {\n        placement = 0;\n        if (capacity \u003C= 0 || string.IsNullOrEmpty(zoneName))\n            return false;\n\n        placement = CalculatePlacement(capacity, remaining);\n        return placement \u003E 0;\n    }\n\n    private static int CalculatePlacement(int capacity, int remaining)\n    {\n        if (remaining \u003E capacity)\n            return capacity;\n\n        return remaining \u003E capacity / 2\n            ? remaining - 1\n            : remaining;\n    }\n\n    private static void AddOverflowAllocation(List\u003Cstring\u003E allocations, int remaining)\n    {\n        if (remaining \u003E 0)\n            allocations.Add($\u0022OVERFLOW:{remaining}\u0022);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

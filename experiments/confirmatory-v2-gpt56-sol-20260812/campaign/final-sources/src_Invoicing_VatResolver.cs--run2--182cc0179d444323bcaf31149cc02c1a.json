@@ -1,0 +1,17 @@
+{
+  "artifact_id": "182cc0179d444323bcaf31149cc02c1a",
+  "timestamp": "2026-08-13T10:22:00.0662363+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Invoicing/VatResolver.cs",
+  "source_sha256": "43edb46ce6f8dfdbb3d4a56c1521e8c68b4f48a8aacf02a4fc7b55facb091a3f",
+  "final_source": "namespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m)\n            return 0m;\n\n        var rate = GetBaseRate(countryCode);\n        rate = ApplyAccountAdjustment(rate, account.Kind, net);\n        rate = ApplyHighValueCap(rate, net);\n\n        return net * rate;\n    }\n\n    private static decimal GetBaseRate(string countryCode) =\u003E\n        countryCode switch\n        {\n            \u0022GB\u0022 =\u003E 0.20m,\n            \u0022DE\u0022 =\u003E 0.19m,\n            \u0022FR\u0022 =\u003E 0.20m,\n            \u0022IE\u0022 =\u003E 0.23m,\n            _ =\u003E 0m\n        };\n\n    private static decimal ApplyAccountAdjustment(decimal rate, AccountKind accountKind, decimal net)\n    {\n        if (accountKind == AccountKind.Government)\n            return 0m;\n\n        return accountKind == AccountKind.Business \u0026\u0026 net \u003E 10000m\n            ? rate * 0.5m\n            : rate;\n    }\n\n    private static decimal ApplyHighValueCap(decimal rate, decimal net) =\u003E\n        rate \u003E 0m \u0026\u0026 net \u003E 100000m\n            ? Math.Min(rate, 0.15m)\n            : rate;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

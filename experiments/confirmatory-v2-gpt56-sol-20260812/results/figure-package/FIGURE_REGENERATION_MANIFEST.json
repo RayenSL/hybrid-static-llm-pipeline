@@ -1,0 +1,22 @@
+{
+  "status": "complete",
+  "attempts": 624,
+  "quality_rows": 623,
+  "attempts_sha256": "c4873a403f36466fd5571620a77d83b603bb519f891cecddae98496c00f84bb4",
+  "contrasts_sha256": "9511db536414966a2e90ee17be458337396e7f134713393671883c0c7c28d7d3",
+  "quality_sha256": "a3d7dc96ad3b4e52116d8b88d9df3bf46fa803da4264e87233816ef0ca30701e",
+  "generated_figures": [
+    "figure5_2_strict_success_ladder",
+    "figure5_3_grounding_control_interaction",
+    "figure5_5_triggering_metric_reduction",
+    "figure5_6_whole_solution_quality",
+    "figure5_7_layer3_behavior",
+    "figure5_8_visible_test_effect"
+  ],
+  "formats": [
+    "png",
+    "svg",
+    "pdf"
+  ],
+  "scope_note": "Figures 5.2, 5.3, 5.5, 5.6, 5.7 and 5.8 depend on the new confirmatory campaign and were regenerated. The architecture, illustrative trajectory and separate grounding-context figures are outside this campaign scope."
+}

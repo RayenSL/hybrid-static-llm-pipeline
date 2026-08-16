@@ -1,0 +1,19 @@
+contrast,description,status,holm_family,n_instances,estimate,ci95_lo,ci95_hi,cluster_se,exact_signflip_p,holm_adjusted_p
+visible_test_main,"test_on - test_off, averaged over grounding and control",confirmatory_primary,,26,0.02564102564102564,-0.010945901677082925,0.062227952959134206,0.0177646236673731,0.3125,0.3125
+test_effect__grounding_0__control_0,"test_on - test_off at grounding=0, iterative=0",exploratory_underpowered,cell_specific_test,26,0.08974358974358974,-0.014945541087305642,0.19443272057448513,0.050831352824612853,0.125,0.5
+test_effect__grounding_0__control_1,"test_on - test_off at grounding=0, iterative=1",exploratory_underpowered,cell_specific_test,26,2.135044278125301e-18,-0.03808088131152262,0.03808088131152262,0.018490006540840973,1.0,1.0
+test_effect__grounding_1__control_0,"test_on - test_off at grounding=1, iterative=0",exploratory_underpowered,cell_specific_test,26,0.0,0.0,0.0,0.0,1.0,1.0
+test_effect__grounding_1__control_1,"test_on - test_off at grounding=1, iterative=1",exploratory_underpowered,cell_specific_test,26,0.012820512820512818,-0.04715861884988779,0.07279964449091343,0.02912260690153987,1.0,1.0
+grounding_main,"grounded - ungrounded, averaged over control and test",planned_secondary,,26,0.07692307692307694,0.016021135190345898,0.13782501865580798,0.029570673319668714,0.015625,0.015625
+grounding_effect__control_0__test_0,"grounded - ungrounded at iterative=0, test=0",planned_secondary,grounding_simple,26,0.16666666666666669,0.022914492141070775,0.3104188411922626,0.06979824404521129,0.0625,0.25
+grounding_effect__control_0__test_1,"grounded - ungrounded at iterative=0, test=1",planned_secondary,grounding_simple,26,0.07692307692307693,-0.010809292763591258,0.16465544660974513,0.04259807109188757,0.125,0.375
+grounding_effect__control_1__test_0,"grounded - ungrounded at iterative=1, test=0",planned_secondary,grounding_simple,26,0.025641025641025644,-0.010945901677082929,0.06222795295913422,0.017764623667373105,0.5,1.0
+grounding_effect__control_1__test_1,"grounded - ungrounded at iterative=1, test=1",planned_secondary,grounding_simple,26,0.038461538461538464,-0.019628010462272485,0.09655108738534941,0.028205128205128206,0.5,1.0
+iteration_main,"iterative - single_shot, averaged over grounding and test",planned_secondary,,26,0.025641025641025644,-0.03946588868844558,0.09074793997049688,0.031612379502405016,0.5625,0.5625
+iteration_effect__grounding_0__test_0,"iterative - single_shot at grounding=0, test=0",planned_secondary,iteration_simple,26,0.11538461538461539,-0.016213939145386908,0.2469831699146177,0.06389710663783135,0.125,0.5
+iteration_effect__grounding_0__test_1,"iterative - single_shot at grounding=0, test=1",planned_secondary,iteration_simple,26,0.025641025641025654,-0.08154888946677014,0.13283094074882143,0.052045597769703696,0.8125,1.0
+iteration_effect__grounding_1__test_0,"iterative - single_shot at grounding=1, test=0",planned_secondary,iteration_simple,26,-0.02564102564102564,-0.11013491498475067,0.05885286370269938,0.04102564102564103,1.0,1.0
+iteration_effect__grounding_1__test_1,"iterative - single_shot at grounding=1, test=1",planned_secondary,iteration_simple,26,-0.012820512820512822,-0.0392248532404269,0.013583827599401252,0.012820512820512824,1.0,1.0
+grounding_x_test,"difference in test effects: grounded - ungrounded, averaged over control",exploratory_underpowered,test_interactions,26,-0.038461538461538464,-0.08232772330487256,0.005404646381795629,0.021299035545943784,0.25,0.75
+control_x_test,"difference in test effects: iterative - single_shot, averaged over grounding",exploratory_underpowered,test_interactions,26,-0.038461538461538464,-0.09655108738534941,0.019628010462272485,0.028205128205128206,0.375,0.75
+grounding_x_control_x_test,three-way difference-in-difference-in-differences,exploratory_underpowered,test_interactions,26,0.10256410256410256,-0.0437836067083317,0.24891181183653682,0.0710584946694924,0.3125,0.75

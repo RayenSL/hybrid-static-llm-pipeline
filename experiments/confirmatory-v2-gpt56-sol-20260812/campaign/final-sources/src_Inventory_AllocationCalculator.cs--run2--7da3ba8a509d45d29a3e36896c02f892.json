@@ -1,0 +1,17 @@
+{
+  "artifact_id": "7da3ba8a509d45d29a3e36896c02f892",
+  "timestamp": "2026-08-12T13:40:21.450477+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Inventory/AllocationCalculator.cs",
+  "source_sha256": "60c06e8487146dc7955fd909360b1783413a8dd933719ec3969d3a2fcdaac7fd",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EAllocates available stock across a warehouse\u0027s zones.\u003C/summary\u003E\npublic sealed class AllocationCalculator\n{\n    public IReadOnlyList\u003Cstring\u003E Allocate(StockItem item, Warehouse warehouse)\n    {\n        var result = new List\u003Cstring\u003E();\n        int remaining = item.OnHand - item.Reserved;\n\n        if (remaining \u003C= 0)\n            return result;\n\n        foreach (var zone in warehouse.Zones)\n        {\n            if (!TryCalculatePlacement(zone.Name, zone.Capacity, remaining, out int place))\n                continue;\n\n            result.Add($\u0022{zone.Name}:{place}\u0022);\n            remaining -= place;\n\n            if (remaining \u003C= 0)\n                break;\n        }\n\n        if (remaining \u003E 0)\n            result.Add($\u0022OVERFLOW:{remaining}\u0022);\n\n        return result;\n    }\n\n    private static bool TryCalculatePlacement(\n        string? zoneName,\n        int capacity,\n        int remaining,\n        out int place)\n    {\n        place = 0;\n        if (capacity \u003C= 0 || string.IsNullOrEmpty(zoneName))\n            return false;\n\n        place = CalculatePlacement(capacity, remaining);\n        return place \u003E 0;\n    }\n\n    private static int CalculatePlacement(int capacity, int remaining)\n    {\n        if (remaining \u003E capacity)\n            return capacity;\n\n        if (remaining \u003E capacity / 2)\n            return remaining - 1;\n\n        return remaining;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

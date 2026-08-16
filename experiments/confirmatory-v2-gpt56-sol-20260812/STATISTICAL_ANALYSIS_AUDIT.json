@@ -1,0 +1,121 @@
+{
+  "audit_version": "1.0",
+  "campaign_id": "6b28bd73dce3f9fe5ee9ed17",
+  "status": "statistical_analysis_and_campaign_figure_regeneration_complete",
+  "analysis_population": {
+    "itt_assignments": 624,
+    "independent_targets": 26,
+    "factorial_cells": 8,
+    "repetitions_per_cell": 3,
+    "strict_successes": 586,
+    "materialised_repairs": 623,
+    "private_passes": 612,
+    "private_regressions": 11,
+    "private_unavailable": 1
+  },
+  "method": {
+    "aggregation": "three repetitions averaged within target and factorial cell",
+    "primary_estimand": "visible-test ON minus OFF absolute strict-success risk difference, averaged over grounding and control structure",
+    "confidence_interval": "paired target-level Student-t interval with 25 degrees of freedom",
+    "hypothesis_test": "two-sided exact cluster sign-flip test over 2^26 assignments, evaluated by discrete dynamic programming",
+    "multiplicity": "Holm adjustment within prespecified simple-effect and interaction families",
+    "mixed_model_role": "prespecified random-intercept logistic sensitivity analysis; paired risk differences remain primary"
+  },
+  "principal_results": {
+    "visible_test_main": {
+      "risk_difference": 0.02564102564102564,
+      "ci95": [-0.010945901677082925, 0.062227952959134206],
+      "exact_p": 0.3125,
+      "interpretation": "no statistically persuasive strict-success benefit"
+    },
+    "grounding_main": {
+      "risk_difference": 0.07692307692307694,
+      "ci95": [0.016021135190345898, 0.13782501865580798],
+      "exact_p": 0.015625,
+      "interpretation": "positive planned secondary average effect"
+    },
+    "iteration_main": {
+      "risk_difference": 0.025641025641025644,
+      "ci95": [-0.03946588868844558, 0.09074793997049688],
+      "exact_p": 0.5625,
+      "interpretation": "no clear average effect"
+    },
+    "visible_test_token_cost": {
+      "complete_targets": 25,
+      "mean_additional_tokens": 1611.833333333333,
+      "ci95": [1361.872213190583, 1861.7944534760832],
+      "exact_p": 1.1920928955078125e-7
+    },
+    "holm_adjusted_test_interactions": {
+      "grounding_x_test": 0.75,
+      "control_x_test": 0.75,
+      "grounding_x_control_x_test": 0.75
+    }
+  },
+  "glmm_sensitivity": {
+    "observations": 624,
+    "clusters": 26,
+    "laplace_map_converged": true,
+    "variational_bayes_converged": true,
+    "map_random_intercept_sd": 0.002,
+    "vb_random_intercept_sd": 2.027,
+    "weak_prior_map_converged": false,
+    "interpretation": "material estimator sensitivity and a failed weak-prior diagnostic preclude treating GLMM coefficients as more stable than the paired estimands",
+    "metadata_sha256": "ccaf9c666dc80e0f3415ce53437386d44dfe0fcd0f09ef265387cef03f64a580"
+  },
+  "outputs": {
+    "paired_risk_differences_sha256": "9511db536414966a2e90ee17be458337396e7f134713393671883c0c7c28d7d3",
+    "paired_token_differences_sha256": "910ba444e35c0b99211b9f3c660ed9965c03f00c54f749b21c69059e67e6bfd4",
+    "model_ready_attempts_sha256": "f744cc873590a199df12cb564d91bd5523e8379939256ef5f8935808f3caee9e",
+    "report_sha256": "0cfead484865ffee4c992120daa40d0720c15f900ba8513861f27db992190182",
+    "figure_manifest_sha256": "e8f1a782feedb1bb2183944f4ecdbe79e1ad9c8a0f9cdd2cf191d0d9ae2889bf"
+  },
+  "figure_regeneration": {
+    "regenerated_families": [
+      "figure5_2_strict_success_ladder",
+      "figure5_3_grounding_control_interaction",
+      "figure5_5_triggering_metric_reduction",
+      "figure5_6_whole_solution_quality",
+      "figure5_7_layer3_behavior",
+      "figure5_8_visible_test_effect"
+    ],
+    "formats_per_family": ["png", "svg", "pdf"],
+    "pdf_pages_per_file": 1,
+    "pdf_render_visual_qa_passed": true,
+    "svg_parse_failures": 0,
+    "png_dimension_failures": 0,
+    "mirrored_files_checked": 42,
+    "mirror_hash_mismatches": 0,
+    "superseded_files_archived": 42,
+    "archive": "archive/previous-figures-20260814",
+    "unchanged_out_of_scope": [
+      "architecture figure",
+      "illustrative metric trajectory",
+      "separate grounding-context experiment figure"
+    ]
+  },
+  "implementation_evidence": {
+    "workflow": "test-driven red-green-refactor",
+    "analysis_tests_passed": 20,
+    "analysis_tests_failed": 0,
+    "paired_analysis_source_sha256": "978638db981593515f9b902c2a70650f89b4394d8d7ccaa6065b3aba4dbc78cc",
+    "glmm_source_sha256": "3278ea1f9a8257362e1881f5e4241519f36ce95ef9d9d8e4d29fbd9a88482a18",
+    "figure_source_sha256": "39ca1a7929d00b349b86a212180d5b0c27de8ec8444bd1200be20f00fe6c3c54",
+    "software": {
+      "python": "3.14.4",
+      "numpy": "2.4.4",
+      "pandas": "3.0.2",
+      "scipy": "1.17.1",
+      "statsmodels": "0.14.5",
+      "matplotlib": "3.10.9",
+      "pymupdf": "1.26.4",
+      "pypdf": "6.14.2"
+    }
+  },
+  "limitations": [
+    "The failed StatementBuilder assignment has no token or Layer 2 quality measurement.",
+    "Several cells are close to the strict-success ceiling, reducing precision for cell-specific effects.",
+    "Layer 2 detector improvement does not establish behavioural preservation.",
+    "The GLMM is estimator-sensitive and is retained only as sensitivity evidence."
+  ]
+}

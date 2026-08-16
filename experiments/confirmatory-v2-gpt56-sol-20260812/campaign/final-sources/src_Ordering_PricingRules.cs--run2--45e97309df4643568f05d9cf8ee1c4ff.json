@@ -1,0 +1,17 @@
+{
+  "artifact_id": "45e97309df4643568f05d9cf8ee1c4ff",
+  "timestamp": "2026-08-12T13:55:27.4422443+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Ordering/PricingRules.cs",
+  "source_sha256": "8d51bb7c3f406b02d92e5bcece6ad831109764fea6e683de8794dda2a84ba1f2",
+  "final_source": "namespace Ordering;\n\n/// \u003Csummary\u003EApplies tier, override and channel adjustments to an order subtotal.\u003C/summary\u003E\npublic sealed class PricingRules\n{\n    public decimal ApplyAdjustments(Order order, CustomerTier tier)\n    {\n        var subtotal = CalculateSubtotal(order);\n        if (tier == CustomerTier.Blocked)\n            return 0m;\n\n        var adjusted = ApplyTierDiscount(subtotal, tier);\n        adjusted = ApplyDiscounts(adjusted, subtotal, order.DiscountOverride);\n        adjusted = ApplyChannelAdjustment(adjusted, order.Channel);\n        return EnsureNonNegative(adjusted);\n    }\n\n    private static decimal CalculateSubtotal(Order order)\n    {\n        decimal subtotal = 0m;\n        foreach (var line in order.Lines)\n            subtotal \u002B= line.UnitPrice * line.Quantity;\n\n        return subtotal;\n    }\n\n    private static decimal ApplyTierDiscount(decimal subtotal, CustomerTier tier) =\u003E\n        tier == CustomerTier.Wholesale ? subtotal * 0.95m : subtotal;\n\n    private static decimal ApplyDiscounts(\n        decimal adjusted,\n        decimal subtotal,\n        decimal? discountOverride)\n    {\n        var discount = discountOverride.GetValueOrDefault();\n        if (discount \u003E 0m)\n            adjusted -= discount;\n\n        if (subtotal \u003E 500m)\n            adjusted -= 10m;\n\n        return adjusted;\n    }\n\n    private static decimal ApplyChannelAdjustment(decimal adjusted, OrderChannel channel) =\u003E\n        channel switch\n        {\n            OrderChannel.Web =\u003E adjusted,\n            OrderChannel.Phone =\u003E adjusted \u002B 2m,\n            OrderChannel.Marketplace =\u003E adjusted * 1.02m,\n            _ =\u003E adjusted,\n        };\n\n    private static decimal EnsureNonNegative(decimal adjusted) =\u003E\n        adjusted \u003C 0m ? 0m : adjusted;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

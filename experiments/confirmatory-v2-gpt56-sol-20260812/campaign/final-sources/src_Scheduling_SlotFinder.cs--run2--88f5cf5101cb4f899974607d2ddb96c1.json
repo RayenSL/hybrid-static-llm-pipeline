@@ -1,0 +1,17 @@
+{
+  "artifact_id": "88f5cf5101cb4f899974607d2ddb96c1",
+  "timestamp": "2026-08-12T15:01:17.8854699+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Scheduling/SlotFinder.cs",
+  "source_sha256": "4f53b71a680da274a1aefbed728074bd0f120ae2243da5e7ec2c7b5302091945",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EFinds the first calendar slot that fits a required duration.\u003C/summary\u003E\npublic sealed class SlotFinder\n{\n    public Slot? FindFirstFit(Resource resource, TimeSpan duration, DateTime notBefore)\n    {\n        if (duration \u003C= TimeSpan.Zero)\n            return null;\n\n        foreach (var slot in resource.Calendar)\n        {\n            if (IsSuitable(slot, duration, notBefore))\n                return slot;\n        }\n\n        return null;\n    }\n\n    private static bool IsSuitable(Slot slot, TimeSpan duration, DateTime notBefore)\n    {\n        if (slot.Start \u003C notBefore)\n            return false;\n\n        var length = slot.End - slot.Start;\n        return length \u003E= duration\n            \u0026\u0026 slot.Start.Hour \u003E= 8\n            \u0026\u0026 slot.Start.Hour \u003C= 18\n            \u0026\u0026 slot.End.Hour \u003C= 20;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

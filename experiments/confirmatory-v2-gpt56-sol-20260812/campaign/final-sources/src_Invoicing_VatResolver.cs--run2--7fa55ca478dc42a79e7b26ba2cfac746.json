@@ -1,0 +1,17 @@
+{
+  "artifact_id": "7fa55ca478dc42a79e7b26ba2cfac746",
+  "timestamp": "2026-08-13T10:21:32.878029+00:00",
+  "architecture": "grounded_single_shot",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 2,
+  "relative_file": "src/Invoicing/VatResolver.cs",
+  "source_sha256": "90f05e579b48545fa083a1c1a1e4bfe1c3918e898c89ee1502f68f6aae586ee8",
+  "final_source": "namespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m)\n            return 0m;\n\n        var rate = GetJurisdictionRate(countryCode);\n        rate = ApplyAccountAdjustment(rate, account.Kind, net);\n        rate = ApplyHighValueCap(rate, net);\n\n        return net * rate;\n    }\n\n    private static decimal GetJurisdictionRate(string countryCode)\n    {\n        return countryCode switch\n        {\n            \u0022GB\u0022 =\u003E 0.20m,\n            \u0022DE\u0022 =\u003E 0.19m,\n            \u0022FR\u0022 =\u003E 0.20m,\n            \u0022IE\u0022 =\u003E 0.23m,\n            _ =\u003E 0.0m\n        };\n    }\n\n    private static decimal ApplyAccountAdjustment(decimal rate, AccountKind accountKind, decimal net)\n    {\n        if (accountKind == AccountKind.Government)\n            return 0m;\n\n        if (accountKind == AccountKind.Business \u0026\u0026 net \u003E 10000m)\n            return rate * 0.5m;\n\n        return rate;\n    }\n\n    private static decimal ApplyHighValueCap(decimal rate, decimal net)\n    {\n        return rate \u003E 0m \u0026\u0026 net \u003E 100000m\n            ? Math.Min(rate, 0.15m)\n            : rate;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Invoicing_VatResolver.cs--c39ea451cb834c6a84acb69e157d06e6.json",
+  "visible_test_sha256": "bf97972acdb10708c38b87ddb71236464e842631ffe51f00ce073b615804b61d",
+  "build_passed": true,
+  "visible_test_passed": true
+}

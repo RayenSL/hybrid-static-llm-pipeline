@@ -1,0 +1,56 @@
+{
+  "status": "completed_with_estimator_sensitivity",
+  "formula": "strict_success ~ grounding * iterative * visible_test + C(anti_pattern_type) + (1 | instance_id)",
+  "input_sha256": "f744cc873590a199df12cb564d91bd5523e8379939256ef5f8935808f3caee9e",
+  "observations": 624,
+  "instances": 26,
+  "analysis_seed": 20260728,
+  "software": {
+    "python": "3.14.4",
+    "numpy": "2.4.4",
+    "pandas": "3.0.2",
+    "scipy": "1.17.1",
+    "statsmodels": "0.14.5"
+  },
+  "primary_model_fit": {
+    "estimator": "statsmodels BinomialBayesMixedGLM fit_map; Laplace/MAP",
+    "fixed_effect_prior_sd": 2.0,
+    "log_random_effect_sd_prior_sd": 0.5,
+    "optimizer": {
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "iterations": 112,
+      "function_value": 29.351385609395138,
+      "max_abs_gradient": 4.220888934813871e-06
+    }
+  },
+  "sensitivity_model_fit": {
+    "estimator": "statsmodels BinomialBayesMixedGLM fit_vb; mean-field variational Bayes",
+    "fixed_effect_prior_sd": 2.0,
+    "log_random_effect_sd_prior_sd": 0.5,
+    "optimizer": {
+      "success": true,
+      "message": "Optimization terminated successfully.",
+      "iterations": 42,
+      "function_value": 111.23618932191205,
+      "max_abs_gradient": 7.96315112294721e-06
+    }
+  },
+  "weak_prior_diagnostic": {
+    "estimator": "Laplace/MAP",
+    "fixed_effect_prior_sd": 10.0,
+    "log_random_effect_sd_prior_sd": 1.0,
+    "optimizer": {
+      "success": false,
+      "message": "Desired error not necessarily achieved due to precision loss.",
+      "iterations": 376,
+      "function_value": -228.00810515541272,
+      "max_abs_gradient": 9377.931002152558
+    },
+    "warnings": [
+      "Laplace fitting did not converge, |gradient|=23008.176110"
+    ],
+    "random_intercept_sd": 5.109088917238241e-12
+  },
+  "interpretation": "The regularized fits converge but their random-intercept SD estimates differ materially. The weak-prior fit does not converge and collapses the random-effect variance, consistent with near-separation and only 26 clusters. Use the prespecified instance-level paired risk differences as the primary effect-scale results; treat GLMM coefficients as model-based sensitivity evidence."
+}

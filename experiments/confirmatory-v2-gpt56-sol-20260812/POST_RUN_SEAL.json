@@ -1,0 +1,16 @@
+{
+  "seal_version": "1.0",
+  "sealed_at": "2026-08-13T14:00:57.4490490+02:00",
+  "campaign_id": "6b28bd73dce3f9fe5ee9ed17",
+  "manifest_sha256": "67e5d373b54fa7a0b690883ddb79ddec2fc4d76afed9076f6e8cf7a6b0f705a8",
+  "checksum_index": "POST_RUN_SHA256SUMS.txt",
+  "checksum_index_sha256": "12685c22cf567f2b63af4bbb30670430ca74b2b1863f12db5b6f460fe7d2471a",
+  "indexed_files": 1378,
+  "campaign_assignments": 624,
+  "ledger_rows": 624,
+  "trace_files": 624,
+  "materialized_source_files": 623,
+  "trajectory_files": 78,
+  "private_layer3_included": false,
+  "status": "sealed_with_documented_secondary_trajectory_deviation"
+}

@@ -1,0 +1,9 @@
+control_structure,grounding_enabled,visible_tests_enabled,assigned_attempts,materialized_attempts,build_passed_attempts,metric_resolved_attempts,private_passed_attempts,strict_successes,strict_success_rate,visible_test_availability_rate,token_observed_attempts,mean_input_tokens,mean_output_tokens,mean_total_tokens,total_tokens_consumed,mean_llm_calls,mean_build_attempts,mean_test_attempts,mean_test_duration_ms,mean_repair_duration_ms
+iterative,false,false,78,78,78,76,75,73,0.9359,0,78,4347.5641,1993.9615,6341.5256,494639,2.0128,1.0128,0,0,35698.8909
+iterative,false,true,78,78,78,76,75,73,0.9359,0.9615,78,6698,2001.5897,8699.5897,678568,2.0256,1.0256,0.9615,16002.636,51398.0044
+iterative,true,false,78,78,78,78,75,75,0.9615,0,78,6471.9487,2153.641,8625.5897,672796,2.0513,1.0513,0,0,37494.1307
+iterative,true,true,78,78,78,77,77,76,0.9744,0.9615,78,8516.4359,2080.2692,10596.7051,826543,2.0128,1.0128,0.9615,14992.6766,52949.5536
+single_shot,false,false,78,78,78,64,78,64,0.8205,0,78,1069.3846,1721.8077,2791.1923,217713,1,1,0,0,34125.0816
+single_shot,false,true,78,77,77,72,76,71,0.9103,0.9615,77,2141.0649,1751,3892.0649,299689,1,0.9872,0.9487,14388.9569,48279.9576
+single_shot,true,false,78,78,78,77,78,77,0.9872,0,78,1941.4615,1921.5,3862.9615,301311,1,1,0,0,36939.085
+single_shot,true,true,78,78,78,77,78,77,0.9872,0.9615,78,3016.5,1934,4950.5,386139,1,1,0.9615,17549.4155,54426.3425

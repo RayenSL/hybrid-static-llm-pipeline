@@ -1,0 +1,17 @@
+{
+  "artifact_id": "277a803564f54d6396e5cc672b474a43",
+  "timestamp": "2026-08-12T14:58:33.104546+00:00",
+  "architecture": "ungrounded_single_shot",
+  "grounding_enabled": false,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Scheduling/SlotFinder.cs",
+  "source_sha256": "f08b22ff8e4098833813dceb17d17fb47eb61004eb7527e0909fb7fd4e9acad1",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EFinds the first calendar slot that fits a required duration.\u003C/summary\u003E\npublic sealed class SlotFinder\n{\n    public Slot? FindFirstFit(Resource resource, TimeSpan duration, DateTime notBefore)\n    {\n        if (resource.Calendar.Count == 0)\n            return null;\n        if (duration \u003C= TimeSpan.Zero)\n            return null;\n\n        foreach (var slot in resource.Calendar)\n        {\n            if (slot.Start \u003C notBefore)\n                continue;\n            var length = slot.End - slot.Start;\n            if (length \u003C duration)\n                continue;\n            if (slot.Start.Hour \u003C 8 || slot.Start.Hour \u003E 18)\n                continue;\n            if (length \u003E= duration \u0026\u0026 slot.End.Hour \u003C= 20)\n                return slot;\n        }\n\n        if (resource.Calendar.Count \u003E 100)\n            return null;\n        return null;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

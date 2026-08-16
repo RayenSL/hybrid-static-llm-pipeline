@@ -1,0 +1,17 @@
+{
+  "artifact_id": "2d3a186b37e741cf914c9b886f6a572d",
+  "timestamp": "2026-08-12T14:31:44.4565587+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Notifications/RetryPolicy.cs",
+  "source_sha256": "b8360ba129b9727e1f0d87ea0a130038ad780ae52a619232178b8f6ccb1e1c4b",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n        if (attempt \u003E 10)\n            return 3600;\n\n        var delay = GetBaseDelay(channel) * attempt;\n        return ApplyDelayRules(delay, attempt, serverBusy);\n    }\n\n    private static int GetBaseDelay(Channel channel) =\u003E channel switch\n    {\n        Channel.Email =\u003E 30,\n        Channel.Sms =\u003E 10,\n        Channel.Push =\u003E 5,\n        _ =\u003E 15\n    };\n\n    private static int ApplyDelayRules(int delay, int attempt, bool serverBusy)\n    {\n        if (serverBusy \u0026\u0026 delay \u003C 600)\n            delay *= 2;\n\n        if (delay \u003E 3600)\n            return 3600;\n        if (delay \u003C 1)\n            return 1;\n\n        return attempt \u003E 7 ? delay \u002B 100 : delay;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

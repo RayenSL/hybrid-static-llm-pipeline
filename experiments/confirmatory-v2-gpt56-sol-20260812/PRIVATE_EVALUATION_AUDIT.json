@@ -1,0 +1,78 @@
+{
+  "audit_version": "1.0",
+  "campaign_id": "6b28bd73dce3f9fe5ee9ed17",
+  "oracle_manifest_version": "2.0.0",
+  "oracle_manifest_sha256": "e085997fb91006b82c5ad3e8580acd7e1798d7d73fe626ef0c1d4e6e530b9fcc",
+  "golden_index_sha256": "b471ef1fffd8aa2d6317484e9b26aab771bc595f10816d1b8faae41e570ab626",
+  "execution": {
+    "artifact_files": 623,
+    "result_rows": 623,
+    "unique_evaluation_ids": 623,
+    "unique_artifact_refs": 623,
+    "artifact_identity_issues": 0,
+    "evaluated": 623,
+    "passed": 612,
+    "regressed": 11,
+    "not_run": 0,
+    "parallelism": 4,
+    "per_artifact_timeout_seconds": 180,
+    "nuget_audit_disabled": true,
+    "result_sha256": "75eb89a8771f7dd46eacb85804236f810581d25ea9a0152766015f2ca57bd34c",
+    "progress_log_sha256": "e5d3835037d977631b11d1f92a78985d13efc205f4c15858a6cf16e147f61f66"
+  },
+  "execution_amendment": {
+    "reason": "A one-artefact benchmark required 79.3 seconds because the private evaluator rebuilds the referenced corpus graph in a fresh isolated copy for every artefact. Sequential evaluation of 623 artefacts was impractical.",
+    "change": "Added an opt-in bounded-parallelism parameter to PrivateLayer3Evaluator and --parallelism to the CLI. The default remains one. Results are retained in sorted artefact order.",
+    "methodological_effect": "None. Every artefact still uses its own fresh corpus copy, immutable final source, frozen oracle and independent child process. No model, detector, retry or repair operation is invoked.",
+    "pre_run_benchmark": "Four real artefacts at parallelism four: 4/4 evaluated, 4/4 passed, 1080 drivers passed, 115.5 seconds wall time.",
+    "test_evidence": "The new test failed before implementation because the parallelism parameter did not exist, then passed after implementation. The full repository suite passed 129/129.",
+    "evaluator_source_sha256": "86f09fc80fbe93ac4e98ef23b7f49817cd515bacd627e3eac95b641a863422f0",
+    "command_source_sha256": "33d587d069a9156713024af149c8ceda68545e79977153cef9dc8f882ad4d990",
+    "test_source_sha256": "6a29b78541801f1a56a5758391f987a15ec95e3119923929ccae1cc11d8a5528",
+    "cli_dll_sha256": "2ef6298abfa6f1dfd2b331ace13c57a2925917a4b1320d24abd192a916474552"
+  },
+  "stopped_uncommitted_attempts": {
+    "count": 2,
+    "reason": "The initial process allowances were too short for the measured sequential runtime.",
+    "result_file_existed_when_stopped": false,
+    "impact": "No private result was committed or overwritten. No repair or LLM assignment was replayed. The final complete result file is the only private result used in analysis."
+  },
+  "private_regressions": {
+    "target": "src/Invoicing/VatResolver.cs",
+    "count": 11,
+    "drivers_per_regression": {
+      "passing": 269,
+      "failing": 1
+    },
+    "by_condition": [
+      { "architecture": "agentic", "visible_tests_enabled": false, "runs": [1, 2, 3] },
+      { "architecture": "agentic", "visible_tests_enabled": true, "runs": [1, 2, 3] },
+      { "architecture": "grounded_iterative", "visible_tests_enabled": false, "runs": [1, 2, 3] },
+      { "architecture": "grounded_iterative", "visible_tests_enabled": true, "runs": [3] },
+      { "architecture": "ungrounded_single_shot", "visible_tests_enabled": true, "runs": [3] }
+    ],
+    "regressions_that_passed_visible_suite": 5,
+    "other_targets_with_regression": 0
+  },
+  "factorial_analysis": {
+    "attempt_rows": 624,
+    "unique_run_ids": 624,
+    "assigned": 624,
+    "private_passed": 612,
+    "strict_successes": 586,
+    "attempts_sha256": "c4873a403f36466fd5571620a77d83b603bb519f891cecddae98496c00f84bb4",
+    "arm_summary_json_sha256": "c979bedabe2d232ac472fe1c014dbc362ad8622fd031109bae3a660d1a9b37b4",
+    "arm_summary_csv_sha256": "3a4f751ee13daf8b5c169b9cf93f566d1ed430f8569833496305c0122c412cba",
+    "arms": [
+      { "control": "iterative", "grounding": false, "visible_tests": false, "strict": 73, "assigned": 78, "rate": 0.9358974359 },
+      { "control": "iterative", "grounding": false, "visible_tests": true, "strict": 73, "assigned": 78, "rate": 0.9358974359 },
+      { "control": "iterative", "grounding": true, "visible_tests": false, "strict": 75, "assigned": 78, "rate": 0.9615384615 },
+      { "control": "iterative", "grounding": true, "visible_tests": true, "strict": 76, "assigned": 78, "rate": 0.9743589744 },
+      { "control": "single_shot", "grounding": false, "visible_tests": false, "strict": 64, "assigned": 78, "rate": 0.8205128205 },
+      { "control": "single_shot", "grounding": false, "visible_tests": true, "strict": 71, "assigned": 78, "rate": 0.9102564103 },
+      { "control": "single_shot", "grounding": true, "visible_tests": false, "strict": 77, "assigned": 78, "rate": 0.9871794872 },
+      { "control": "single_shot", "grounding": true, "visible_tests": true, "strict": 77, "assigned": 78, "rate": 0.9871794872 }
+    ]
+  },
+  "audit_result": "private_layer3_complete_and_factorial_summary_verified"
+}

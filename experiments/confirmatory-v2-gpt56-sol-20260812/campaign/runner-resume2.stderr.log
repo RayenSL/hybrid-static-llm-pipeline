@@ -1,0 +1,1043 @@
+Campaign: 6b28bd73dce3f9fe5ee9ed17
+Working copy omits: bin obj .git .vs .idea
+Design: False|single_shot|False, False|single_shot|True, True|single_shot|False, True|single_shot|True, False|iterative|False, False|iterative|True, True|iterative|False, True|iterative|True
+Manifest SHA-256: 67e5d373b54fa7a0b690883ddb79ddec2fc4d76afed9076f6e8cf7a6b0f705a8
+Assignments: 624; already completed: 279
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-6e0c30119d65419cb3e408ba521dd0da
+  [1/1] StatementBuilder.cs (~1318 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[280/624] 27ceabd8cf0de977680be657: grounded=True, control=iterative, tests=False complete
+[281/624] 4f0804fa6ed89af109c862a0: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-8467c253e99d4274a4c39a0a47648c6f
+  [1/1] StatementBuilder.cs (~1318 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[282/624] 79559fbbe825d2f2f3489158: grounded=True, control=iterative, tests=False complete
+[283/624] 088aafd7158c8c962dce23a7: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-e0b7b494ce2745ebb6fad19c898d9b1f
+  [1/1] StatementBuilder.cs (~1318 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[284/624] aad207c1999262d18fdb98d8: grounded=False, control=iterative, tests=True complete
+[285/624] 7c2d72feb219c37eb92e0754: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-1c0f7718ae8640a28f95065bebef57da
+  [1/1] StatementBuilder.cs (~1318 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[286/624] e6ab90a03c78f82647cbda1f: grounded=False, control=iterative, tests=False complete
+[287/624] f7a00dc061e22cb36d3d07bd: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-0f008e5e06d04858a2b59ea1b5288fcf
+  [1/1] StatementBuilder.cs (~1318 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[288/624] c8e253e1e2cb0a91f144b027: grounded=True, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-61bdad370ea94384aa190e9d856d7373
+  [1/1] AllocationCalculator.cs (~286 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[289/624] 3400fa95498cc828c87e1c1a: grounded=True, control=iterative, tests=True complete
+[290/624] 4a45a90f8e8ffa86512b0fb7: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ec24f72ff868443490cca0f41709722a
+  [1/1] AllocationCalculator.cs (~286 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[291/624] e743b4ce46b9e37c7e7ec748: grounded=False, control=iterative, tests=False complete
+[292/624] 09c7d60f950b08d84ba66d0c: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-683c9f5100284667a908d60623386011
+  [1/1] AllocationCalculator.cs (~286 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 2 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[293/624] 4007306a2c56aa680755bc16: grounded=True, control=iterative, tests=False complete
+[294/624] 42e1a5b4449d5b5a971869f6: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-591a1cab172941178a3be0fd75199492
+  [1/1] AllocationCalculator.cs (~286 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[295/624] c2c4ee27950b68f68a2930c2: grounded=False, control=iterative, tests=True complete
+[296/624] 1c4555dccbde0ac169c01a64: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f51f4c271ba54f0a9c7244f94c89291d
+  [1/1] StatementBuilder.cs (~1318 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[297/624] 4f24e7e213baa7b9e6cb70b3: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-3669134e6f6a48b498b518bc7ea3fa54
+  [1/1] StatementBuilder.cs (~1318 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[298/624] e1a1f46201a9884852a0a4cd: grounded=True, control=iterative, tests=False complete
+[299/624] 7c5f11e8bda68bc8bd3fc295: grounded=False, control=single_shot, tests=False complete
+[300/624] 34d0a39987146730048d818d: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-12350015ed7e4ef5816e1df551cef41c
+  [1/1] StatementBuilder.cs (~1318 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[301/624] ef0d42b745004ee0bf6f6cf6: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-644c575bf8854d419acb745f43fc71b3
+  [1/1] StatementBuilder.cs (~1318 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[302/624] 40bc5c197cc6fd1666776cf1: grounded=False, control=iterative, tests=True complete
+[303/624] 9ac36ff36ee3baa3b1d4193d: grounded=False, control=single_shot, tests=True complete
+[304/624] 410793bcf042f0dab697c618: grounded=True, control=single_shot, tests=True complete
+[305/624] 94aab506141376d15388e7f2: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-3cb3a6b805a6489f8d7adfee6d8aa292
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[306/624] 6616538247bfe0ad99d26643: grounded=True, control=iterative, tests=True complete
+[307/624] 045b848dcc350c87846216cd: grounded=False, control=single_shot, tests=True complete
+[308/624] 1230a2f58cdf908895fb0db2: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-9044645b1b154e3bba7c3ec55acc9594
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[309/624] cbc9e790523d012e98757055: grounded=False, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-1122383a6b1f47889e3024576b0b90c5
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[310/624] 80b5be063775335729674aba: grounded=False, control=iterative, tests=False complete
+[311/624] 69a82fedad6b52d699466407: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-122540b7f41f43d7a2f9dc44059e4437
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[312/624] 079110da2f99238e1098cf04: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-65d080c8a7a743cc94869a0ed0c6ca9e
+  [1/1] Scheduler.cs (~373 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[313/624] be091b146a53ad78446842c0: grounded=False, control=iterative, tests=False complete
+[314/624] 30e2363c9ae75e2dd99826f4: grounded=True, control=single_shot, tests=True complete
+[315/624] bd913e23fbe38693d71206b1: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-c8122648fa194d10b51067e150e4f117
+  [1/1] Scheduler.cs (~373 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[316/624] 86540798c088fea8bcb37daf: grounded=True, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-86149eaa4cbc42d6979822b0d82920e6
+  [1/1] Scheduler.cs (~373 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[317/624] a0b593a961c00c72de3a02d8: grounded=True, control=iterative, tests=False complete
+[318/624] 76ba2c1851019924bbab5ceb: grounded=False, control=single_shot, tests=True complete
+[319/624] 48f97832e6f9a663823d612c: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-7932ff49d0344c3481610b94ad5b3263
+  [1/1] Scheduler.cs (~373 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[320/624] f694c50078ea5367a96400ae: grounded=False, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-907dd93b771f4d51964358d15ff13d6d
+  [1/1] DispatchPipeline.cs (~443 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[321/624] 7cf49c0c35eb6c16e5d1c350: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-47963c8d994841a4a859ec894d14b087
+  [1/1] DispatchPipeline.cs (~443 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[322/624] c8ac6223f03760c322aaf342: grounded=True, control=iterative, tests=True complete
+[323/624] a0c0e95d2f185217f7963d50: grounded=True, control=single_shot, tests=False complete
+[324/624] bceafd08064d2cdc092bd918: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-3e0a6042afd44f3891ad665c92a9bc15
+  [1/1] DispatchPipeline.cs (~443 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[325/624] 5dd10cec4c1c6361e9b1e288: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-a5dcf75e9c3449b5950d597b1ef75e38
+  [1/1] DispatchPipeline.cs (~443 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[326/624] bd47c678857fdceaa9db87dd: grounded=False, control=iterative, tests=True complete
+[327/624] eea29e102145426ee09a2fc0: grounded=True, control=single_shot, tests=True complete
+[328/624] ef9d8d25b542ed3b238b3a5f: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-bcded132f5fa4725980b53f04080dc5b
+  [1/1] InvoiceRenderer.cs (~524 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[329/624] e9942d6b4ab68a8fe9e552d3: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-736ecb83512a4bc8bd3b914dfd0954ed
+  [1/1] InvoiceRenderer.cs (~524 tok, 1 known, grounded, visible-test=unavailable)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[330/624] e9cd3970f0c5191dba3cbdde: grounded=True, control=iterative, tests=True complete
+[331/624] ebded8d3667cf0b2252f037d: grounded=True, control=single_shot, tests=True complete
+[332/624] 893fa762944702d7e0654641: grounded=False, control=single_shot, tests=True complete
+[333/624] 195db7834b233c6a70db76cb: grounded=True, control=single_shot, tests=False complete
+[334/624] 68c3b9f2aabb7123411e3a47: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-de8af55960674006b56925e46d555f1c
+  [1/1] InvoiceRenderer.cs (~524 tok, 1 known, visible-test=unavailable)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[335/624] bdb84bd160de5461be85ad8e: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-05503ce29dfa4b35a52fa1f455cd2581
+  [1/1] InvoiceRenderer.cs (~524 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[336/624] 4b54dfe3e4d1a5a74e504822: grounded=True, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f50a86baa1594e8fb798a2527a6c0bd6
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[337/624] 4085e21cf769602b136794da: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-961bff3a92254642b9afb2f2c84e10cb
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[338/624] 99c7709d585e1ed9f930ee23: grounded=False, control=iterative, tests=False complete
+[339/624] 98e96b599434ce083e6daa19: grounded=False, control=single_shot, tests=True complete
+[340/624] 9d9546b8f3e60bc45c618b42: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-42e74f446f614848aad0206d3c92bc39
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[341/624] 7f2c902e70dc7ff280b2b527: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-a86da788f89b42acb8041bc45d5defc5
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[342/624] 090be01e873e2429d2b9967e: grounded=True, control=iterative, tests=True complete
+[343/624] b80d466ee6e03806e4244c93: grounded=True, control=single_shot, tests=False complete
+[344/624] e6bca1778ea8b7557648b0d4: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-a0623c4d93724ddcbbbc9462ec6b12a6
+  [1/1] OrderProcessor.cs (~1821 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[345/624] 972795d340164ff9f255784d: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-42c1c9afcb704ec283faf175c76d8c07
+  [1/1] OrderProcessor.cs (~1821 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[346/624] ca56e6c0effce35dac7cfa21: grounded=False, control=iterative, tests=False complete
+[347/624] 36b8e31f91cd564412808852: grounded=True, control=single_shot, tests=True complete
+[348/624] 3a326edb434842d54912254f: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-2b3374e4c3324c18be816081c2eb8ef3
+  [1/1] OrderProcessor.cs (~1821 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[349/624] 8dc254d000ecce8ad4ee57d7: grounded=False, control=iterative, tests=True complete
+[350/624] 3271cf1bbc2613cc6dd4714c: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-7c8c893bf1324ea48b2664733c0bed1f
+  [1/1] OrderProcessor.cs (~1821 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[351/624] 7223d3164894ab8f827f4c16: grounded=True, control=iterative, tests=False complete
+[352/624] b944a70d976edfd030412d50: grounded=False, control=single_shot, tests=False complete
+[353/624] d5a35ae7495859eec1228634: grounded=False, control=single_shot, tests=True complete
+[354/624] e5fcdc1ff0afb9f151951156: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-a74c7eb4438043f6a52ad221e4794576
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[355/624] 476a5ebd08e8885efb43b018: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-e6b6005af220416cb3ab7739f429a247
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[356/624] 942dee04b3517553b889f801: grounded=True, control=iterative, tests=True complete
+[357/624] 46af028521f8678815261d64: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-7139bc765022490590c63a8c6de48540
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[358/624] 4a9406eef1fcf536294e25ab: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-d329488d09864ec0a42b92f34ef73867
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[359/624] 95bee031dd11040109bd11cb: grounded=True, control=iterative, tests=False complete
+[360/624] 51215e45d99d2a712f4f86cd: grounded=True, control=single_shot, tests=False complete
+[361/624] b344278850d3277543f15cb4: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-08dd00770ede4d33bfc6b1e3672435e0
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[362/624] 8a690bb25c817dd49831bdfc: grounded=False, control=iterative, tests=False complete
+[363/624] c43b03f453c2262a31a95657: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-b4f08d1adbf8437faf16029f9422e029
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[364/624] e870eb2430ef1d1df8a08139: grounded=True, control=iterative, tests=True complete
+[365/624] 2a5b997dc5c9bf453cbf58ce: grounded=True, control=single_shot, tests=False complete
+[366/624] 151616cf550d39ec29f0b1c9: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-e375eb5a3b7f4a049bfc16b4778bf4ee
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[367/624] a06912a209d99fd4c73a6b44: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-04fdb3190d9a4787ae069464ccf5254a
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[368/624] 6c8719e6acf234880bfe273c: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-65df2c4c2bcc40759a190142f9f9f1f1
+  [1/1] InvoiceRenderer.cs (~524 tok, 1 known, grounded, visible-test=unavailable)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[369/624] 724e470d89e14893fafe6355: grounded=True, control=iterative, tests=True complete
+[370/624] 44bf294cab8f8c602c00026d: grounded=True, control=single_shot, tests=True complete
+[371/624] 2c062ff1dd75a01a3d6ae4bd: grounded=False, control=single_shot, tests=True complete
+[372/624] 99042741163564cf3915efcd: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-39cb54c5ecd14470b335e47c18a58f9f
+  [1/1] InvoiceRenderer.cs (~524 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[373/624] 23a871d1092bfdf9228fb0b9: grounded=True, control=iterative, tests=False complete
+[374/624] cd14ef2cebadecdc8d44167e: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-1c1232eedfa74507baa4951ba7f29a23
+  [1/1] InvoiceRenderer.cs (~524 tok, 1 known, visible-test=unavailable)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[375/624] 0d0a2797912760610345a747: grounded=False, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-2b50a66382ac4111b17112a81307c89f
+  [1/1] InvoiceRenderer.cs (~524 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[376/624] f99140d2bad4be1ebc140446: grounded=False, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-3a5e243dcf5e4f739736e213cfe87fcd
+  [1/1] Scheduler.cs (~373 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[377/624] bceee2500e393885eb9dba14: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-0839068f04154aa4917e9b309af6bbe8
+  [1/1] Scheduler.cs (~373 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[378/624] de82acee400b7511cf41924a: grounded=True, control=iterative, tests=True complete
+[379/624] 73654fada1e5b5165c31f88e: grounded=True, control=single_shot, tests=True complete
+[380/624] 0d58d28c6e6d22d04c64b61b: grounded=True, control=single_shot, tests=False complete
+[381/624] f562b787f92db8cf36f4a486: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f448462a93764f4a834e6bce67a0377b
+  [1/1] Scheduler.cs (~373 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[382/624] b395e0d7dd727e066b05dcd1: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-5229b3f328b84bf9a0516f14867828ff
+  [1/1] Scheduler.cs (~373 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[383/624] 4651fed94c9467dd4379d353: grounded=False, control=iterative, tests=True complete
+[384/624] 822ef08f87ba5ad61730dcd9: grounded=False, control=single_shot, tests=False complete
+[385/624] b16ce83e26854a98f870fcdb: grounded=True, control=single_shot, tests=False complete
+[386/624] f7de34dee125fd13caaf2a73: grounded=False, control=single_shot, tests=False complete
+[387/624] 24ddbac7880ad1d98435b70a: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-04ec748c43524c63bdbe488cf405a746
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[388/624] e7af18b00d079298c2e0804e: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-9d7e087cca194249af290b17024ca983
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[389/624] 1b32adce00b5be68a892a47c: grounded=True, control=iterative, tests=False complete
+[390/624] a4d8da381415b8d8aa851304: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-27eedde43ae847cf94436abc13cb9523
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[391/624] 6d9c02777e95338538aed9c1: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-1a3ccfc36db6475db1da6cfb1e545347
+  [1/1] ReplenishmentPlanner.cs (~379 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[392/624] 7117e4fdc1361aef2a8f0c6f: grounded=False, control=iterative, tests=False complete
+[393/624] 224a02ddbb97adb250ef7667: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-6010066ff6cb48b1ad1763d609dfd026
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[394/624] 1b75ed386a9b1845d002467c: grounded=True, control=iterative, tests=False complete
+[395/624] 7382ea200a6b15d0913dce32: grounded=False, control=single_shot, tests=False complete
+[396/624] ff046a2624519b27a72f26d9: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-26b9004f3202431699471a3e48a5042b
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[397/624] 00ad21bd466ced0df4cac3b7: grounded=False, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-624205964e5349988d8a02ffe4e6b4df
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[398/624] 9f431de03afb61b546298667: grounded=False, control=iterative, tests=True complete
+[399/624] af2a2802049e7f59c682fcc3: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-24253ae71bad48d996e88df24a197f2e
+  [1/1] FulfilmentCoordinator.cs (~1747 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[400/624] 1d65f6c8418ad5aaa0d3b209: grounded=True, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-9ed1f66c71e5419b8ec69c72f6ad8e48
+  [1/1] ClaimAdjudicator.cs (~616 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[401/624] 6b912fd5e36af8a2ffa7be62: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-2672bc585ce44963834818f45c8512e6
+  [1/1] ClaimAdjudicator.cs (~616 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[402/624] 383643ac393d54c30b20f649: grounded=False, control=iterative, tests=True complete
+[403/624] 441fa5fb8437503a6b7319ec: grounded=False, control=single_shot, tests=False complete
+[404/624] cd49849ac23e72cd1f4cd688: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f711827dd5364e4aaf3e1a6026ee43a2
+  [1/1] ClaimAdjudicator.cs (~616 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[405/624] b490dd32b722b6afaab32fc9: grounded=True, control=iterative, tests=False complete
+[406/624] 7f313831bbae97d2f3c33f5e: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-a9c8cece89e140ca8f2dedfe11fef2d9
+  [1/1] ClaimAdjudicator.cs (~616 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[407/624] f3b32af7d00066f6788ba0ec: grounded=False, control=iterative, tests=False complete
+[408/624] 48369941080097f2dd4cbea8: grounded=True, control=single_shot, tests=False complete
+[409/624] 2e98b7e9b8ea80f4a11955e2: grounded=True, control=single_shot, tests=False complete
+[410/624] 12bbed19c6401827683c8cf0: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-1d53755b09534438b59d77cefbf4bce2
+  [1/1] ReturnsHandler.cs (~1072 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[411/624] 8b45d7e82b4a8b055242b423: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-2216c73450214c14baa9b413ee4d6378
+  [1/1] ReturnsHandler.cs (~1072 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[412/624] eaab183b905101212ea5eb09: grounded=False, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-16bcae9bf65846cda0b8935b6d50a601
+  [1/1] ReturnsHandler.cs (~1072 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[413/624] 2c4fbae32cff6be5363c3333: grounded=False, control=iterative, tests=True complete
+[414/624] 39d5bf1514201bc099eb45e9: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-0fe20b57d5f94840b4f318fa063bca58
+  [1/1] ReturnsHandler.cs (~1072 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[415/624] a1f58790d2ae019d7bade8f2: grounded=True, control=iterative, tests=False complete
+[416/624] 41a10bbb6b874fe4756e2f67: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f347e22b394041c4a98d8152a4583b55
+  [1/1] SlotFinder.cs (~220 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[417/624] a6dba7bd515adfdf48d776e2: grounded=False, control=iterative, tests=True complete
+[418/624] f957f090b9288131536b3727: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-3e757f434be6449ab42cfad14c1225bf
+  [1/1] SlotFinder.cs (~220 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[419/624] 2602696a5d7ef86cadd965ab: grounded=True, control=iterative, tests=True complete
+[420/624] 16392470476e918bace58461: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-9ec3c2697ea94aad9a38dc170735fe88
+  [1/1] SlotFinder.cs (~220 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[421/624] 7acfa6074ef4cbb4fc3a946d: grounded=False, control=iterative, tests=False complete
+[422/624] 45b40b0ab598f0d375617019: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ce7801b9e39d4e7daf208f546618ca83
+  [1/1] SlotFinder.cs (~220 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[423/624] 14d61f3a67eda57ee3d01d80: grounded=True, control=iterative, tests=False complete
+[424/624] 2068eaf7285a858642a3a1a3: grounded=False, control=single_shot, tests=True complete
+[425/624] 9502cd9149d90e5cc8661814: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-a6a2f0a68bbd47a69c5fee9849b66047
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[426/624] 1dfa5ed68b9ab0d3925b0d52: grounded=False, control=iterative, tests=False complete
+[427/624] 066f0e20d23bf34decca68ea: grounded=False, control=single_shot, tests=True complete
+[428/624] 33a93be8ed26e6f869c88dd4: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-910a68fabea547d4bb52af73a872cfe8
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[429/624] 5244bfa6193344cc5caf9e9b: grounded=True, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-48497a56aaf341b5aa263b8165279b38
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[430/624] c2412855c8c674f0239a9550: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-7a796e22d80146549415b14fb84378ca
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[431/624] 3b8072c1eca6b88884131091: grounded=False, control=iterative, tests=True complete
+[432/624] a28ea66926ba84ca11bf664d: grounded=True, control=single_shot, tests=False complete
+[433/624] 5a467db4d53927455db609bd: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-92caf0f7e7da41e195cbadfec85a1f7a
+  [1/1] AllocationCalculator.cs (~286 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[434/624] 490a34995850fa2670fd8554: grounded=False, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-0c0016bf6f5a4db5b41237d03857646b
+  [1/1] AllocationCalculator.cs (~286 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[435/624] e0fb81a7cb4fcb55e2815726: grounded=False, control=iterative, tests=True complete
+[436/624] e0348e47359bddfbbadf417a: grounded=False, control=single_shot, tests=True complete
+[437/624] a3e4c8f934627b11237ce27e: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-7a5ceb4b60c841e28e153556d5e7731e
+  [1/1] AllocationCalculator.cs (~286 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[438/624] 1bfd65ed2681f883c3ad9ca4: grounded=True, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-2d7fc1dd75dc422e8c099cc9f987d8ee
+  [1/1] AllocationCalculator.cs (~286 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[439/624] b8abd9869cdcf80c5dc4595c: grounded=True, control=iterative, tests=True complete
+[440/624] ec2e9da6d2061fc043c5d7ad: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-75702f21ef3a42b4820bbd31b1f66c14
+  [1/1] RecurrenceEngine.cs (~885 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 2 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[441/624] 56fdee8a62b47b2471909f0f: grounded=True, control=iterative, tests=False complete
+[442/624] b1079a8bd11b26f5d8091a82: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-1d65f089396846c98b5ccd1e243aee9c
+  [1/1] RecurrenceEngine.cs (~885 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[443/624] 94626f733439dc81a872091d: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-258399325fd249cc8f8529f25de4b0a6
+  [1/1] RecurrenceEngine.cs (~885 tok, 1 known, visible-test=available)
+      run 2: 2 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[444/624] 21ba0bc92c61719784c8d594: grounded=False, control=iterative, tests=True complete
+[445/624] da4daff22b6f110944979881: grounded=True, control=single_shot, tests=True complete
+[446/624] 4de2e6471d92f064d9d52473: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-42ede7057d9f45afa121cb0d36454a34
+  [1/1] RecurrenceEngine.cs (~885 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[447/624] 7037543342277bf667c8a025: grounded=False, control=iterative, tests=False complete
+[448/624] 4d8272ab63cdd06d7a394373: grounded=False, control=single_shot, tests=True complete
+[449/624] 8a4bdd345435dac3b9cb4721: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-d8ce45f3a1604d1bb90c1e309d0cf97e
+  [1/1] SubscriptionAccountService.cs (~1560 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[450/624] 38d93ab96e17e5616fb98b59: grounded=True, control=iterative, tests=True complete
+[451/624] 1d445abf5d390929899470fe: grounded=True, control=single_shot, tests=True complete
+[452/624] 24568b8da59efe35cc7f215a: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f3abd18f07004ede86014ce31dac907c
+  [1/1] SubscriptionAccountService.cs (~1560 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[453/624] ca10e55e5d722ee13fdfc7ec: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-515570efe3474145bc550c1ee4048537
+  [1/1] SubscriptionAccountService.cs (~1560 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[454/624] 042a2315a9bba3cd0c06235e: grounded=False, control=iterative, tests=False complete
+[455/624] fb7f4ef47e6969d4204c80ea: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-614c5b7037fe4132abc81ee0980ad8d3
+  [1/1] SubscriptionAccountService.cs (~1560 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[456/624] 568500001da920260f43ae92: grounded=False, control=iterative, tests=True complete
+[457/624] 101bab458287c280a1621d77: grounded=False, control=single_shot, tests=False complete
+[458/624] aeaeacb42c5ca0b2c586989c: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f5fbaec01be1417a8a2b87d63efc1c9d
+  [1/1] OrderImporter.cs (~548 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[459/624] a202976189e6db0e1fc0ffd5: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-97b5e0abb17742e99e631880c6fd12fd
+  [1/1] OrderImporter.cs (~548 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[460/624] a82947426223ca1815b9db4b: grounded=False, control=iterative, tests=False complete
+[461/624] 82b6840c54b056abf2c34287: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-e265ab0a77064b42b42cb6f7d18aaa9b
+  [1/1] OrderImporter.cs (~548 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[462/624] 58b527066f6bde8a9641f72b: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-51965116be65444b9913b338d60a20a1
+  [1/1] OrderImporter.cs (~548 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[463/624] e3171578986275998afed151: grounded=True, control=iterative, tests=True complete
+[464/624] fdf4283593b317aade9bc627: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-32a01d440b404329beabf62b08fa0a71
+  [1/1] NotificationCenter.cs (~1020 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[465/624] 5c86cb4db136af26dac7dc3b: grounded=True, control=iterative, tests=True complete
+[466/624] e66abf383f6fcf3a16917352: grounded=False, control=single_shot, tests=True complete
+[467/624] fba08bce25f1713055ee5317: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f0bc3773783045bc912e8ce037d0368b
+  [1/1] NotificationCenter.cs (~1020 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[468/624] d2fca995c352de15bf72a8f7: grounded=False, control=iterative, tests=True complete
+[469/624] 475c4ca64794effc297c0a0b: grounded=False, control=single_shot, tests=False complete
+[470/624] 81412feeb0322445c5e3875f: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-65ddd4904dc4424b9bbaa241e6002e30
+  [1/1] NotificationCenter.cs (~1020 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[471/624] 203859d24d0d64365896a6d4: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ca4f5e90b8d243bf9c9ca1b0ca34151c
+  [1/1] NotificationCenter.cs (~1020 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[472/624] 2e4e921cf4805b592a012413: grounded=True, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-cc4263fa9f7d46858c2b0fdacabe3881
+  [1/1] RetryPolicy.cs (~254 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[473/624] 9d4a2a29fc5dcaa08380257d: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f7a40cc147fd49a590d38f9ac661841f
+  [1/1] RetryPolicy.cs (~254 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[474/624] 5ea20c8ebd698ec0982f9d84: grounded=False, control=iterative, tests=True complete
+[475/624] 04b4dd127668a3b2f7d9f853: grounded=False, control=single_shot, tests=True complete
+[476/624] dbea149d46084f2d18f8ce4c: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-39477eca5e0840dd8667f842a5895ba8
+  [1/1] RetryPolicy.cs (~254 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[477/624] a6e8ffc9d74f90c53d7e83a2: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-5bb7f0f2c46b45698e253ce189b7877b
+  [1/1] RetryPolicy.cs (~254 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[478/624] 948aabd0efb1c596533929e7: grounded=True, control=iterative, tests=True complete
+[479/624] 9f1dc38408abda89fd5cab49: grounded=True, control=single_shot, tests=False complete
+[480/624] f55c36e08a14e9eb05ec0cde: grounded=True, control=single_shot, tests=True complete
+[481/624] ce7be67ad36a94ca245e156d: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-55fae19ccdb04e728a32c6b65c387c00
+  [1/1] CaseOperationsManager.cs (~1780 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[482/624] 5f50340d52f8a250aa08e1e3: grounded=False, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-269f414fa7004a248d606c3dcd1e540b
+  [1/1] CaseOperationsManager.cs (~1780 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[483/624] 0b134581b1e80a09472480f0: grounded=False, control=iterative, tests=False complete
+[484/624] 8955bb665063794c97d249af: grounded=True, control=single_shot, tests=True complete
+[485/624] 8575b3fc5b7c94f52f63020d: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ed4fce76a1fc4a2ea86af943a4c1da9d
+  [1/1] CaseOperationsManager.cs (~1780 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[486/624] f95dd7ac2a64c52c0e5c3927: grounded=True, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-87660369525e467a84e7220dd2bc8ca0
+  [1/1] CaseOperationsManager.cs (~1780 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[487/624] e14a93215e0adbcd0b2b367f: grounded=True, control=iterative, tests=False complete
+[488/624] f3e0c0d7d01833a8e254aae7: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-a42e673857d640f78fc369256047c3b9
+  [1/1] SettlementBatchProcessor.cs (~794 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[489/624] a9e43854d3fa4e3e022c1aed: grounded=True, control=iterative, tests=True complete
+[490/624] 22bcde1aa689c917c67bbc23: grounded=False, control=single_shot, tests=False complete
+[491/624] e3489da8202dcaa47c4f240f: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-98e1a06bb0164b7e8fde294bca343973
+  [1/1] SettlementBatchProcessor.cs (~794 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[492/624] 0a7af2fac87d69238672c78c: grounded=True, control=iterative, tests=False complete
+[493/624] c6c291677b9acd5d5de0543e: grounded=True, control=single_shot, tests=True complete
+[494/624] d13fda1f408530b4de6d46b2: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-1a0cb7a789b04b56984dea418e42262f
+  [1/1] SettlementBatchProcessor.cs (~794 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[495/624] 38fc141d54b9951e6bb92bfa: grounded=False, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-b6ee39a8ec4f4e82a0b382f77f8fcdaa
+  [1/1] SettlementBatchProcessor.cs (~794 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[496/624] 8350925355262700a62b2c20: grounded=False, control=iterative, tests=False complete
+[497/624] edd036ad633857f04d675070: grounded=False, control=single_shot, tests=True complete
+[498/624] f8e3f55a8bad544cbfb57230: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-4992f55e49114f688254c4241c30997a
+  [1/1] VatResolver.cs (~254 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[499/624] a90b60b864604e04b5ea98a7: grounded=False, control=iterative, tests=False complete
+[500/624] 2b9fba75f777b13310ed271b: grounded=True, control=single_shot, tests=False complete
+[501/624] dc706540376ebd9ff8290c5f: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-1983581cc8234a7f93fe05fb6bce2fe7
+  [1/1] VatResolver.cs (~254 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[502/624] 7e2ae0ccecfb1350354ab0a5: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-34957bc323404f2f89db06beeba74e16
+  [1/1] VatResolver.cs (~254 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[503/624] b282583db5681d95a3e00a96: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-7e89d27d017446dfbf78fe23c9d47239
+  [1/1] VatResolver.cs (~254 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[504/624] cd493bb30278fbb76fa04cb3: grounded=True, control=iterative, tests=True complete
+[505/624] b6f669524428e0044cd91aa4: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-7f89e99521c2415c922c56554548f22c
+  [1/1] BillingManager.cs (~1530 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[506/624] 9f9cc28f84ee4b35dd3fdb54: grounded=True, control=iterative, tests=False complete
+[507/624] b04c138183138b5639d5b22e: grounded=False, control=single_shot, tests=True complete
+[508/624] 2291dab112b543968536aae7: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-0ad2b6caf2444bc7ae68f128d6e6aa83
+  [1/1] BillingManager.cs (~1530 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[509/624] 9f94cfcfcdd653aef5a63508: grounded=False, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-9d2341360abe478fb00df790e57825e4
+  [1/1] BillingManager.cs (~1530 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[510/624] d1248a803e5557c06bff1220: grounded=False, control=iterative, tests=False complete
+[511/624] 07078d9f26b6f1ba33d9e8ba: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-a0144c9115e140f2bd1cfa6dc9cc5cb0
+  [1/1] BillingManager.cs (~1530 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[512/624] c5ef8ba38bda7ef280e9050e: grounded=True, control=iterative, tests=True complete
+[513/624] 18adc2db344b825bb9981731: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-be6105c452e543db9a9fe639a372a606
+  [1/1] CheckoutCoordinator.cs (~1555 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[514/624] 268d8028e89abcbfca484880: grounded=False, control=iterative, tests=False complete
+[515/624] 669839c072b5ed7da21eecd6: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-681565cd72d040f683ebde6350cea3ee
+  [1/1] CheckoutCoordinator.cs (~1555 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[516/624] 1cb64c6d235abaffc29bfbe4: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-d7c46bdba5c549c1804b039eb42ffc65
+  [1/1] CheckoutCoordinator.cs (~1555 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[517/624] 1306b00a98f32dd59009d394: grounded=True, control=iterative, tests=True complete
+[518/624] e5799220af8c1d630e9e8976: grounded=True, control=single_shot, tests=False complete
+[519/624] 2967343bbb4d9bb657fae13a: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-344b55ea50a749cba6ae0f0a2abe5171
+  [1/1] CheckoutCoordinator.cs (~1555 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[520/624] 578688dc3113bfbddd5a2b7d: grounded=True, control=iterative, tests=False complete
+[521/624] b51d00e2f386d20302c6bee1: grounded=False, control=single_shot, tests=True complete
+[522/624] ef8f8ddd5bd177c4e015f74c: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f2318949763548c6994674812bde0f07
+  [1/1] StockController.cs (~1586 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[523/624] aac518039a684a15b713c803: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f30a8a115aca41c7aac9f355ca822099
+  [1/1] StockController.cs (~1586 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[524/624] e4d0899de953f8d3fd4e6ec2: grounded=True, control=iterative, tests=False complete
+[525/624] a6ab937338ac144d4e5c27c5: grounded=True, control=single_shot, tests=True complete
+[526/624] 36f380cadc10178936c06fdf: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-052afdc3c83e4744b56c3ada8a96c2f9
+  [1/1] StockController.cs (~1586 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[527/624] 1bb6d9edd99252c462e24ae3: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-e0acd8949bd94dc98086593a91a7844e
+  [1/1] StockController.cs (~1586 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[528/624] 2044d5906d340887291f66cc: grounded=False, control=iterative, tests=False complete
+[529/624] 110df18b3b08cf14151e8b4a: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-f77f44f1ec9247db83e21b9f3c309058
+  [1/1] ClaimAdjudicator.cs (~616 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[530/624] 593b883fcd0000eaac17c28c: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-5c45d25438ab4ca2896212003dae443d
+  [1/1] ClaimAdjudicator.cs (~616 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[531/624] 7037f1c759a4c4e32be6e759: grounded=False, control=iterative, tests=False complete
+[532/624] e442f6059f2f4640f669c221: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-69f4e828e0a942488b0804466f5ab9f2
+  [1/1] ClaimAdjudicator.cs (~616 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[533/624] 21013d829501793cdf6bfc7c: grounded=False, control=iterative, tests=True complete
+[534/624] 8fbb1923cc85e5542846d47f: grounded=False, control=single_shot, tests=True complete
+[535/624] 235773ccf71e3b8726ee2e93: grounded=False, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-1a4742e61dcf41cbb76a98c265817e41
+  [1/1] ClaimAdjudicator.cs (~616 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[536/624] 3bc634331d1243d5553ae2ab: grounded=True, control=iterative, tests=True complete
+[537/624] 7a5ed2547f4513e11a496672: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ea149747b6f746e0b566a89360250baf
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[538/624] e91adac16f4c71b9cd4c5fa8: grounded=True, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-4838c35ad0244fd6b4fc085f4bc6b1a7
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[539/624] 857ad333a7a51efb27e87cc6: grounded=True, control=iterative, tests=False complete
+[540/624] 52e4e5fd11a707e217b075e3: grounded=True, control=single_shot, tests=True complete
+[541/624] 3800a2728ce3aa8628285052: grounded=False, control=single_shot, tests=True complete
+[542/624] e97a845f415367c72254f93d: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-3dffcb4673884a07977225235b3f08bc
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[543/624] 0e098f1dbc8b17a7832a02b5: grounded=False, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-72f180e9a1db43a5a422fa536780d688
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[544/624] 5633a1aaa628dcf675b4fce9: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-4c8bfabd9c494facb4f91b378e3dc606
+  [1/1] ScheduleManager.cs (~1490 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[545/624] f326037082d583ebc450a43b: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-be04c8e455ba4ba08c05f042fdf74b21
+  [1/1] ScheduleManager.cs (~1490 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[546/624] 87836336cc55bee51482dbc1: grounded=False, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-af8ad1ee00fd40b09f0e39ae1eb317b4
+  [1/1] ScheduleManager.cs (~1490 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[547/624] 69fff4c818dd1c7a222e7e93: grounded=False, control=iterative, tests=False complete
+[548/624] f2410fd3101c40174e17958e: grounded=False, control=single_shot, tests=False complete
+[549/624] a2404cc82feae7e226a6dd34: grounded=False, control=single_shot, tests=True complete
+[550/624] a4e614550c5f1f6aab79cc5e: grounded=True, control=single_shot, tests=False complete
+[551/624] ae9a5e3cb8f8e6cf46097362: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ed3ca7422f21424ca69b10dbfeef06c5
+  [1/1] ScheduleManager.cs (~1490 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[552/624] 620fc4bf7892f826d4e73898: grounded=True, control=iterative, tests=True complete
+[553/624] 818af119c51e3f6944b06755: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-9c83a6e762a34e87a69ceb7931c407c0
+  [1/1] ReturnsHandler.cs (~1072 tok, 1 known, grounded, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[554/624] 8c0d291630130158b344d6b9: grounded=True, control=iterative, tests=False complete
+[555/624] 21c09fd49b6768641ffd366a: grounded=True, control=single_shot, tests=False complete
+[556/624] f5005ba39aef04f4ebf072d8: grounded=False, control=single_shot, tests=False complete
+[557/624] 830435a88cb69c7ee43d6bb8: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-468d043276414368865175a512efc04b
+  [1/1] ReturnsHandler.cs (~1072 tok, 1 known, visible-test=disabled)
+      run 2: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[558/624] 738f37c476191243e0fb4bcd: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-76630a5920c64111a9bac344eb072599
+  [1/1] ReturnsHandler.cs (~1072 tok, 1 known, grounded, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[559/624] f2d727ac415f9e865cc5cbdb: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-572523f25cab47f69480f165df2daa47
+  [1/1] ReturnsHandler.cs (~1072 tok, 1 known, visible-test=available)
+      run 2: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[560/624] 046b9e73ff91392a04c75f5d: grounded=False, control=iterative, tests=True complete
+[561/624] 39ad2460f7a44e06e50ab069: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-38c448814f064de0ab89bbb3c447e3f9
+  [1/1] SettlementBatchProcessor.cs (~794 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[562/624] af5c14e34d618d1825f349f3: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-280f322812914e159f5e45d020e5606b
+  [1/1] SettlementBatchProcessor.cs (~794 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[563/624] aadd8defbd34a041b771dc1b: grounded=True, control=iterative, tests=True complete
+[564/624] 1f0fc7a57c8f6cc40e979158: grounded=True, control=single_shot, tests=False complete
+[565/624] 66f908d194846151f79a27dc: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-cb512dd6439b460ebb73c8c2177785b5
+  [1/1] SettlementBatchProcessor.cs (~794 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[566/624] 8309fa09a2750d0ee2667da9: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-4f81a0d7dc824a0285c7df7c54b8dd13
+  [1/1] SettlementBatchProcessor.cs (~794 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[567/624] d71766c89456db4ffd28369b: grounded=False, control=iterative, tests=True complete
+[568/624] b119ad0447bd3910d83b4744: grounded=False, control=single_shot, tests=False complete
+[569/624] 2f5f6f1de8fd784f805c8c99: grounded=False, control=single_shot, tests=True complete
+[570/624] 465e12ab59962ca6eddc96b1: grounded=False, control=single_shot, tests=False complete
+[571/624] 8261cfad66c5d8e342d508cd: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ac91e072ccc241da8a2383f24d02470b
+  [1/1] VatResolver.cs (~254 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[572/624] 9edf31fce803352d885e0b0e: grounded=False, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-30938091e71c4953976c281038c62273
+  [1/1] VatResolver.cs (~254 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[573/624] b3dc184d3097f58c9233c855: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ddf281564d934587a6e06a48e455e56b
+  [1/1] VatResolver.cs (~254 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[574/624] d313534e570a34f063373994: grounded=True, control=iterative, tests=False complete
+[575/624] 01f78b7c48c53a9cffec6d4c: grounded=True, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ebac628328384a31a602171f6f008edd
+  [1/1] VatResolver.cs (~254 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[576/624] 954a5104148a476fc6b66eea: grounded=True, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-bb0087e3581144bbb09663948e01198c
+  [1/1] PricingRules.cs (~253 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[577/624] 4fd75ca6bee96c2e913ee57f: grounded=True, control=iterative, tests=True complete
+[578/624] 5d99ab2b6936b1813452de5f: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-8cb6cc05c6614f1c85e8bc8cf2f9cde4
+  [1/1] PricingRules.cs (~253 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[579/624] 18a3108dd1c69a26e3a9afda: grounded=True, control=iterative, tests=False complete
+[580/624] ed8c1c4312447204b9688de2: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-d7ccd504b87d4ec9b8081b75ee7cad42
+  [1/1] PricingRules.cs (~253 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[581/624] 186f896aa48fef1538bb91aa: grounded=False, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-b8565f69379646babe3e8d3ed1299cb1
+  [1/1] PricingRules.cs (~253 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[582/624] 003b7f4a9e823d38cb71fdf8: grounded=False, control=iterative, tests=False complete
+[583/624] 3c47d0f2eddc4cc9398eb809: grounded=True, control=single_shot, tests=False complete
+[584/624] 0fcd642cf55a4cebd8bf9096: grounded=True, control=single_shot, tests=True complete
+[585/624] ec57f8197dd6282684d5b98a: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-513c74d403de4548856fbb1b4a27feda
+  [1/1] Scheduler.cs (~373 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[586/624] b9b3a35205f462d1130a597a: grounded=True, control=iterative, tests=True complete
+[587/624] b0612e6465823777cf1ac1c8: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-461f45393a264d87a312078d99778512
+  [1/1] Scheduler.cs (~373 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[588/624] 7ac43c842af7711dab518607: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-46a0427a1ca54258bf692107e09e6319
+  [1/1] Scheduler.cs (~373 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[589/624] c3292b018277784d46ea1ca1: grounded=False, control=iterative, tests=True complete
+[590/624] 1a06472bf12933a2795c30aa: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-be234ffafe6e4616908b6fcb2be58771
+  [1/1] Scheduler.cs (~373 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[591/624] 4acd7b117f71eb1b350c1d4e: grounded=False, control=iterative, tests=False complete
+[592/624] 33ad1bdf2c6912a45e1e9c6e: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-7c9e6c6be94547b7bc2bd15445954fa6
+  [1/1] OrderProcessor.cs (~1821 tok, 1 known, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[593/624] 04ffa2aa4d79c484c0c353fd: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-9c9783800e174766b41f8aaf301e4ef9
+  [1/1] OrderProcessor.cs (~1821 tok, 1 known, grounded, visible-test=available)
+      run 1: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[594/624] f840db67fc07198e1e6f008a: grounded=True, control=iterative, tests=True complete
+[595/624] 0bc4c18f823ff374efa960d0: grounded=False, control=single_shot, tests=False complete
+[596/624] 9ba3038a057d8905f5810c90: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-b0e6e00dd3cd449f8c50a857acc8766c
+  [1/1] OrderProcessor.cs (~1821 tok, 1 known, grounded, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[597/624] a41e31dfa14eab56cbf77a3c: grounded=True, control=iterative, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-84fd2cd0a5a94e04a7d9bd3b2bfe32c4
+  [1/1] OrderProcessor.cs (~1821 tok, 1 known, visible-test=disabled)
+      run 1: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[598/624] 629725faf22db0ecab46267e: grounded=False, control=iterative, tests=False complete
+[599/624] 34071cd61c07f22879789e2d: grounded=True, control=single_shot, tests=True complete
+[600/624] 7c44fcb806836ca403c1fa6a: grounded=False, control=single_shot, tests=True complete
+[601/624] e4b969581050e1c2f455c60b: grounded=True, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-9f694ecc3fa545299c2cb4f28540d846
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[602/624] 522f87aff92ff0a900d04800: grounded=False, control=iterative, tests=True complete
+[603/624] a80c0e6cc09827fc097e09b4: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-b859ebdcab2d40a5b4a5cd718ab1ba72
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[604/624] 1aee95096aa4e19bbc025970: grounded=False, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-bc316ab6d0a84c49a8d8ecdeb6c92aed
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[605/624] ce1582b99b08f05d3241902c: grounded=True, control=iterative, tests=True complete
+[606/624] 7327cc99bf5613ba19576036: grounded=True, control=single_shot, tests=True complete
+[607/624] 1159deea82aab0b11ff95000: grounded=False, control=single_shot, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-d27c5b225de244fb9701b2ab57c772d7
+  [1/1] AccessDecisionEngine.cs (~754 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[608/624] 0d6640f5eb79ed0f3d27787e: grounded=True, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-8998359a78e5442a9986b7424d17d7f3
+  [1/1] StockController.cs (~1586 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[609/624] ffaecc796ff1bf51a654125d: grounded=True, control=iterative, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-81e7c22499ea461e8af1ef475a0d1bb1
+  [1/1] StockController.cs (~1586 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[610/624] a851e90ecd11881a39bd3f87: grounded=True, control=iterative, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-2da4cf79cbab439bb4dc9603792c2cee
+  [1/1] StockController.cs (~1586 tok, 1 known, visible-test=disabled)
+      run 3: 1 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[611/624] a607a1d96060efa78788c68b: grounded=False, control=iterative, tests=False complete
+[612/624] 7ebd9737e721f56f70ffa8d1: grounded=True, control=single_shot, tests=False complete
+[613/624] 117aac714f40019870201420: grounded=False, control=single_shot, tests=True complete
+[614/624] 26ed7a7988e071bd4bb23f52: grounded=True, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-002098107c3a4d4abcbc107181a863d6
+  [1/1] StockController.cs (~1586 tok, 1 known, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[615/624] f7dd05ecd3f1c93c69488f8a: grounded=False, control=iterative, tests=True complete
+[616/624] 9e8e3e884ff5a446aa1ca5d1: grounded=False, control=single_shot, tests=False complete
+[617/624] eb45728e2900e5c8a22825a4: grounded=False, control=single_shot, tests=True complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-ff632be264cf47d780ab3247f5c4dd6f
+  [1/1] RecurrenceEngine.cs (~885 tok, 1 known, visible-test=disabled)
+      run 3: 2 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[618/624] aaa962b04907ea2ff0f554fa: grounded=False, control=iterative, tests=False complete
+[619/624] 1ac3537c669f91f556fe4609: grounded=True, control=single_shot, tests=False complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-77ccba4b359b4b65b18e402da75fe8f4
+  [1/1] RecurrenceEngine.cs (~885 tok, 1 known, grounded, visible-test=available)
+      run 3: 1 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[620/624] f8bec1d21019f9b295cf3e93: grounded=True, control=iterative, tests=True complete
+[621/624] e17aa81a5998a14da56d6633: grounded=False, control=single_shot, tests=False complete
+agentic: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-6636f3c639ca4d28b96612dfc8f8eaad
+  [1/1] RecurrenceEngine.cs (~885 tok, 1 known, visible-test=available)
+      run 3: 2 build(s), 1 visible-test run(s), 1 finding(s), final build ok
+[622/624] fc54fbb097583687374c197f: grounded=False, control=iterative, tests=True complete
+grounded_iterative: 1 file(s) (1 with seeded instances), 1 known instance(s), model=gpt-5.6-sol, runs=1, budget=6, prompt=v2.0.2/v2.1.2
+  working copy: C:\Users\RayenSyal\AppData\Local\Temp\hybridlens-agentic-a109063dcd8844d29ecaae65a5f5b218
+  [1/1] RecurrenceEngine.cs (~885 tok, 1 known, grounded, visible-test=disabled)
+      run 3: 2 build(s), 0 visible-test run(s), 1 finding(s), final build ok
+[623/624] 1b6d92dbc4b6bce48f477cda: grounded=True, control=iterative, tests=False complete
+[624/624] f1cc75a3a768f18b0768eecd: grounded=True, control=single_shot, tests=True complete
+Factorial campaign complete. Freeze the output directory before private evaluation.

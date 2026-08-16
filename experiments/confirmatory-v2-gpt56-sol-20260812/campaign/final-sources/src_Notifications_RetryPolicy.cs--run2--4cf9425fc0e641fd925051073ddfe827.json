@@ -1,0 +1,17 @@
+{
+  "artifact_id": "4cf9425fc0e641fd925051073ddfe827",
+  "timestamp": "2026-08-12T13:32:02.6130736+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Notifications/RetryPolicy.cs",
+  "source_sha256": "5eb4093527957766d54205efbd34db723e74f6a8afe475b688dea8ac3a6f9628",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    private const int MaximumAttempt = 10;\n    private const int MaximumDelay = 3600;\n    private const int BusyServerThreshold = 600;\n    private const int LateAttemptThreshold = 7;\n    private const int LateAttemptPenalty = 100;\n\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n        if (attempt \u003E MaximumAttempt)\n            return MaximumDelay;\n\n        int delay = GetBaseDelay(channel) * attempt;\n        delay = ApplyServerBusyBackoff(delay, serverBusy);\n        return ApplyDelayLimitsAndPenalty(delay, attempt);\n    }\n\n    private static int GetBaseDelay(Channel channel)\n    {\n        switch (channel)\n        {\n            case Channel.Email:\n                return 30;\n            case Channel.Sms:\n                return 10;\n            case Channel.Push:\n                return 5;\n            default:\n                return 15;\n        }\n    }\n\n    private static int ApplyServerBusyBackoff(int delay, bool serverBusy)\n    {\n        return serverBusy \u0026\u0026 delay \u003C BusyServerThreshold ? delay * 2 : delay;\n    }\n\n    private static int ApplyDelayLimitsAndPenalty(int delay, int attempt)\n    {\n        if (delay \u003E MaximumDelay)\n            return MaximumDelay;\n        if (delay \u003C 1)\n            return 1;\n        if (attempt \u003E LateAttemptThreshold)\n            return delay \u002B LateAttemptPenalty;\n        return delay;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

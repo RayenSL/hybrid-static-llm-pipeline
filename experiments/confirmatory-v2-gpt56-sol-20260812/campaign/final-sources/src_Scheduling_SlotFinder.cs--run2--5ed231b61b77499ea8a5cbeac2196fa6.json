@@ -1,0 +1,17 @@
+{
+  "artifact_id": "5ed231b61b77499ea8a5cbeac2196fa6",
+  "timestamp": "2026-08-12T14:59:15.3157574+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 2,
+  "relative_file": "src/Scheduling/SlotFinder.cs",
+  "source_sha256": "7ff0b382b943b68fc5ebc6251d45b85a576146141ccb9886f228a595a6dd4085",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EFinds the first calendar slot that fits a required duration.\u003C/summary\u003E\npublic sealed class SlotFinder\n{\n    public Slot? FindFirstFit(Resource resource, TimeSpan duration, DateTime notBefore)\n    {\n        if (resource.Calendar.Count == 0 || duration \u003C= TimeSpan.Zero)\n            return null;\n\n        foreach (var slot in resource.Calendar)\n        {\n            if (IsEligible(slot, duration, notBefore))\n                return slot;\n        }\n\n        return null;\n    }\n\n    private static bool IsEligible(Slot slot, TimeSpan duration, DateTime notBefore)\n    {\n        if (slot.Start \u003C notBefore)\n            return false;\n\n        var length = slot.End - slot.Start;\n        if (length \u003C duration)\n            return false;\n\n        if (slot.Start.Hour \u003C 8 || slot.Start.Hour \u003E 18)\n            return false;\n\n        return slot.End.Hour \u003C= 20;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Scheduling_SlotFinder.cs--a54b7dbc234d4dc39b434d6ccc5ec4ed.json",
+  "visible_test_sha256": "1af9f166830c6f4ccbb772756c6f7c9544631a6566fb382e97e87fbcd454c4e8",
+  "build_passed": true,
+  "visible_test_passed": true
+}

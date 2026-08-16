@@ -1,0 +1,9 @@
+grounding,iterative,visible_test,assigned,strict_success,private_regression,metric_unresolved,build_failed,unavailable,other_failure
+0,0,0,78,64,0,14,0,0,0
+0,0,1,78,71,1,5,0,1,0
+0,1,0,78,73,3,2,0,0,0
+0,1,1,78,73,3,2,0,0,0
+1,0,0,78,77,0,1,0,0,0
+1,0,1,78,77,0,1,0,0,0
+1,1,0,78,75,3,0,0,0,0
+1,1,1,78,76,1,1,0,0,0

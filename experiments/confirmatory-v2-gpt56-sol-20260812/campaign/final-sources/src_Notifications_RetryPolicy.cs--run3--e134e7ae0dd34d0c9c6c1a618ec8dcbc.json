@@ -1,0 +1,17 @@
+{
+  "artifact_id": "e134e7ae0dd34d0c9c6c1a618ec8dcbc",
+  "timestamp": "2026-08-13T10:05:57.6551911+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 3,
+  "relative_file": "src/Notifications/RetryPolicy.cs",
+  "source_sha256": "4a5c1cc89e6108bdf7f4f28d37c95c248c0c2dab6076883706e9c37c37258143",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003EComputes the backoff delay before the next delivery attempt.\u003C/summary\u003E\npublic sealed class RetryPolicy\n{\n    private const int MaximumAttempt = 10;\n    private const int MaximumDelay = 3600;\n\n    public int NextDelay(int attempt, Channel channel, bool serverBusy)\n    {\n        if (attempt \u003C= 0)\n            return 0;\n        if (attempt \u003E MaximumAttempt)\n            return MaximumDelay;\n\n        int delay = GetBaseDelay(channel) * attempt;\n        delay = ApplyServerBusyBackoff(delay, serverBusy);\n        return ApplyDelayBoundsAndLateAttemptPenalty(delay, attempt);\n    }\n\n    private static int GetBaseDelay(Channel channel) =\u003E channel switch\n    {\n        Channel.Email =\u003E 30,\n        Channel.Sms =\u003E 10,\n        Channel.Push =\u003E 5,\n        _ =\u003E 15\n    };\n\n    private static int ApplyServerBusyBackoff(int delay, bool serverBusy)\n    {\n        return serverBusy \u0026\u0026 delay \u003C 600 ? delay * 2 : delay;\n    }\n\n    private static int ApplyDelayBoundsAndLateAttemptPenalty(int delay, int attempt)\n    {\n        if (delay \u003E MaximumDelay)\n            return MaximumDelay;\n        if (delay \u003C 1)\n            return 1;\n        if (attempt \u003E 7)\n            return delay \u002B 100;\n\n        return delay;\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Notifications_RetryPolicy.cs--b41b19489e964774bb8e7a1eab96a639.json",
+  "visible_test_sha256": "a9079d81a00fb73d571c92ed5db214b06a19db3f586fe9913ab841341dd65e49",
+  "build_passed": true,
+  "visible_test_passed": true
+}

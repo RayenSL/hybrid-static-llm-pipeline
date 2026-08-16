@@ -1,0 +1,17 @@
+{
+  "artifact_id": "6e1395a6dafe44a58e317163904d7856",
+  "timestamp": "2026-08-13T11:21:03.3564917+00:00",
+  "architecture": "ungrounded_single_shot",
+  "grounding_enabled": false,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Ordering/PricingRules.cs",
+  "source_sha256": "49a23de0e3786744f4ecdb398c485e06843c93bb649bf1cd46abbbb6edafdf43",
+  "final_source": "namespace Ordering;\n\n/// \u003Csummary\u003EApplies tier, override and channel adjustments to an order subtotal.\u003C/summary\u003E\npublic sealed class PricingRules\n{\n    public decimal ApplyAdjustments(Order order, CustomerTier tier)\n    {\n        var subtotal = CalculateSubtotal(order);\n        if (tier == CustomerTier.Blocked)\n            return 0m;\n\n        var adjusted = ApplyTierAdjustment(subtotal, tier);\n        adjusted = ApplyDiscountOverride(adjusted, order.DiscountOverride);\n        adjusted = ApplyHighValueDiscount(adjusted, subtotal);\n        adjusted = ApplyChannelAdjustment(adjusted, order.Channel);\n\n        return ClampToZero(adjusted);\n    }\n\n    private static decimal CalculateSubtotal(Order order)\n    {\n        decimal subtotal = 0m;\n        foreach (var line in order.Lines)\n            subtotal \u002B= line.UnitPrice * line.Quantity;\n\n        return subtotal;\n    }\n\n    private static decimal ApplyTierAdjustment(decimal subtotal, CustomerTier tier) =\u003E\n        tier == CustomerTier.Wholesale ? subtotal * 0.95m : subtotal;\n\n    private static decimal ApplyDiscountOverride(decimal adjusted, decimal? discountOverride)\n    {\n        var discount = discountOverride.GetValueOrDefault();\n        return discount \u003E 0m ? adjusted - discount : adjusted;\n    }\n\n    private static decimal ApplyHighValueDiscount(decimal adjusted, decimal subtotal) =\u003E\n        subtotal \u003E 500m ? adjusted - 10m : adjusted;\n\n    private static decimal ApplyChannelAdjustment(decimal adjusted, OrderChannel channel) =\u003E\n        channel switch\n        {\n            OrderChannel.Web =\u003E adjusted,\n            OrderChannel.Phone =\u003E adjusted \u002B 2m,\n            OrderChannel.Marketplace =\u003E adjusted * 1.02m,\n            _ =\u003E adjusted,\n        };\n\n    private static decimal ClampToZero(decimal adjusted) =\u003E\n        adjusted \u003C 0m ? 0m : adjusted;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

@@ -1,0 +1,17 @@
+{
+  "artifact_id": "5eb2d505bbb04f5fb91766270940a99e",
+  "timestamp": "2026-08-13T07:46:07.6290378+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 1,
+  "relative_file": "src/Inventory/AllocationCalculator.cs",
+  "source_sha256": "11260b04d17d8756806f50e7c62c6f844747a6a4e435274b1d78076bf4a67e07",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EAllocates available stock across a warehouse\u0027s zones.\u003C/summary\u003E\npublic sealed class AllocationCalculator\n{\n    public IReadOnlyList\u003Cstring\u003E Allocate(StockItem item, Warehouse warehouse)\n    {\n        var allocations = new List\u003Cstring\u003E();\n        int remaining = item.OnHand - item.Reserved;\n\n        if (remaining \u003C= 0)\n            return allocations;\n\n        foreach (var zone in warehouse.Zones)\n        {\n            if (!IsUsable(zone))\n                continue;\n\n            int quantity = CalculateQuantity(remaining, zone.Capacity);\n            if (quantity \u003C= 0)\n                continue;\n\n            allocations.Add($\u0022{zone.Name}:{quantity}\u0022);\n            remaining -= quantity;\n\n            if (remaining \u003C= 0)\n                break;\n        }\n\n        AddOverflowIfNeeded(allocations, remaining);\n        return allocations;\n    }\n\n    private static bool IsUsable(Zone zone) =\u003E\n        zone.Capacity \u003E 0 \u0026\u0026 !string.IsNullOrEmpty(zone.Name);\n\n    private static int CalculateQuantity(int remaining, int capacity)\n    {\n        if (remaining \u003E capacity)\n            return capacity;\n\n        return remaining \u003E capacity / 2 ? remaining - 1 : remaining;\n    }\n\n    private static void AddOverflowIfNeeded(List\u003Cstring\u003E allocations, int remaining)\n    {\n        if (remaining \u003E 0)\n            allocations.Add($\u0022OVERFLOW:{remaining}\u0022);\n    }\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Inventory_AllocationCalculator.cs--5f420ca8e5624f39a3954d20b226b52c.json",
+  "visible_test_sha256": "0f30ca694dc2ddb37b02d648974e6661d9ddc52153ad6a7880642647c434a46d",
+  "build_passed": true,
+  "visible_test_passed": true
+}

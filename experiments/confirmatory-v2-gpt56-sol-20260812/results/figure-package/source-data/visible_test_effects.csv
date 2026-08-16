@@ -1,0 +1,6 @@
+contrast,description,status,holm_family,n_instances,estimate,ci95_lo,ci95_hi,cluster_se,exact_signflip_p,holm_adjusted_p
+visible_test_main,"test_on - test_off, averaged over grounding and control",confirmatory_primary,,26,0.02564102564102564,-0.010945901677082925,0.062227952959134206,0.0177646236673731,0.3125,0.3125
+test_effect__grounding_0__control_0,"test_on - test_off at grounding=0, iterative=0",exploratory_underpowered,cell_specific_test,26,0.08974358974358974,-0.014945541087305642,0.19443272057448513,0.050831352824612853,0.125,0.5
+test_effect__grounding_0__control_1,"test_on - test_off at grounding=0, iterative=1",exploratory_underpowered,cell_specific_test,26,2.135044278125301e-18,-0.03808088131152262,0.03808088131152262,0.018490006540840973,1.0,1.0
+test_effect__grounding_1__control_0,"test_on - test_off at grounding=1, iterative=0",exploratory_underpowered,cell_specific_test,26,0.0,0.0,0.0,0.0,1.0,1.0
+test_effect__grounding_1__control_1,"test_on - test_off at grounding=1, iterative=1",exploratory_underpowered,cell_specific_test,26,0.012820512820512818,-0.04715861884988779,0.07279964449091343,0.02912260690153987,1.0,1.0

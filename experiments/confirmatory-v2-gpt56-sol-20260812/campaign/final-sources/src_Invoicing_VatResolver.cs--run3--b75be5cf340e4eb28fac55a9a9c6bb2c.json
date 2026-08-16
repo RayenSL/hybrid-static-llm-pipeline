@@ -1,0 +1,17 @@
+{
+  "artifact_id": "b75be5cf340e4eb28fac55a9a9c6bb2c",
+  "timestamp": "2026-08-13T07:18:56.3519171+00:00",
+  "architecture": "ungrounded_single_shot",
+  "grounding_enabled": false,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Invoicing/VatResolver.cs",
+  "source_sha256": "f466b81fe1694b8d9350856bc67db4b7191f1a941edb1d420a9cae384f439659",
+  "final_source": "namespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m)\n            return 0m;\n\n        decimal rate;\n        switch (countryCode)\n        {\n            case \u0022GB\u0022:\n                rate = 0.20m;\n                break;\n            case \u0022DE\u0022:\n                rate = 0.19m;\n                break;\n            case \u0022FR\u0022:\n                rate = 0.20m;\n                break;\n            case \u0022IE\u0022:\n                rate = 0.23m;\n                break;\n            default:\n                rate = 0.0m;\n                break;\n        }\n\n        if (account.Kind == AccountKind.Government)\n            rate = 0m;\n        else if (account.Kind == AccountKind.Business \u0026\u0026 net \u003E 10000m)\n            rate *= 0.5m;\n\n        if (rate \u003E 0m \u0026\u0026 net \u003E 100000m)\n            rate = Math.Min(rate, 0.15m);\n\n        return net * rate;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

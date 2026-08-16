@@ -1,0 +1,88 @@
+{
+  "audit_version": "1.0",
+  "audited_at": "2026-08-13T14:00:57.4490490+02:00",
+  "campaign_id": "6b28bd73dce3f9fe5ee9ed17",
+  "manifest_sha256": "67e5d373b54fa7a0b690883ddb79ddec2fc4d76afed9076f6e8cf7a6b0f705a8",
+  "pipeline_revision": "89d34f49050e78fdb43c267699981ab8cb6b8411",
+  "corpus_revision": "20e22649fe8276507c2e760c9d3e48f40e111241",
+  "completion": {
+    "runner_exited": true,
+    "completion_marker_seen": true,
+    "manifest_assignments": 624,
+    "ledger_rows": 624,
+    "unique_assignment_ids": 624,
+    "trace_files": 624,
+    "authoritative_records": 624,
+    "unique_run_ids": 624,
+    "ledger_errors": 0,
+    "live_or_zero_length_traces": 0
+  },
+  "integrity": {
+    "ordered_manifest_ledger_identity": true,
+    "trace_run_id_links_valid": true,
+    "treatment_metadata_matches_manifest": true,
+    "materialized_source_files": 623,
+    "materialized_source_payload_hashes_valid": 623,
+    "missing_materialized_sources": 1,
+    "missing_materialized_source_reason": "Assignment 278 ended in api_failure before a repair was materialised.",
+    "iterative_first_build_records": 312,
+    "generated_test_artifacts_referenced": 25,
+    "native_manifest_preflight_passed": true,
+    "native_preflight_scope": "Manifest, baseline, pristine sources, generated-test artefacts and treatment design."
+  },
+  "authoritative_outcomes": {
+    "assigned": 624,
+    "evaluable": 622,
+    "resolved": 597,
+    "built_unresolved": 25,
+    "final_build_failures": 0,
+    "api_failures": 2,
+    "visible_tests_enabled": 312,
+    "visible_tests_available": 300,
+    "visible_tests_passed": 299,
+    "executed_visible_test_failures": 0,
+    "llm_calls": 944,
+    "input_tokens": 2665643,
+    "output_tokens": 1211755,
+    "total_tokens": 3877398
+  },
+  "first_build_outcomes": {
+    "snapshots": 312,
+    "resolved": 298,
+    "built_unresolved": 5,
+    "build_failures": 9,
+    "build_failures_recovered_to_final_resolved": 9,
+    "note": "One first-build built_unresolved snapshot belongs to the non-evaluable DNS-failed assignment 279."
+  },
+  "infrastructure_failures": [
+    {
+      "order": 278,
+      "target": "Invoicing.StatementBuilder",
+      "architecture": "ungrounded_single_shot",
+      "visible_tests_enabled": true,
+      "error_status": "api_failure"
+    },
+    {
+      "order": 279,
+      "target": "Invoicing.StatementBuilder",
+      "architecture": "agentic",
+      "visible_tests_enabled": false,
+      "error_status": "api_failure"
+    }
+  ],
+  "trajectory_deviation": {
+    "present": true,
+    "severity": "secondary_artifact_integrity",
+    "iterative_assignment_references": 312,
+    "unique_trajectory_paths": 78,
+    "collision_groups": 78,
+    "references_per_collision_group": 4,
+    "surviving_matching_references": 78,
+    "stale_overwritten_references": 234,
+    "cause": "AgenticRunner.WriteTrajectoryArtefactAsync names files only by relative source path and run number. The four iterative factorial conditions for a target and repetition therefore reuse one path.",
+    "impact": "Earlier full-turn trajectory JSON in each collision group was overwritten. Authoritative trace records, final materialised sources, build and test outcomes, detector results, token counts and run IDs remain available and valid.",
+    "disposition": "Do not replay committed assignments. Treat the JSONL traces as authoritative and do not use the overwritten trajectory JSON for condition-level trajectory analysis."
+  },
+  "private_layer3_status": "not_run",
+  "audit_result": "campaign_complete_with_documented_secondary_trajectory_deviation"
+}

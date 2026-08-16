@@ -1,0 +1,17 @@
+{
+  "artifact_id": "ece45e171aa541d4bbc9ccbb67e034e8",
+  "timestamp": "2026-08-12T13:38:30.8890197+00:00",
+  "architecture": "agentic",
+  "grounding_enabled": false,
+  "control_structure": "iterative",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Inventory/AllocationCalculator.cs",
+  "source_sha256": "8e6b50aa28637e9e7b90891b28c6f6a4ff932a1801ec471e222ba017d533bbbb",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EAllocates available stock across a warehouse\u0027s zones.\u003C/summary\u003E\npublic sealed class AllocationCalculator\n{\n    public IReadOnlyList\u003Cstring\u003E Allocate(StockItem item, Warehouse warehouse)\n    {\n        var result = new List\u003Cstring\u003E();\n        int remaining = item.OnHand - item.Reserved;\n\n        foreach (var zone in warehouse.Zones)\n        {\n            if (TryAllocateToZone(zone.Name, zone.Capacity, ref remaining, result) \u0026\u0026 remaining \u003C= 0)\n                break;\n        }\n\n        AddOverflowIfNecessary(remaining, result);\n        return result;\n    }\n\n    private static bool TryAllocateToZone(\n        string zoneName,\n        int capacity,\n        ref int remaining,\n        ICollection\u003Cstring\u003E result)\n    {\n        if (remaining \u003C= 0 || capacity \u003C= 0 || string.IsNullOrEmpty(zoneName))\n            return false;\n\n        int quantity = CalculatePlacement(remaining, capacity);\n        if (quantity \u003C= 0)\n            return false;\n\n        result.Add($\u0022{zoneName}:{quantity}\u0022);\n        remaining -= quantity;\n        return true;\n    }\n\n    private static int CalculatePlacement(int remaining, int capacity)\n    {\n        if (remaining \u003E capacity)\n            return capacity;\n\n        return remaining \u003E capacity / 2 ? remaining - 1 : remaining;\n    }\n\n    private static void AddOverflowIfNecessary(int remaining, ICollection\u003Cstring\u003E result)\n    {\n        if (remaining \u003E 0)\n            result.Add($\u0022OVERFLOW:{remaining}\u0022);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

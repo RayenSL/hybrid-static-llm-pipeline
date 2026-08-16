@@ -1,0 +1,16 @@
+{
+  "seal_version": "1.0",
+  "campaign_id": "6b28bd73dce3f9fe5ee9ed17",
+  "manifest_sha256": "67e5d373b54fa7a0b690883ddb79ddec2fc4d76afed9076f6e8cf7a6b0f705a8",
+  "checksum_index": "FINAL_SHA256SUMS.txt",
+  "checksum_index_sha256": "8a444bdcee43513c5e5d27fa1761a75f6cc3bde26e04c3dcf7eedecc86264adb",
+  "indexed_files": 1424,
+  "campaign_assignments": 624,
+  "private_results": 623,
+  "layer2_quality_results": 623,
+  "statistical_analysis_targets": 26,
+  "regenerated_figure_families": 6,
+  "factorial_attempt_rows": 624,
+  "strict_successes": 586,
+  "status": "complete_with_private_quality_statistical_and_figure_evaluation_and_sealed_with_documented_trajectory_deviation"
+}

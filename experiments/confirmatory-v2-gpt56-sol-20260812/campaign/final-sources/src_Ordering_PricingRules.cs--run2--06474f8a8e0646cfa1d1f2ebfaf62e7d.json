@@ -1,0 +1,17 @@
+{
+  "artifact_id": "06474f8a8e0646cfa1d1f2ebfaf62e7d",
+  "timestamp": "2026-08-12T13:56:39.728477+00:00",
+  "architecture": "grounded_iterative",
+  "grounding_enabled": true,
+  "control_structure": "iterative",
+  "visible_tests_enabled": true,
+  "visible_test_available": true,
+  "run_number": 2,
+  "relative_file": "src/Ordering/PricingRules.cs",
+  "source_sha256": "a29cfa055b4021c53d2d4c062ec328e22278fde31b506a71b117faea2f958a20",
+  "final_source": "namespace Ordering;\n\n/// \u003Csummary\u003EApplies tier, override and channel adjustments to an order subtotal.\u003C/summary\u003E\npublic sealed class PricingRules\n{\n    public decimal ApplyAdjustments(Order order, CustomerTier tier)\n    {\n        var subtotal = CalculateSubtotal(order);\n        if (tier == CustomerTier.Blocked)\n            return 0m;\n\n        var adjusted = ApplyTierAdjustment(subtotal, tier);\n        adjusted = ApplyDiscountOverride(adjusted, order.DiscountOverride);\n        adjusted = ApplySubtotalDiscount(adjusted, subtotal);\n        adjusted = ApplyChannelAdjustment(adjusted, order.Channel);\n\n        return ClampToZero(adjusted);\n    }\n\n    private static decimal CalculateSubtotal(Order order)\n    {\n        decimal subtotal = 0m;\n        foreach (var line in order.Lines)\n            subtotal \u002B= line.UnitPrice * line.Quantity;\n\n        return subtotal;\n    }\n\n    private static decimal ApplyTierAdjustment(decimal amount, CustomerTier tier) =\u003E\n        tier == CustomerTier.Wholesale ? amount * 0.95m : amount;\n\n    private static decimal ApplyDiscountOverride(decimal amount, decimal? discountOverride)\n    {\n        var discount = discountOverride.GetValueOrDefault();\n        return discount \u003E 0m ? amount - discount : amount;\n    }\n\n    private static decimal ApplySubtotalDiscount(decimal amount, decimal subtotal) =\u003E\n        subtotal \u003E 500m ? amount - 10m : amount;\n\n    private static decimal ApplyChannelAdjustment(decimal amount, OrderChannel channel) =\u003E\n        channel switch\n        {\n            OrderChannel.Web =\u003E amount,\n            OrderChannel.Phone =\u003E amount \u002B 2m,\n            OrderChannel.Marketplace =\u003E amount * 1.02m,\n            _ =\u003E amount,\n        };\n\n    private static decimal ClampToZero(decimal amount) =\u003E amount \u003C 0m ? 0m : amount;\n}\n",
+  "visible_test_artifact_ref": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\confirmatory-v2-gpt56-sol-20260812\\generated-tests\\src_Ordering_PricingRules.cs--d65d54c11a3d4ea6815385e0f4c4fa3d.json",
+  "visible_test_sha256": "cb00a8476aa711ec9a2f98945201a2cfb61944d3cf8d27d96648e24bb9c05c75",
+  "build_passed": true,
+  "visible_test_passed": true
+}

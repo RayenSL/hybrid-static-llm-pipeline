@@ -1,0 +1,17 @@
+{
+  "artifact_id": "bed1e8e36b324256bc5ee1ac28572fe6",
+  "timestamp": "2026-08-13T07:53:42.3338146+00:00",
+  "architecture": "ungrounded_single_shot",
+  "grounding_enabled": false,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Inventory/ReplenishmentPlanner.cs",
+  "source_sha256": "063dde8d8c0144f831bb597b1061db6b725cb90f31a3185bdad2b15d9044f780",
+  "final_source": "namespace Inventory;\n\n/// \u003Csummary\u003EBuilds a replenishment plan across a set of stock items.\u003C/summary\u003E\npublic sealed class ReplenishmentPlanner\n{\n    public IReadOnlyList\u003Cstring\u003E BuildPlan(IEnumerable\u003CStockItem\u003E items, ISupplier supplier, int season)\n    {\n        var plan = new List\u003Cstring\u003E();\n        foreach (var item in items)\n        {\n            int orderQty = CalculateOrderQuantity(item, season);\n            if (orderQty \u003C= 0 || string.IsNullOrEmpty(item.Sku))\n                continue;\n\n            RecordOrderResult(plan, item, supplier, orderQty);\n        }\n\n        return plan;\n    }\n\n    private static int CalculateOrderQuantity(StockItem item, int season)\n    {\n        if (item.OnHand \u003C 0)\n            return 0;\n\n        int available = item.OnHand - item.Reserved;\n        if (available \u003E item.ReorderPoint)\n            return 0;\n\n        int deficit = item.ReorderPoint - available;\n        int orderQty;\n        if (deficit \u003C= 0)\n            orderQty = 0;\n        else if (deficit \u003C 10)\n            orderQty = 10;\n        else if (deficit \u003C 100)\n            orderQty = deficit;\n        else\n            orderQty = deficit \u002B 50;\n\n        if (season == 4 \u0026\u0026 orderQty \u003E 0)\n            orderQty = (int)(orderQty * 1.5);\n        else if (season == 1)\n            orderQty /= 2;\n\n        return orderQty;\n    }\n\n    private static void RecordOrderResult(\n        ICollection\u003Cstring\u003E plan,\n        StockItem item,\n        ISupplier supplier,\n        int orderQty)\n    {\n        bool placed = supplier.PlaceOrder(item.Sku, orderQty);\n        if (placed \u0026\u0026 orderQty \u003E 200)\n            plan.Add($\u0022{item.Sku}:LARGE:{orderQty}\u0022);\n        else if (placed)\n            plan.Add($\u0022{item.Sku}:{orderQty}\u0022);\n        else\n            plan.Add($\u0022{item.Sku}:FAILED\u0022);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}
