@@ -37,7 +37,8 @@ public sealed class FactorialSingleShotRunner(
         bool visibleTestsEnabled,
         LoadedGeneratedTest? visibleTest,
         string finalArtifactDirectory,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        DirectEditPromptProfile? promptProfile = null)
     {
         if (grounded && string.IsNullOrWhiteSpace(groundingBlock))
             throw new ArgumentException("grounded single-shot requires a finding block", nameof(groundingBlock));
@@ -73,18 +74,28 @@ public sealed class FactorialSingleShotRunner(
                 throw new InvalidDataException(
                     "visible test was generated from a different pristine source revision");
         }
-        var architecture = grounded ? "grounded_single_shot" : "ungrounded_single_shot";
-        var systemPrompt = grounded
-            ? FactorialSingleShotPrompt.GroundedSystemPrompt
-            : FactorialSingleShotPrompt.UngroundedSystemPrompt;
+        // With no profile the factorial family is used verbatim, so the sealed campaign's prompts,
+        // architecture label and recorded context level are unchanged.
+        var architecture = promptProfile?.Architecture
+                           ?? (grounded ? "grounded_single_shot" : "ungrounded_single_shot");
+        var promptVersion = promptProfile?.PromptVersion ?? FactorialSingleShotPrompt.Version;
+        var recordedContextLevel = promptProfile?.ContextLevel
+                                   ?? (grounded ? ContextLevel.Structural : ContextLevel.Minimal);
+        var systemPrompt = promptProfile?.SystemPrompt
+                           ?? (grounded
+                               ? FactorialSingleShotPrompt.GroundedSystemPrompt
+                               : FactorialSingleShotPrompt.UngroundedSystemPrompt);
         var visiblePrompt = visibleTest is null ? null : new LoadedVisibleTestPrompt(
             visibleTest.Source.TestName,
             visibleTest.Source.UsingDirectives,
             GeneratedTestSourceCanonicalizer.RenderForPrompt(visibleTest.Source),
             visibleTest.Artifact.TestSha256!);
-        var userPrompt = FactorialSingleShotPrompt.BuildUserPrompt(
-            relative.Replace('\\', '/'), original, targetDescriptor,
-            grounded ? groundingBlock : null, visiblePrompt);
+        var contextBlock = grounded ? groundingBlock : null;
+        var userPrompt = promptProfile is null
+            ? FactorialSingleShotPrompt.BuildUserPrompt(
+                relative.Replace('\\', '/'), original, targetDescriptor, contextBlock, visiblePrompt)
+            : promptProfile.BuildUserPrompt(
+                relative.Replace('\\', '/'), original, targetDescriptor, contextBlock, visiblePrompt);
 
         CopyTree(corpusRoot, workingRoot);
         var stopwatch = Stopwatch.StartNew();
@@ -109,7 +120,7 @@ public sealed class FactorialSingleShotRunner(
                 {
                     SystemPrompt = systemPrompt,
                     UserPrompt = userPrompt,
-                    PromptVersion = FactorialSingleShotPrompt.Version
+                    PromptVersion = promptVersion
                 }, cancellationToken);
                 parsed = Parse(response.Content);
                 if (parsed is null)
@@ -205,10 +216,11 @@ public sealed class FactorialSingleShotRunner(
             Severity = instance.Severity,
             Snippet = instance.Snippet,
             Metrics = null,
-            ContextLevel = grounded ? ContextLevel.Structural : ContextLevel.Minimal,
+            ContextLevel = recordedContextLevel,
             ModelName = modelName,
-            PromptVersion = FactorialSingleShotPrompt.Version,
+            PromptVersion = promptVersion,
             Architecture = architecture,
+            ContextTruncated = promptProfile?.ContextTruncated ?? false,
             GroundingEnabled = grounded,
             ControlStructure = "single_shot",
             VisibleTestsEnabled = visibleTestsEnabled,
