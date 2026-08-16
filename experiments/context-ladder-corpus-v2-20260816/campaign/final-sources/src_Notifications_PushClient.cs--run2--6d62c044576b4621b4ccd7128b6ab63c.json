@@ -1,0 +1,17 @@
+{
+  "artifact_id": "6d62c044576b4621b4ccd7128b6ab63c",
+  "timestamp": "2026-08-16T14:40:54.0376403+00:00",
+  "architecture": "context_ladder_full",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Notifications/PushClient.cs",
+  "source_sha256": "23fa72b9780b9d8d7c40f5d2705b85e2531455cb4acf4e9cfed0b0ec1cdfcd1b",
+  "final_source": "using Notifications.Legacy;\n\nnamespace Notifications;\n\n/// \u003Csummary\u003ESends push notifications.\u003C/summary\u003E\npublic sealed class PushClient\n{\n    private readonly IPushProvider _pushProvider;\n\n    public PushClient()\n        : this(new DefaultPushProvider())\n    {\n    }\n\n    public PushClient(IPushProvider pushProvider)\n    {\n        _pushProvider = pushProvider ?? throw new System.ArgumentNullException(nameof(pushProvider));\n    }\n\n    public bool SendPush(Message message)\n    {\n        return _pushProvider.Deliver(\n            message.Recipient.Name,\n            message.Subject,\n            message.Body);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

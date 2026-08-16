@@ -1,0 +1,17 @@
+{
+  "artifact_id": "bf827b796d574856833f8383d1689f85",
+  "timestamp": "2026-08-16T16:06:12.0510186+00:00",
+  "architecture": "context_ladder_relational",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Scheduling/CalendarFeed.cs",
+  "source_sha256": "dccc9842a77462143fe42d5fcbd910aefd72b40bb3f7208bdad1f9ebfebd33a5",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EBuilds an exportable calendar feed for a resource.\u003C/summary\u003E\npublic sealed class CalendarFeed\n{\n    public string Build(Resource resource)\n    {\n        var events = new List\u003Cstring\u003E();\n        foreach (var slot in resource.Calendar)\n            events.Add($\u0022{resource.Name}:{slot.Start:O}-{slot.End:O}\u0022);\n        return FeedApiV2.Serialize(events);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": false,
+  "visible_test_passed": null
+}

@@ -1,0 +1,17 @@
+{
+  "artifact_id": "bf6715df420e42ccb4bc04881e35b06a",
+  "timestamp": "2026-08-16T14:28:39.0109103+00:00",
+  "architecture": "context_ladder_relational",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Scheduling/Scheduler.cs",
+  "source_sha256": "8b38ef2d1237f4431020fda9b3a28c5c5ee8bb9686c5c5f89fa32d808593f72f",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EPlaces jobs onto the most suitable available resource.\u003C/summary\u003E\npublic sealed class Scheduler\n{\n    public IReadOnlyList\u003Cstring\u003E PlaceJobs(IEnumerable\u003CJob\u003E jobs, IReadOnlyList\u003CResource\u003E resources)\n    {\n        var placements = new List\u003Cstring\u003E();\n        foreach (var job in jobs)\n        {\n            if (string.IsNullOrEmpty(job.RequiredSkill))\n                continue;\n\n            var chosen = FindBestResource(job, resources);\n            placements.Add(FormatPlacement(job, chosen));\n        }\n\n        return placements;\n    }\n\n    private static Resource? FindBestResource(Job job, IReadOnlyList\u003CResource\u003E resources)\n    {\n        Resource? chosen = null;\n        foreach (var resource in resources)\n        {\n            if (!resource.Skills.Contains(job.RequiredSkill))\n                continue;\n            if (resource.Calendar.Count \u003E 20)\n                continue;\n            if (chosen == null || resource.Calendar.Count \u003C chosen.Calendar.Count)\n                chosen = resource;\n        }\n\n        return chosen;\n    }\n\n    private static string FormatPlacement(Job job, Resource? chosen)\n    {\n        if (chosen == null)\n            return $\u0022{job.Id}:UNPLACED\u0022;\n\n        if (RequiresOvertime(job, chosen))\n            return $\u0022{job.Id}:{chosen.Name}:OT\u0022;\n        if (job.Priority \u003E 8)\n            return $\u0022{job.Id}:{chosen.Name}:URGENT\u0022;\n\n        return $\u0022{job.Id}:{chosen.Name}\u0022;\n    }\n\n    private static bool RequiresOvertime(Job job, Resource resource)\n    {\n        if (job.Priority \u003E 5 \u0026\u0026 resource.Calendar.Count \u003E 10)\n            return true;\n\n        return job.Duration.TotalHours \u003E 8;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

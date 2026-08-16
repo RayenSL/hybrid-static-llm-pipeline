@@ -1,0 +1,17 @@
+{
+  "artifact_id": "d434c375966246c586c2cf25969ccae9",
+  "timestamp": "2026-08-16T14:40:28.7235975+00:00",
+  "architecture": "context_ladder_structural",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Notifications/PushClient.cs",
+  "source_sha256": "5f935272bbdc55967c70cc2c475e52b6c9048a0fc7f88726f1ee6d26dd386016",
+  "final_source": "using Notifications.Legacy;\n\nnamespace Notifications;\n\n/// \u003Csummary\u003ESends push notifications.\u003C/summary\u003E\npublic sealed class PushClient\n{\n    public bool SendPush(Message message)\n    {\n#pragma warning disable CS0618 // No replacement API is present in the supplied context.\n        return PushApiV1.Push(message.Recipient.Name, message.Body);\n#pragma warning restore CS0618\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

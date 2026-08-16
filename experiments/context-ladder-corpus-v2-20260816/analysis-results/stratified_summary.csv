@@ -1,0 +1,13 @@
+anti_pattern_type,level,resolved,n
+god_class,minimal,38,39
+god_class,structural,39,39
+god_class,relational,39,39
+god_class,full,39,39
+long_method,minimal,39,39
+long_method,structural,37,39
+long_method,relational,38,39
+long_method,full,39,39
+obsolete_api_usage,minimal,2,30
+obsolete_api_usage,structural,1,30
+obsolete_api_usage,relational,6,30
+obsolete_api_usage,full,30,30

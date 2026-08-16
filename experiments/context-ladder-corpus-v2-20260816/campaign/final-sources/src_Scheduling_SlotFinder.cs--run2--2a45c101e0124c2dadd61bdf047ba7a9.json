@@ -1,0 +1,17 @@
+{
+  "artifact_id": "2a45c101e0124c2dadd61bdf047ba7a9",
+  "timestamp": "2026-08-16T18:12:41.8602859+00:00",
+  "architecture": "context_ladder_structural",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Scheduling/SlotFinder.cs",
+  "source_sha256": "2d12ffe4eed6836fc86a581ea44dbe89d4cb82c7a719b760dec988199d2e952e",
+  "final_source": "namespace Scheduling;\n\n/// \u003Csummary\u003EFinds the first calendar slot that fits a required duration.\u003C/summary\u003E\npublic sealed class SlotFinder\n{\n    public Slot? FindFirstFit(Resource resource, TimeSpan duration, DateTime notBefore)\n    {\n        if (resource.Calendar.Count == 0 || duration \u003C= TimeSpan.Zero)\n            return null;\n\n        return FindFirstEligibleSlot(resource, duration, notBefore);\n    }\n\n    private static Slot? FindFirstEligibleSlot(\n        Resource resource,\n        TimeSpan duration,\n        DateTime notBefore)\n    {\n        foreach (var slot in resource.Calendar)\n        {\n            if (IsEligible(slot, duration, notBefore))\n                return slot;\n        }\n\n        if (resource.Calendar.Count \u003E 100)\n            return null;\n        return null;\n    }\n\n    private static bool IsEligible(Slot slot, TimeSpan duration, DateTime notBefore)\n    {\n        if (slot.Start \u003C notBefore)\n            return false;\n\n        var length = slot.End - slot.Start;\n        if (length \u003C duration)\n            return false;\n        if (slot.Start.Hour \u003C 8 || slot.Start.Hour \u003E 18)\n            return false;\n\n        return slot.End.Hour \u003C= 20;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

@@ -1,0 +1,17 @@
+{
+  "status": "final_sealed",
+  "sealed_at_utc": "2026-08-16T19:17:56.2998507Z",
+  "campaign_id": "7e7ef92bb6f4b948a7e757c0",
+  "assignments": 432,
+  "ledger_records": 432,
+  "layer3_records": 432,
+  "layer2_records": 432,
+  "post_run_sha256sums_sha256": "5052f67e3144741084f886ac0de874f396d67936c72fe8d61eceac37cf1aa03d",
+  "layer3_sha256": "8b7ebc42fc26e6ed7b447bc491528f71f89a85e1bd237fc8554bae435224a446",
+  "layer2_sha256": "24c82e89fddbee75e5b4b2106b883dc617bbbe2abe3215d619f16ff135f691db",
+  "runner_logs": [
+    "runner-campaign.log",
+    "runner-layer3.log",
+    "runner-layer2.log"
+  ]
+}

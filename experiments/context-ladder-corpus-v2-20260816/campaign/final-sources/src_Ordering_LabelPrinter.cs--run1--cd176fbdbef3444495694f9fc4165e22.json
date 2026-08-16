@@ -1,0 +1,17 @@
+{
+  "artifact_id": "cd176fbdbef3444495694f9fc4165e22",
+  "timestamp": "2026-08-16T16:40:36.4487656+00:00",
+  "architecture": "context_ladder_structural",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Ordering/LabelPrinter.cs",
+  "source_sha256": "153f58c605cc5ef8512b4ab6f9c107c4a592427a5e898374ee91ba5a3d0595dd",
+  "final_source": "using Ordering.Legacy;\n\nnamespace Ordering;\n\n/// \u003Csummary\u003EProduces dispatch labels for an order.\u003C/summary\u003E\npublic sealed class LabelPrinter\n{\n    public string Print(Order order, string service)\n    {\n        // TODO: support multi-parcel orders with one label per parcel\n        // No supported replacement API is available in the supplied context.\n#pragma warning disable CS0612, CS0618\n        return LabelApiV1.Render(order.Reference, service);\n#pragma warning restore CS0612, CS0618\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

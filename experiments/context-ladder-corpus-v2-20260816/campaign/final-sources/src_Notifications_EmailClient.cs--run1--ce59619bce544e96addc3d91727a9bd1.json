@@ -1,0 +1,17 @@
+{
+  "artifact_id": "ce59619bce544e96addc3d91727a9bd1",
+  "timestamp": "2026-08-16T16:24:41.2810611+00:00",
+  "architecture": "context_ladder_relational",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Notifications/EmailClient.cs",
+  "source_sha256": "662e898b13ea6c60c10fce49f9a6e3b306e34064a1a01c3076c644636dc5c624",
+  "final_source": "using Notifications.Legacy;\n\nnamespace Notifications;\n\n/// \u003Csummary\u003ESends email messages.\u003C/summary\u003E\npublic sealed class EmailClient\n{\n    private static class LegacyMailCompatibility\n    {\n        internal static readonly System.Func\u003Cstring, string, string, bool\u003E Send =\n            (System.Func\u003Cstring, string, string, bool\u003E)System.Delegate.CreateDelegate(\n                typeof(System.Func\u003Cstring, string, string, bool\u003E),\n                typeof(MailApiV1).GetMethod(\n                    \u0022Send\u0022,\n                    new[] { typeof(string), typeof(string), typeof(string) })!);\n    }\n\n    public bool SendEmail(Message message)\n    {\n        var emailAddress = message.Recipient.EmailAddress;\n        var subject = message.Subject;\n        var body = message.Body;\n\n        return LegacyMailCompatibility.Send(emailAddress, subject, body);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

@@ -1,0 +1,17 @@
+{
+  "artifact_id": "32c5fa90348649648be04fcd35193531",
+  "timestamp": "2026-08-16T17:58:26.413447+00:00",
+  "architecture": "context_ladder_full",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Inventory/SnapshotWriter.cs",
+  "source_sha256": "be32f5e1991a918e2347876238f6723d98da21c38140fc01697f902290dedc90",
+  "final_source": "using Inventory.Legacy;\n\nnamespace Inventory;\n\n/// \u003Csummary\u003EWrites point-in-time stock snapshots.\u003C/summary\u003E\npublic sealed class SnapshotWriter\n{\n    private readonly IInventoryStore _store;\n    private int _count;\n\n    public SnapshotWriter()\n        : this(new InMemoryInventoryStore())\n    {\n    }\n\n    public SnapshotWriter(IInventoryStore store)\n    {\n        _store = store ?? throw new ArgumentNullException(nameof(store));\n    }\n\n    public void Write(StockItem item)\n    {\n        _store.Save(item.Sku, item.OnHand, item.Reserved);\n        _count\u002B\u002B;\n    }\n\n    public int Count =\u003E _count;\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

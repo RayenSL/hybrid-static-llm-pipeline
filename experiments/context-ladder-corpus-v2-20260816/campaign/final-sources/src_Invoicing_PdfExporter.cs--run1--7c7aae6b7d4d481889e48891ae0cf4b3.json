@@ -1,0 +1,17 @@
+{
+  "artifact_id": "7c7aae6b7d4d481889e48891ae0cf4b3",
+  "timestamp": "2026-08-16T14:26:30.0576058+00:00",
+  "architecture": "context_ladder_relational",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Invoicing/PdfExporter.cs",
+  "source_sha256": "859430a4ee4bf340e93f16bd53c5bbc16a1befdeb8f4f9f086394792a03feeb2",
+  "final_source": "using Invoicing.Legacy;\n\nnamespace Invoicing;\n\n/// \u003Csummary\u003EExports an invoice as a PDF byte stream.\u003C/summary\u003E\npublic sealed class PdfExporter\n{\n    private static readonly Func\u003Cstring, IEnumerable\u003Cstring\u003E, byte[]\u003E RenderPdf = CreateRenderer();\n\n    public byte[] Export(Invoice invoice)\n    {\n        var lines = new List\u003Cstring\u003E();\n        foreach (var line in invoice.Lines)\n            lines.Add($\u0022{line.Description}: {line.NetAmount}\u0022);\n        // TODO: include the billing address block in the header\n        return RenderPdf($\u0022Invoice {invoice.Number}\u0022, lines);\n    }\n\n    private static Func\u003Cstring, IEnumerable\u003Cstring\u003E, byte[]\u003E CreateRenderer()\n    {\n        var method = typeof(RenderApiV1).GetMethod(\n            \u0022ToPdf\u0022,\n            new[] { typeof(string), typeof(IEnumerable\u003Cstring\u003E) })\n            ?? throw new MissingMethodException(typeof(RenderApiV1).FullName, \u0022ToPdf\u0022);\n\n        return (Func\u003Cstring, IEnumerable\u003Cstring\u003E, byte[]\u003E)Delegate.CreateDelegate(\n            typeof(Func\u003Cstring, IEnumerable\u003Cstring\u003E, byte[]\u003E),\n            method);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

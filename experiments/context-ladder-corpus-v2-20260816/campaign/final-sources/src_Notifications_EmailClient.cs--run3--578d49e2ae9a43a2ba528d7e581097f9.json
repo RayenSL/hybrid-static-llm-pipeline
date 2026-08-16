@@ -1,0 +1,17 @@
+{
+  "artifact_id": "578d49e2ae9a43a2ba528d7e581097f9",
+  "timestamp": "2026-08-16T16:30:30.1184546+00:00",
+  "architecture": "context_ladder_relational",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Notifications/EmailClient.cs",
+  "source_sha256": "3fd7295299bbf4ae69a110ea004a2bd7399a0d582ec2133d924db739ea35b56c",
+  "final_source": "namespace Notifications;\n\n/// \u003Csummary\u003ESends email messages.\u003C/summary\u003E\npublic sealed class EmailClient\n{\n    public bool SendEmail(Message message)\n    {\n        return MailApiV2.Send(message.Recipient.EmailAddress, message.Subject, message.Body);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": false,
+  "visible_test_passed": null
+}

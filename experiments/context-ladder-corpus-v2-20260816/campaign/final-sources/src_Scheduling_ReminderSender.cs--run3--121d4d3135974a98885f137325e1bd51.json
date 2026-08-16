@@ -1,0 +1,17 @@
+{
+  "artifact_id": "121d4d3135974a98885f137325e1bd51",
+  "timestamp": "2026-08-16T15:58:39.3541369+00:00",
+  "architecture": "context_ladder_full",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Scheduling/ReminderSender.cs",
+  "source_sha256": "9887bf35df937ff847ea4db7016b5a4c1cbdc55283f47dda64a90b7bd576ba69",
+  "final_source": "using Scheduling.Legacy;\n\nnamespace Scheduling;\n\n/// \u003Csummary\u003ESends reminders for upcoming jobs.\u003C/summary\u003E\npublic sealed class ReminderSender\n{\n    public bool Send(Job job, string recipient)\n    {\n        // TODO: localise the reminder text per recipient\n        return NotifyApiV2.Send(new Notification\n        {\n            Recipient = recipient,\n            Body = $\u0022Reminder for {job.Id}\u0022\n        });\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

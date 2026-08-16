@@ -1,0 +1,133 @@
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.Pipeline\HybridLens.Pipeline.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json. [Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.CLI\HybridLens.CLI.csproj]
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.LLM\HybridLens.LLM.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json. [Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.CLI\HybridLens.CLI.csproj]
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.Pipeline\HybridLens.Pipeline.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json. [Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.CLI\HybridLens.CLI.csproj]
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.LLM\HybridLens.LLM.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json. [Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.CLI\HybridLens.CLI.csproj]
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.ContextBuilder\HybridLens.ContextBuilder.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json. [Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.CLI\HybridLens.CLI.csproj]
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.ContextBuilder\HybridLens.ContextBuilder.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json. [Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.CLI\HybridLens.CLI.csproj]
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.StaticAnalysis\HybridLens.StaticAnalysis.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json. [Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.CLI\HybridLens.CLI.csproj]
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.StaticAnalysis\HybridLens.StaticAnalysis.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json. [Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.CLI\HybridLens.CLI.csproj]
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.ContextBuilder\HybridLens.ContextBuilder.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json.
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.ContextBuilder\HybridLens.ContextBuilder.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json.
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.StaticAnalysis\HybridLens.StaticAnalysis.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json.
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.StaticAnalysis\HybridLens.StaticAnalysis.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json.
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.LLM\HybridLens.LLM.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json.
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.LLM\HybridLens.LLM.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json.
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.Pipeline\HybridLens.Pipeline.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://pkgs.dev.azure.com/ibissoftware/_packaging/ibiscore/nuget/v3/index.json.
+Z:\GitHub\hybrid-static-llm-pipeline\src\HybridLens.Pipeline\HybridLens.Pipeline.csproj : warning NU1900: Error occurred while getting package vulnerability data: Unable to load the service index for source https://nuget.telerik.com/v3/index.json.
+Campaign: 7e7ef92bb6f4b948a7e757c0
+Manifest SHA-256: a3f3e9a55928ba1a48f85ca2b65cfa4b77594355f6ccb67ec2d2d6a48ea2bcd9
+Ladder: ladder-v2.0.0 (8c5bcdb50d61a13d439dbbcb9a7a5eb46270349d869bc254ab5b69c13a4dd86f)
+Assignments: 432; model=gpt-5.6-sol; repetitions=3; applier=none (direct edit)
+Already completed: 0
+[1/432] Relational ObsoleteApiUsage StockSync.Reconcile → Inventory.Legacy.SyncApiV1.Reconcile(string, int, int) -> BuildsUnresolved
+[2/432] Minimal ObsoleteApiUsage StockSync.Reconcile → Inventory.Legacy.SyncApiV1.Reconcile(string, int, int) -> BuildsUnresolved
+[3/432] Full ObsoleteApiUsage StockSync.Reconcile → Inventory.Legacy.SyncApiV1.Reconcile(string, int, int) -> Resolved
+[4/432] Structural ObsoleteApiUsage StockSync.Reconcile → Inventory.Legacy.SyncApiV1.Reconcile(string, int, int) -> BuildsUnresolved
+[5/432] Full LongMethod OrderImporter.ImportBatch -> Resolved
+[6/432] Minimal LongMethod OrderImporter.ImportBatch -> Resolved
+[7/432] Relational LongMethod OrderImporter.ImportBatch -> Resolved
+[8/432] Structural LongMethod OrderImporter.ImportBatch -> Resolved
+[9/432] Structural LongMethod InvoiceRenderer.Render -> Resolved
+[10/432] Minimal LongMethod InvoiceRenderer.Render -> Resolved
+[11/432] Relational LongMethod InvoiceRenderer.Render -> Resolved
+[12/432] Full LongMethod InvoiceRenderer.Render -> Resolved
+[13/432] Minimal ObsoleteApiUsage CurrencyConverter.Convert → Invoicing.Legacy.RatesV1.Lookup(string, string) -> BuildsUnresolved
+[14/432] Structural ObsoleteApiUsage CurrencyConverter.Convert → Invoicing.Legacy.RatesV1.Lookup(string, string) -> BuildsUnresolved
+[15/432] Full ObsoleteApiUsage CurrencyConverter.Convert → Invoicing.Legacy.RatesV1.Lookup(string, string) -> Resolved
+[16/432] Relational ObsoleteApiUsage CurrencyConverter.Convert → Invoicing.Legacy.RatesV1.Lookup(string, string) -> BuildsUnresolved
+[17/432] Full ObsoleteApiUsage PdfExporter.Export → Invoicing.Legacy.RenderApiV1.ToPdf(string, System.Collections.Generic.IEnumerable<string>) -> Resolved
+[18/432] Structural ObsoleteApiUsage PdfExporter.Export → Invoicing.Legacy.RenderApiV1.ToPdf(string, System.Collections.Generic.IEnumerable<string>) -> BuildsUnresolved
+[19/432] Relational ObsoleteApiUsage PdfExporter.Export → Invoicing.Legacy.RenderApiV1.ToPdf(string, System.Collections.Generic.IEnumerable<string>) -> Resolved
+[20/432] Minimal ObsoleteApiUsage PdfExporter.Export → Invoicing.Legacy.RenderApiV1.ToPdf(string, System.Collections.Generic.IEnumerable<string>) -> BuildFails
+[21/432] Structural LongMethod Scheduler.PlaceJobs -> Resolved
+[22/432] Minimal LongMethod Scheduler.PlaceJobs -> Resolved
+[23/432] Full LongMethod Scheduler.PlaceJobs -> Resolved
+[24/432] Relational LongMethod Scheduler.PlaceJobs -> Resolved
+[25/432] Full LongMethod Scheduler.PlaceJobs -> Resolved
+[26/432] Structural LongMethod Scheduler.PlaceJobs -> Resolved
+[27/432] Minimal LongMethod Scheduler.PlaceJobs -> Resolved
+[28/432] Relational LongMethod Scheduler.PlaceJobs -> Resolved
+[29/432] Minimal GodClass Scheduling.RecurrenceEngine -> Resolved
+[30/432] Structural GodClass Scheduling.RecurrenceEngine -> Resolved
+[31/432] Full GodClass Scheduling.RecurrenceEngine -> Resolved
+[32/432] Relational GodClass Scheduling.RecurrenceEngine -> Resolved
+[33/432] Relational LongMethod ClaimAdjudicator.Evaluate -> Resolved
+[34/432] Minimal LongMethod ClaimAdjudicator.Evaluate -> Resolved
+[35/432] Full LongMethod ClaimAdjudicator.Evaluate -> Resolved
+[36/432] Structural LongMethod ClaimAdjudicator.Evaluate -> Resolved
+[37/432] Relational ObsoleteApiUsage SmsClient.SendSms → Notifications.Legacy.SmsApiV1.Send(string, string) -> BuildsUnresolved
+[38/432] Full ObsoleteApiUsage SmsClient.SendSms → Notifications.Legacy.SmsApiV1.Send(string, string) -> Resolved
+[39/432] Structural ObsoleteApiUsage SmsClient.SendSms → Notifications.Legacy.SmsApiV1.Send(string, string) -> BuildsUnresolved
+[40/432] Minimal ObsoleteApiUsage SmsClient.SendSms → Notifications.Legacy.SmsApiV1.Send(string, string) -> BuildsUnresolved
+[41/432] Full GodClass Inventory.CycleCountService -> Resolved
+[42/432] Minimal GodClass Inventory.CycleCountService -> Resolved
+[43/432] Structural GodClass Inventory.CycleCountService -> Resolved
+[44/432] Relational GodClass Inventory.CycleCountService -> Resolved
+[45/432] Minimal ObsoleteApiUsage PushClient.SendPush → Notifications.Legacy.PushApiV1.Push(string, string) -> BuildsUnresolved
+[46/432] Structural ObsoleteApiUsage PushClient.SendPush → Notifications.Legacy.PushApiV1.Push(string, string) -> BuildsUnresolved
+[47/432] Full ObsoleteApiUsage PushClient.SendPush → Notifications.Legacy.PushApiV1.Push(string, string) -> Resolved
+[48/432] Relational ObsoleteApiUsage PushClient.SendPush → Notifications.Legacy.PushApiV1.Push(string, string) -> Resolved
+[49/432] Structural GodClass Invoicing.StatementBuilder -> Resolved
+[50/432] Relational GodClass Invoicing.StatementBuilder -> Resolved
+[51/432] Minimal GodClass Invoicing.StatementBuilder -> Resolved
+[52/432] Full GodClass Invoicing.StatementBuilder -> Resolved
+[53/432] Minimal GodClass Ordering.CheckoutCoordinator -> Resolved
+[54/432] Relational GodClass Ordering.CheckoutCoordinator -> Resolved
+[55/432] Full GodClass Ordering.CheckoutCoordinator -> Resolved
+[56/432] Structural GodClass Ordering.CheckoutCoordinator -> Resolved
+[57/432] Relational GodClass Invoicing.BillingManager -> Resolved
+[58/432] Structural GodClass Invoicing.BillingManager -> Resolved
+[59/432] Full GodClass Invoicing.BillingManager -> Resolved
+[60/432] Minimal GodClass Invoicing.BillingManager -> Resolved
+[61/432] Full GodClass Subscriptions.SubscriptionAccountService -> Resolved
+[62/432] Structural GodClass Subscriptions.SubscriptionAccountService -> Resolved
+[63/432] Minimal GodClass Subscriptions.SubscriptionAccountService -> Resolved
+[64/432] Relational GodClass Subscriptions.SubscriptionAccountService -> Resolved
+[65/432] Relational ObsoleteApiUsage PushClient.SendPush → Notifications.Legacy.PushApiV1.Push(string, string) -> BuildsUnresolved
+[66/432] Structural ObsoleteApiUsage PushClient.SendPush → Notifications.Legacy.PushApiV1.Push(string, string) -> BuildsUnresolved
+[67/432] Minimal ObsoleteApiUsage PushClient.SendPush → Notifications.Legacy.PushApiV1.Push(string, string) -> BuildsUnresolved
+[68/432] Full ObsoleteApiUsage PushClient.SendPush → Notifications.Legacy.PushApiV1.Push(string, string) -> Resolved
+[69/432] Relational LongMethod AllocationCalculator.Allocate -> Resolved
+[70/432] Minimal LongMethod AllocationCalculator.Allocate -> Resolved
+[71/432] Full LongMethod AllocationCalculator.Allocate -> Resolved
+[72/432] Structural LongMethod AllocationCalculator.Allocate -> BuildFails
+[73/432] Full ObsoleteApiUsage CalendarFeed.Build → Scheduling.Legacy.FeedApiV1.Serialize(System.Collections.Generic.IEnumerable<string>) -> Resolved
+[74/432] Structural ObsoleteApiUsage CalendarFeed.Build → Scheduling.Legacy.FeedApiV1.Serialize(System.Collections.Generic.IEnumerable<string>) -> BuildFails
+[75/432] Relational ObsoleteApiUsage CalendarFeed.Build → Scheduling.Legacy.FeedApiV1.Serialize(System.Collections.Generic.IEnumerable<string>) -> BuildFails
+[76/432] Minimal ObsoleteApiUsage CalendarFeed.Build → Scheduling.Legacy.FeedApiV1.Serialize(System.Collections.Generic.IEnumerable<string>) -> BuildsUnresolved
+[77/432] Full GodClass Inventory.CycleCountService -> Resolved
+[78/432] Relational GodClass Inventory.CycleCountService -> Resolved
+[79/432] Minimal GodClass Inventory.CycleCountService -> Resolved
+[80/432] Structural GodClass Inventory.CycleCountService -> Resolved
+[81/432] Structural ObsoleteApiUsage StockSync.Reconcile → Inventory.Legacy.SyncApiV1.Reconcile(string, int, int) -> BuildsUnresolved
+[82/432] Minimal ObsoleteApiUsage StockSync.Reconcile → Inventory.Legacy.SyncApiV1.Reconcile(string, int, int) -> BuildsUnresolved
+[83/432] Relational ObsoleteApiUsage StockSync.Reconcile → Inventory.Legacy.SyncApiV1.Reconcile(string, int, int) -> Resolved
+[84/432] Full ObsoleteApiUsage StockSync.Reconcile → Inventory.Legacy.SyncApiV1.Reconcile(string, int, int) -> Resolved
+[85/432] Relational ObsoleteApiUsage PdfExporter.Export → Invoicing.Legacy.RenderApiV1.ToPdf(string, System.Collections.Generic.IEnumerable<string>) -> BuildsUnresolved
+[86/432] Structural ObsoleteApiUsage PdfExporter.Export → Invoicing.Legacy.RenderApiV1.ToPdf(string, System.Collections.Generic.IEnumerable<string>) -> BuildsUnresolved
+[87/432] Full ObsoleteApiUsage PdfExporter.Export → Invoicing.Legacy.RenderApiV1.ToPdf(string, System.Collections.Generic.IEnumerable<string>) -> Resolved
+[88/432] Minimal ObsoleteApiUsage PdfExporter.Export → Invoicing.Legacy.RenderApiV1.ToPdf(string, System.Collections.Generic.IEnumerable<string>) -> BuildFails
+[89/432] Relational LongMethod RetryPolicy.NextDelay -> Resolved
+[90/432] Full LongMethod RetryPolicy.NextDelay -> Resolved
+[91/432] Structural LongMethod RetryPolicy.NextDelay -> Resolved
+[92/432] Minimal LongMethod RetryPolicy.NextDelay -> Resolved
+[93/432] Full GodClass Ordering.CheckoutCoordinator -> Resolved
+[94/432] Relational GodClass Ordering.CheckoutCoordinator -> Resolved
+[95/432] Structural GodClass Ordering.CheckoutCoordinator -> Resolved
+[96/432] Minimal GodClass Ordering.CheckoutCoordinator -> Resolved
+[97/432] Minimal LongMethod VatResolver.Resolve -> Resolved
+[98/432] Full LongMethod VatResolver.Resolve -> Resolved
+[99/432] Structural LongMethod VatResolver.Resolve -> Resolved
+[100/432] Relational LongMethod VatResolver.Resolve -> Resolved
+[101/432] Full LongMethod AccessDecisionEngine.Decide -> Resolved
+[102/432] Relational LongMethod AccessDecisionEngine.Decide -> Resolved
+[103/432] Structural LongMethod AccessDecisionEngine.Decide -> Resolved
+[104/432] Minimal LongMethod AccessDecisionEngine.Decide -> Resolved
+[105/432] Full LongMethod InvoiceRenderer.Render -> Resolved
+[106/432] Relational LongMethod InvoiceRenderer.Render -> Resolved
+[107/432] Structural LongMethod InvoiceRenderer.Render -> Resolved
+[108/432] Minimal LongMethod InvoiceRenderer.Render -> Resolved
+[109/432] Full GodClass Invoicing.BillingManager -> Resolved
+[110/432] Minimal GodClass Invoicing.BillingManager -> Resolved
+[111/432] Structural GodClass Invoicing.BillingManager -> Resolved
+[112/432] Relational GodClass Invoicing.BillingManager -> Resolved

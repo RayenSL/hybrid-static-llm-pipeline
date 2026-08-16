@@ -1,0 +1,17 @@
+{
+  "artifact_id": "5693da81abaa4179a8e936e187e5d423",
+  "timestamp": "2026-08-16T16:37:52.2711518+00:00",
+  "architecture": "context_ladder_relational",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Notifications/EmailClient.cs",
+  "source_sha256": "118f6f2f22e2c6c7c953781f9c8f986c845658e655c15d88f300731decc32bf7",
+  "final_source": "using Notifications.Legacy;\n\nnamespace Notifications;\n\n/// \u003Csummary\u003ESends email messages.\u003C/summary\u003E\npublic sealed class EmailClient\n{\n    public bool SendEmail(Message message)\n    {\n#pragma warning disable CS0612, CS0618 // No replacement API is exposed by the supplied context.\n        return MailApiV1.Send(message.Recipient.EmailAddress, message.Subject, message.Body);\n#pragma warning restore CS0612, CS0618\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

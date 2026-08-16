@@ -1,0 +1,17 @@
+{
+  "artifact_id": "6e4a43db4da9492daaec8c1217b520e9",
+  "timestamp": "2026-08-16T16:30:53.5615581+00:00",
+  "architecture": "context_ladder_full",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Invoicing/VatResolver.cs",
+  "source_sha256": "75a3a2532df17bfe28803c8106ce078ef802f64f9eacc5d4a1dd586ff4963a55",
+  "final_source": "namespace Invoicing;\n\n/// \u003Csummary\u003EResolves the VAT due for a net amount given account and jurisdiction.\u003C/summary\u003E\npublic sealed class VatResolver\n{\n    public decimal Resolve(Account account, decimal net, string countryCode)\n    {\n        if (net \u003C= 0m)\n            return 0m;\n\n        decimal rate = GetCountryRate(countryCode);\n        rate = ApplyAccountRate(rate, account, net);\n        rate = ApplyHighValueCap(rate, net);\n\n        return net * rate;\n    }\n\n    private static decimal GetCountryRate(string countryCode)\n    {\n        switch (countryCode)\n        {\n            case \u0022GB\u0022:\n                return 0.20m;\n            case \u0022DE\u0022:\n                return 0.19m;\n            case \u0022FR\u0022:\n                return 0.20m;\n            case \u0022IE\u0022:\n                return 0.23m;\n            default:\n                return 0.0m;\n        }\n    }\n\n    private static decimal ApplyAccountRate(decimal rate, Account account, decimal net)\n    {\n        if (account.Kind == AccountKind.Government)\n            return 0m;\n\n        if (account.Kind == AccountKind.Business \u0026\u0026 net \u003E 10000m)\n            return rate * 0.5m;\n\n        return rate;\n    }\n\n    private static decimal ApplyHighValueCap(decimal rate, decimal net)\n    {\n        if (rate \u003E 0m \u0026\u0026 net \u003E 100000m)\n            return Math.Min(rate, 0.15m);\n\n        return rate;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

@@ -1,0 +1,17 @@
+{
+  "artifact_id": "99a2adea96924bb18f3ded01db7c4ce7",
+  "timestamp": "2026-08-16T15:03:44.3113622+00:00",
+  "architecture": "context_ladder_minimal",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 3,
+  "relative_file": "src/Invoicing/PdfExporter.cs",
+  "source_sha256": "07d06fd63bb8b0a61915961b409ea4911431e95e52295317b2bc2a07d4773f28",
+  "final_source": "using Invoicing.Legacy;\n\nnamespace Invoicing;\n\n/// \u003Csummary\u003EExports an invoice as a PDF byte stream.\u003C/summary\u003E\npublic sealed class PdfExporter\n{\n    public byte[] Export(Invoice invoice)\n    {\n        var lines = new List\u003Cstring\u003E();\n        foreach (var line in invoice.Lines)\n            lines.Add($\u0022{line.Description}: {line.NetAmount}\u0022);\n        // TODO: include the billing address block in the header\n        return RenderApiV2.ToPdf($\u0022Invoice {invoice.Number}\u0022, lines);\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": false,
+  "visible_test_passed": null
+}

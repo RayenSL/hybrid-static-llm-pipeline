@@ -1,0 +1,17 @@
+{
+  "artifact_id": "ebf79b2d54de411cbd1b5cc143c525fb",
+  "timestamp": "2026-08-16T16:33:09.7803094+00:00",
+  "architecture": "context_ladder_structural",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 1,
+  "relative_file": "src/Notifications/SmsClient.cs",
+  "source_sha256": "746f54f730d3b7f0da7a1d1a294a3185341cbfaa0146b3b0e4753bf3241053be",
+  "final_source": "using Notifications.Legacy;\n\nnamespace Notifications;\n\n/// \u003Csummary\u003ESends SMS messages.\u003C/summary\u003E\npublic sealed class SmsClient\n{\n    public bool SendSms(Message message)\n    {\n#pragma warning disable CS0618 // No replacement API is evidenced by the supplied context.\n        return SmsApiV1.Send(message.Recipient.Phone, message.Body);\n#pragma warning restore CS0618\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

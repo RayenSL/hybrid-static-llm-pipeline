@@ -1,0 +1,13 @@
+estimator,term,log_odds,approx_sd,odds_ratio
+laplace_map,Intercept,3.5811516506169156,0.6007712412609341,35.91487843116851
+laplace_map,"C(context_level, Treatment('minimal'))[T.full]",5.150082085462128,0.9047720901862897,172.445645016362
+laplace_map,"C(context_level, Treatment('minimal'))[T.relational]",0.63477393621298,0.5746044949257756,1.886595602301594
+laplace_map,"C(context_level, Treatment('minimal'))[T.structural]",-0.46057590251688174,0.5884533949116699,0.6309201923334563
+laplace_map,C(anti_pattern_type)[T.long_method],0.08436730079912143,0.7300614631415615,1.0880284541455931
+laplace_map,C(anti_pattern_type)[T.obsolete_api_usage],-5.616770596006504,0.6052051220103509,0.003636365460582519
+variational_bayes,Intercept,3.8091900914390164,0.24543526190616247,45.11388594360932
+variational_bayes,"C(context_level, Treatment('minimal'))[T.full]",5.808772077223492,0.8278716127467806,333.20971856307364
+variational_bayes,"C(context_level, Treatment('minimal'))[T.relational]",0.6462501180724012,0.4210192403786227,1.9083712280574716
+variational_bayes,"C(context_level, Treatment('minimal'))[T.structural]",-0.4970712132003144,0.43441703149389643,0.608309662590818
+variational_bayes,C(anti_pattern_type)[T.long_method],0.3424028667565008,0.5773659712301201,1.4083275515953264
+variational_bayes,C(anti_pattern_type)[T.obsolete_api_usage],-5.973189014268686,0.30431225056057715,0.002546108880944296

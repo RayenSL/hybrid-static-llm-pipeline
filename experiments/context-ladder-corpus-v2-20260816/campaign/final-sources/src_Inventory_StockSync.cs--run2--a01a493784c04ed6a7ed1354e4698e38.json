@@ -1,0 +1,17 @@
+{
+  "artifact_id": "a01a493784c04ed6a7ed1354e4698e38",
+  "timestamp": "2026-08-16T14:19:05.6311627+00:00",
+  "architecture": "context_ladder_structural",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Inventory/StockSync.cs",
+  "source_sha256": "23780415fb3ca75c4a9a7cfd905fdaa8d5f3f01f813890fa4f6e623274a03bd5",
+  "final_source": "using Inventory.Legacy;\n\nnamespace Inventory;\n\n/// \u003Csummary\u003EReconciles a counted quantity against the system position.\u003C/summary\u003E\npublic sealed class StockSync\n{\n    public int Reconcile(StockItem item, int countedQuantity)\n    {\n        // TODO: feed the variance into the audit trail\n#pragma warning disable CS0612, CS0618 // No replacement API is identified in the supplied context.\n        return SyncApiV1.Reconcile(item.Sku, countedQuantity, item.OnHand);\n#pragma warning restore CS0612, CS0618\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}

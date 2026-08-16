@@ -1,0 +1,17 @@
+{
+  "artifact_id": "7e53dfc8573b4d9cb999a0ba0b7fcba4",
+  "timestamp": "2026-08-16T17:22:59.8267124+00:00",
+  "architecture": "context_ladder_full",
+  "grounding_enabled": true,
+  "control_structure": "single_shot",
+  "visible_tests_enabled": false,
+  "visible_test_available": false,
+  "run_number": 2,
+  "relative_file": "src/Invoicing/CurrencyConverter.cs",
+  "source_sha256": "80607d227d20de73c0684b2f88b2fa6aea7e64e0ab56099a7c9351d6d3961511",
+  "final_source": "using Invoicing.Legacy;\n\nnamespace Invoicing;\n\n/// \u003Csummary\u003EConverts monetary amounts between currencies.\u003C/summary\u003E\npublic sealed class CurrencyConverter\n{\n    private readonly IRateProvider _rateProvider = new TableRateProvider();\n\n    public decimal Convert(decimal amount, string from, string to)\n    {\n        var rate = _rateProvider.GetRate(from, to);\n        return amount * rate;\n    }\n}\n",
+  "visible_test_artifact_ref": null,
+  "visible_test_sha256": null,
+  "build_passed": true,
+  "visible_test_passed": null
+}
