@@ -20,6 +20,19 @@ public sealed class ContextConfig
 
     /// <summary>Arbitrary key-value pairs injected into every prompt (e.g. project name, framework version).</summary>
     public IDictionary<string, string> Metadata { get; set; } = new Dictionary<string, string>();
+
+    /// <summary>
+    /// The ladder that defines what <see cref="Level"/> means. Defaults to the sealed supplement's
+    /// ladder so existing callers keep their exact behaviour; the direct-editing campaign selects
+    /// <see cref="ContextLadder.V2"/>, whose Full rung is cross-file rather than metadata-only.
+    /// </summary>
+    public IReadOnlyList<ContextLevelSpec> Ladder { get; set; } = ContextLadder.V1;
+
+    /// <summary>
+    /// Declaring sources resolved during preflight and frozen into the manifest. Only rendered when
+    /// the level's spec asks for cross-file scope; empty everywhere in the sealed supplement.
+    /// </summary>
+    public IReadOnlyList<CrossFileDeclaration> CrossFileDeclarations { get; set; } = [];
 }
 
 public enum ContextStrategy

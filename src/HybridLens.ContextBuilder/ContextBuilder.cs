@@ -65,16 +65,22 @@ public sealed class ContextBuilder : IContextBuilder
         return sb.ToString();
     }
 
-    // ── Level 4: relational + metadata + related findings in same file ────────
+    // ── Level 4: relational + metadata or cross-file declarations ─────────────
+    //
+    // What Full means is decided by ContextLadder, not here. Under the sealed ladder (V1) that is
+    // project metadata plus co-located findings, and this method reproduces its previous output
+    // byte-for-byte. Under V2 the metadata rung is replaced by the declaring sources the repair
+    // actually needs, which are resolved during preflight and arrive frozen on the config.
 
     private static string BuildFull(Finding finding, IReadOnlyList<Finding> allFindings, ContextConfig config)
     {
+        var spec = ContextLadder.For(config.Ladder, ContextLevel.Full);
         var sb = new StringBuilder();
         AppendHeader(sb, finding);
-        AppendMetrics(sb, finding);
+        if (spec.IncludeMetrics) AppendMetrics(sb, finding);
         sb.AppendLine();
 
-        if (config.Metadata.Count > 0)
+        if (spec.IncludeProjectMetadata && config.Metadata.Count > 0)
         {
             sb.AppendLine("## Project metadata");
             foreach (var (key, value) in config.Metadata)
@@ -82,24 +88,55 @@ public sealed class ContextBuilder : IContextBuilder
             sb.AppendLine();
         }
 
-        var relatedInFile = allFindings
-            .Where(f => f.FilePath == finding.FilePath && f != finding)
-            .ToList();
+        if (spec.CrossFile == CrossFileScope.ReferencedTypeDeclarations)
+            AppendCrossFileDeclarations(sb, config.CrossFileDeclarations);
 
-        if (relatedInFile.Count > 0)
+        if (spec.IncludeCoLocatedFindings)
         {
-            sb.AppendLine("## Other findings in the same file");
-            foreach (var related in relatedInFile)
-                sb.AppendLine($"  - [{related.Type}] {related.SymbolName} (line {related.Line})");
-            sb.AppendLine();
+            var relatedInFile = allFindings
+                .Where(f => f.FilePath == finding.FilePath && f != finding)
+                .ToList();
+
+            if (relatedInFile.Count > 0)
+            {
+                sb.AppendLine("## Other findings in the same file");
+                foreach (var related in relatedInFile)
+                    sb.AppendLine($"  - [{related.Type}] {related.SymbolName} (line {related.Line})");
+                sb.AppendLine();
+            }
         }
 
-        AppendClassMemberSummary(sb, finding);
+        if (spec.IncludeMemberSummary) AppendClassMemberSummary(sb, finding);
         sb.AppendLine();
-        AppendSurroundingLines(sb, finding, config.SnippetContextLines);
+        if (spec.IncludeSurroundingWindow)
+            AppendSurroundingLines(sb, finding, spec.SnippetContextLines ?? config.SnippetContextLines);
         sb.AppendLine();
         AppendSnippet(sb, finding.Snippet);
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// Renders the frozen declaring sources. Each file is labelled with the types it contributed, so
+    /// the model can see why it was supplied rather than having to infer the relevance of an
+    /// otherwise unexplained second file.
+    /// </summary>
+    private static void AppendCrossFileDeclarations(
+        StringBuilder sb, IReadOnlyList<CrossFileDeclaration> declarations)
+    {
+        if (declarations.Count == 0) return;
+
+        sb.AppendLine("## Referenced declarations");
+        foreach (var declaration in declarations)
+        {
+            sb.AppendLine($"### {declaration.RelativePath}");
+            if (declaration.DeclaredTypes.Count > 0)
+                sb.AppendLine($"Declares: {string.Join(", ", declaration.DeclaredTypes)}");
+            sb.AppendLine("```csharp");
+            sb.AppendLine(declaration.Source.TrimEnd());
+            sb.AppendLine("```");
+        }
+
+        sb.AppendLine();
     }
 
     // ── Shared building blocks ────────────────────────────────────────────────
