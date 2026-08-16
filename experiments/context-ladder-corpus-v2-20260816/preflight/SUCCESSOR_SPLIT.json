@@ -1,0 +1,58 @@
+{
+  "observed_at": "2026-08-16T16:13:21.8206512+02:00",
+  "corpus_revision": "20e22649fe8276507c2e760c9d3e48f40e111241",
+  "with_successor": 4,
+  "without_successor": 6,
+  "targets": [
+    {
+      "target": "CalendarFeed",
+      "successor_type": null,
+      "obsolete_message": "Use ICalendarWriter; assemble events then Write - staged migration"
+    },
+    {
+      "target": "CurrencyConverter",
+      "successor_type": null,
+      "obsolete_message": "Use IRateProvider with explicit base currency; manual rounding required"
+    },
+    {
+      "target": "EmailClient",
+      "successor_type": "MailApiV2",
+      "obsolete_message": "Use MailApiV2.Send"
+    },
+    {
+      "target": "LabelPrinter",
+      "successor_type": "LabelApiV2",
+      "obsolete_message": "Use LabelApiV2.Render"
+    },
+    {
+      "target": "PdfExporter",
+      "successor_type": null,
+      "obsolete_message": "Use IDocumentWriter; build the document model then call Write - no direct equivalent"
+    },
+    {
+      "target": "PushClient",
+      "successor_type": null,
+      "obsolete_message": "Removed; no replacement - integrate IPushProvider directly"
+    },
+    {
+      "target": "ReminderSender",
+      "successor_type": "NotifyApiV2",
+      "obsolete_message": "Use NotifyApiV2.Send"
+    },
+    {
+      "target": "SmsClient",
+      "successor_type": "SmsApiV2",
+      "obsolete_message": "Use SmsApiV2.Send"
+    },
+    {
+      "target": "SnapshotWriter",
+      "successor_type": null,
+      "obsolete_message": "Removed; no replacement - persist via IInventoryStore directly"
+    },
+    {
+      "target": "StockSync",
+      "successor_type": null,
+      "obsolete_message": "Removed in vNext; no direct replacement - re-implement against IStockLedger"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "status": "pre_run_frozen",
+  "frozen_at_utc": "2026-08-16T14:14:59.3662021Z",
+  "campaign_id": "7e7ef92bb6f4b948a7e757c0",
+  "repo_revision": "a2c787da6559b4d2db22736b61f896def9d7b313",
+  "corpus_revision": "20e22649fe8276507c2e760c9d3e48f40e111241",
+  "corpus_version": "v2.0",
+  "manifest_sha256": "a3f3e9a55928ba1a48f85ca2b65cfa4b77594355f6ccb67ec2d2d6a48ea2bcd9",
+  "baseline_sha256": "d46368f1479f906c0fcb83503e26ad24d9512bbe06429fccac70262b68d1ded3",
+  "ladder_version": "ladder-v2.0.0",
+  "ladder_sha256": "8c5bcdb50d61a13d439dbbcb9a7a5eb46270349d869bc254ab5b69c13a4dd86f",
+  "prompt_version": "ladder-v1.0.0",
+  "randomization_seed": 1819459010,
+  "targets": 36,
+  "assignments": 432,
+  "repetitions": 3,
+  "anti_pattern_targets": {
+    "god_class": 13,
+    "long_method": 13,
+    "obsolete_api_usage": 10
+  },
+  "context_levels": [
+    "minimal",
+    "structural",
+    "relational",
+    "full"
+  ],
+  "model_deployment_identifier": "azure:https://ai-ray-poc.openai.azure.com:gpt-5.6-sol",
+  "evaluated_model": "gpt-5.6-sol",
+  "applier_model": null,
+  "visible_generated_tests": false,
+  "successor_split": {
+    "with_successor": 4,
+    "without_successor": 6,
+    "source": "preflight/SUCCESSOR_SPLIT.json"
+  },
+  "cross_file": {
+    "assignments_with_declarations": 108,
+    "truncated_assignments": 0,
+    "dropped_files": []
+  },
+  "campaign_output_empty": true,
+  "preflight_passed": true
+}
