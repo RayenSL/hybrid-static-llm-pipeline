@@ -13,13 +13,15 @@ import hashlib
 import json
 import math
 from collections import Counter
+from fractions import Fraction
+from functools import reduce
 from pathlib import Path
 
 import numpy as np
+from scipy.stats import t as student_t
 
 
 CELLS = [(g, c, t) for g in (0, 1) for c in (0, 1) for t in (0, 1)]
-T_975_DF18 = 2.10092204024096
 
 
 def sha256(path: Path) -> str:
@@ -45,8 +47,8 @@ def cell(control: str) -> int:
 
 def build_cube(attempts: list[dict], field: str) -> tuple[list[str], np.ndarray]:
     instances = sorted({row["instance_key"] for row in attempts})
-    if len(instances) != 19:
-        raise ValueError(f"expected 19 independent instances, found {len(instances)}")
+    if not instances:
+        raise ValueError("factorial data contains no independent instances")
     by_instance = {name: i for i, name in enumerate(instances)}
     values: dict[tuple[int, int, int, int], list[float]] = {}
     for row in attempts:
@@ -56,7 +58,8 @@ def build_cube(attempts: list[dict], field: str) -> tuple[list[str], np.ndarray]
             cell(row["control_structure"]),
             int(row["visible_tests_enabled"]),
         )
-        values.setdefault(key, []).append(float(row[field]))
+        value = row.get(field)
+        values.setdefault(key, []).append(float(value) if value is not None else math.nan)
     cube = np.empty((len(instances), 2, 2, 2), dtype=float)
     for i in range(len(instances)):
         for g, c, t in CELLS:
@@ -70,36 +73,57 @@ def build_cube(attempts: list[dict], field: str) -> tuple[list[str], np.ndarray]
     return instances, cube
 
 
-def exact_signflip_p(differences: np.ndarray) -> float:
-    """Two-sided exact cluster sign-flip p-value over all 2^19 assignments."""
-    differences = np.asarray(differences, dtype=float)
-    n = len(differences)
-    observed = abs(float(np.mean(differences)))
-    if observed == 0.0 and np.all(differences == 0.0):
+def partition_private_outcomes(attempts: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
+    passes = [row for row in attempts if row.get("private_test_passed") is True]
+    regressions = [row for row in attempts if row.get("private_test_passed") is False]
+    unavailable = [row for row in attempts if row.get("private_test_passed") is None]
+    return passes, regressions, unavailable
+
+
+def exact_signflip_p_dynamic_programming(differences: np.ndarray) -> float:
+    """Two-sided exact cluster sign-flip p-value without enumerating 2^n rows."""
+    finite = np.asarray(differences, dtype=float)
+    finite = finite[np.isfinite(finite)]
+    if not len(finite) or np.all(finite == 0.0):
         return 1.0
-    total = 1 << n
-    extreme = 0
-    bits = np.arange(n, dtype=np.uint64)
-    chunk = 32768
-    tolerance = 1e-12
-    for start in range(0, total, chunk):
-        stop = min(start + chunk, total)
-        codes = np.arange(start, stop, dtype=np.uint64)[:, None]
-        signs = 1.0 - 2.0 * ((codes >> bits) & 1).astype(float)
-        statistics = np.abs((signs @ differences) / n)
-        extreme += int(np.count_nonzero(statistics + tolerance >= observed))
-    return extreme / total
+
+    fractions = [Fraction(float(value)).limit_denominator(1_000_000) for value in finite]
+    denominator = math.lcm(*(value.denominator for value in fractions))
+    integers = [value.numerator * (denominator // value.denominator) for value in fractions]
+    divisor = reduce(math.gcd, (abs(value) for value in integers if value), 0) or 1
+    integers = [value // divisor for value in integers]
+
+    distribution = Counter({0: 1})
+    for value in integers:
+        updated = Counter()
+        for total, count in distribution.items():
+            updated[total + value] += count
+            updated[total - value] += count
+        distribution = updated
+
+    observed = abs(sum(integers))
+    extreme = sum(count for total, count in distribution.items() if abs(total) >= observed)
+    return extreme / (1 << len(integers))
+
+
+def exact_signflip_p(differences: np.ndarray) -> float:
+    return exact_signflip_p_dynamic_programming(differences)
 
 
 def estimate(differences: np.ndarray) -> dict:
+    differences = np.asarray(differences, dtype=float)
+    differences = differences[np.isfinite(differences)]
     n = len(differences)
+    if n < 2:
+        raise ValueError("at least two complete instance-level differences are required")
     mean = float(np.mean(differences))
     se = float(np.std(differences, ddof=1) / math.sqrt(n))
+    critical = float(student_t.ppf(0.975, n - 1))
     return {
         "n_instances": n,
         "estimate": mean,
-        "ci95_lo": mean - T_975_DF18 * se,
-        "ci95_hi": mean + T_975_DF18 * se,
+        "ci95_lo": mean - critical * se,
+        "ci95_hi": mean + critical * se,
         "cluster_se": se,
         "exact_signflip_p": exact_signflip_p(differences),
     }
@@ -254,7 +278,10 @@ def model_ready(attempts: list[dict], instances: list[str], path: Path) -> None:
             "strict_success": int(row["strict_success"]),
             "build_passed": int(row["build_passed"]),
             "metric_resolved": int(row["metric_resolved"]),
-            "private_test_passed": int(row["private_test_passed"]),
+            "private_test_passed": (
+                int(row["private_test_passed"])
+                if row.get("private_test_passed") is not None else None
+            ),
             "total_tokens": row["total_tokens"],
         })
     write_csv(path, rows)
@@ -266,8 +293,13 @@ def main() -> None:
     parser.add_argument("--out", required=True, type=Path)
     args = parser.parse_args()
     attempts = json.loads(args.attempts.read_text(encoding="utf-8-sig"))
-    if len(attempts) != 456:
-        raise ValueError(f"expected 456 ITT attempts, found {len(attempts)}")
+    instances = sorted({row["instance_key"] for row in attempts})
+    expected_attempts = len(instances) * len(CELLS) * 3
+    if len(attempts) != expected_attempts:
+        raise ValueError(
+            f"expected {expected_attempts} ITT attempts for {len(instances)} instances, "
+            f"found {len(attempts)}"
+        )
     args.out.mkdir(parents=True, exist_ok=False)
 
     instances, outcome_cube = build_cube(attempts, "strict_success")
@@ -278,6 +310,7 @@ def main() -> None:
     write_csv(args.out / "paired_token_differences.csv", tokens)
     model_ready(attempts, instances, args.out / "model_ready_attempts.csv")
 
+    private_passes, private_regression_rows, private_unavailable = partition_private_outcomes(attempts)
     regressions = [
         {
             "run_id": row["run_id"],
@@ -290,13 +323,28 @@ def main() -> None:
             "strict_success": row["strict_success"],
             "materialized_source_ref": row["materialized_source_ref"],
         }
-        for row in attempts if not row["private_test_passed"]
+        for row in private_regression_rows
     ]
     write_csv(args.out / "private_regressions.csv", regressions)
+    unavailable_rows = [
+        {
+            "run_id": row["run_id"],
+            "instance_key": row["instance_key"],
+            "anti_pattern_type": row["anti_pattern_type"],
+            "grounding_enabled": row["grounding_enabled"],
+            "control_structure": row["control_structure"],
+            "visible_tests_enabled": row["visible_tests_enabled"],
+            "strict_success": row["strict_success"],
+            "materialized_source_ref": row["materialized_source_ref"],
+        }
+        for row in private_unavailable
+    ]
+    if unavailable_rows:
+        write_csv(args.out / "private_unavailable.csv", unavailable_rows)
 
     arm_private = Counter(
         (row["grounding_enabled"], row["control_structure"], row["visible_tests_enabled"])
-        for row in attempts if not row["private_test_passed"]
+        for row in private_regression_rows
     )
     metadata = {
         "analysis_status": "complete_for_prespecified_instance_level_paired_estimands",
@@ -305,12 +353,16 @@ def main() -> None:
         "independent_instances": len(instances),
         "repetitions_per_cell": 3,
         "strict_successes": sum(row["strict_success"] for row in attempts),
-        "private_passes": sum(row["private_test_passed"] for row in attempts),
+        "private_passes": len(private_passes),
         "private_regressions": len(regressions),
+        "private_unavailable": len(private_unavailable),
         "method": {
             "aggregation": "three repetitions averaged within instance and factorial cell",
-            "confidence_interval": "paired instance-level Student-t interval, df=18",
-            "hypothesis_test": "two-sided exact sign-flip randomization test over all 2^19 cluster signs",
+            "confidence_interval": f"paired instance-level Student-t interval, df={len(instances) - 1}",
+            "hypothesis_test": (
+                f"two-sided exact sign-flip randomization test over all 2^{len(instances)} "
+                "cluster signs, evaluated by discrete dynamic programming"
+            ),
             "multiplicity": "Holm adjustment within each four-cell simple-effect family and the three test-interaction family",
             "power_classification": "visible-test main effect confirmatory; cell-specific test effects and test interactions exploratory",
         },
@@ -325,8 +377,8 @@ def main() -> None:
         ],
         "mixed_effects_logistic_model": {
             "prespecified_formula": "strict_success ~ grounding * control_structure * visible_test + anti_pattern + (1 | instance)",
-            "status": "model_ready_dataset_emitted; validated GLMM runtime unavailable in the frozen local environment",
-            "interpretation_rule": "do not replace the prespecified GLMM with an unvalidated post-hoc optimizer",
+            "status": "model_ready_dataset_emitted; fit separately as a model-based sensitivity analysis",
+            "interpretation_rule": "paired instance-level risk differences remain the primary effect-scale analysis",
         },
     }
     (args.out / "ANALYSIS_METADATA.json").write_text(
@@ -344,6 +396,7 @@ def main() -> None:
         f"- Private behavioral passes: {metadata['private_passes']}/{len(attempts)} "
         f"({metadata['private_passes'] / len(attempts):.1%})",
         f"- Private behavioral regressions: {len(regressions)}/{len(attempts)}",
+        f"- Private outcome unavailable after API failure: {len(private_unavailable)}/{len(attempts)}",
         "",
         "## Confirmatory primary estimand",
         "",
@@ -357,9 +410,8 @@ def main() -> None:
         "",
         "## Prespecified mixed-effects model",
         "",
-        "A model-ready attempt table is emitted, but the GLMM was not fit in this pass because the "
-        "frozen local runtime contains neither R nor a validated mixed-model Python package. This is "
-        "recorded explicitly rather than substituting an unvalidated post-hoc optimizer.",
+        "A model-ready attempt table is emitted for the prespecified random-intercept logistic "
+        "sensitivity model. Its results are reported separately from the primary paired estimands.",
     ]
     (args.out / "PAIRED_ANALYSIS_REPORT.md").write_text(
         "\n".join(report) + "\n", encoding="utf-8"

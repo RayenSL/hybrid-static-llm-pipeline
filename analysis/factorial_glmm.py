@@ -65,6 +65,17 @@ def write_csv(path: Path, rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
+def validate_model_ready_data(data) -> tuple[int, int]:
+    observations = len(data)
+    instances = int(data["instance_id"].nunique())
+    counts = data.groupby("instance_id").size()
+    if instances < 2 or observations != instances * 24 or not (counts == 24).all():
+        raise ValueError(
+            "model-ready data must contain 24 factorial attempts for every independent instance"
+        )
+    return observations, instances
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", required=True, type=Path)
@@ -80,8 +91,7 @@ def main() -> None:
     from statsmodels.genmod.bayes_mixed_glm import BinomialBayesMixedGLM
 
     data = pd.read_csv(args.data)
-    if len(data) != 456 or data["instance_id"].nunique() != 19:
-        raise ValueError("model-ready data must contain 456 attempts and 19 instances")
+    observations, instances = validate_model_ready_data(data)
     args.out.mkdir(parents=True, exist_ok=False)
 
     common = {"vcp_p": 0.5, "fe_p": 2.0}
@@ -130,8 +140,8 @@ def main() -> None:
         "status": "completed_with_estimator_sensitivity",
         "formula": FORMULA + " + (1 | instance_id)",
         "input_sha256": sha256(args.data),
-        "observations": len(data),
-        "instances": int(data["instance_id"].nunique()),
+        "observations": observations,
+        "instances": instances,
         "analysis_seed": ANALYSIS_SEED,
         "software": {
             "python": platform.python_version(),
@@ -164,7 +174,7 @@ def main() -> None:
             "The regularized fits converge but their random-intercept SD estimates "
             "differ materially. The weak-prior fit does not converge and collapses "
             "the random-effect variance, consistent with near-separation and only "
-            "19 clusters. Use the prespecified instance-level paired risk differences "
+            f"{instances} clusters. Use the prespecified instance-level paired risk differences "
             "as the primary effect-scale results; treat GLMM coefficients as "
             "model-based sensitivity evidence."
         ),
@@ -184,7 +194,7 @@ def main() -> None:
         f"{variance_rows[1]['random_intercept_sd']:.3f} under VB.",
         "",
         "A weak-prior MAP diagnostic did not converge and pushed the random-effect "
-        "variance to the boundary. With 19 clusters and near-complete success in "
+        f"variance to the boundary. With {instances} clusters and near-complete success in "
         "several cells, the model is weakly identified. Coefficients and approximate "
         "intervals are retained in glmm_fixed_effects.csv, but the paired "
         "instance-level absolute risk differences remain the primary interpretation.",

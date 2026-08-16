@@ -107,10 +107,10 @@ def main(argv=None) -> int:
     )
     instance = box(
         11.40, 17.70, 4.50, 1.45, "Evaluation instance (this study)",
-        "Constructed corpus, frozen at v1.0"
-        "\n30 detector-confirmed seeded targets:"
-        "\n10 God Class - 10 Long Method - 10 Obsolete API"
-        "\n31 control and distractor files"
+        "Constructed corpus, frozen at v2.0"
+        "\n36 detector-confirmed seeded targets:"
+        "\n13 God Class - 13 Long Method - 10 Obsolete API"
+        "\n37 control and distractor files"
         "\nGround truth known by construction",
         FILL["corpus"], title_size=8.9, body_size=6.4, body_gap=0.58,
     )
@@ -146,7 +146,7 @@ def main(argv=None) -> int:
             color=INK, zorder=3)
     ax.text(
         confirm_cx, 13.88,
-        "10 God Class + 9 Long Method targets (LM-01 excluded) x 3 repetitions x 8 cells = 456 attempts"
+        "26 God Class and Long Method targets x 3 repetitions x 8 cells = 624 assignments"
         "\ngpt-5.6-sol edits production source directly; the factorial has no separate applier"
         "\nNeutral coordinates to every cell - Structural finding to grounded cells only - visible test to test-ON cells only",
         ha="center", va="center", fontsize=6.5, color=MUTED, style="italic",
@@ -155,7 +155,7 @@ def main(argv=None) -> int:
 
     controller = box(
         2.20, 12.60, 3.30, 1.85, "Experiment controller",
-        "Frozen assignment manifest, seed 503999552"
+        "Frozen assignment manifest, seed 20260812"
         "\nFreezes the two payload views and the"
         "\nsingle-shot / iterative contract"
         "\nInterleaves cells; failures stay in their"
@@ -165,15 +165,16 @@ def main(argv=None) -> int:
     test_author = box(
         6.70, 12.85, 3.90, 1.35, "Diagnosis-blind test generation",
         "Pristine source + test-project skeleton + neutral coordinates"
-        "\nOne stateless call per target, before any repair is proposed"
+        "\nOne planning and one implementation call per target"
+        "\nFrozen plan: exactly five cases"
         "\nNo diagnosis, metrics, private oracle or reference repair",
-        FILL["test"], title_size=8.7, body_size=6.3, body_gap=0.58,
+        FILL["test"], title_size=8.7, body_size=5.9, body_gap=0.58,
     )
     admission = box(
         6.70, 11.42, 3.90, 1.15, "Admission and freeze",
-        "Schema parse -> compile -> two passes on the pristine system"
+        "Schema parse -> compile -> three passes on the pristine system"
         "\nInvokes production code, non-vacuous assertion"
-        "\nImmutable artefact; one attempt, no regeneration",
+        "\n25 of 26 admitted; no regeneration after failure",
         FILL["test"], title_size=8.7, body_size=6.3, body_gap=0.55,
     )
 
@@ -302,11 +303,12 @@ def main(argv=None) -> int:
     layer3 = box(
         layer_centers[2], 4.55, 4.10, 1.55, "Layer 3 - private behavioural oracle",
         "Author-written characterisation suite"
-        "\nFrozen pre-repair, hidden from every model surface"
+        "\n270 frozen drivers; hidden from every model surface"
+        "\n10 per evaluated target + 10 Obsolete smoke"
         "\nExecuted only after the campaign is sealed"
         "\nEquivalence (God Class / Long Method)"
         "\nSmoke oracle (Obsolete API Usage)",
-        FILL["private"], title_size=8.5, body_size=6.7, body_gap=0.60,
+        FILL["private"], title_size=8.5, body_size=6.2, body_gap=0.60,
         edge="#477d7b",
     )
 
@@ -326,7 +328,7 @@ def main(argv=None) -> int:
 
     # both experiments are fed by the detection stage; "Detector roles" annotates it
     arrow((3.60, 15.10), (3.60, panel_y1))
-    note(2.05, 14.82, "19 factorial targets")
+    note(2.05, 14.82, "26 factorial targets")
     rail_top = 14.85
     line([6.90, 6.90], [15.10, rail_top])
     line([6.90, 11.40], [rail_top, rail_top])
