@@ -194,7 +194,13 @@ public static class ContextLadderManifestCommand
             ? array
             : throw new InvalidDataException("baseline has no 'findings' array");
 
+        // An admitted entry names exactly one target. `line` is optional but strongly advised: a
+        // symbol alone is not unique, because overloads share a name and the detector flags each
+        // one separately. Ibis.Besteksadministratie has six Extensions.AsDbXml overloads, so a
+        // symbol-only entry silently admits six targets from one class and breaks the
+        // one-target-per-class independence rule.
         HashSet<string>? admitted = null;
+        var admittedCount = 0;
         if (admittedPath is not null)
         {
             using var admittedDoc = JsonDocument.Parse(File.ReadAllText(admittedPath));
@@ -203,7 +209,11 @@ public static class ContextLadderManifestCommand
             {
                 var file = entry.GetProperty("file").GetString()!;
                 var symbol = entry.GetProperty("symbol").GetString()!;
-                admitted.Add($"{Resolve(file)}::{symbol}");
+                var line = entry.TryGetProperty("line", out var l) && l.TryGetInt32(out var value)
+                    ? value.ToString()
+                    : "*";
+                admitted.Add($"{Resolve(file)}::{symbol}::{line}");
+                admittedCount++;
             }
         }
 
@@ -218,10 +228,13 @@ public static class ContextLadderManifestCommand
             if (file is null || symbol is null) continue;
 
             var full = Resolve(file);
-            if (admitted is not null && !admitted.Contains($"{full}::{symbol}")) continue;
-
             var line = finding.TryGetProperty("line", out var l) ? l.GetInt32() : 0;
+            if (admitted is not null &&
+                !admitted.Contains($"{full}::{symbol}::{line}") &&
+                !admitted.Contains($"{full}::{symbol}::*")) continue;
+
             var snippet = finding.TryGetProperty("snippet", out var s) ? s.GetString() : null;
+
             var severity = finding.TryGetProperty("severity", out var sev)
                 ? sev.GetString()?.ToLowerInvariant() switch
                 {
@@ -246,6 +259,14 @@ public static class ContextLadderManifestCommand
             targets.Add(new LadderTarget(
                 key, type.Value, severity, full, symbol, line, known.EndLine, snippet, metrics));
         }
+
+        // An admitted list is a statement about how many targets there are. If the counts disagree
+        // the schedule is not the one that was hand-confirmed, so refuse rather than run a campaign
+        // over a silently different population.
+        if (admitted is not null && targets.Count != admittedCount)
+            throw new InvalidDataException(
+                $"admitted list names {admittedCount} targets but matched {targets.Count} findings. "
+                + "Add a 'line' to each entry: a symbol alone is not unique when overloads share a name.");
 
         return targets;
     }
