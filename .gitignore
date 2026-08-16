@@ -10,6 +10,12 @@ obj/
 archive/previous-runs-*/
 experiments/**/archive/
 
+# Superseded figure sets: regenerable from the sealed campaign via analysis/
+archive/previous-figures-*/
+
+# Thesis writing drafts: the thesis is authored outside this repo
+archive/thesis-drafts-*/
+
 # Per-assignment codebase reconstructions: regenerable from campaign/final-sources
 # via preflight/archive_materialized_codebases.py. The INDEX/SUMMARY/SHA256SUMS
 # records at the viewable-codebases root are kept as provenance.
