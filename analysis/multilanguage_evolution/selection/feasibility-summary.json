@@ -1,0 +1,46 @@
+{
+  "status": "feasibility_only",
+  "cases": [
+    {
+      "repository": "Odoo",
+      "domain": "Business applications",
+      "preserved_years": 19.8,
+      "observations": 21,
+      "complete_syntax": 21,
+      "gaps": [],
+      "numerical_feasibility_gate": true,
+      "scientific_admission": false
+    },
+    {
+      "repository": "Jenkins",
+      "domain": "Development automation",
+      "preserved_years": 19.9,
+      "observations": 21,
+      "complete_syntax": 20,
+      "gaps": [
+        "endpoint-2026"
+      ],
+      "numerical_feasibility_gate": true,
+      "scientific_admission": false
+    },
+    {
+      "repository": "Apache Tomcat",
+      "domain": "Application-server infrastructure",
+      "preserved_years": 20.5,
+      "observations": 21,
+      "complete_syntax": 19,
+      "gaps": [
+        "2025",
+        "endpoint-2026"
+      ],
+      "numerical_feasibility_gate": true,
+      "scientific_admission": false
+    }
+  ],
+  "remaining_gates": [
+    "repository-specific scope review",
+    "empirical rule validation",
+    "current build and runtime smoke checks",
+    "independent A/B and offline replay"
+  ]
+}

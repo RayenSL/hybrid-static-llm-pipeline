@@ -218,9 +218,9 @@ if wants analyse; then
     info "Repair shape — settles the gaming question of the metric-resolved outcome:"
     run "$PYTHON" analysis/extraction_vs_simplification.py --campaign "$OUT"
     info "Paired effects, the mixed-model sensitivity analysis and the figures:"
-    info "  $PYTHON analysis/analyse_results.py --help"
+    info "  $PYTHON analysis/factorial_test_feedback_analysis.py --help"
     info "  $PYTHON analysis/factorial_glmm.py --help"
-    info "  $PYTHON analysis/sol_thesis_figures.py --help"
+    info "  $PYTHON analysis/confirmatory_v2_figures.py --help"
 fi
 
 step "Done"

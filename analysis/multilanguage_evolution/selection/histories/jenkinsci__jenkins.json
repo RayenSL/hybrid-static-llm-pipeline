@@ -1,0 +1,802 @@
+{
+  "schema_version": "history-audit/1",
+  "status": "inventory_only_not_measurement",
+  "repository": "https://github.com/jenkinsci/jenkins.git",
+  "cutoff_utc": "2026-09-14T00:00:00+00:00",
+  "endpoint": {
+    "commit": "003f706d2f3ea233d56e30770741182716ab8808",
+    "committer_unix": 1789267592,
+    "committer_date": "2026-09-12T20:46:32-06:00"
+  },
+  "earliest_first_parent": {
+    "commit": "8a0dc230f44e84e5a7f7920cf9a31f09a54999ac",
+    "committer_unix": 1162761361,
+    "committer_date": "2006-11-05T21:16:01+00:00"
+  },
+  "earliest_source": {
+    "commit": "8a0dc230f44e84e5a7f7920cf9a31f09a54999ac",
+    "committer_unix": 1162761361,
+    "committer_date": "2006-11-05T21:16:01+00:00"
+  },
+  "undated_source_import": false,
+  "reachable_roots": [
+    "ce829c15d0e322f7f785eab27f6562943984c40b",
+    "9a2891057d64a824cc2cd1b155a60fdf3fdce2a1",
+    "3bce1000dfb7186c058279d92324d500cbf20a36",
+    "8a0dc230f44e84e5a7f7920cf9a31f09a54999ac"
+  ],
+  "first_parent_commits": 23265,
+  "elapsed_years": 19.853192127047,
+  "timestamp_reversals": 5,
+  "observations": [
+    {
+      "label": "earliest-2006",
+      "commit": "8a0dc230f44e84e5a7f7920cf9a31f09a54999ac",
+      "committer_unix": 1162761361,
+      "committer_date": "2006-11-05T21:16:01+00:00",
+      "inventory": {
+        "tracked_files": 594,
+        "tracked_language_files": {
+          "java": 142,
+          "javascript": 6,
+          "other": 446
+        },
+        "top_level_paths": {
+          "core": 316,
+          "war": 224,
+          "lib": 53,
+          "pom.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2007",
+      "commit": "3382630865948cf103bbff48514ffdfa60a87e05",
+      "committer_unix": 1198903875,
+      "committer_date": "2007-12-29T04:51:15+00:00",
+      "inventory": {
+        "tracked_files": 1323,
+        "tracked_language_files": {
+          "java": 414,
+          "javascript": 34,
+          "other": 875
+        },
+        "top_level_paths": {
+          "core": 664,
+          "war": 449,
+          "lib": 129,
+          "remoting": 46,
+          "maven-interceptor": 10,
+          "jnlp-agent": 9,
+          "maven-agent": 8,
+          ".cvsignore": 1,
+          "assembly-src.xml": 1,
+          "dummy.keystore": 1,
+          "pom.xml": 1,
+          "publish-javadoc.sh": 1,
+          "push-m2-repo.rb": 1,
+          "release.sh": 1,
+          "update.changelog.rb": 1
+        }
+      }
+    },
+    {
+      "label": "2008",
+      "commit": "c5a4e8c463e9928fa235e3cd7217447f67a71a0b",
+      "committer_unix": 1230767923,
+      "committer_date": "2008-12-31T23:58:43+00:00",
+      "inventory": {
+        "tracked_files": 3977,
+        "tracked_language_files": {
+          "java": 591,
+          "javascript": 43,
+          "other": 3342,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 2364,
+          "war": 1261,
+          "lib": 130,
+          "test": 100,
+          "remoting": 63,
+          "debian": 25,
+          "maven-interceptor": 11,
+          "maven-agent": 9,
+          "ips": 3,
+          ".cvsignore": 1,
+          "LICENSE.txt": 1,
+          "assembly-src.xml": 1,
+          "debian.sh": 1,
+          "dummy.keystore": 1,
+          "pom.xml": 1,
+          "publish-javadoc.sh": 1,
+          "push-m2-repo.rb": 1,
+          "release-debian.sh": 1,
+          "release.sh": 1,
+          "update.changelog.rb": 1
+        }
+      }
+    },
+    {
+      "label": "2009",
+      "commit": "a3785dc287380c7697f0b3941517f65aa8bdf15c",
+      "committer_unix": 1261751310,
+      "committer_date": "2009-12-25T14:28:30+00:00",
+      "inventory": {
+        "tracked_files": 4681,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 829,
+          "javascript": 44,
+          "other": 3806,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 2927,
+          "war": 1068,
+          "maven-plugin": 300,
+          "test": 210,
+          "remoting": 78,
+          "debian": 26,
+          "maven-interceptor": 11,
+          "opensuse": 10,
+          "rpm": 10,
+          "cli": 7,
+          "maven-agent": 7,
+          "msi": 7,
+          "ips": 3,
+          ".hudson": 1,
+          "LICENSE.txt": 1,
+          "assembly-src.xml": 1,
+          "concurrent-build-branch-note.txt": 1,
+          "debian.sh": 1,
+          "dummy.keystore": 1,
+          "javadocReverseIndex.groovy": 1
+        }
+      }
+    },
+    {
+      "label": "2010",
+      "commit": "3f72e021ca5460c5e8ccf5735c15ddc10bc34c26",
+      "committer_unix": 1293814421,
+      "committer_date": "2011-01-01T01:53:41+09:00",
+      "inventory": {
+        "tracked_files": 7005,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1051,
+          "javascript": 47,
+          "other": 5905,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 4894,
+          "war": 1215,
+          "maven-plugin": 388,
+          "test": 293,
+          "remoting": 84,
+          "debian": 28,
+          "ui-samples-plugin": 17,
+          "cli": 11,
+          "maven-interceptor": 11,
+          "maven3-interceptor": 9,
+          "maven-agent": 7,
+          "msi": 7,
+          "opensuse": 7,
+          "rpm": 6,
+          "ebuild": 5,
+          "maven3-agent": 5,
+          "ips": 3,
+          "plugins": 2,
+          ".gitignore": 1,
+          ".hudson": 1
+        }
+      }
+    },
+    {
+      "label": "2011",
+      "commit": "0d2c5575339fc845783306ba3de387ea9f073a07",
+      "committer_unix": 1324839284,
+      "committer_date": "2011-12-25T10:54:44-08:00",
+      "inventory": {
+        "tracked_files": 8735,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1088,
+          "javascript": 55,
+          "other": 7590,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 6653,
+          "war": 1150,
+          "maven-plugin": 460,
+          "test": 349,
+          "ui-samples-plugin": 25,
+          "debian": 21,
+          "osx": 20,
+          "cli": 13,
+          "msi": 7,
+          "opensuse": 7,
+          "rpm": 6,
+          "ebuild": 5,
+          "ips": 3,
+          "plugins": 2,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          "BUILDING.TXT": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2012",
+      "commit": "79cc2ebbe3607ea44d245be162ffd211de77911d",
+      "committer_unix": 1355999407,
+      "committer_date": "2012-12-20T02:30:07-08:00",
+      "inventory": {
+        "tracked_files": 9028,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1210,
+          "javascript": 70,
+          "other": 7746,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 6866,
+          "war": 1163,
+          "maven-plugin": 467,
+          "test": 383,
+          "ui-samples-plugin": 45,
+          "osx": 25,
+          "debian": 21,
+          "cli": 16,
+          "msi": 7,
+          "opensuse": 7,
+          "rpm": 6,
+          "ips": 3,
+          "src": 3,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          "BUILDING.TXT": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "changelog.html": 1
+        }
+      }
+    },
+    {
+      "label": "2013",
+      "commit": "eddd9d8bb121cc926746ac5d6f8f21aa9c840ad6",
+      "committer_unix": 1387570738,
+      "committer_date": "2013-12-20T15:18:58-05:00",
+      "inventory": {
+        "tracked_files": 11079,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1245,
+          "javascript": 73,
+          "other": 9759,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 9288,
+          "war": 1259,
+          "test": 429,
+          "osx": 25,
+          "cli": 19,
+          "debian": 15,
+          "msi": 7,
+          "opensuse": 7,
+          "rpm": 6,
+          ".idea": 3,
+          "ips": 3,
+          "src": 3,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          "BUILDING.TXT": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "changelog.html": 1,
+          "dummy.keystore": 1
+        }
+      }
+    },
+    {
+      "label": "2014",
+      "commit": "ed891f6bc0a99497f96126f43b9cd8bec7fec51b",
+      "committer_unix": 1417631414,
+      "committer_date": "2014-12-03T18:30:14+00:00",
+      "inventory": {
+        "tracked_files": 10559,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1271,
+          "javascript": 76,
+          "other": 9210,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 8948,
+          "war": 1063,
+          "test": 442,
+          "cli": 25,
+          "osx": 25,
+          "debian": 15,
+          "msi": 7,
+          "opensuse": 7,
+          "rpm": 6,
+          "ips": 3,
+          "src": 3,
+          ".editorconfig": 1,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          "BUILDING.TXT": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "changelog.html": 1,
+          "dummy.keystore": 1
+        }
+      }
+    },
+    {
+      "label": "2015",
+      "commit": "9ab3f1d6aa15a242d226b45664bbb1a8dd0c9818",
+      "committer_unix": 1450810404,
+      "committer_date": "2015-12-22T19:53:24+01:00",
+      "inventory": {
+        "tracked_files": 10723,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1373,
+          "javascript": 75,
+          "other": 9274
+        },
+        "top_level_paths": {
+          "core": 9096,
+          "war": 1057,
+          "test": 525,
+          "cli": 27,
+          "src": 3,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          "BUILDING.TXT": 1,
+          "CONTRIBUTING.md": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "changelog.html": 1,
+          "dummy.keystore": 1,
+          "licenseCompleter.groovy": 1,
+          "plugins": 1,
+          "pom.xml": 1,
+          "rc.changelog.rb": 1,
+          "show-pom-version.rb": 1,
+          "translation-tool.pl": 1
+        }
+      }
+    },
+    {
+      "label": "2016",
+      "commit": "c05e0523851f9e4dcb83be2f4c9646734674e9e4",
+      "committer_unix": 1482265466,
+      "committer_date": "2016-12-20T15:24:26-05:00",
+      "inventory": {
+        "tracked_files": 11329,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1412,
+          "javascript": 100,
+          "other": 9816
+        },
+        "top_level_paths": {
+          "core": 9633,
+          "war": 1162,
+          "test": 486,
+          "cli": 27,
+          "src": 4,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          ".mvn": 1,
+          "BUILDING.TXT": 1,
+          "CONTRIBUTING.md": 1,
+          "Jenkinsfile": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "changelog.html": 1,
+          "dummy.keystore": 1,
+          "licenseCompleter.groovy": 1,
+          "pom.xml": 1,
+          "rc.changelog.rb": 1
+        }
+      }
+    },
+    {
+      "label": "2017",
+      "commit": "16042bd57bc3e7bc0544b3a4da5e0f79dfa5087b",
+      "committer_unix": 1514544968,
+      "committer_date": "2017-12-29T11:56:08+01:00",
+      "inventory": {
+        "tracked_files": 11753,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1493,
+          "javascript": 100,
+          "other": 10159
+        },
+        "top_level_paths": {
+          "core": 9852,
+          "war": 1292,
+          "test": 551,
+          "cli": 36,
+          "src": 4,
+          ".gitattributes": 1,
+          ".github": 1,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          ".mvn": 1,
+          "BUILDING.TXT": 1,
+          "CONTRIBUTING.md": 1,
+          "Jenkinsfile": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "changelog.html": 1,
+          "dummy.keystore": 1,
+          "licenseCompleter.groovy": 1,
+          "pom.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2018",
+      "commit": "bcc4e4fe9c3dccc5ca74299d24f8f992c9d5cd71",
+      "committer_unix": 1545023240,
+      "committer_date": "2018-12-16T21:07:20-08:00",
+      "inventory": {
+        "tracked_files": 11738,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1615,
+          "javascript": 103,
+          "other": 10019
+        },
+        "top_level_paths": {
+          "core": 9684,
+          "war": 1316,
+          "test": 617,
+          "test-jdk8": 52,
+          "cli": 36,
+          "\"core": 5,
+          "src": 4,
+          ".mvn": 3,
+          ".gitattributes": 1,
+          ".github": 1,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          "CONTRIBUTING.md": 1,
+          "Dockerfile": 1,
+          "Jenkinsfile": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "changelog.html": 1,
+          "dummy.keystore": 1
+        }
+      }
+    },
+    {
+      "label": "2019",
+      "commit": "a1e740a56df7c1e70ca5219bf7e12bc202005b5d",
+      "committer_unix": 1574037536,
+      "committer_date": "2019-11-17T16:38:56-08:00",
+      "inventory": {
+        "tracked_files": 11679,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1590,
+          "javascript": 106,
+          "other": 9982
+        },
+        "top_level_paths": {
+          "core": 9644,
+          "war": 1295,
+          "test": 669,
+          "cli": 33,
+          "\"core": 5,
+          "src": 4,
+          ".github": 3,
+          ".mvn": 3,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          "CONTRIBUTING.md": 1,
+          "Dockerfile": 1,
+          "Jenkinsfile": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "bom": 1,
+          "changelog.html": 1,
+          "dummy.keystore": 1
+        }
+      }
+    },
+    {
+      "label": "2020",
+      "commit": "884e4ddefefce28ce3bb03395852c3607351ec59",
+      "committer_unix": 1609257846,
+      "committer_date": "2020-12-29T16:04:06+00:00",
+      "inventory": {
+        "tracked_files": 11766,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1677,
+          "javascript": 119,
+          "other": 9969
+        },
+        "top_level_paths": {
+          "core": 9648,
+          "war": 1331,
+          "test": 713,
+          "cli": 35,
+          ".github": 6,
+          "\"core": 5,
+          "src": 4,
+          ".mvn": 3,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          "CONTRIBUTING.md": 1,
+          "Dockerfile": 1,
+          "Jenkinsfile": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "bom": 1,
+          "changelog.html": 1,
+          "docs": 1
+        }
+      }
+    },
+    {
+      "label": "2021",
+      "commit": "c9aea4738fb27c61c7ca472a6557c7e744e3c91e",
+      "committer_unix": 1640966083,
+      "committer_date": "2021-12-31T07:54:43-08:00",
+      "inventory": {
+        "tracked_files": 11705,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1680,
+          "javascript": 131,
+          "other": 9893
+        },
+        "top_level_paths": {
+          "core": 9542,
+          "war": 1320,
+          "test": 770,
+          "cli": 38,
+          ".github": 6,
+          "\"core": 5,
+          ".mvn": 3,
+          ".editorconfig": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          "CONTRIBUTING.md": 1,
+          "Jenkinsfile": 1,
+          "LICENSE.txt": 1,
+          "README.md": 1,
+          "assembly-src.xml": 1,
+          "bom": 1,
+          "changelog.html": 1,
+          "docs": 1,
+          "dummy.keystore": 1
+        }
+      }
+    },
+    {
+      "label": "2022",
+      "commit": "989ef5b6d64a95c5b58cde8b428c61557491a101",
+      "committer_unix": 1672505545,
+      "committer_date": "2022-12-31T16:52:25+00:00",
+      "inventory": {
+        "tracked_files": 11865,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1717,
+          "javascript": 145,
+          "other": 10001,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 9823,
+          "war": 1165,
+          "test": 786,
+          "cli": 38,
+          ".github": 8,
+          "websocket": 6,
+          "\"core": 5,
+          ".idea": 3,
+          ".mvn": 3,
+          "src": 2,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".gitpod.yml": 1,
+          ".gitpod": 1,
+          ".jenkins": 1,
+          ".perltidyrc": 1,
+          ".prettierrc.json": 1,
+          "CONTRIBUTING.md": 1
+        }
+      }
+    },
+    {
+      "label": "2023",
+      "commit": "2e267453eb7530848df3a4b75774136446e280b5",
+      "committer_unix": 1704021896,
+      "committer_date": "2023-12-31T12:24:56+01:00",
+      "inventory": {
+        "tracked_files": 12047,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1770,
+          "javascript": 154,
+          "other": 10121,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 9989,
+          "war": 1153,
+          "test": 812,
+          "cli": 39,
+          ".github": 13,
+          "\"core": 5,
+          "websocket": 4,
+          ".idea": 3,
+          ".mvn": 3,
+          "src": 2,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".gitpod.yml": 1,
+          ".gitpod": 1,
+          ".jenkins": 1,
+          ".perltidyrc": 1,
+          ".prettierrc.json": 1,
+          "CONTRIBUTING.md": 1
+        }
+      }
+    },
+    {
+      "label": "2024",
+      "commit": "0a645059151d3b33782699e4e94fbbf6c33dd933",
+      "committer_unix": 1735672400,
+      "committer_date": "2024-12-31T19:13:20+00:00",
+      "inventory": {
+        "tracked_files": 12492,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1808,
+          "javascript": 163,
+          "other": 10519,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 10444,
+          "war": 967,
+          "test": 831,
+          "src": 149,
+          "cli": 40,
+          ".github": 13,
+          "\"core": 5,
+          "websocket": 4,
+          ".idea": 3,
+          ".mvn": 3,
+          ".babelrc": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".gitpod.yml": 1,
+          ".gitpod": 1,
+          ".jenkins": 1,
+          ".perltidyrc": 1,
+          ".prettierignore": 1
+        }
+      }
+    },
+    {
+      "label": "2025",
+      "commit": "a3fb95e0aa908242666a4fde2ea889b56865e0d8",
+      "committer_unix": 1767178767,
+      "committer_date": "2025-12-31T11:59:27+01:00",
+      "inventory": {
+        "tracked_files": 12325,
+        "tracked_language_files": {
+          "c": 1,
+          "java": 1884,
+          "javascript": 125,
+          "other": 10314,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 10403,
+          "test": 868,
+          "war": 802,
+          "src": 156,
+          "cli": 40,
+          ".github": 14,
+          "websocket": 4,
+          ".idea": 3,
+          ".mvn": 3,
+          ".babelrc": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          ".perltidyrc": 1,
+          ".prettierignore": 1,
+          ".prettierrc.json": 1,
+          ".stylelintrc.js": 1,
+          ".yarnrc.yml": 1
+        }
+      }
+    },
+    {
+      "label": "endpoint-2026",
+      "commit": "003f706d2f3ea233d56e30770741182716ab8808",
+      "committer_unix": 1789267592,
+      "committer_date": "2026-09-12T20:46:32-06:00",
+      "inventory": {
+        "tracked_files": 12423,
+        "tracked_language_files": {
+          "java": 1946,
+          "javascript": 130,
+          "other": 10346,
+          "python": 1
+        },
+        "top_level_paths": {
+          "core": 10454,
+          "test": 902,
+          "war": 806,
+          "src": 164,
+          "cli": 42,
+          ".github": 13,
+          "websocket": 4,
+          ".idea": 3,
+          ".mvn": 3,
+          ".babelrc": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".jenkins": 1,
+          ".perltidyrc": 1,
+          ".prettierignore": 1,
+          ".prettierrc.json": 1,
+          ".stylelintrc.js": 1,
+          ".yarnrc.yml": 1
+        }
+      }
+    }
+  ],
+  "scope_warning": "Counts cover tracked paths; no production/generated/vendor exclusions or parser admission applied.",
+  "history_archive": {
+    "file": "jenkinsci__jenkins.history.json.gz",
+    "sha256": "ed4220c598656c3068914f97d9ddc94847cb576fbe7093f296fe3b8acdd43588"
+  }
+}

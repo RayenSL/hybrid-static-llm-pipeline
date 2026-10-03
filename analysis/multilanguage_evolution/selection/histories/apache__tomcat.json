@@ -1,0 +1,741 @@
+{
+  "schema_version": "history-audit/1",
+  "status": "inventory_only_not_measurement",
+  "repository": "https://github.com/apache/tomcat.git",
+  "cutoff_utc": "2026-09-14T00:00:00+00:00",
+  "endpoint": {
+    "commit": "462be987157efbd854ef7d32690f5eb3d5df9ec6",
+    "committer_unix": 1789130984,
+    "committer_date": "2026-09-11T13:49:44+01:00"
+  },
+  "earliest_first_parent": {
+    "commit": "a84fabcbc6fee8a69253ad92a304b4718e96a7c9",
+    "committer_unix": 1143467626,
+    "committer_date": "2006-03-27T13:53:46+00:00"
+  },
+  "earliest_source": {
+    "commit": "a84fabcbc6fee8a69253ad92a304b4718e96a7c9",
+    "committer_unix": 1143467626,
+    "committer_date": "2006-03-27T13:53:46+00:00"
+  },
+  "undated_source_import": false,
+  "reachable_roots": [
+    "a84fabcbc6fee8a69253ad92a304b4718e96a7c9"
+  ],
+  "first_parent_commits": 28698,
+  "elapsed_years": 20.460257315091773,
+  "timestamp_reversals": 2,
+  "observations": [
+    {
+      "label": "earliest-2006",
+      "commit": "a84fabcbc6fee8a69253ad92a304b4718e96a7c9",
+      "committer_unix": 1143467626,
+      "committer_date": "2006-03-27T13:53:46+00:00",
+      "inventory": {
+        "tracked_files": 976,
+        "tracked_language_files": {
+          "java": 828,
+          "other": 148
+        },
+        "top_level_paths": {
+          "java": 975,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2007",
+      "commit": "879d430c6454153972b7641eaa299f065b3654fb",
+      "committer_unix": 1199054523,
+      "committer_date": "2007-12-30T22:42:03+00:00",
+      "inventory": {
+        "tracked_files": 1690,
+        "tracked_language_files": {
+          "java": 1130,
+          "other": 560
+        },
+        "top_level_paths": {
+          "java": 1246,
+          "webapps": 330,
+          "res": 42,
+          "test": 32,
+          "bin": 18,
+          "conf": 7,
+          ".classpath": 1,
+          ".project": 1,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTES-FOR-TOMCAT-7.txt": 1,
+          "NOTICE": 1,
+          "PROPOSALS.txt": 1,
+          "RELEASE-NOTES": 1,
+          "RELEASE-PLAN-6.0.txt": 1,
+          "RUNNING.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1,
+          "dist.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2008",
+      "commit": "8249b5fff6cb2ae68329fdaeaba5f13be823facf",
+      "committer_unix": 1230727687,
+      "committer_date": "2008-12-31T12:48:07+00:00",
+      "inventory": {
+        "tracked_files": 1789,
+        "tracked_language_files": {
+          "java": 1202,
+          "other": 587
+        },
+        "top_level_paths": {
+          "java": 1266,
+          "webapps": 327,
+          "modules": 74,
+          "res": 46,
+          "test": 37,
+          "bin": 18,
+          "conf": 7,
+          ".classpath": 1,
+          ".project": 1,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "PROPOSALS.txt": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-7-RELEASE-PLAN.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1,
+          "dist.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2009",
+      "commit": "0a15b793fa54102f8f730bbe9780247d610e38b4",
+      "committer_unix": 1262275264,
+      "committer_date": "2009-12-31T16:01:04+00:00",
+      "inventory": {
+        "tracked_files": 2187,
+        "tracked_language_files": {
+          "java": 1532,
+          "other": 655
+        },
+        "top_level_paths": {
+          "java": 1372,
+          "webapps": 344,
+          "modules": 311,
+          "res": 65,
+          "test": 57,
+          "bin": 17,
+          "conf": 7,
+          ".classpath": 1,
+          ".project": 1,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "PROPOSALS.txt": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-7-RELEASE-PLAN.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1,
+          "dist.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2010",
+      "commit": "2a31398b5bdd10b6dd98c10576d5454d80076ef0",
+      "committer_unix": 1293655324,
+      "committer_date": "2010-12-29T20:42:04+00:00",
+      "inventory": {
+        "tracked_files": 2325,
+        "tracked_language_files": {
+          "java": 1547,
+          "other": 778
+        },
+        "top_level_paths": {
+          "java": 1414,
+          "webapps": 365,
+          "test": 229,
+          "modules": 214,
+          "res": 68,
+          "bin": 18,
+          "conf": 7,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "PROPOSALS.txt": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-7-RELEASE-PLAN.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2011",
+      "commit": "6c17007fe8388533eed3dde426046ae35fa92a57",
+      "committer_unix": 1325370576,
+      "committer_date": "2011-12-31T22:29:36+00:00",
+      "inventory": {
+        "tracked_files": 2419,
+        "tracked_language_files": {
+          "java": 1602,
+          "other": 817
+        },
+        "top_level_paths": {
+          "java": 1414,
+          "webapps": 364,
+          "test": 314,
+          "modules": 223,
+          "res": 67,
+          "bin": 20,
+          "conf": 7,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2012",
+      "commit": "ad9a49cb08bf004af97cad465bba45d21d112325",
+      "committer_unix": 1356908455,
+      "committer_date": "2012-12-30T23:00:55+00:00",
+      "inventory": {
+        "tracked_files": 2647,
+        "tracked_language_files": {
+          "java": 1783,
+          "other": 864
+        },
+        "top_level_paths": {
+          "java": 1520,
+          "test": 406,
+          "webapps": 380,
+          "modules": 230,
+          "res": 74,
+          "bin": 20,
+          "conf": 7,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2013",
+      "commit": "411e4cc9b12bb4fd5aadfbb585db9b40afc90d3d",
+      "committer_unix": 1388432363,
+      "committer_date": "2013-12-30T19:39:23+00:00",
+      "inventory": {
+        "tracked_files": 3006,
+        "tracked_language_files": {
+          "java": 2030,
+          "other": 976
+        },
+        "top_level_paths": {
+          "java": 1666,
+          "test": 578,
+          "webapps": 407,
+          "modules": 232,
+          "res": 85,
+          "bin": 20,
+          "conf": 7,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "SVN-MERGE.txt": 1,
+          "TOMCAT-NEXT.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2014",
+      "commit": "326a3475680738efc7cb15a7a36bc863d2adbafc",
+      "committer_unix": 1419851804,
+      "committer_date": "2014-12-29T11:16:44+00:00",
+      "inventory": {
+        "tracked_files": 3018,
+        "tracked_language_files": {
+          "java": 2036,
+          "other": 982
+        },
+        "top_level_paths": {
+          "java": 1752,
+          "test": 635,
+          "webapps": 410,
+          "modules": 94,
+          "res": 89,
+          "bin": 19,
+          "conf": 8,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "SVN-MERGE.txt": 1,
+          "TOMCAT-NEXT.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2015",
+      "commit": "7e8db40083c732a2c33c57d9be945c59b8fd2029",
+      "committer_unix": 1451585350,
+      "committer_date": "2015-12-31T18:09:10+00:00",
+      "inventory": {
+        "tracked_files": 3203,
+        "tracked_language_files": {
+          "java": 2181,
+          "other": 1022
+        },
+        "top_level_paths": {
+          "java": 1843,
+          "test": 726,
+          "webapps": 411,
+          "modules": 95,
+          "res": 90,
+          "bin": 19,
+          "conf": 8,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "SVN-MERGE.txt": 1,
+          "TOMCAT-NEXT.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2016",
+      "commit": "c08e4bb70d26cb63eaac7a3b8c5f3033bd2fb4fe",
+      "committer_unix": 1483092889,
+      "committer_date": "2016-12-30T10:14:49+00:00",
+      "inventory": {
+        "tracked_files": 3224,
+        "tracked_language_files": {
+          "java": 2194,
+          "other": 1030
+        },
+        "top_level_paths": {
+          "java": 1838,
+          "test": 772,
+          "webapps": 392,
+          "modules": 95,
+          "res": 87,
+          "bin": 19,
+          "conf": 10,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2017",
+      "commit": "d3399023e38f9f9513d6edc40884bf4c8a651ea5",
+      "committer_unix": 1514036616,
+      "committer_date": "2017-12-23T13:43:36+00:00",
+      "inventory": {
+        "tracked_files": 3328,
+        "tracked_language_files": {
+          "java": 2274,
+          "other": 1054
+        },
+        "top_level_paths": {
+          "java": 1880,
+          "test": 826,
+          "webapps": 395,
+          "modules": 96,
+          "res": 87,
+          "bin": 21,
+          "conf": 10,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2018",
+      "commit": "ffc4b76e42fd39d88c9417d0ba2b3d697c16f5b5",
+      "committer_unix": 1545479139,
+      "committer_date": "2018-12-22T11:45:39+00:00",
+      "inventory": {
+        "tracked_files": 3922,
+        "tracked_language_files": {
+          "java": 2400,
+          "other": 1522
+        },
+        "top_level_paths": {
+          "java": 2386,
+          "test": 866,
+          "webapps": 403,
+          "res": 121,
+          "modules": 100,
+          "bin": 23,
+          "conf": 10,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2019",
+      "commit": "81e721526d4125e68e591dddf14dbb460f02f43b",
+      "committer_unix": 1577236432,
+      "committer_date": "2019-12-24T17:13:52-08:00",
+      "inventory": {
+        "tracked_files": 4081,
+        "tracked_language_files": {
+          "java": 2474,
+          "other": 1607
+        },
+        "top_level_paths": {
+          "java": 2480,
+          "test": 905,
+          "webapps": 404,
+          "res": 128,
+          "modules": 118,
+          "bin": 23,
+          "conf": 10,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1,
+          "build.properties.default": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2020",
+      "commit": "0974ffcc1880ace148f9effd35e27728cccfc558",
+      "committer_unix": 1609343669,
+      "committer_date": "2020-12-30T16:54:29+01:00",
+      "inventory": {
+        "tracked_files": 4171,
+        "tracked_language_files": {
+          "java": 2502,
+          "other": 1669
+        },
+        "top_level_paths": {
+          "java": 2496,
+          "test": 954,
+          "webapps": 395,
+          "res": 150,
+          "modules": 127,
+          "bin": 23,
+          "conf": 10,
+          ".github": 1,
+          ".gitignore": 1,
+          ".travis.yml": 1,
+          ".travis": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1
+        }
+      }
+    },
+    {
+      "label": "2021",
+      "commit": "f2e57c94034d515e340eae275c1fa4f05804228e",
+      "committer_unix": 1640970693,
+      "committer_date": "2021-12-31T17:11:33+00:00",
+      "inventory": {
+        "tracked_files": 4375,
+        "tracked_language_files": {
+          "c_header": 1,
+          "java": 2563,
+          "other": 1811
+        },
+        "top_level_paths": {
+          "java": 2501,
+          "test": 1094,
+          "webapps": 395,
+          "modules": 180,
+          "res": 153,
+          "bin": 25,
+          "conf": 10,
+          ".editorconfig": 1,
+          ".github": 1,
+          ".gitignore": 1,
+          ".travis.yml": 1,
+          ".travis": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1
+        }
+      }
+    },
+    {
+      "label": "2022",
+      "commit": "b364efe99e2f1afa2321cdd249d57b92235b21ef",
+      "committer_unix": 1671637556,
+      "committer_date": "2022-12-21T15:45:56+00:00",
+      "inventory": {
+        "tracked_files": 4446,
+        "tracked_language_files": {
+          "c_header": 2,
+          "java": 2615,
+          "other": 1829
+        },
+        "top_level_paths": {
+          "java": 2497,
+          "test": 1115,
+          "webapps": 391,
+          "modules": 241,
+          "res": 152,
+          "bin": 25,
+          "conf": 10,
+          ".editorconfig": 1,
+          ".github": 1,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1
+        }
+      }
+    },
+    {
+      "label": "2023",
+      "commit": "7bdece55a30dac81c3f094f51ce29142dd62579e",
+      "committer_unix": 1703872212,
+      "committer_date": "2023-12-29T17:50:12+00:00",
+      "inventory": {
+        "tracked_files": 4564,
+        "tracked_language_files": {
+          "c_header": 4,
+          "java": 2692,
+          "other": 1868
+        },
+        "top_level_paths": {
+          "java": 2522,
+          "test": 1177,
+          "webapps": 391,
+          "modules": 264,
+          "res": 160,
+          "bin": 25,
+          "conf": 9,
+          ".github": 2,
+          ".editorconfig": 1,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1
+        }
+      }
+    },
+    {
+      "label": "2024",
+      "commit": "fdec436da281b5c30321bd59be0ff1e8aaef9184",
+      "committer_unix": 1734948489,
+      "committer_date": "2024-12-23T11:08:09+01:00",
+      "inventory": {
+        "tracked_files": 4516,
+        "tracked_language_files": {
+          "c_header": 1,
+          "java": 2633,
+          "other": 1882
+        },
+        "top_level_paths": {
+          "java": 2534,
+          "test": 1241,
+          "webapps": 396,
+          "res": 161,
+          "modules": 134,
+          "bin": 25,
+          "conf": 9,
+          ".github": 2,
+          ".editorconfig": 1,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1
+        }
+      }
+    },
+    {
+      "label": "2025",
+      "commit": "c158fa6816c38880772f27607b3cef2e1e97bac2",
+      "committer_unix": 1767020543,
+      "committer_date": "2025-12-29T17:02:23+02:00",
+      "inventory": {
+        "tracked_files": 4706,
+        "tracked_language_files": {
+          "c_header": 1,
+          "java": 2750,
+          "other": 1955
+        },
+        "top_level_paths": {
+          "java": 2563,
+          "test": 1387,
+          "webapps": 405,
+          "res": 163,
+          "modules": 134,
+          "bin": 25,
+          "conf": 9,
+          ".github": 5,
+          ".editorconfig": 1,
+          ".gitignore": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1,
+          "RUNNING.txt": 1,
+          "TOMCAT-NEXT.txt": 1
+        }
+      }
+    },
+    {
+      "label": "endpoint-2026",
+      "commit": "462be987157efbd854ef7d32690f5eb3d5df9ec6",
+      "committer_unix": 1789130984,
+      "committer_date": "2026-09-11T13:49:44+01:00",
+      "inventory": {
+        "tracked_files": 4781,
+        "tracked_language_files": {
+          "c_header": 1,
+          "java": 2822,
+          "other": 1958
+        },
+        "top_level_paths": {
+          "java": 2560,
+          "test": 1459,
+          "webapps": 405,
+          "res": 163,
+          "modules": 135,
+          "bin": 25,
+          "conf": 9,
+          ".github": 6,
+          ".asf.yaml": 1,
+          ".editorconfig": 1,
+          ".gitignore": 1,
+          "AGENTS.md": 1,
+          "BUILDING.txt": 1,
+          "CONTRIBUTING.md": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "MERGE.txt": 1,
+          "NOTICE": 1,
+          "README.md": 1,
+          "RELEASE-NOTES": 1
+        }
+      }
+    }
+  ],
+  "scope_warning": "Counts cover tracked paths; no production/generated/vendor exclusions or parser admission applied.",
+  "history_archive": {
+    "file": "apache__tomcat.history.json.gz",
+    "sha256": "e3509375ad748e37f2a22634de5f07434392ce4166fee8a02434fbc054139b42"
+  }
+}

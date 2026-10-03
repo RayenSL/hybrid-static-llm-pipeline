@@ -1,97 +1,107 @@
-# HybridLens automated evaluation
+# Analysis and reproducibility
 
-This directory contains the analysis tools that operate on normal pipeline run traces. The evaluation path requires no interactive input.
+This directory contains the analyses supporting *Static Analysis and LLMs for Verified
+Anti-Pattern Repair* (3 October 2026). The revised thesis reports three separate repair
+populations and an exploratory evolution study in Appendix B. Keep their denominators
+and statistical interpretations separate.
 
-## Flow
+## Generated outputs
 
-```text
-static analysis
-  → grounded LLM explanation and repair
-  → apply/build/re-measure verification
-  → automated quality reports
-```
+This checkout keeps analysis code, tests, protocols, dependency locks and frozen
+input-selection records. Generated `results/`, `*_results/`, `figures/`, logs, caches
+and their top-level publication hash manifests have been removed and are ignored.
+Result paths below describe expected outputs, not files shipped in this checkout.
 
-The agentic and grounded-iterative arms also emit verification rows directly from their first-build and final snapshots. All arms can therefore be analyzed from their persisted JSONL records.
-
-## Tools
-
-| Tool | Input | Purpose |
-|---|---|---|
-| `loader.py` + `compare.py` | Generation JSONL | Failure, token, latency, uniqueness, and run-variance summaries |
-| `band_agreement.py` | Analyzer trace + frozen corpus truth records | Confirms detector metrics against mechanically maintained ground truth |
-| `analyse_results.py` | Generation and verification JSONL | Produces automated detection, repair, alignment, and whole-solution quality tables |
-| `thesis_figures.py` | Automated CSV tables | Produces architecture, repair, recall, and quality figures |
-| `layer3_run.py` + `layer3_figure.py` | Characterization project + repaired sources | Measures behavioral preservation |
+Some analyses consume earlier stages' results, source archives or file-event databases.
+Regenerate or restore those inputs before running downstream summaries and renderers.
+The study READMEs retain the commands and historical interpretation; their result links
+refer to generated artifacts. The cleanup recovery archives are stored outside this repository.
+Raw repair campaigns under `experiments/` are unchanged by this cleanup.
 
 ## Setup
 
+Run commands from the repository root with Python 3.12 or later:
+
 ```bash
-cd analysis
 python -m venv .venv
 # Windows: .venv\Scripts\activate
 # macOS/Linux: source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install -r analysis/requirements.txt
+python -m unittest discover -s analysis/tests -v
 ```
 
-## Generate reports
+These requirements cover the general analysis tools. The Appendix B studies retain
+separate checksum-pinned parser and statistics runtimes; follow their own READMEs.
 
-Pass one or more paths or glob patterns:
+## Repair experiments in Chapters 4–6
+
+| Evidence | Tools | Saved inputs/results |
+|---|---|---|
+| Confirmatory factorial: 26 targets, 624 assignments | `factorial_test_feedback_analysis.py`, `factorial_glmm.py`, `confirmatory_v2_figures.py` | `experiments/confirmatory-v2-gpt56-sol-20260812/` |
+| Four-level corpus context comparison | `context_ladder_analysis.py` | `experiments/context-ladder-corpus-v2-20260816/` |
+| Industrial context comparison | `context_ladder_industrial_analysis.py` | See [industrial runbook](../RUNBOOK-context-ladder-industrial.md); restricted source and harness are required |
+| Context comparison figures | `context_ladder_thesis_package.py` | Separate corpus and industrial summary files |
+| System architecture | `architecture_figure.py` | Diagram source; verified by `tests/test_architecture_figure.py` |
+| Illustrative repairs | Source excerpts and remeasurement records | [Qualitative repair evidence](../docs/qualitative-repairs/README.md) |
+
+The factorial analysis averages repetitions within each target before computing paired
+contrasts. The industrial analysis is descriptive. The corpus and industrial context
+campaigns use direct editing; the older suggestion-plus-applier experiment is a separate
+historical campaign.
+
+Inspect the command-line interfaces before choosing fresh output directories:
 
 ```bash
-python analysis/analyse_results.py \
-  --input runs/phase-c-evaluation-combined.jsonl \
-  --output output
+python analysis/factorial_test_feedback_analysis.py --help
+python analysis/factorial_glmm.py --help
+python analysis/confirmatory_v2_figures.py --help
+python analysis/context_ladder_analysis.py --help
+python analysis/context_ladder_industrial_analysis.py --help
+python analysis/context_ladder_thesis_package.py --help
 ```
 
-Additional verification traces can be supplied separately when useful:
+Use [the corpus runbook](../RUNBOOK-context-ladder-corpus.md) and
+[the industrial runbook](../RUNBOOK-context-ladder-industrial.md) for campaign-specific
+inputs, frozen protocols and reproduction commands. `prepare_v2_run.py` prepares and
+checks the confirmatory run; `chapter54_quality_rescore.py` performs offline quality
+remeasurement. `extraction_vs_simplification.py` classifies archived repair diffs.
+Do not overwrite sealed experiment results when checking a rerun.
+
+## Appendix B
+
+| Thesis evidence | Directory | Dependencies to retain |
+|---|---|---|
+| Annual counts and prevalence (Figures B.1–B.2) | [multilanguage_evolution](multilanguage_evolution/README.md) | Frozen source archives, detector contracts, scope rules and scan evidence |
+| God Class change counts (Figure B.3) | [god_class_change_count_thesis](god_class_change_count_thesis/README.md) | [maintenance_associations](maintenance_associations/README.md) corrected cohorts and fitted models |
+| Change categories (Figure B.4) | [god_class_change_categories](god_class_change_categories/README.md), including `combined_fix/` | Corrected cohorts, file-event databases and first-parent histories |
+| Finding redetection (Figure B.5) | [active_persistence](active_persistence/README.md) | Annual scan evidence and corrected Odoo observations |
+
+The maintenance-association scripts remain to regenerate the corrected cohorts and
+models used by downstream studies. Publication renderers remain because they produce
+the figures and accompanying LaTeX from those results.
+
+The Json.NET evolution/repository-selection pilot and the mechanism, documented-fix
+and method-overlap follow-ups retain their source code and protocols as well. These
+exploratory tools are separate from the results reported in the revised thesis.
+
+## Shared and historical utilities
+
+`loader.py`, `compare.py` and `analyse_results.py` inspect normal pipeline JSONL traces.
+`band_agreement.py` compares detector metrics with the frozen corpus truth records.
+For example:
 
 ```bash
-python analysis/analyse_results.py \
-  --input 'runs/20260708-*.jsonl' \
-  --verified 'runs/*-verified.jsonl' \
-  --output output
+python analysis/analyse_results.py --input 'runs/*.jsonl' --output output
+python analysis/compare.py 'runs/*.jsonl'
 ```
 
-Records are de-duplicated by `run_id`. Missing optional instruments are skipped; failed or truncated generations remain in the summaries and do not prevent report generation.
+The legacy figure and packaging tools (`thesis_figures.py`, `sol_thesis_figures.py`,
+`chapter54_sol_package.py`, `grounding_context_analysis.py`, `render_grounding_figure.py`,
+`layer3_run.py`, `layer3_figure.py`, `metric_reduction_figure.py`,
+`metric_trajectory_figure.py`, and `quality_impact_figure.py`) remain for their archived
+campaigns or reusable measurements. Their historical figure numbers do not identify the
+current thesis figures. Use `confirmatory_v2_figures.py` for the final factorial figures.
 
-## Automated outputs
-
-`output/tables/` may contain:
-
-| Output | Meaning |
-|---|---|
-| `run_overview.csv` | Generation, verification, failure, and distinct-instance counts |
-| `generation_counts.csv` | Records by architecture, context, and anti-pattern |
-| `generation_failures.csv` | Persisted failure categories by architecture and context |
-| `quality_attribute_alignment.csv` | Lexical mention alignment against the fixed anti-pattern-to-quality mapping |
-| `agentic_recall.csv` | Agentic recovery of statically known instances with Wilson intervals |
-| `agentic_spurious_summary.csv` | Matched and spurious agentic detections |
-| `verified_repair_by_architecture.csv` | Apply/build/re-measure outcome ladder and resolved rate |
-| `verified_repair_by_context.csv` | Verified repair outcome by context level |
-| `verified_repair_2x2.csv` | Grounding × control-structure cells |
-| `verified_repair_2x2_contrasts.csv` | Paired automated contrasts and McNemar p-values |
-| `quality_impact_by_architecture.csv` | Whole-solution detector and independent analyzer deltas |
-
-No subjective score is inferred from these fields. Explanation text remains available in raw records for inspection, but acceptance and aggregate reporting are based only on deterministic or programmatically measured outcomes.
-
-## Raw run-trace inspection
-
-```bash
-python analysis/compare.py runs/*.jsonl
-python analysis/compare.py runs/*.jsonl --field parsed_suggested_fix --export-csv reports/
-```
-
-The loader reports parse failures and uncertainty signals rather than suppressing rows. Every function returns a tidy pandas `DataFrame` for further analysis.
-
-## Schema
-
-Each JSONL line is a `RunRecord` serialized with snake-case names. Important automated fields include:
-
-- identity: `run_id`, `timestamp`, `run_number`, `architecture`
-- finding: `anti_pattern_type`, `file_path`, `symbol_name`, `line`, `severity`, `metrics`
-- generation: `context_level`, `model_name`, prompts, raw output, parsed fields, tokens, duration
-- quality mapping: `expected_quality_attributes`, `llm_quality_attributes_mentioned`, `quality_attribute_alignment`
-- verification: `repair_applicable`, `build_passed`, `remeasured_metrics`, `verified_repair_ladder`, `verified_repair_success`
-- quality impact: `quality_delta`
-- agentic trace: `matched_instance_id`, `is_spurious`, `agentic_iterations`, `agentic_snapshot`
-- uncertainty/failure: `context_truncated`, `parse_status`, `error_status`, `error_message`
+One-off chapter-restructuring and prose-integration scripts have been removed. Thesis
+writing Markdown is separate from the retained protocols, source evidence and operational
+documentation. Presentation slides and speaker notes live in [presentations](../presentations/).

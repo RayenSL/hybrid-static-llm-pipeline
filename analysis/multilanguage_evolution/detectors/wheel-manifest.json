@@ -1,0 +1,17 @@
+{
+  "platform": "Windows x86_64 / CPython 3.12",
+  "purpose": "offline feasibility parser dependencies",
+  "files": {
+    "attrs-26.1.0-py3-none-any.whl": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+    "jsonschema-4.26.0-py3-none-any.whl": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce",
+    "jsonschema_specifications-2025.9.1-py3-none-any.whl": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+    "referencing-0.37.0-py3-none-any.whl": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+    "rpds_py-2026.6.3-cp312-cp312-win_amd64.whl": "2c958bf94822e9290a40aaf2a822d4bc5c88099093e3948ad6c571eca9272e5f",
+    "tree_sitter-0.25.2-cp312-cp312-win_amd64.whl": "6d0302550bbe4620a5dc7649517c4409d74ef18558276ce758419cf09e578897",
+    "tree_sitter_c-0.24.2-cp310-abi3-win_amd64.whl": "abb549225091f7b25df2dd3a0143ece6e208f7055d8bcb4700b41ee79b9ef1e1",
+    "tree_sitter_cpp-0.23.4-cp39-abi3-win_amd64.whl": "68606a45bea92669d155399e1239f771a7767d8683cd8f8e30e7d813107030ca",
+    "tree_sitter_java-0.23.5-cp39-abi3-win_amd64.whl": "1ee45e790f8d31d416bc84a09dac2e2c6bc343e89b8a2e1d550513498eedfde7",
+    "tree_sitter_python-0.25.0-cp310-abi3-win_amd64.whl": "9bcde33f18792de54ee579b00e1b4fe186b7926825444766f849bf7181793a76",
+    "typing_extensions-4.16.0-py3-none-any.whl": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+  }
+}

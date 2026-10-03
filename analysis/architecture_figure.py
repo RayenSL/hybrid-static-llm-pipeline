@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """Figure 5.1: end-to-end experimental architecture.
 
-The diagram renders the pipeline as currently specified in the thesis: a frozen
-corpus and a static-analysis detection stage feeding two separately frozen
-experiments --
-the confirmatory 2 x 2 x 2 direct-editing factorial (with its pre-repair,
-diagnosis-blind generated characterisation test) and the supplementary
-four-level context experiment in the original Hybrid suggestion-plus-applier
-mechanism. Both paths share the verification gate, the three measurement
-layers, and the analysis stage, but never share a denominator.
+The diagram renders the pipeline as currently specified in the thesis. Static
+analysis detects the target and constructs the nested context payloads. Its
+Structural payload is exposed only to grounded factorial cells, while all four
+payloads feed the context-ladder runs. Diagnosis-blind generated tests are a
+confirmatory factor only; the context-ladder runs instead use separately frozen,
+author-written behavioural oracles after repair.
 """
 from __future__ import annotations
 
@@ -106,32 +104,41 @@ def main(argv=None) -> int:
         FILL["corpus"], title_size=9.6, body_size=6.8, body_gap=0.72,
     )
     instance = box(
-        11.40, 17.70, 4.50, 1.45, "Evaluation instance (this study)",
-        "Constructed corpus, frozen at v2.0"
-        "\n36 detector-confirmed seeded targets:"
+        11.40, 17.70, 4.50, 1.45, "Evaluation populations (this study)",
+        "Constructed corpus v2.0: 36 confirmed targets"
         "\n13 God Class - 13 Long Method - 10 Obsolete API"
-        "\n37 control and distractor files"
-        "\nGround truth known by construction",
+        "\n37 control and distractor files; seeded ground truth"
+        "\nIndustrial repository (Ibis): 9 assigned targets"
+        "\n8 Long Method - 1 God Class",
         FILL["corpus"], title_size=8.9, body_size=6.4, body_gap=0.58,
     )
     detection = box(
-        4.55, 15.85, 8.30, 1.50, "Detection - static analyser",
-        "God Class (ATFD - WMC - TCC) - Long Method (cyclomatic complexity, LOC)"
-        "\nObsolete API Usage ([Obsolete] symbol resolution)"
-        "\nEmits finding, severity, triggering metrics, thresholds, symbol and line range",
-        FILL["detect"], title_size=9.4, body_size=7.0, body_gap=0.74,
+        4.55, 15.85, 8.30, 1.50, "Detection and nested context construction - static analyser",
+        "Minimal: anti-pattern label + code fragment | Structural: + diagnosis, metrics and thresholds"
+        "\nRelational: + enclosing declaration and source window | Full: + Referenced type declarations"
+        "\nFull cap: 8 files / 60,000 characters; detector finding retains symbol and line range",
+        FILL["detect"], title_size=9.0, body_size=6.6, body_gap=0.72,
     )
     detector_role = box(
-        11.40, 15.85, 4.50, 1.50, "Detector roles",
-        "Admits and localises every target"
-        "\nSupplies the Structural finding to grounded conditions"
+        11.40, 15.85, 4.50, 1.50, "Payload routing and detector roles",
+        "Structural only to grounded factorial cells"
+        "\nNeutral coordinates to ungrounded factorial cells"
+        "\nAll four payloads to context-ladder runs"
         "\nRe-measures the triggering condition after repair"
-        "\nDetector-only recall and precision is a manipulation"
-        "\ncheck, never a repair arm",
-        FILL["detect"], title_size=8.9, body_size=6.5, body_gap=0.58,
+        "\nCorpus-only recall/precision check; never a repair arm",
+        FILL["detect"], title_size=8.5, body_size=6.1, body_gap=0.57,
     )
 
-    panel_y0, panel_y1 = 7.25, 14.55
+    panel_y0, panel_y1 = 7.25, 12.75
+
+    shared_tests = box(
+        4.60, 14.25, 6.80, 1.15,
+        "Confirmatory diagnosis-blind test generation and admission",
+        "Pristine source + test-project skeleton + neutral coordinates; freeze after three successful pristine passes"
+        "\nOne frozen five-case suite per factorial target"
+        "\nVisible only to test-ON factorial assignments",
+        FILL["test"], title_size=8.8, body_size=6.0, body_gap=0.55,
+    )
 
     # ------------------------------------------- confirmatory factorial panel
     confirm_x0, confirm_x1 = 0.35, 8.85
@@ -141,11 +148,11 @@ def main(argv=None) -> int:
         linewidth=1.15, edgecolor=CONFIRM_EDGE, facecolor=FILL["campaign"], zorder=0,
     ))
     confirm_cx = (confirm_x0 + confirm_x1) / 2
-    ax.text(confirm_cx, 14.31, "Confirmatory 2 x 2 x 2 direct-editing factorial",
+    ax.text(confirm_cx, 12.51, "Confirmatory 2 x 2 x 2 direct-editing factorial",
             ha="center", va="center", fontsize=10.0, fontweight="bold",
             color=INK, zorder=3)
     ax.text(
-        confirm_cx, 13.88,
+        confirm_cx, 12.08,
         "26 God Class and Long Method targets x 3 repetitions x 8 cells = 624 assignments"
         "\ngpt-5.6-sol edits production source directly; the factorial has no separate applier"
         "\nNeutral coordinates to every cell - Structural finding to grounded cells only - visible test to test-ON cells only",
@@ -154,32 +161,15 @@ def main(argv=None) -> int:
     )
 
     controller = box(
-        2.20, 12.60, 3.30, 1.85, "Experiment controller",
+        confirm_cx, 10.88, 7.70, 1.25, "Experiment controller",
         "Frozen assignment manifest, seed 20260812"
-        "\nFreezes the two payload views and the"
-        "\nsingle-shot / iterative contract"
-        "\nInterleaves cells; failures stay in their"
-        "\nassigned denominator",
-        FILL["control"], title_size=8.9, body_size=6.4, body_gap=0.60,
-    )
-    test_author = box(
-        6.70, 12.85, 3.90, 1.35, "Diagnosis-blind test generation",
-        "Pristine source + test-project skeleton + neutral coordinates"
-        "\nOne planning and one implementation call per target"
-        "\nFrozen plan: exactly five cases"
-        "\nNo diagnosis, metrics, private oracle or reference repair",
-        FILL["test"], title_size=8.7, body_size=5.9, body_gap=0.58,
-    )
-    admission = box(
-        6.70, 11.42, 3.90, 1.15, "Admission and freeze",
-        "Schema parse -> compile -> three passes on the pristine system"
-        "\nInvokes production code, non-vacuous assertion"
-        "\n25 of 26 admitted; no regeneration after failure",
-        FILL["test"], title_size=8.7, body_size=6.3, body_gap=0.55,
+        "\nFreezes payload view, repair contract and test OFF / ON assignment"
+        "\nInterleaves cells; failures stay in their assigned denominator",
+        FILL["control"], title_size=8.9, body_size=6.4, body_gap=0.58,
     )
 
     arm_centers = [1.47, 3.58, 5.69, 7.80]
-    arm_w, arm_cy, arm_h = 1.98, 9.05, 2.55
+    arm_w, arm_cy, arm_h = 1.98, 8.72, 2.35
     box(
         arm_centers[0], arm_cy, arm_w, arm_h, "Ungrounded\nsingle-shot",
         "Pristine source and\nneutral coordinates"
@@ -218,14 +208,7 @@ def main(argv=None) -> int:
         "\nTest OFF / ON",
         FILL["arm"], title_size=8.2, body_size=6.4, body_gap=0.88,
     )
-    note(
-        confirm_cx, 7.51,
-        "Intention to treat: a test-ON assignment whose generated test failed generation or admission "
-        "stays in its test-ON denominator",
-        size=6.5, boxed=False,
-    )
-
-    # --------------------------------------------------- supplementary panel
+    # ------------------------------------------------ context-ladder panel
     supp_x0, supp_x1 = 9.15, 13.65
     ax.add_patch(FancyBboxPatch(
         (supp_x0, panel_y0), supp_x1 - supp_x0, panel_y1 - panel_y0,
@@ -233,46 +216,42 @@ def main(argv=None) -> int:
         linewidth=1.15, edgecolor=SUPP_EDGE, facecolor=FILL["supplement"], zorder=0,
     ))
     supp_cx = (supp_x0 + supp_x1) / 2
-    ax.text(supp_cx, 14.31, "Supplementary four-level context experiment",
+    ax.text(supp_cx, 12.51, "Direct-editing context-ladder experiments",
             ha="center", va="center", fontsize=8.5, fontweight="bold",
             color=INK, zorder=3)
     ax.text(
-        supp_cx, 13.90,
-        "All 30 targets x 4 nested levels x 1 repetition"
-        "\n= 120 matched assignments, separately frozen, seed 20260728"
-        "\nOriginal Hybrid suggestion-plus-applier mechanism",
+        supp_cx, 12.10,
+        "ladder-v2.0.0 - gpt-5.6-sol - single-shot"
+        "\nVisible tests OFF; no build or test feedback",
         ha="center", va="center", fontsize=6.3, color=MUTED, style="italic",
         linespacing=1.35, zorder=3,
     )
 
-    context_levels = box(
-        supp_cx, 12.45, 4.10, 2.10, "Nested context payloads",
-        "Minimal: anti-pattern label + code fragment"
-        "\nStructural: + symbol, file and line location,"
-        "\nseverity, triggering metrics, thresholds"
-        "\nRelational: + enclosing-member summary"
-        "\nand surrounding source window"
-        "\nFull: + frozen project, framework and domain"
-        "\nmetadata (no co-located findings)",
-        FILL["hybrid"], title_size=8.7, body_size=6.4, body_gap=0.58,
+    corpus_run = box(
+        10.28, 10.62, 1.92, 1.22, "Corpus run",
+        "36 targets x 4 levels"
+        "\nx 3 repetitions"
+        "\n= 432 assignments"
+        "\nMatched inference",
+        FILL["hybrid"], title_size=8.0, body_size=5.9, body_gap=0.52,
     )
-    suggestion = box(
-        supp_cx, 10.25, 4.10, 1.35, "Suggestion - gpt-5.6-sol",
-        "One explanation and repair recommendation"
-        "\nper assignment"
-        "\nNo direct source editing",
-        FILL["hybrid"], title_size=8.7, body_size=6.4, body_gap=0.58,
+    industrial_run = box(
+        12.52, 10.62, 1.92, 1.22, "Ibis run",
+        "9 targets x 4 levels"
+        "\nx 3 repetitions"
+        "\n= 108 assignments"
+        "\nDescriptive only",
+        FILL["hybrid"], title_size=8.0, body_size=5.9, body_gap=0.52,
     )
-    applier = box(
-        supp_cx, 8.60, 4.10, 1.55, "Strict-literal applier - DeepSeek-V4-Pro",
-        "Fixed deployment, held constant across levels"
-        "\nNot an experimental factor"
-        "\nMay not invent unspecified design decisions"
-        "\nUnimplementable recommendation -> unapplicable",
-        FILL["hybrid"], title_size=8.1, body_size=6.4, body_gap=0.55,
+    direct_edit = box(
+        supp_cx, 8.78, 4.10, 1.52, "Direct production-source editing",
+        "One complete edited file per call"
+        "\nNo separate applier"
+        "\nFailures stay in their assigned denominator",
+        FILL["hybrid"], title_size=8.5, body_size=6.5, body_gap=0.58,
     )
     note(supp_cx, 7.51,
-         "Visible generated tests are disabled throughout this experiment",
+         "Separate manifests and denominators; never pooled",
          size=6.5, boxed=False)
 
     # ------------------------------------------------------------ verification
@@ -302,23 +281,22 @@ def main(argv=None) -> int:
     )
     layer3 = box(
         layer_centers[2], 4.55, 4.10, 1.55, "Layer 3 - private behavioural oracle",
-        "Author-written characterisation suite"
-        "\n270 frozen drivers; hidden from every model surface"
-        "\n10 per evaluated target + 10 Obsolete smoke"
-        "\nExecuted only after the campaign is sealed"
-        "\nEquivalence (God Class / Long Method)"
-        "\nSmoke oracle (Obsolete API Usage)",
+        "Corpus: frozen author-written characterisation drivers"
+        "\nIbis: frozen author-written 90-driver golden-master harness"
+        "\nNever supplied to the repair model"
+        "\nExecuted only after each campaign is sealed",
         FILL["private"], title_size=8.5, body_size=6.2, body_gap=0.60,
         edge="#477d7b",
     )
 
     analysis = box(
-        7, 2.55, 13.20, 1.50, "Analysis - separate denominators, never pooled",
+        7, 2.66, 13.20, 1.65, "Analysis - separate denominators, never pooled",
         "Confirmatory: strict success = build AND triggering detector resolved AND private oracle passed; the primary estimand is the"
         "\ntarget-level visible-test main effect, with grounding and control structure as planned secondary effects"
-        "\nSupplement: verified repair = strict-literal application AND build AND detector resolved; Cochran Q and exact McNemar, Holm-adjusted"
+        "\nCorpus ladder: verified repair = build AND detector resolved; Cochran Q and exact McNemar, Holm-adjusted"
+        "\nIndustrial ladder: the same endpoint and an external oracle, reported descriptively without a p-value"
         "\nDetection recall and precision manipulation check - whole-solution quality impact - tokens, calls, builds and duration by condition",
-        FILL["analysis"], title_size=9.4, body_size=7.0,
+        FILL["analysis"], title_size=9.4, body_size=6.4,
     )
 
     # ----------------------------------------------------------------- arrows
@@ -326,29 +304,26 @@ def main(argv=None) -> int:
     arrow((8.70, 17.70), (9.15, 17.70), dashed=True)
     arrow((8.70, 15.85), (9.15, 15.85), dashed=True)
 
-    # both experiments are fed by the detection stage; "Detector roles" annotates it
-    arrow((3.60, 15.10), (3.60, panel_y1))
-    note(2.05, 14.82, "26 factorial targets")
-    rail_top = 14.85
-    line([6.90, 6.90], [15.10, rail_top])
-    line([6.90, 11.40], [rail_top, rail_top])
-    arrow((11.40, rail_top), (11.40, panel_y1))
-    note(9.85, rail_top, "all 30 targets")
+    # Detection constructs the payloads; arrow labels state what each experiment sees.
+    arrow((4.55, 15.10), top(shared_tests))
+    arrow((2.20, 15.10), (2.20, panel_y1))
+    note(1.78, 13.58, "Structural only to\ngrounded factorial cells", size=6.0)
+    arrow((11.40, 15.10), (11.40, panel_y1))
+    note(11.82, 13.58, "All four payloads to\ncontext-ladder runs", size=6.0)
 
-    arrow(bottom(test_author), top(admission))
-    arrow((3.85, 12.60), (4.75, 12.60), dashed=True)
-    note(4.30, 13.02, "neutral view", size=6.2)
+    # The generated test artefact is a confirmatory factor only.
+    arrow((5.35, bottom(shared_tests)[1]), (5.35, panel_y1), dashed=True)
+    note(5.35, 13.22, "test-ON only", size=5.9)
 
     # assignment rail: controller payloads and the admitted visible test
-    rail_y = 10.62
+    rail_y = 10.08
     line([arm_centers[0], arm_centers[-1]], [rail_y, rail_y])
-    line([2.20, 2.20], [11.675, rail_y])
-    line([6.70, 6.70], [10.845, rail_y], dashed=True)
+    line([confirm_cx, confirm_cx], [bottom(controller)[1], rail_y])
     for cx in arm_centers:
         arrow((cx, rail_y), (cx, arm_cy + arm_h / 2))
 
-    arrow(bottom(context_levels), top(suggestion))
-    arrow(bottom(suggestion), top(applier))
+    arrow(bottom(corpus_run), (direct_edit["cx"] - 0.65, top(direct_edit)[1]))
+    arrow(bottom(industrial_run), (direct_edit["cx"] + 0.65, top(direct_edit)[1]))
 
     arrow((confirm_cx, panel_y0), (confirm_cx, verify["cy"] + verify["h"] / 2))
     arrow((supp_cx, panel_y0), (supp_cx, verify["cy"] + verify["h"] / 2))

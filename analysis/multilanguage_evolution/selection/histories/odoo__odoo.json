@@ -1,0 +1,750 @@
+{
+  "schema_version": "history-audit/1",
+  "status": "inventory_only_not_measurement",
+  "repository": "https://github.com/odoo/odoo.git",
+  "cutoff_utc": "2026-09-14T00:00:00+00:00",
+  "endpoint": {
+    "commit": "7bbce824a1897a912441a7f0511ffec505cbe1d5",
+    "committer_unix": 1789292151,
+    "committer_date": "2026-09-13T09:35:51+00:00"
+  },
+  "earliest_first_parent": {
+    "commit": "004a0b996ff8f269451e07346f71a129a1f3fbaf",
+    "committer_unix": 1165498900,
+    "committer_date": "2006-12-07T13:41:40+00:00"
+  },
+  "earliest_source": {
+    "commit": "004a0b996ff8f269451e07346f71a129a1f3fbaf",
+    "committer_unix": 1165498900,
+    "committer_date": "2006-12-07T13:41:40+00:00"
+  },
+  "undated_source_import": false,
+  "reachable_roots": [
+    "1925b23fbd9002375cdbd447519c8288ce7086e3",
+    "c83cac4bfe1707493414c13183484f6dbd7d6741",
+    "5260d22c4d60cf73d22fd179bea142a4c2d00b36",
+    "6815b491d6553b02ad2902141e587379231e6fcf",
+    "39574b1d41661dbd05b3b4fc63acfd3177fe7300",
+    "9a4378e93aed45bc7d1f692d20e471d1a8aba955",
+    "004a0b996ff8f269451e07346f71a129a1f3fbaf"
+  ],
+  "first_parent_commits": 94000,
+  "elapsed_years": 19.76722121325279,
+  "timestamp_reversals": 3894,
+  "observations": [
+    {
+      "label": "earliest-2006",
+      "commit": "004a0b996ff8f269451e07346f71a129a1f3fbaf",
+      "committer_unix": 1165498900,
+      "committer_date": "2006-12-07T13:41:40+00:00",
+      "inventory": {
+        "tracked_files": 444,
+        "tracked_language_files": {
+          "other": 95,
+          "python": 349
+        },
+        "top_level_paths": {
+          "bin": 429,
+          "doc": 11,
+          "man": 2,
+          "MANIFEST.in": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2007",
+      "commit": "6a40969d7c278846c137d5241c89b4caee27cf8d",
+      "committer_unix": 1199107901,
+      "committer_date": "2007-12-31T13:31:41+00:00",
+      "inventory": {
+        "tracked_files": 1202,
+        "tracked_language_files": {
+          "other": 379,
+          "python": 823
+        },
+        "top_level_paths": {
+          "addons": 596,
+          "bin": 574,
+          "doc": 19,
+          "pixmaps": 4,
+          "win32": 4,
+          "man": 2,
+          "MANIFEST.in": 1,
+          "setup.py": 1,
+          "tinyerp-server-installer.nsi": 1
+        }
+      }
+    },
+    {
+      "label": "2008",
+      "commit": "21d90144cd66cb3573b79f8968439cbed4ef0b8c",
+      "committer_unix": 1230744469,
+      "committer_date": "2008-12-31T18:27:49+01:00",
+      "inventory": {
+        "tracked_files": 4316,
+        "tracked_language_files": {
+          "other": 3438,
+          "python": 878
+        },
+        "top_level_paths": {
+          "addons": 4078,
+          "bin": 201,
+          "doc": 17,
+          "pixmaps": 8,
+          "win32": 4,
+          "man": 2,
+          "MANIFEST.in": 1,
+          "README": 1,
+          "rpminstall_sh.txt": 1,
+          "setup.cfg": 1,
+          "setup.nsi": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2009",
+      "commit": "77820727d3b8fbba3c08ecd0d47653490756acd9",
+      "committer_unix": 1262264240,
+      "committer_date": "2009-12-31T18:27:20+05:30",
+      "inventory": {
+        "tracked_files": 6087,
+        "tracked_language_files": {
+          "other": 4970,
+          "python": 1117
+        },
+        "top_level_paths": {
+          "addons": 5627,
+          "bin": 364,
+          "debian": 44,
+          "doc": 24,
+          "pixmaps": 8,
+          "win32": 4,
+          "python25-compat": 3,
+          "man": 2,
+          ".bzrignore": 1,
+          "MANIFEST.in": 1,
+          "Makefile": 1,
+          "README": 1,
+          "change-loglevel.sh": 1,
+          "get-srvstats.sh": 1,
+          "rpminstall_sh.txt": 1,
+          "setup.cfg": 1,
+          "setup.nsi": 1,
+          "setup.py": 1,
+          "sql": 1
+        }
+      }
+    },
+    {
+      "label": "2010",
+      "commit": "1cc0afd870e8d4e3d7550599cd212956b8d7b084",
+      "committer_unix": 1293824688,
+      "committer_date": "2010-12-31T20:44:48+01:00",
+      "inventory": {
+        "tracked_files": 7374,
+        "tracked_language_files": {
+          "c_header": 1,
+          "javascript": 9,
+          "other": 5880,
+          "python": 1484
+        },
+        "top_level_paths": {
+          "addons": 6853,
+          "bin": 405,
+          "debian": 57,
+          "doc": 25,
+          "pixmaps": 8,
+          "tools": 6,
+          "win32": 4,
+          "python25-compat": 3,
+          "man": 2,
+          ".bzrignore": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "Makefile": 1,
+          "README": 1,
+          "rpminstall_sh.txt": 1,
+          "setup.cfg": 1,
+          "setup.nsi": 1,
+          "setup.py": 1,
+          "sql": 1,
+          "ssl-cert.cfg": 1
+        }
+      }
+    },
+    {
+      "label": "2011",
+      "commit": "8aff5209ea583dbe5e9c5d1342684dd6da6cfe19",
+      "committer_unix": 1325318240,
+      "committer_date": "2011-12-31T08:57:20+01:00",
+      "inventory": {
+        "tracked_files": 10715,
+        "tracked_language_files": {
+          "csharp": 29,
+          "javascript": 401,
+          "other": 8670,
+          "python": 1615
+        },
+        "top_level_paths": {
+          "addons": 10177,
+          "openerp": 451,
+          "history": 26,
+          "doc": 14,
+          "install": 14,
+          "debian": 9,
+          "win32": 4,
+          ".bzrignore": 1,
+          "LICENSE": 1,
+          "LICENSE.web": 1,
+          "MANIFEST.in": 1,
+          "Makefile": 1,
+          "README": 1,
+          "README.web": 1,
+          "babel.cfg": 1,
+          "bin": 1,
+          "gen_translations.sh": 1,
+          "gunicorn.conf.py": 1,
+          "logging.json": 1,
+          "npybabel.py": 1
+        }
+      }
+    },
+    {
+      "label": "2012",
+      "commit": "28d08ad90171677bb4a020d4aaebcd3b2243dbe6",
+      "committer_unix": 1356697823,
+      "committer_date": "2012-12-28T13:30:23+01:00",
+      "inventory": {
+        "tracked_files": 10884,
+        "tracked_language_files": {
+          "csharp": 29,
+          "javascript": 395,
+          "other": 9013,
+          "python": 1447
+        },
+        "top_level_paths": {
+          "addons": 10401,
+          "openerp": 393,
+          "doc": 26,
+          "history": 26,
+          "install": 14,
+          "debian": 9,
+          "win32": 2,
+          ".bzrignore": 1,
+          "LICENSE": 1,
+          "LICENSE.web": 1,
+          "MANIFEST.in": 1,
+          "README": 1,
+          "README.web": 1,
+          "openerp-server": 1,
+          "openerp-wsgi.py": 1,
+          "scripts": 1,
+          "setup.cfg": 1,
+          "setup.nsi": 1,
+          "setup.py": 1,
+          "setup_rpm.sh": 1
+        }
+      }
+    },
+    {
+      "label": "2013",
+      "commit": "d963fa888cb767d5b3ad6275787a2324bcec1902",
+      "committer_unix": 1388466121,
+      "committer_date": "2013-12-31T05:02:01+00:00",
+      "inventory": {
+        "tracked_files": 11942,
+        "tracked_language_files": {
+          "csharp": 29,
+          "javascript": 420,
+          "other": 9950,
+          "python": 1543
+        },
+        "top_level_paths": {
+          "addons": 11410,
+          "openerp": 388,
+          "doc": 54,
+          "history": 26,
+          "openerpcommand": 23,
+          "install": 14,
+          "debian": 9,
+          "win32": 2,
+          ".bzrignore": 1,
+          "LICENSE": 1,
+          "LICENSE.web": 1,
+          "MANIFEST.in": 1,
+          "README": 1,
+          "README.web": 1,
+          "oe": 1,
+          "oe-bash-completion": 1,
+          "openerp-gevent": 1,
+          "openerp-server": 1,
+          "openerp-wsgi.py": 1,
+          "scripts": 1
+        }
+      }
+    },
+    {
+      "label": "2014",
+      "commit": "4a0b13ed92311032ec4236a71b5a07592df79b0f",
+      "committer_unix": 1420037533,
+      "committer_date": "2014-12-31T15:52:13+01:00",
+      "inventory": {
+        "tracked_files": 13597,
+        "tracked_language_files": {
+          "javascript": 419,
+          "other": 11373,
+          "python": 1805
+        },
+        "top_level_paths": {
+          "addons": 12521,
+          "openerp": 755,
+          "doc": 282,
+          "setup": 15,
+          "debian": 11,
+          ".gitignore": 1,
+          "CONTRIBUTING.md": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "Makefile": 1,
+          "README.md": 1,
+          "odoo.py": 1,
+          "openerp-gevent": 1,
+          "openerp-server": 1,
+          "openerp-wsgi.py": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2015",
+      "commit": "c9ed8aec914409deff7ff8d7d44254b3e9854dff",
+      "committer_unix": 1451376301,
+      "committer_date": "2015-12-29T09:05:01+01:00",
+      "inventory": {
+        "tracked_files": 19911,
+        "tracked_language_files": {
+          "javascript": 535,
+          "other": 17564,
+          "python": 1812
+        },
+        "top_level_paths": {
+          "addons": 18632,
+          "openerp": 740,
+          "doc": 494,
+          "setup": 18,
+          "debian": 11,
+          ".gitignore": 1,
+          ".mailmap": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "Makefile": 1,
+          "README.md": 1,
+          "odoo.py": 1,
+          "openerp-gevent": 1,
+          "openerp-server": 1,
+          "openerp-wsgi.py": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1
+        }
+      }
+    },
+    {
+      "label": "2016",
+      "commit": "ee9341366efaa97195e4a0e03c57578c915fe054",
+      "committer_unix": 1483132819,
+      "committer_date": "2016-12-30T13:20:19-08:00",
+      "inventory": {
+        "tracked_files": 19747,
+        "tracked_language_files": {
+          "javascript": 559,
+          "other": 17057,
+          "python": 2131
+        },
+        "top_level_paths": {
+          "addons": 18349,
+          "odoo": 756,
+          "doc": 594,
+          "setup": 22,
+          "debian": 11,
+          ".github": 2,
+          ".gitignore": 1,
+          ".mailmap": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "Makefile": 1,
+          "README.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2017",
+      "commit": "fdb7a8db267e97edaf48b37f65f09ee235b98b5a",
+      "committer_unix": 1514461194,
+      "committer_date": "2017-12-28T12:39:54+01:00",
+      "inventory": {
+        "tracked_files": 21195,
+        "tracked_language_files": {
+          "javascript": 714,
+          "other": 18188,
+          "python": 2293
+        },
+        "top_level_paths": {
+          "addons": 19609,
+          "odoo": 774,
+          "doc": 763,
+          "setup": 20,
+          "debian": 14,
+          ".github": 2,
+          ".gitignore": 1,
+          ".mailmap": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "Makefile": 1,
+          "README.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2018",
+      "commit": "b605f6d9811f323c4f25948f4b347904a7a1f530",
+      "committer_unix": 1541520977,
+      "committer_date": "2018-11-06T16:16:17+00:00",
+      "inventory": {
+        "tracked_files": 21535,
+        "tracked_language_files": {
+          "javascript": 1029,
+          "other": 17665,
+          "python": 2841
+        },
+        "top_level_paths": {
+          "addons": 19755,
+          "doc": 906,
+          "odoo": 826,
+          "setup": 20,
+          "debian": 14,
+          ".github": 2,
+          ".gitignore": 1,
+          ".mailmap": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "README.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2019",
+      "commit": "3998fa8dc18ac36cf99f273d96c4b5f536ff7a9f",
+      "committer_unix": 1568282507,
+      "committer_date": "2019-09-12T10:01:47+00:00",
+      "inventory": {
+        "tracked_files": 23078,
+        "tracked_language_files": {
+          "javascript": 1134,
+          "other": 18654,
+          "python": 3290
+        },
+        "top_level_paths": {
+          "addons": 21199,
+          "doc": 960,
+          "odoo": 870,
+          "setup": 20,
+          "debian": 14,
+          ".github": 2,
+          ".gitignore": 1,
+          ".mailmap": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "README.md": 1,
+          "SECURITY.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2020",
+      "commit": "a6c29c44f44079308a04a3637d0479fdb067a9ec",
+      "committer_unix": 1608028294,
+      "committer_date": "2020-12-15T11:31:34+01:00",
+      "inventory": {
+        "tracked_files": 25924,
+        "tracked_language_files": {
+          "javascript": 2183,
+          "other": 19279,
+          "python": 4460,
+          "typescript": 2
+        },
+        "top_level_paths": {
+          "addons": 24229,
+          "odoo": 949,
+          "doc": 696,
+          "setup": 20,
+          "debian": 16,
+          ".github": 2,
+          ".gitignore": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "README.md": 1,
+          "SECURITY.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2021",
+      "commit": "5169fc0c20695907228fc16737060a50e1569f8f",
+      "committer_unix": 1640897212,
+      "committer_date": "2021-12-30T20:46:52+00:00",
+      "inventory": {
+        "tracked_files": 25929,
+        "tracked_language_files": {
+          "javascript": 2185,
+          "other": 19279,
+          "python": 4463,
+          "typescript": 2
+        },
+        "top_level_paths": {
+          "addons": 24233,
+          "odoo": 950,
+          "doc": 696,
+          "setup": 20,
+          "debian": 16,
+          ".github": 2,
+          ".gitignore": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "README.md": 1,
+          "SECURITY.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2022",
+      "commit": "efe52d50bb9e8bee22517a25fec5cb85d50b9d85",
+      "committer_unix": 1672449402,
+      "committer_date": "2022-12-31T02:16:42+01:00",
+      "inventory": {
+        "tracked_files": 27962,
+        "tracked_language_files": {
+          "javascript": 3043,
+          "other": 19728,
+          "python": 5188,
+          "typescript": 3
+        },
+        "top_level_paths": {
+          "addons": 26130,
+          "odoo": 1008,
+          "doc": 772,
+          "setup": 22,
+          "debian": 16,
+          ".github": 2,
+          ".gitignore": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "README.md": 1,
+          "SECURITY.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2023",
+      "commit": "b12393b81e100362747cbda224255b6d785f4d7b",
+      "committer_unix": 1702660371,
+      "committer_date": "2023-12-15T17:12:51+00:00",
+      "inventory": {
+        "tracked_files": 29616,
+        "tracked_language_files": {
+          "javascript": 3234,
+          "other": 20185,
+          "python": 6175,
+          "typescript": 22
+        },
+        "top_level_paths": {
+          "addons": 27592,
+          "odoo": 1090,
+          "doc": 882,
+          "setup": 22,
+          "debian": 16,
+          ".github": 2,
+          ".gitignore": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "README.md": 1,
+          "SECURITY.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2024",
+      "commit": "22f8d827f90ff52fcea8135a03dca5b0c0d461a1",
+      "committer_unix": 1733133365,
+      "committer_date": "2024-12-02T09:56:05+00:00",
+      "inventory": {
+        "tracked_files": 31356,
+        "tracked_language_files": {
+          "javascript": 4074,
+          "other": 19958,
+          "python": 7275,
+          "typescript": 49
+        },
+        "top_level_paths": {
+          "addons": 29226,
+          "odoo": 1150,
+          "doc": 930,
+          "setup": 18,
+          "debian": 17,
+          ".github": 3,
+          ".gitignore": 1,
+          ".tx": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "README.md": 1,
+          "SECURITY.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "2025",
+      "commit": "d088dbad84492234ae792b76545497c6cd62e4f4",
+      "committer_unix": 1767192414,
+      "committer_date": "2025-12-31T14:46:54+00:00",
+      "inventory": {
+        "tracked_files": 45242,
+        "tracked_language_files": {
+          "javascript": 5665,
+          "other": 31370,
+          "python": 8133,
+          "typescript": 74
+        },
+        "top_level_paths": {
+          "addons": 43004,
+          "odoo": 1196,
+          "doc": 990,
+          "setup": 19,
+          "debian": 17,
+          ".github": 3,
+          ".gitignore": 1,
+          ".weblate.json": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "README.md": 1,
+          "SECURITY.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "ruff.toml": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    },
+    {
+      "label": "endpoint-2026",
+      "commit": "7bbce824a1897a912441a7f0511ffec505cbe1d5",
+      "committer_unix": 1789292151,
+      "committer_date": "2026-09-13T09:35:51+00:00",
+      "inventory": {
+        "tracked_files": 48209,
+        "tracked_language_files": {
+          "javascript": 5872,
+          "other": 33603,
+          "python": 8659,
+          "typescript": 75
+        },
+        "top_level_paths": {
+          "addons": 45912,
+          "odoo": 1207,
+          "doc": 1037,
+          "setup": 20,
+          "debian": 17,
+          ".github": 3,
+          ".gitignore": 1,
+          ".weblate.json": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYRIGHT": 1,
+          "LICENSE": 1,
+          "MANIFEST.in": 1,
+          "README.md": 1,
+          "SECURITY.md": 1,
+          "odoo-bin": 1,
+          "requirements.txt": 1,
+          "ruff.toml": 1,
+          "setup.cfg": 1,
+          "setup.py": 1
+        }
+      }
+    }
+  ],
+  "scope_warning": "Counts cover tracked paths; no production/generated/vendor exclusions or parser admission applied.",
+  "history_archive": {
+    "file": "odoo__odoo.history.json.gz",
+    "sha256": "3c5a06280c573787f502f27d536cf65b4a6e5ea891c8d83c045df46ae2bf11fc"
+  }
+}

@@ -1,0 +1,1 @@
+Historical feasibility implementation, retained to reproduce pre-fix outputs. Do not use for new measurements. Concatenating syntax_probe.py and this file reproduces the legacy adapter SHA-256 50660bf919ff1ce4dce6ab97f959425e6124a48fec694f394dc5689e703ae5de.

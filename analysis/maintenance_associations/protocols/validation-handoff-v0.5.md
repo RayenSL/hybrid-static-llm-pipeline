@@ -1,0 +1,11 @@
+# Validation handoff v0.5 — 22 September 2026
+
+The earlier detector-positive packet included superseded Odoo 2019 and 2024 snapshots. Rebuild those strata from sampling amendment v0.2; preserve the original packet as historical evidence. Retain 2014, 2019 and 2024 as the pilot years and the original positive sampling seeds. No detector threshold or hypothesis changes.
+
+Add up to five uniformly sampled unflagged eligible units per repository, year and structural rule. For Long Method, use the named-definition inventory. For God Class, use class records with complete WMC and a resolved or negative-by-WMC assessment under the existing implementation. Select without replacement using seed strings beginning `20260922:detector-unflagged`, with repository, year and rule suffixes. These are detector-negative units, not independently established negatives. Preserve stratum populations and inclusion probabilities.
+
+Do not invent equivalent Obsolete API controls from unflagged files. The retained output does not provide the full resolved source-reference population needed to sample equivalent negative API pairs. That validation gap remains open. Structural-unit review also does not automatically validate file-level control selection, dynamic bindings, scope or units missed by the parser.
+
+Mix positive and unflagged structural cases in a fixed shuffled review order. Put detector stratum assignments, calculated metrics and sampling probabilities in a separate coordinator ledger. This reduces direct exposure to detector decisions but does not establish complete blinding: rule names and source code remain visible. Reviewers should record their assessment before consulting machine predictions. Archive complete sampled source files and API declaration files, checked against source hashes; further context can be obtained from the frozen source archives.
+
+Copy the existing corrective-change and lineage review worksheets without changing their frozen examples or labels. Supply a separate submission checker which rejects changed evidence identifiers, duplicate cases, unsupported labels and missing reviewer/evidence/rationale fields. Completion of a worksheet is not scientific admission or verification of reviewer independence. Retain disagreements and uncertainty; the small pilot is not a precise population-wide precision/recall estimate.

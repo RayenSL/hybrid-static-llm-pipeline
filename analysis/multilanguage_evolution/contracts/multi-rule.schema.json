@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hybridlens:evolution:multi-rule:0.2",
+  "type": "object",
+  "required": ["schema_version", "admitted", "repository", "commit", "language", "archive_sha256", "scope_sha256", "scope", "syntax_report_sha256", "adapter_sha256", "tool", "inventory", "rules", "class_metrics", "semantic_diagnostics", "semantic_coverage", "limitations"],
+  "properties": {
+    "schema_version": {"const": "evolution.multi-rule/0.2"},
+    "admitted": {"const": false},
+    "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "language": {"enum": ["python", "java"]},
+    "rules": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["rule", "status", "unit", "eligible_count", "assessed_count", "finding_count", "observed_finding_count", "findings", "candidates", "limitations"],
+        "properties": {
+          "rule": {"enum": ["LongMethod", "GodClass", "ObsoleteApiUsage"]},
+          "status": {"enum": ["complete", "partial", "unavailable"]},
+          "unit": {"type": "string"},
+          "eligible_count": {"type": ["integer", "null"], "minimum": 0},
+          "assessed_count": {"type": "integer", "minimum": 0},
+          "finding_count": {"type": ["integer", "null"], "minimum": 0},
+          "observed_finding_count": {"type": "integer", "minimum": 0},
+          "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+          "candidates": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+          "limitations": {"type": "array", "items": {"type": "string"}}
+        },
+        "allOf": [{"if": {"properties": {"status": {"const": "complete"}}}, "then": {"properties": {"finding_count": {"type": "integer"}}}, "else": {"properties": {"finding_count": {"type": "null"}}}}]
+      }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "required": ["id", "rule", "path", "line", "symbol", "source_sha256", "metrics"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "rule": {"enum": ["LongMethod", "GodClass", "ObsoleteApiUsage"]},
+        "path": {"type": "string", "minLength": 1},
+        "line": {"type": "integer", "minimum": 1},
+        "symbol": {"type": "string"},
+        "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "metrics": {"type": "object", "additionalProperties": {"type": "number"}}
+      }
+    }
+  }
+}

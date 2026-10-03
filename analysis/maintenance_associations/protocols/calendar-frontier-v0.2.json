@@ -1,0 +1,49 @@
+{
+  "version": "0.2",
+  "date": "2026-09-22",
+  "repository": "https://github.com/odoo/odoo.git",
+  "selection_rule": "Latest first-parent node in the frozen ancestry whose prefix maximum committer timestamp is strictly before 1 January of the following year (UTC).",
+  "historical_branch_tip_proven": false,
+  "original_evidence_preserved": true,
+  "replacements": [
+    {
+      "repository": "odoo__odoo",
+      "snapshot": "2018",
+      "frozen_commit": "b605f6d9811f323c4f25948f4b347904a7a1f530",
+      "proposed_commit": "d029ee1bcb33197c48ce6e0a25c86c8f127074dc"
+    },
+    {
+      "repository": "odoo__odoo",
+      "snapshot": "2019",
+      "frozen_commit": "3998fa8dc18ac36cf99f273d96c4b5f536ff7a9f",
+      "proposed_commit": "989a78b3fc04e7b5b79e165fda8539be5f091b8c"
+    },
+    {
+      "repository": "odoo__odoo",
+      "snapshot": "2020",
+      "frozen_commit": "a6c29c44f44079308a04a3637d0479fdb067a9ec",
+      "proposed_commit": "0d215ac63dc80f875e086415d6b376678b2716c6"
+    },
+    {
+      "repository": "odoo__odoo",
+      "snapshot": "2023",
+      "frozen_commit": "b12393b81e100362747cbda224255b6d785f4d7b",
+      "proposed_commit": "a65051a650cf24e9260dad5ebf4b7df4eec4702d"
+    },
+    {
+      "repository": "odoo__odoo",
+      "snapshot": "2024",
+      "frozen_commit": "22f8d827f90ff52fcea8135a03dca5b0c0d461a1",
+      "proposed_commit": "acecadd5d30f9a5f1d35aa453a42c1d43351ec99"
+    }
+  ],
+  "detector_inputs": {
+    "detectors/multi_rule.py": "45a5a107fc351f9650c49ba8d5188244af6a5c80b8e7366860811c0bad1f6dac",
+    "detectors/python/semantic.py": "77a72424d9840580dc375cf14e615011a48c4a51b8e8611e0cff9c9a2d7ba361",
+    "detectors/java/SemanticScan.java": "54210eca9b53409c34b1479b8692f76165c9e1bbb198143ed935d967ac11481b",
+    "detectors/syntax_probe.py": "1a73cf0d67be6fe21a2a1c400f8697d96350c88454f728514d3b5bbf8e36bdcf",
+    "detectors/syntax_worker.py": "496a0f6a8514a289c6c204dfa4096f5e594a88a0a91a452138382b59a9f9986a",
+    "detectors/linux-wheel-lock.json": "9005d47903664f2548455e61b648aacdb642089a485e852a0045f36edbdb3ff1",
+    "protocols/odoo__odoo.json": "a8cbaabd160ac409f0fe8e74abfbb6c5a8c6be4aac7f02ba5ec07ecdf31da24b"
+  }
+}

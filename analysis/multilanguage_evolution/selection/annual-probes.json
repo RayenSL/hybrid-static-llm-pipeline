@@ -1,0 +1,1227 @@
+[
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2007-java.json",
+    "sha256": "01c33cccff0eab884a5d694266a8c88fb0a223bf7dcc8c9ad7cc88348ce35123",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "879d430c6454153972b7641eaa299f065b3654fb",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1054,
+    "parsed_files": 1054,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2008-java.json",
+    "sha256": "dfa875689f06b8c28f249315db41db689ce2596edfdfd417109a16ecdfd26f29",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "8249b5fff6cb2ae68329fdaeaba5f13be823facf",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1101,
+    "parsed_files": 1101,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2009-java.json",
+    "sha256": "d4ccbbcb11f40ed2b4c1a21b7e3c8075890d39b3b0db0430288ab00e7fb93bee",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "0a15b793fa54102f8f730bbe9780247d610e38b4",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1345,
+    "parsed_files": 1345,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2010-java.json",
+    "sha256": "6f8ac2cd7c0069d3136533344a049146327db9b749c885d74fc3f6ea11389a13",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "2a31398b5bdd10b6dd98c10576d5454d80076ef0",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1299,
+    "parsed_files": 1299,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2011-java.json",
+    "sha256": "29ca463b69baf68d8d39f5bc1b6f164ae48dce9b960c51caf2a2558052614a56",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "6c17007fe8388533eed3dde426046ae35fa92a57",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1310,
+    "parsed_files": 1310,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2012-java.json",
+    "sha256": "535e758a0aea7e40026d38b5638f11f8b3ceb3f7fa0f7ef50f87414b8c5f150d",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "ad9a49cb08bf004af97cad465bba45d21d112325",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1416,
+    "parsed_files": 1416,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2013-java.json",
+    "sha256": "9c0a3470a72a686088939c12c94699a64df30be99e4332f3dbe01a1d5821cb5a",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "411e4cc9b12bb4fd5aadfbb585db9b40afc90d3d",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1543,
+    "parsed_files": 1543,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2014-java.json",
+    "sha256": "12f606bb5c05d3f8d6f4ceca9dfd851f798d1395705e8aed498e0e3d666f5077",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "326a3475680738efc7cb15a7a36bc863d2adbafc",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1541,
+    "parsed_files": 1541,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2015-java.json",
+    "sha256": "bef36ffa5a459cab35b3213313cf1039199d43c9b96437455110acad5dbd12cb",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "7e8db40083c732a2c33c57d9be945c59b8fd2029",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1618,
+    "parsed_files": 1618,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2016-java.json",
+    "sha256": "48bd9570dbc8ad584ae30e57a484c37d233e5b3c30e1db81d8a58ff7799e8514",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "c08e4bb70d26cb63eaac7a3b8c5f3033bd2fb4fe",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1612,
+    "parsed_files": 1612,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2017-java.json",
+    "sha256": "2c39b87c5f7c3fbe5e082ad5219f47ff5d9d0e5663f070294218af7928a2e5a8",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "d3399023e38f9f9513d6edc40884bf4c8a651ea5",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1651,
+    "parsed_files": 1651,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2018-java.json",
+    "sha256": "ae95bbab929812aa4bfa5bb7ea38a3f2f6dc7029477d6bf9ce9fb0d7ee4b1764",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "ffc4b76e42fd39d88c9417d0ba2b3d697c16f5b5",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1741,
+    "parsed_files": 1741,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2019-java.json",
+    "sha256": "515233086ca47a05a00cbf7c85ed522250ceac948f80e13b833aa4adbc93a8ae",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "81e721526d4125e68e591dddf14dbb460f02f43b",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1781,
+    "parsed_files": 1781,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2020-java.json",
+    "sha256": "4a0dca56ebbe6680f51c0db8f760393c39db2383b52ae41b53e14a09025d8f1d",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "0974ffcc1880ace148f9effd35e27728cccfc558",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1786,
+    "parsed_files": 1786,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2021-java.json",
+    "sha256": "01459c84e4ca1b6bb23c1bcf35d40d0151be436ebc5c7ff56dfcc75245424b19",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "f2e57c94034d515e340eae275c1fa4f05804228e",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1821,
+    "parsed_files": 1821,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2022-java.json",
+    "sha256": "597720696d3d79065fc13a056d8299cecbe887e379a5c8a21867fe7eb0f66c48",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "b364efe99e2f1afa2321cdd249d57b92235b21ef",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1859,
+    "parsed_files": 1859,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2023-java.json",
+    "sha256": "e5469e749d5d060e7eaa724ab863b566ebd09800069f30f77c96113089e0f409",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "7bdece55a30dac81c3f094f51ce29142dd62579e",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1898,
+    "parsed_files": 1898,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2024-java.json",
+    "sha256": "1af7e12464e40a847ffdd921354f938b3841173bf112e7892f55716fc7ab5507",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "fdec436da281b5c30321bd59be0ff1e8aaef9184",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1798,
+    "parsed_files": 1798,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-2025-java.json",
+    "sha256": "c1dd318ab88c075279d6e19e0d4395859fca4b47f4c00ad6cdd70b8877e0257c",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "c158fa6816c38880772f27607b3cef2e1e97bac2",
+    "language": "java",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1813,
+    "parsed_files": 1810,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": [
+      {
+        "byte_end": 19305,
+        "byte_start": 19223,
+        "kind": "ERROR",
+        "line": 598,
+        "path": "java/org/apache/naming/NamingContext.java"
+      },
+      {
+        "byte_end": 19269,
+        "byte_start": 19251,
+        "kind": "ERROR",
+        "line": 598,
+        "path": "java/org/apache/naming/NamingContext.java"
+      },
+      {
+        "byte_end": 19363,
+        "byte_start": 19363,
+        "kind": "missing::",
+        "line": 599,
+        "path": "java/org/apache/naming/NamingContext.java"
+      },
+      {
+        "byte_end": 19472,
+        "byte_start": 19390,
+        "kind": "ERROR",
+        "line": 600,
+        "path": "java/org/apache/naming/NamingContext.java"
+      },
+      {
+        "byte_end": 19436,
+        "byte_start": 19418,
+        "kind": "ERROR",
+        "line": 600,
+        "path": "java/org/apache/naming/NamingContext.java"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-earliest-2006-java.json",
+    "sha256": "f5f3a984f6f52587dd7c1f282e83e1432a9e24f537dfb6d4dba692f4430c6114",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "a84fabcbc6fee8a69253ad92a304b4718e96a7c9",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 828,
+    "parsed_files": 828,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/apache__tomcat-endpoint-2026-java.json",
+    "sha256": "f991c41cf0be5e015576337c3c20b120134c337d9b54aa944816b585bbd0585e",
+    "repository": "https://github.com/apache/tomcat.git",
+    "commit": "462be987157efbd854ef7d32690f5eb3d5df9ec6",
+    "language": "java",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1814,
+    "parsed_files": 1811,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": [
+      {
+        "byte_end": 20592,
+        "byte_start": 20510,
+        "kind": "ERROR",
+        "line": 630,
+        "path": "java/org/apache/naming/NamingContext.java"
+      },
+      {
+        "byte_end": 20556,
+        "byte_start": 20538,
+        "kind": "ERROR",
+        "line": 630,
+        "path": "java/org/apache/naming/NamingContext.java"
+      },
+      {
+        "byte_end": 20650,
+        "byte_start": 20650,
+        "kind": "missing::",
+        "line": 631,
+        "path": "java/org/apache/naming/NamingContext.java"
+      },
+      {
+        "byte_end": 20759,
+        "byte_start": 20677,
+        "kind": "ERROR",
+        "line": 632,
+        "path": "java/org/apache/naming/NamingContext.java"
+      },
+      {
+        "byte_end": 20723,
+        "byte_start": 20705,
+        "kind": "ERROR",
+        "line": 632,
+        "path": "java/org/apache/naming/NamingContext.java"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2007-java.json",
+    "sha256": "09ce133235f16d86bad5bae26ac39d999213218cca24ffd05b00a5f0f82a8e75",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "3382630865948cf103bbff48514ffdfa60a87e05",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 384,
+    "parsed_files": 384,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2008-java.json",
+    "sha256": "20fad8174b896c3cc6bb4166e019aba4131ac626144d67cf23e47aff61d08831",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "c5a4e8c463e9928fa235e3cd7217447f67a71a0b",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 502,
+    "parsed_files": 502,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2009-java.json",
+    "sha256": "1f70875af35e328ba79aa7bbe8a035fd6f74f5268da78fb0757cd1e3dae780f6",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "a3785dc287380c7697f0b3941517f65aa8bdf15c",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 664,
+    "parsed_files": 664,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2010-java.json",
+    "sha256": "48871041ec7d372567eb44687b39cc7c9333164efb28e4d02a6ce3935a240cf5",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "3f72e021ca5460c5e8ccf5735c15ddc10bc34c26",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 815,
+    "parsed_files": 815,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2011-java.json",
+    "sha256": "5fc73130caad5b75c1151e4301cf4acdacef46f4810e86a505c3448e71e881be",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "0d2c5575339fc845783306ba3de387ea9f073a07",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 828,
+    "parsed_files": 828,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2012-java.json",
+    "sha256": "9d61a589c51517f8b3ead9c071333295341056ed269e57270df1f67064a8ddf4",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "79cc2ebbe3607ea44d245be162ffd211de77911d",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 911,
+    "parsed_files": 911,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2013-java.json",
+    "sha256": "7d74a2bc46c3043c7904d610614796a461a55018a3319819a3a41a5e479854e7",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "eddd9d8bb121cc926746ac5d6f8f21aa9c840ad6",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 905,
+    "parsed_files": 905,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2014-java.json",
+    "sha256": "7170a6f51c0984408ed595570067e5013d1faef112402df72d6166cc477ac08f",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "ed891f6bc0a99497f96126f43b9cd8bec7fec51b",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 936,
+    "parsed_files": 936,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2015-java.json",
+    "sha256": "eec50033adc8aacf1b5549637d234b11d214342df71b1b8d339059fa66c23422",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "9ab3f1d6aa15a242d226b45664bbb1a8dd0c9818",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 955,
+    "parsed_files": 955,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2016-java.json",
+    "sha256": "5c6c65da27cd799317ce49c66dcf1c3489a5dbf076c1a1bfff3fbbc52a3ea937",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "c05e0523851f9e4dcb83be2f4c9646734674e9e4",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1001,
+    "parsed_files": 1001,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2017-java.json",
+    "sha256": "6aee43bcd60f65952b95cae37cef8848d132229105fdafc1bac514b17b04659e",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "16042bd57bc3e7bc0544b3a4da5e0f79dfa5087b",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1022,
+    "parsed_files": 1022,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2018-java.json",
+    "sha256": "f5c6d821d1d7961ebb21884e5a79bed212bfca9fd21b0ab96d229c9daa497c28",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "bcc4e4fe9c3dccc5ca74299d24f8f992c9d5cd71",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1067,
+    "parsed_files": 1067,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2019-java.json",
+    "sha256": "c4a483e85ab58860039a1f11beff82432899c70287c51c6bd700330607315105",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "a1e740a56df7c1e70ca5219bf7e12bc202005b5d",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1077,
+    "parsed_files": 1077,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2020-java.json",
+    "sha256": "5a3d0c13ff8977695039ac5dd1d7fb404ef026a54b4deab245938fa8197a108a",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "884e4ddefefce28ce3bb03395852c3607351ec59",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1132,
+    "parsed_files": 1132,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2021-java.json",
+    "sha256": "642fab5788fec3d0f7078b2156c7cd1674fd39b31fc64593847b43b2be159ddf",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "c9aea4738fb27c61c7ca472a6557c7e744e3c91e",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1114,
+    "parsed_files": 1114,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2022-java.json",
+    "sha256": "1ed5a9107969be4e205ae1fec6ea30707d81d6c5a8f4934f05f18a8be1b8c703",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "989ef5b6d64a95c5b58cde8b428c61557491a101",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1135,
+    "parsed_files": 1135,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2023-java.json",
+    "sha256": "49708f52e600964bf875cd62e8722b37887fc596c2a6fa08c6280b11468d3ad9",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "2e267453eb7530848df3a4b75774136446e280b5",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1162,
+    "parsed_files": 1162,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2024-java.json",
+    "sha256": "77a2cc1748177219694b1875a02e9633fa9f701e0a38fbac51a0b9421c97a890",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "0a645059151d3b33782699e4e94fbbf6c33dd933",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1186,
+    "parsed_files": 1186,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-2025-java.json",
+    "sha256": "001334e86281508251b0f8f69f307a62ca59cc20bc788d5d7efd55b220086a42",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "a3fb95e0aa908242666a4fde2ea889b56865e0d8",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 1244,
+    "parsed_files": 1244,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-earliest-2006-java.json",
+    "sha256": "0a66d969c29c933ed813db068cfdb0af7cf8819e62791cb9ac5b96dfb4cf037e",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "8a0dc230f44e84e5a7f7920cf9a31f09a54999ac",
+    "language": "java",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 138,
+    "parsed_files": 138,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/jenkinsci__jenkins-endpoint-2026-java.json",
+    "sha256": "51fcf346f2f5f19b10032836fe24dce799936d79f84cf521e89fa45984ef9c83",
+    "repository": "https://github.com/jenkinsci/jenkins.git",
+    "commit": "003f706d2f3ea233d56e30770741182716ab8808",
+    "language": "java",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1276,
+    "parsed_files": 1275,
+    "scope_sha256": "98ae94b953504274cc1c7c2925379b610177439c852cdde6ffe46652c27c32dc",
+    "diagnostic_examples": [
+      {
+        "byte_end": 3321,
+        "byte_start": 3321,
+        "kind": "missing:)",
+        "line": 102,
+        "path": "core/src/main/java/jenkins/model/PeepholePermalink.java"
+      },
+      {
+        "byte_end": 3334,
+        "byte_start": 3321,
+        "kind": "ERROR",
+        "line": 102,
+        "path": "core/src/main/java/jenkins/model/PeepholePermalink.java"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2007-python.json",
+    "sha256": "6245dda7f720ba666e1e852c92dde1a177c333b8e895a55cf745bfd6ba3654ef",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "6a40969d7c278846c137d5241c89b4caee27cf8d",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 562,
+    "parsed_files": 561,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 43984,
+        "byte_start": 43981,
+        "kind": "ERROR",
+        "line": 1081,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 45978,
+        "byte_start": 45975,
+        "kind": "ERROR",
+        "line": 1134,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 49345,
+        "byte_start": 49342,
+        "kind": "ERROR",
+        "line": 1226,
+        "path": "addons/account/account.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2008-python.json",
+    "sha256": "5f33b5357e17fe16bee495c601b5894a37b5269c4bcbf08832ef03d792f82eb2",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "21d90144cd66cb3573b79f8968439cbed4ef0b8c",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 877,
+    "parsed_files": 875,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 60687,
+        "byte_start": 60684,
+        "kind": "ERROR",
+        "line": 1280,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 62628,
+        "byte_start": 62625,
+        "kind": "ERROR",
+        "line": 1320,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 64837,
+        "byte_start": 64834,
+        "kind": "ERROR",
+        "line": 1374,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 23060,
+        "byte_start": 23054,
+        "kind": "ERROR",
+        "line": 537,
+        "path": "bin/addons/base/ir/ir_actions.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2009-python.json",
+    "sha256": "b6c37376508e370f61869ba7c6d47cd207f5cfa09459fab1cd2acb65847eced7",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "77820727d3b8fbba3c08ecd0d47653490756acd9",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1094,
+    "parsed_files": 1092,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 66300,
+        "byte_start": 66297,
+        "kind": "ERROR",
+        "line": 1336,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 68398,
+        "byte_start": 68395,
+        "kind": "ERROR",
+        "line": 1378,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 72193,
+        "byte_start": 72190,
+        "kind": "ERROR",
+        "line": 1460,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 26311,
+        "byte_start": 26305,
+        "kind": "ERROR",
+        "line": 592,
+        "path": "bin/addons/base/ir/ir_actions.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2010-python.json",
+    "sha256": "d0c34b11f34568f1eaaff8c66fe58317092695d5ffe3dab45684eb497d8ceb7b",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "1cc0afd870e8d4e3d7550599cd212956b8d7b084",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1456,
+    "parsed_files": 1451,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 88260,
+        "byte_start": 88257,
+        "kind": "ERROR",
+        "line": 1803,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 90305,
+        "byte_start": 90302,
+        "kind": "ERROR",
+        "line": 1845,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 96020,
+        "byte_start": 96017,
+        "kind": "ERROR",
+        "line": 1966,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 403,
+        "byte_start": 400,
+        "kind": "ERROR",
+        "line": 11,
+        "path": "addons/email_template/html2text.py"
+      },
+      {
+        "byte_end": 59000,
+        "byte_start": 58994,
+        "kind": "ERROR",
+        "line": 1386,
+        "path": "addons/outlook/plugin/openerp-outlook-plugin/dialogs/dialog_map.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2011-python.json",
+    "sha256": "a9ffa148a5e8d187be9375168bdc2cbe8a25d6841b0ede2bcdd4a0a409e30f7b",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "8aff5209ea583dbe5e9c5d1342684dd6da6cfe19",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1574,
+    "parsed_files": 1572,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 99678,
+        "byte_start": 99675,
+        "kind": "ERROR",
+        "line": 1975,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 101722,
+        "byte_start": 101719,
+        "kind": "ERROR",
+        "line": 2016,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 107739,
+        "byte_start": 107736,
+        "kind": "ERROR",
+        "line": 2140,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 403,
+        "byte_start": 400,
+        "kind": "ERROR",
+        "line": 11,
+        "path": "addons/email_template/html2text.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2012-python.json",
+    "sha256": "d33d7c7c7e6a31b9b0866debd75ba8cf47f70526a57a69af19fcf39a9a34148f",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "28d08ad90171677bb4a020d4aaebcd3b2243dbe6",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1376,
+    "parsed_files": 1374,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 103173,
+        "byte_start": 103170,
+        "kind": "ERROR",
+        "line": 1994,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 105175,
+        "byte_start": 105172,
+        "kind": "ERROR",
+        "line": 2035,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 111635,
+        "byte_start": 111632,
+        "kind": "ERROR",
+        "line": 2169,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 403,
+        "byte_start": 400,
+        "kind": "ERROR",
+        "line": 11,
+        "path": "addons/email_template/html2text.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2013-python.json",
+    "sha256": "73a1bd9859af354c3f9955dc57e60ba7b6ae8d0dee602567bdb5bf078b80ce6d",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "d963fa888cb767d5b3ad6275787a2324bcec1902",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1437,
+    "parsed_files": 1434,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 105396,
+        "byte_start": 105393,
+        "kind": "ERROR",
+        "line": 2046,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 107398,
+        "byte_start": 107395,
+        "kind": "ERROR",
+        "line": 2087,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 113858,
+        "byte_start": 113855,
+        "kind": "ERROR",
+        "line": 2221,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 403,
+        "byte_start": 400,
+        "kind": "ERROR",
+        "line": 11,
+        "path": "addons/email_template/html2text.py"
+      },
+      {
+        "byte_end": 3449,
+        "byte_start": 3432,
+        "kind": "ERROR",
+        "line": 97,
+        "path": "openerp/tools/mail.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2014-python.json",
+    "sha256": "79fae5384c65aa87c8152e2cc49a445474449be7a5afd84d120b6355f5a400ce",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "4a0b13ed92311032ec4236a71b5a07592df79b0f",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1629,
+    "parsed_files": 1625,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 105020,
+        "byte_start": 105017,
+        "kind": "ERROR",
+        "line": 2002,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 107044,
+        "byte_start": 107041,
+        "kind": "ERROR",
+        "line": 2043,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 114218,
+        "byte_start": 114215,
+        "kind": "ERROR",
+        "line": 2191,
+        "path": "addons/account/account.py"
+      },
+      {
+        "byte_end": 403,
+        "byte_start": 400,
+        "kind": "ERROR",
+        "line": 11,
+        "path": "addons/email_template/html2text.py"
+      },
+      {
+        "byte_end": 1928,
+        "byte_start": 1925,
+        "kind": "ERROR",
+        "line": 52,
+        "path": "openerp/cli/shell.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2015-python.json",
+    "sha256": "034df4a3415c0e18a523189fca3f9bd1b05e644ba6f38d8cea8572e593266fdb",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "c9ed8aec914409deff7ff8d7d44254b3e9854dff",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1581,
+    "parsed_files": 1578,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 403,
+        "byte_start": 400,
+        "kind": "ERROR",
+        "line": 11,
+        "path": "addons/mail/models/html2text.py"
+      },
+      {
+        "byte_end": 47591,
+        "byte_start": 47580,
+        "kind": "ERROR",
+        "line": 1169,
+        "path": "openerp/addons/base/ir/ir_qweb.py"
+      },
+      {
+        "byte_end": 1156,
+        "byte_start": 1153,
+        "kind": "ERROR",
+        "line": 37,
+        "path": "openerp/cli/shell.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2016-python.json",
+    "sha256": "2353d29215269a8326be6e8b21e437d1698a992d67358ab78cf77b6c6d0700b0",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "ee9341366efaa97195e4a0e03c57578c915fe054",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1808,
+    "parsed_files": 1804,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 403,
+        "byte_start": 400,
+        "kind": "ERROR",
+        "line": 11,
+        "path": "addons/mail/models/html2text.py"
+      },
+      {
+        "byte_end": 4196,
+        "byte_start": 4184,
+        "kind": "ERROR",
+        "line": 103,
+        "path": "odoo/addons/base/ir/ir_qweb/assetsbundle.py"
+      },
+      {
+        "byte_end": 8207,
+        "byte_start": 8195,
+        "kind": "ERROR",
+        "line": 191,
+        "path": "odoo/addons/base/ir/ir_qweb/ir_qweb.py"
+      },
+      {
+        "byte_end": 1289,
+        "byte_start": 1286,
+        "kind": "ERROR",
+        "line": 46,
+        "path": "odoo/cli/shell.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2017-python.json",
+    "sha256": "03f550033be3f77092249c00c22fe83a53ba522f63ae427456683b07eec35897",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "fdb7a8db267e97edaf48b37f65f09ee235b98b5a",
+    "language": "python",
+    "status": "partial",
+    "admitted": false,
+    "eligible_files": 1909,
+    "parsed_files": 1906,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": [
+      {
+        "byte_end": 560,
+        "byte_start": 548,
+        "kind": "ERROR",
+        "line": 26,
+        "path": "addons/website/models/ir_qweb.py"
+      },
+      {
+        "byte_end": 4194,
+        "byte_start": 4182,
+        "kind": "ERROR",
+        "line": 103,
+        "path": "odoo/addons/base/models/assetsbundle.py"
+      },
+      {
+        "byte_end": 8360,
+        "byte_start": 8348,
+        "kind": "ERROR",
+        "line": 194,
+        "path": "odoo/addons/base/models/ir_qweb.py"
+      }
+    ]
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2018-python.json",
+    "sha256": "4ee25c86dfbb6885d8e9d31b89c85774da6407644bd59838dcfc9d9d3017291e",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "b605f6d9811f323c4f25948f4b347904a7a1f530",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 2314,
+    "parsed_files": 2314,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2019-python.json",
+    "sha256": "e137c8e28d46614619993532352e270e283d27e1c06a31ce4949626294cf2246",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "3998fa8dc18ac36cf99f273d96c4b5f536ff7a9f",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 2605,
+    "parsed_files": 2605,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2020-python.json",
+    "sha256": "0906c1437b77ff50a0bb550374ce9d78c0a5e79731773114f334f0381c132f7c",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "a6c29c44f44079308a04a3637d0479fdb067a9ec",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 3428,
+    "parsed_files": 3428,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2021-python.json",
+    "sha256": "5cfcd147ed05b0617ccddaebc7905079644e389ada2119ae383ea75f430815f8",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "5169fc0c20695907228fc16737060a50e1569f8f",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 3430,
+    "parsed_files": 3430,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2022-python.json",
+    "sha256": "4e0e594ae2b84ad1c4e696676c25f73d1f32173e92433589150e5586df9450a2",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "efe52d50bb9e8bee22517a25fec5cb85d50b9d85",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 3903,
+    "parsed_files": 3903,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2023-python.json",
+    "sha256": "a06a61636ca9f74d150e0995eb3d054cbe8d35706573599dfad440bf2ff1ed05",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "b12393b81e100362747cbda224255b6d785f4d7b",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 4613,
+    "parsed_files": 4613,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2024-python.json",
+    "sha256": "e1d6ec605c5378a17c6df1ccb2c4087b7f5e14376d067a0594cad7acb0d244eb",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "22f8d827f90ff52fcea8135a03dca5b0c0d461a1",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 5424,
+    "parsed_files": 5424,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-2025-python.json",
+    "sha256": "a0ff51bdfcd38cc7a7701937582a3fc7274890936d709580b1290e4ee55ff6bf",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "d088dbad84492234ae792b76545497c6cd62e4f4",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 5916,
+    "parsed_files": 5916,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-earliest-2006-python.json",
+    "sha256": "6c3911c6b4c7f2db112f18d4dbcdc6f86567021d625f801b86a32ea754ea9f91",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "004a0b996ff8f269451e07346f71a129a1f3fbaf",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 197,
+    "parsed_files": 197,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  },
+  {
+    "result_file": "tmp/multilanguage-evolution/annual-probes/odoo__odoo-endpoint-2026-python.json",
+    "sha256": "568ee3455d5a94c2034b408ed4d6bf4e65d47d435efd6a45139cc64d872e0dfc",
+    "repository": "https://github.com/odoo/odoo.git",
+    "commit": "7bbce824a1897a912441a7f0511ffec505cbe1d5",
+    "language": "python",
+    "status": "complete",
+    "admitted": false,
+    "eligible_files": 6262,
+    "parsed_files": 6262,
+    "scope_sha256": "f87f83385ec4cdc4125093df141e314b81665e8856d8c7abf971818f8919f13e",
+    "diagnostic_examples": []
+  }
+]

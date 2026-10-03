@@ -15,6 +15,15 @@ src/
 └── HybridLens.Tests            # Unit and integration tests
 ```
 
+## Research material
+
+The revised [thesis](Static_Analysis_and_LLMs_for_Verified_Anti_Pattern_Repair.pdf)
+is the reference for the reported experiments. See [analysis/README.md](analysis/README.md)
+for the current repair analyses, the Appendix B studies and their reproduction dependencies.
+Experiment records remain under `experiments/`; operational protocols and qualitative
+repair evidence remain under `docs/`. Slides and speaker notes are in
+[presentations/](presentations/).
+
 ## Prerequisites
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)

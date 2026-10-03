@@ -1,0 +1,927 @@
+{
+  "schema_version": "history-audit/1",
+  "status": "inventory_only_not_measurement",
+  "repository": "https://github.com/qemu/qemu.git",
+  "cutoff_utc": "2026-09-14T00:00:00+00:00",
+  "endpoint": {
+    "commit": "d43c2d5f89db70359a7b3a7e2ad7098fcc0165ef",
+    "committer_unix": 1789164282,
+    "committer_date": "2026-09-11T12:04:42-10:00"
+  },
+  "earliest_first_parent": {
+    "commit": "e63c3dc74bfb90e4522d075d0d5a7600c5145745",
+    "committer_unix": 1045608936,
+    "committer_date": "2003-02-18T22:55:36+00:00"
+  },
+  "earliest_source": {
+    "commit": "31e31b8a248ffa216223dad49f75efbdfca5df23",
+    "committer_unix": 1045608936,
+    "committer_date": "2003-02-18T22:55:36+00:00"
+  },
+  "undated_source_import": false,
+  "reachable_roots": [
+    "6bf19c94a0518a2c9101f2ee368c9a0ea56101ba",
+    "e63c3dc74bfb90e4522d075d0d5a7600c5145745"
+  ],
+  "first_parent_commits": 26619,
+  "elapsed_years": 23.562330924735697,
+  "timestamp_reversals": 3,
+  "observations": [
+    {
+      "label": "earliest-2003",
+      "commit": "31e31b8a248ffa216223dad49f75efbdfca5df23",
+      "committer_unix": 1045608936,
+      "committer_date": "2003-02-18T22:55:36+00:00",
+      "inventory": {
+        "tracked_files": 16,
+        "tracked_language_files": {
+          "c": 5,
+          "c_header": 7,
+          "other": 4
+        },
+        "top_level_paths": {
+          "linux-user": 8,
+          "COPYING.LIB": 1,
+          "Makefile": 1,
+          "TODO": 1,
+          "elf.h": 1,
+          "i386.ld": 1,
+          "syscall-i386.h": 1,
+          "thunk.c": 1,
+          "thunk.h": 1
+        }
+      }
+    },
+    {
+      "label": "2004",
+      "commit": "808c4954bfe48da4068c540d667ad379b55a5155",
+      "committer_unix": 1103499227,
+      "committer_date": "2004-12-19T23:33:47+00:00",
+      "inventory": {
+        "tracked_files": 302,
+        "tracked_language_files": {
+          "c": 124,
+          "c_header": 95,
+          "other": 83
+        },
+        "top_level_paths": {
+          "slirp": 40,
+          "hw": 39,
+          "keymaps": 35,
+          "linux-user": 23,
+          "target-arm": 23,
+          "tests": 17,
+          "pc-bios": 12,
+          "audio": 11,
+          "target-i386": 11,
+          "target-ppc": 9,
+          "target-sparc": 9,
+          ".cvsignore": 1,
+          "COPYING": 1,
+          "COPYING.LIB": 1,
+          "Changelog": 1,
+          "Makefile": 1,
+          "Makefile.target": 1,
+          "README": 1,
+          "README.distrib": 1,
+          "TODO": 1
+        }
+      }
+    },
+    {
+      "label": "2005",
+      "commit": "90dc3b395f746f9dc2be1b32251e8fbc866cf379",
+      "committer_unix": 1135031284,
+      "committer_date": "2005-12-19T22:28:04+00:00",
+      "inventory": {
+        "tracked_files": 362,
+        "tracked_language_files": {
+          "c": 160,
+          "c_header": 116,
+          "other": 86
+        },
+        "top_level_paths": {
+          "hw": 53,
+          "slirp": 40,
+          "keymaps": 35,
+          "linux-user": 30,
+          "target-arm": 20,
+          "audio": 18,
+          "tests": 17,
+          "pc-bios": 14,
+          "target-i386": 12,
+          "target-mips": 10,
+          "target-ppc": 10,
+          "target-sparc": 10,
+          "fpu": 6,
+          ".cvsignore": 1,
+          "COPYING": 1,
+          "COPYING.LIB": 1,
+          "Changelog": 1,
+          "LICENSE": 1,
+          "Makefile": 1,
+          "Makefile.target": 1
+        }
+      }
+    },
+    {
+      "label": "2006",
+      "commit": "388c45084d54ced21822ab29c76583a446ad410f",
+      "committer_unix": 1167157627,
+      "committer_date": "2006-12-26T18:27:07+00:00",
+      "inventory": {
+        "tracked_files": 442,
+        "tracked_language_files": {
+          "c": 216,
+          "c_header": 139,
+          "other": 87
+        },
+        "top_level_paths": {
+          "hw": 92,
+          "linux-user": 42,
+          "slirp": 40,
+          "keymaps": 35,
+          "target-arm": 20,
+          "audio": 19,
+          "tests": 18,
+          "pc-bios": 13,
+          "target-i386": 12,
+          "target-mips": 11,
+          "target-ppc": 10,
+          "target-sparc": 10,
+          "target-m68k": 8,
+          "target-sh4": 8,
+          "fpu": 6,
+          ".cvsignore": 1,
+          "COPYING": 1,
+          "COPYING.LIB": 1,
+          "Changelog": 1,
+          "LICENSE": 1
+        }
+      }
+    },
+    {
+      "label": "2007",
+      "commit": "0b09be2b2fa08a572ff95fc264b1acfea19f6dab",
+      "committer_unix": 1199034781,
+      "committer_date": "2007-12-30T17:13:01+00:00",
+      "inventory": {
+        "tracked_files": 771,
+        "tracked_language_files": {
+          "c": 363,
+          "c_header": 240,
+          "other": 168
+        },
+        "top_level_paths": {
+          "hw": 214,
+          "tests": 122,
+          "linux-user": 73,
+          "slirp": 41,
+          "keymaps": 35,
+          "target-arm": 23,
+          "audio": 20,
+          "target-ppc": 16,
+          "pc-bios": 15,
+          "target-cris": 12,
+          "target-i386": 12,
+          "target-mips": 12,
+          "target-alpha": 11,
+          "darwin-user": 10,
+          "target-m68k": 10,
+          "target-sparc": 10,
+          "target-sh4": 8,
+          "fpu": 6,
+          ".cvsignore": 1,
+          "COPYING": 1
+        }
+      }
+    },
+    {
+      "label": "2008",
+      "commit": "3aa9bd6c351daa73a84a19673e5c9b2694bb9eed",
+      "committer_unix": 1230742526,
+      "committer_date": "2008-12-31T16:55:26+00:00",
+      "inventory": {
+        "tracked_files": 945,
+        "tracked_language_files": {
+          "c": 462,
+          "c_header": 289,
+          "other": 194
+        },
+        "top_level_paths": {
+          "hw": 286,
+          "tests": 129,
+          "linux-user": 87,
+          "slirp": 40,
+          "keymaps": 35,
+          "bsd-user": 24,
+          "pc-bios": 24,
+          "audio": 22,
+          "tcg": 22,
+          "target-ppc": 15,
+          "target-i386": 13,
+          "target-cris": 11,
+          "darwin-user": 10,
+          "target-arm": 10,
+          "target-mips": 10,
+          "target-m68k": 9,
+          "target-sh4": 8,
+          "target-sparc": 8,
+          "target-alpha": 7,
+          "fpu": 6
+        }
+      }
+    },
+    {
+      "label": "2009",
+      "commit": "b430a22562e8a3836f984aa3f8b5b62ebd249573",
+      "committer_unix": 1262176037,
+      "committer_date": "2009-12-30T12:27:17+00:00",
+      "inventory": {
+        "tracked_files": 1259,
+        "tracked_language_files": {
+          "c": 602,
+          "c_header": 393,
+          "other": 263,
+          "python": 1
+        },
+        "top_level_paths": {
+          "hw": 400,
+          "tests": 131,
+          "linux-user": 90,
+          "pc-bios": 64,
+          "default-configs": 42,
+          "slirp": 37,
+          "bsd-user": 27,
+          "tcg": 26,
+          "audio": 25,
+          "net": 22,
+          "block": 20,
+          "target-ppc": 15,
+          "target-i386": 13,
+          "gdb-xml": 11,
+          "target-cris": 11,
+          "darwin-user": 10,
+          "target-arm": 10,
+          "target-microblaze": 10,
+          "target-mips": 10,
+          "target-m68k": 9
+        }
+      }
+    },
+    {
+      "label": "2010",
+      "commit": "f96a38347a0c6ab31fbb6200c13e684d1fee449c",
+      "committer_unix": 1293830618,
+      "committer_date": "2010-12-31T22:23:38+01:00",
+      "inventory": {
+        "tracked_files": 1437,
+        "tracked_language_files": {
+          "c": 700,
+          "c_header": 452,
+          "other": 283,
+          "python": 2
+        },
+        "top_level_paths": {
+          "hw": 483,
+          "tests": 131,
+          "linux-user": 91,
+          "pc-bios": 67,
+          "default-configs": 43,
+          "ui": 38,
+          "slirp": 37,
+          "block": 33,
+          "bsd-user": 27,
+          "audio": 26,
+          "tcg": 26,
+          "net": 23,
+          "target-i386": 15,
+          "target-ppc": 15,
+          "target-cris": 13,
+          "gdb-xml": 11,
+          "darwin-user": 10,
+          "target-arm": 10,
+          "target-microblaze": 10,
+          "target-mips": 10
+        }
+      }
+    },
+    {
+      "label": "2011",
+      "commit": "8d3bc5178fbc06cdd89c064ae8f44e77c503e91e",
+      "committer_unix": 1324999738,
+      "committer_date": "2011-12-27T09:28:58-06:00",
+      "inventory": {
+        "tracked_files": 1808,
+        "tracked_language_files": {
+          "c": 837,
+          "c_header": 535,
+          "other": 428,
+          "python": 8
+        },
+        "top_level_paths": {
+          "hw": 565,
+          "tests": 225,
+          "linux-user": 100,
+          "pc-bios": 74,
+          "default-configs": 51,
+          "ui": 43,
+          "slirp": 38,
+          "block": 34,
+          "tcg": 30,
+          "bsd-user": 27,
+          "audio": 26,
+          "libcacard": 23,
+          "net": 23,
+          "scripts": 21,
+          "docs": 16,
+          "target-sparc": 16,
+          "linux-headers": 14,
+          "target-ppc": 14,
+          "target-i386": 13,
+          "qapi": 12
+        }
+      }
+    },
+    {
+      "label": "2012",
+      "commit": "a795ef8dcb8cbadffc996c41ff38927a97645234",
+      "committer_unix": 1356784056,
+      "committer_date": "2012-12-29T12:27:36+00:00",
+      "inventory": {
+        "tracked_files": 2850,
+        "tracked_language_files": {
+          "c": 1572,
+          "c_header": 619,
+          "other": 634,
+          "python": 25
+        },
+        "top_level_paths": {
+          "tests": 901,
+          "hw": 724,
+          "include": 135,
+          "linux-user": 105,
+          "pc-bios": 77,
+          "default-configs": 56,
+          "ui": 49,
+          "block": 41,
+          "slirp": 40,
+          "scripts": 38,
+          "target-i386": 31,
+          "tcg": 30,
+          "audio": 27,
+          "bsd-user": 27,
+          "docs": 25,
+          "libcacard": 23,
+          "target-ppc": 23,
+          "net": 22,
+          "target-xtensa": 19,
+          "target-sparc": 17
+        }
+      }
+    },
+    {
+      "label": "2013",
+      "commit": "f976b09ea249cccc3fd41c98aaf6512908db0bae",
+      "committer_unix": 1387736155,
+      "committer_date": "2013-12-22T19:15:55+01:00",
+      "inventory": {
+        "tracked_files": 3362,
+        "tracked_language_files": {
+          "c": 1727,
+          "c_header": 753,
+          "cpp": 3,
+          "other": 847,
+          "python": 32
+        },
+        "top_level_paths": {
+          "tests": 1062,
+          "hw": 709,
+          "include": 300,
+          "linux-user": 139,
+          "pc-bios": 100,
+          "default-configs": 60,
+          "scripts": 59,
+          "ui": 52,
+          "block": 51,
+          "slirp": 40,
+          "docs": 38,
+          "util": 37,
+          "tcg": 32,
+          "target-i386": 31,
+          "target-ppc": 31,
+          "stubs": 30,
+          "audio": 27,
+          "bsd-user": 27,
+          "target-arm": 27,
+          "libcacard": 26
+        }
+      }
+    },
+    {
+      "label": "2014",
+      "commit": "ab0302ee764fd702465aef6d88612cdff4302809",
+      "committer_unix": 1419347122,
+      "committer_date": "2014-12-23T15:05:22+00:00",
+      "inventory": {
+        "tracked_files": 3792,
+        "tracked_language_files": {
+          "c": 1849,
+          "c_header": 826,
+          "cpp": 8,
+          "other": 1062,
+          "python": 47
+        },
+        "top_level_paths": {
+          "tests": 1284,
+          "hw": 743,
+          "include": 348,
+          "linux-user": 139,
+          "pc-bios": 103,
+          "scripts": 69,
+          "default-configs": 63,
+          "ui": 58,
+          "block": 56,
+          "docs": 45,
+          "stubs": 43,
+          "slirp": 40,
+          "util": 39,
+          "disas": 35,
+          "target-ppc": 32,
+          "target-i386": 31,
+          "target-arm": 30,
+          "tcg": 30,
+          "audio": 27,
+          "bsd-user": 27
+        }
+      }
+    },
+    {
+      "label": "2015",
+      "commit": "38a762fec63fd5c035aae29ba9a77d357e21e4a7",
+      "committer_unix": 1450878812,
+      "committer_date": "2015-12-23T13:53:32+00:00",
+      "inventory": {
+        "tracked_files": 4530,
+        "tracked_language_files": {
+          "c": 1999,
+          "c_header": 957,
+          "cpp": 8,
+          "other": 1511,
+          "python": 55
+        },
+        "top_level_paths": {
+          "tests": 1753,
+          "hw": 804,
+          "include": 454,
+          "linux-user": 145,
+          "pc-bios": 105,
+          "scripts": 80,
+          "default-configs": 64,
+          "ui": 63,
+          "docs": 61,
+          "block": 59,
+          "util": 52,
+          "stubs": 41,
+          "slirp": 40,
+          "disas": 35,
+          "linux-headers": 34,
+          "target-i386": 33,
+          "target-ppc": 32,
+          "tcg": 32,
+          "target-arm": 30,
+          "net": 28
+        }
+      }
+    },
+    {
+      "label": "2016",
+      "commit": "dbe2b65566e76d3c3a0c3358285c0336ac61e757",
+      "committer_unix": 1482945071,
+      "committer_date": "2016-12-28T17:11:11+00:00",
+      "inventory": {
+        "tracked_files": 5068,
+        "tracked_language_files": {
+          "c": 2203,
+          "c_header": 1108,
+          "cpp": 9,
+          "other": 1677,
+          "python": 71
+        },
+        "top_level_paths": {
+          "tests": 1907,
+          "hw": 905,
+          "include": 555,
+          "target": 339,
+          "linux-user": 166,
+          "pc-bios": 114,
+          "scripts": 92,
+          "docs": 71,
+          "block": 65,
+          "ui": 65,
+          "default-configs": 64,
+          "util": 58,
+          "stubs": 53,
+          "slirp": 49,
+          "crypto": 47,
+          "disas": 37,
+          "linux-headers": 34,
+          "net": 34,
+          "tcg": 32,
+          "bsd-user": 27
+        }
+      }
+    },
+    {
+      "label": "2017",
+      "commit": "281f327487c9c9b1599f93c589a408bbf4a651b8",
+      "committer_unix": 1513901496,
+      "committer_date": "2017-12-22T00:11:36+00:00",
+      "inventory": {
+        "tracked_files": 5682,
+        "tracked_language_files": {
+          "c": 2357,
+          "c_header": 1238,
+          "cpp": 9,
+          "other": 2004,
+          "python": 74
+        },
+        "top_level_paths": {
+          "tests": 2176,
+          "hw": 987,
+          "include": 615,
+          "target": 384,
+          "linux-user": 179,
+          "pc-bios": 123,
+          "scripts": 101,
+          "docs": 87,
+          "util": 71,
+          "block": 68,
+          "ui": 68,
+          "default-configs": 67,
+          "crypto": 53,
+          "slirp": 51,
+          "stubs": 45,
+          "migration": 40,
+          "disas": 38,
+          "linux-headers": 38,
+          "net": 34,
+          "tcg": 31
+        }
+      }
+    },
+    {
+      "label": "2018",
+      "commit": "9b2e891ec5ccdb4a7d583b77988848282606fdea",
+      "committer_unix": 1545477931,
+      "committer_date": "2018-12-22T11:25:31+00:00",
+      "inventory": {
+        "tracked_files": 6526,
+        "tracked_language_files": {
+          "c": 2637,
+          "c_header": 1496,
+          "cpp": 10,
+          "other": 2299,
+          "python": 84
+        },
+        "top_level_paths": {
+          "tests": 2452,
+          "hw": 1125,
+          "include": 723,
+          "target": 462,
+          "linux-user": 299,
+          "pc-bios": 131,
+          "scripts": 109,
+          "docs": 98,
+          "util": 79,
+          "default-configs": 76,
+          "block": 74,
+          "ui": 68,
+          "crypto": 54,
+          "slirp": 51,
+          "stubs": 47,
+          "contrib": 46,
+          "linux-headers": 44,
+          "disas": 42,
+          "migration": 40,
+          "net": 39
+        }
+      }
+    },
+    {
+      "label": "2019",
+      "commit": "1010af540b8bdd54ba05cf5567fd85aafa76dd7d",
+      "committer_unix": 1576866332,
+      "committer_date": "2019-12-20T18:25:32+00:00",
+      "inventory": {
+        "tracked_files": 7061,
+        "tracked_language_files": {
+          "c": 2808,
+          "c_header": 1660,
+          "cpp": 10,
+          "other": 2472,
+          "python": 111
+        },
+        "top_level_paths": {
+          "tests": 2528,
+          "hw": 1309,
+          "include": 824,
+          "target": 528,
+          "linux-user": 302,
+          "pc-bios": 153,
+          "docs": 131,
+          "scripts": 118,
+          "util": 82,
+          "ui": 79,
+          "block": 77,
+          "default-configs": 71,
+          "linux-headers": 61,
+          "contrib": 57,
+          "crypto": 54,
+          "stubs": 44,
+          "disas": 42,
+          "qapi": 42,
+          "net": 41,
+          "migration": 40
+        }
+      }
+    },
+    {
+      "label": "2020",
+      "commit": "26f6b15e2636eb20cb6757093170341b22fe6fbc",
+      "committer_unix": 1609457206,
+      "committer_date": "2020-12-31T23:26:46+00:00",
+      "inventory": {
+        "tracked_files": 8029,
+        "tracked_language_files": {
+          "c": 3014,
+          "c_header": 1904,
+          "cpp": 10,
+          "other": 2934,
+          "python": 167
+        },
+        "top_level_paths": {
+          "tests": 2739,
+          "hw": 1479,
+          "include": 942,
+          "target": 605,
+          "linux-user": 342,
+          "docs": 240,
+          "scripts": 161,
+          "pc-bios": 160,
+          "default-configs": 106,
+          "util": 93,
+          "block": 92,
+          "ui": 84,
+          "linux-headers": 62,
+          "crypto": 59,
+          "contrib": 57,
+          "stubs": 51,
+          "qapi": 49,
+          "migration": 47,
+          "accel": 46,
+          "disas": 43
+        }
+      }
+    },
+    {
+      "label": "2021",
+      "commit": "814a0505302d6af277557f10f88d3639eff7a547",
+      "committer_unix": 1640972036,
+      "committer_date": "2021-12-31T09:33:56-08:00",
+      "inventory": {
+        "tracked_files": 8744,
+        "tracked_language_files": {
+          "c": 3244,
+          "c_header": 2113,
+          "cpp": 10,
+          "javascript": 1,
+          "other": 3147,
+          "python": 229
+        },
+        "top_level_paths": {
+          "tests": 2863,
+          "hw": 1563,
+          "include": 1027,
+          "target": 737,
+          "linux-user": 347,
+          "docs": 287,
+          "scripts": 181,
+          "pc-bios": 172,
+          "configs": 99,
+          "ui": 99,
+          "util": 98,
+          "block": 94,
+          "bsd-user": 73,
+          "contrib": 63,
+          "crypto": 62,
+          "linux-headers": 62,
+          "tcg": 60,
+          "accel": 57,
+          "qapi": 53,
+          "stubs": 50
+        }
+      }
+    },
+    {
+      "label": "2022",
+      "commit": "222059a0fccf4af3be776fe35a5ea2d6a68f9a0b",
+      "committer_unix": 1671646089,
+      "committer_date": "2022-12-21T18:08:09+00:00",
+      "inventory": {
+        "tracked_files": 9330,
+        "tracked_language_files": {
+          "c": 3440,
+          "c_header": 2336,
+          "cpp": 3,
+          "javascript": 1,
+          "other": 3317,
+          "python": 233
+        },
+        "top_level_paths": {
+          "tests": 3035,
+          "hw": 1642,
+          "include": 1121,
+          "target": 816,
+          "linux-user": 424,
+          "docs": 304,
+          "scripts": 182,
+          "pc-bios": 170,
+          "block": 103,
+          "configs": 102,
+          "util": 101,
+          "ui": 99,
+          "bsd-user": 93,
+          "crypto": 74,
+          "linux-headers": 67,
+          "contrib": 64,
+          "tcg": 60,
+          "accel": 59,
+          "qapi": 55,
+          "stubs": 54
+        }
+      }
+    },
+    {
+      "label": "2023",
+      "commit": "7425b6277f12e82952cede1f531bfc689bf77fb1",
+      "committer_unix": 1703672132,
+      "committer_date": "2023-12-27T05:15:32-05:00",
+      "inventory": {
+        "tracked_files": 9964,
+        "tracked_language_files": {
+          "c": 3634,
+          "c_header": 2552,
+          "cpp": 4,
+          "javascript": 1,
+          "other": 3518,
+          "python": 255
+        },
+        "top_level_paths": {
+          "tests": 3218,
+          "hw": 1742,
+          "include": 1221,
+          "target": 851,
+          "linux-user": 502,
+          "docs": 320,
+          "scripts": 187,
+          "pc-bios": 170,
+          "util": 108,
+          "block": 103,
+          "bsd-user": 103,
+          "configs": 103,
+          "ui": 103,
+          "crypto": 75,
+          "linux-headers": 72,
+          "tcg": 71,
+          "contrib": 68,
+          "accel": 66,
+          "migration": 59,
+          "qapi": 58
+        }
+      }
+    },
+    {
+      "label": "2024",
+      "commit": "7c89e226f878539b633dde3fd9c9f061c34094e3",
+      "committer_unix": 1735460741,
+      "committer_date": "2024-12-29T03:25:41-05:00",
+      "inventory": {
+        "tracked_files": 10244,
+        "tracked_language_files": {
+          "c": 3703,
+          "c_header": 2607,
+          "cpp": 4,
+          "javascript": 1,
+          "other": 3604,
+          "python": 325
+        },
+        "top_level_paths": {
+          "tests": 3293,
+          "hw": 1744,
+          "include": 1284,
+          "target": 855,
+          "linux-user": 478,
+          "docs": 348,
+          "scripts": 191,
+          "pc-bios": 171,
+          "bsd-user": 129,
+          "util": 108,
+          "ui": 104,
+          "block": 103,
+          "configs": 99,
+          "linux-headers": 85,
+          "crypto": 76,
+          "tcg": 74,
+          "contrib": 71,
+          "accel": 64,
+          "migration": 62,
+          "qapi": 59
+        }
+      }
+    },
+    {
+      "label": "2025",
+      "commit": "667e1fff878326c35c7f5146072e60a63a9a41c8",
+      "committer_unix": 1767159857,
+      "committer_date": "2025-12-31T16:44:17+11:00",
+      "inventory": {
+        "tracked_files": 10934,
+        "tracked_language_files": {
+          "c": 3919,
+          "c_header": 2733,
+          "cpp": 4,
+          "javascript": 1,
+          "other": 3867,
+          "python": 410
+        },
+        "top_level_paths": {
+          "tests": 3503,
+          "hw": 1868,
+          "include": 1344,
+          "target": 889,
+          "linux-user": 513,
+          "docs": 368,
+          "scripts": 207,
+          "pc-bios": 179,
+          "bsd-user": 130,
+          "rust": 114,
+          "util": 111,
+          "ui": 104,
+          "block": 103,
+          "configs": 103,
+          "tcg": 96,
+          "accel": 83,
+          "linux-headers": 79,
+          "contrib": 77,
+          "crypto": 77,
+          "migration": 68
+        }
+      }
+    },
+    {
+      "label": "endpoint-2026",
+      "commit": "d43c2d5f89db70359a7b3a7e2ad7098fcc0165ef",
+      "committer_unix": 1789164282,
+      "committer_date": "2026-09-11T12:04:42-10:00",
+      "inventory": {
+        "tracked_files": 11377,
+        "tracked_language_files": {
+          "c": 4138,
+          "c_header": 2837,
+          "cpp": 5,
+          "javascript": 1,
+          "other": 3970,
+          "python": 426
+        },
+        "top_level_paths": {
+          "tests": 3678,
+          "hw": 1976,
+          "include": 1435,
+          "target": 940,
+          "linux-user": 516,
+          "docs": 385,
+          "scripts": 228,
+          "pc-bios": 178,
+          "bsd-user": 127,
+          "rust": 124,
+          "ui": 110,
+          "util": 110,
+          "configs": 105,
+          "block": 103,
+          "accel": 89,
+          "linux-headers": 78,
+          "crypto": 77,
+          "tcg": 72,
+          "gdbstub": 70,
+          "migration": 68
+        }
+      }
+    }
+  ],
+  "scope_warning": "Counts cover tracked paths; no production/generated/vendor exclusions or parser admission applied.",
+  "history_archive": {
+    "file": "qemu__qemu.history.json.gz",
+    "sha256": "aac0e1aea9bbd14d4eaf2a8ecd9bc0093a781c4cdba9a6fca471cac1799c99c4"
+  }
+}

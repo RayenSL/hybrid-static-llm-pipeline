@@ -1,0 +1,409 @@
+{
+  "schema_version": "history-audit/1",
+  "status": "inventory_only_not_measurement",
+  "repository": "https://github.com/elastic/elasticsearch.git",
+  "cutoff_utc": "2026-09-14T00:00:00+00:00",
+  "endpoint": {
+    "commit": "d8a9ab59389dee57cc9e50f41f217ec49fda12f0",
+    "committer_unix": 1789330166,
+    "committer_date": "2026-09-13T13:09:26-07:00"
+  },
+  "earliest_first_parent": {
+    "commit": "4aaec2ef81c234fde6af1bd08bb1e0c36cebcbca",
+    "committer_unix": 1507821762,
+    "committer_date": "2017-10-12T16:22:42+01:00"
+  },
+  "earliest_source": {
+    "commit": "4aaec2ef81c234fde6af1bd08bb1e0c36cebcbca",
+    "committer_unix": 1507821762,
+    "committer_date": "2017-10-12T16:22:42+01:00"
+  },
+  "undated_source_import": false,
+  "reachable_roots": [
+    "e3f86aa0d155cdacf7fa365fe759c3fe80e04b79",
+    "4aaec2ef81c234fde6af1bd08bb1e0c36cebcbca",
+    "063a76c3dbaa4b89d9a0a7492578ec0620b5bdbf",
+    "5ee82e4ae70530939ebd442f90060bf1375b028f",
+    "46481c67992a2e945f3355cf4a999d76c070045a",
+    "222b36344f0939f12cf54358e7047239cd398463",
+    "971e7bc34197b878564c4876d7309e443f691356",
+    "598a64c990bb4b016a204ea61a05ffc280d3f166",
+    "30a4fe263c6a8a651820a59688a722328870abf2",
+    "121d0b61acbab642029ed08f94e2d7c00dbbf762",
+    "b33896fe778c96081444d79010eebe9132707e43",
+    "e26f62a71e1825879f819d6fcc58f830bdfea9f1",
+    "8b5223fcfd644cd854a2a3dbdada2af7b7e92d10",
+    "5efc712d5c774a8d0bfdb4a00ace1e8cc94c18df",
+    "7d57a52d0fb2a066ab25dad64677a9c8be25ad8d",
+    "c4a12754758897119ad780e57d9fa3c076f7d506",
+    "4480762bf85b111d58fb1737bd32117ceb1cab15",
+    "ec72ca8b7a115f9b2eea3c76c518062b99a1d015"
+  ],
+  "first_parent_commits": 53153,
+  "elapsed_years": 8.920646201825829,
+  "timestamp_reversals": 7,
+  "observations": [
+    {
+      "label": "earliest-2017",
+      "commit": "4aaec2ef81c234fde6af1bd08bb1e0c36cebcbca",
+      "committer_unix": 1507821762,
+      "committer_date": "2017-10-12T16:22:42+01:00",
+      "inventory": {
+        "tracked_files": 3,
+        "tracked_language_files": {
+          "java": 3
+        },
+        "top_level_paths": {
+          "x-pack": 3
+        }
+      }
+    },
+    {
+      "label": "2018",
+      "commit": "794303af73ef721d5c0b54946b7b2145011d3df4",
+      "committer_unix": 1546275529,
+      "committer_date": "2018-12-31T17:58:49+01:00",
+      "inventory": {
+        "tracked_files": 15388,
+        "tracked_language_files": {
+          "java": 10418,
+          "other": 4966,
+          "python": 4
+        },
+        "top_level_paths": {
+          "server": 4743,
+          "x-pack": 4706,
+          "docs": 1717,
+          "modules": 1008,
+          "plugins": 1007,
+          "client": 786,
+          "rest-api-spec": 511,
+          "test": 266,
+          "libs": 181,
+          "qa": 172,
+          "buildSrc": 165,
+          "distribution": 88,
+          "benchmarks": 7,
+          ".ci": 5,
+          "dev-tools": 5,
+          ".github": 2,
+          "gradle": 2,
+          "licenses": 2,
+          ".dir-locals.el": 1,
+          ".editorconfig": 1
+        }
+      }
+    },
+    {
+      "label": "2019",
+      "commit": "c7408a25f1ccb697cd97180ef9999114f72c4438",
+      "committer_unix": 1577748078,
+      "committer_date": "2019-12-30T15:21:18-08:00",
+      "inventory": {
+        "tracked_files": 17416,
+        "tracked_language_files": {
+          "java": 12243,
+          "other": 5169,
+          "python": 4
+        },
+        "top_level_paths": {
+          "x-pack": 6160,
+          "server": 4897,
+          "docs": 1433,
+          "client": 1161,
+          "modules": 1071,
+          "plugins": 1032,
+          "rest-api-spec": 435,
+          "test": 313,
+          "libs": 294,
+          "buildSrc": 241,
+          "qa": 187,
+          "distribution": 137,
+          ".ci": 15,
+          "benchmarks": 9,
+          "dev-tools": 6,
+          "gradle": 5,
+          ".github": 2,
+          "licenses": 2,
+          ".dir-locals.el": 1,
+          ".eclipseformat.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2020",
+      "commit": "e26c9bbd52960809545495a58a4c16d0d7c02925",
+      "committer_unix": 1609349957,
+      "committer_date": "2020-12-30T12:39:17-05:00",
+      "inventory": {
+        "tracked_files": 20722,
+        "tracked_language_files": {
+          "java": 14710,
+          "javascript": 1,
+          "other": 6008,
+          "python": 3
+        },
+        "top_level_paths": {
+          "x-pack": 8194,
+          "server": 5287,
+          "docs": 1677,
+          "client": 1328,
+          "modules": 1215,
+          "plugins": 1092,
+          "rest-api-spec": 487,
+          "buildSrc": 350,
+          "test": 343,
+          "libs": 319,
+          "qa": 196,
+          "distribution": 166,
+          ".ci": 15,
+          "benchmarks": 13,
+          "gradle": 12,
+          ".github": 6,
+          ".idea": 3,
+          "dev-tools": 2,
+          "licenses": 2,
+          ".dir-locals.el": 1
+        }
+      }
+    },
+    {
+      "label": "2021",
+      "commit": "dc1e28b8b452098f2b7c7db3b49728fb824de693",
+      "committer_unix": 1640964988,
+      "committer_date": "2021-12-31T17:36:28+02:00",
+      "inventory": {
+        "tracked_files": 22864,
+        "tracked_language_files": {
+          "java": 16260,
+          "javascript": 2,
+          "other": 6599,
+          "python": 3
+        },
+        "top_level_paths": {
+          "x-pack": 8958,
+          "server": 5696,
+          "docs": 1545,
+          "modules": 1481,
+          "client": 1391,
+          "plugins": 1103,
+          "rest-api-spec": 797,
+          "test": 441,
+          "build-tools-internal": 412,
+          "libs": 382,
+          "qa": 215,
+          "distribution": 177,
+          ".ci": 87,
+          "build-tools": 87,
+          "build-conventions": 28,
+          "benchmarks": 25,
+          ".github": 7,
+          ".idea": 6,
+          "licenses": 3,
+          "dev-tools": 2
+        }
+      }
+    },
+    {
+      "label": "2022",
+      "commit": "f332fc2e3625af8e7e4acb03f1aea673cf00e00a",
+      "committer_unix": 1672438451,
+      "committer_date": "2022-12-30T17:14:11-05:00",
+      "inventory": {
+        "tracked_files": 23472,
+        "tracked_language_files": {
+          "java": 16357,
+          "javascript": 2,
+          "other": 7110,
+          "python": 3
+        },
+        "top_level_paths": {
+          "x-pack": 9686,
+          "server": 6130,
+          "modules": 2201,
+          "docs": 1875,
+          "rest-api-spec": 811,
+          "test": 519,
+          "libs": 481,
+          "plugins": 476,
+          "build-tools-internal": 383,
+          "qa": 244,
+          "distribution": 211,
+          "client": 134,
+          "build-tools": 109,
+          ".ci": 102,
+          "benchmarks": 34,
+          "build-conventions": 30,
+          ".github": 8,
+          ".idea": 6,
+          "gradle": 4,
+          "dev-tools": 3
+        }
+      }
+    },
+    {
+      "label": "2023",
+      "commit": "82ca52d95727c6fb08258f92bd0c3b2ae0d384cd",
+      "committer_unix": 1703964888,
+      "committer_date": "2023-12-30T11:34:48-08:00",
+      "inventory": {
+        "tracked_files": 27446,
+        "tracked_language_files": {
+          "java": 19173,
+          "javascript": 2,
+          "other": 8262,
+          "python": 4,
+          "typescript": 5
+        },
+        "top_level_paths": {
+          "x-pack": 11910,
+          "server": 6536,
+          "docs": 2643,
+          "modules": 2358,
+          "rest-api-spec": 912,
+          "test": 606,
+          "libs": 561,
+          "plugins": 476,
+          "build-tools-internal": 402,
+          "qa": 269,
+          "distribution": 219,
+          "client": 122,
+          "build-tools": 109,
+          ".buildkite": 92,
+          ".ci": 89,
+          "benchmarks": 62,
+          "build-conventions": 30,
+          ".idea": 9,
+          ".github": 8,
+          "gradle": 4
+        }
+      }
+    },
+    {
+      "label": "2024",
+      "commit": "3091155dda64fe7907307241f5118071845220f2",
+      "committer_unix": 1735684148,
+      "committer_date": "2025-01-01T09:29:08+11:00",
+      "inventory": {
+        "tracked_files": 32290,
+        "tracked_language_files": {
+          "c": 2,
+          "c_header": 1,
+          "cpp": 1,
+          "java": 22494,
+          "javascript": 2,
+          "other": 9781,
+          "python": 4,
+          "typescript": 5
+        },
+        "top_level_paths": {
+          "x-pack": 14807,
+          "server": 6918,
+          "docs": 3626,
+          "modules": 2518,
+          "rest-api-spec": 997,
+          "libs": 760,
+          "test": 706,
+          "plugins": 497,
+          "build-tools-internal": 441,
+          "qa": 288,
+          "distribution": 217,
+          "client": 115,
+          "build-tools": 112,
+          ".buildkite": 110,
+          "benchmarks": 69,
+          "build-conventions": 31,
+          ".ci": 18,
+          ".github": 12,
+          ".idea": 9,
+          "dev-tools": 5
+        }
+      }
+    },
+    {
+      "label": "2025",
+      "commit": "e8bd3fb04c30407c7a85fcc10569bf03b8f42f46",
+      "committer_unix": 1767201616,
+      "committer_date": "2025-12-31T18:20:16+01:00",
+      "inventory": {
+        "tracked_files": 36281,
+        "tracked_language_files": {
+          "c_header": 4,
+          "cpp": 3,
+          "java": 26019,
+          "javascript": 2,
+          "other": 10243,
+          "python": 5,
+          "typescript": 5
+        },
+        "top_level_paths": {
+          "x-pack": 17558,
+          "server": 7815,
+          "docs": 3260,
+          "modules": 2655,
+          "rest-api-spec": 1102,
+          "libs": 963,
+          "test": 816,
+          "build-tools-internal": 494,
+          "plugins": 489,
+          "qa": 305,
+          "distribution": 231,
+          ".buildkite": 142,
+          "build-tools": 117,
+          "client": 115,
+          "benchmarks": 109,
+          "build-conventions": 31,
+          ".ci": 18,
+          ".github": 13,
+          ".idea": 9,
+          "dev-tools": 5
+        }
+      }
+    },
+    {
+      "label": "endpoint-2026",
+      "commit": "d8a9ab59389dee57cc9e50f41f217ec49fda12f0",
+      "committer_unix": 1789330166,
+      "committer_date": "2026-09-13T13:09:26-07:00",
+      "inventory": {
+        "tracked_files": 48346,
+        "tracked_language_files": {
+          "c_header": 7,
+          "cpp": 31,
+          "java": 32201,
+          "javascript": 2,
+          "other": 16057,
+          "python": 4,
+          "typescript": 44
+        },
+        "top_level_paths": {
+          "x-pack": 25356,
+          "server": 9202,
+          "docs": 4683,
+          "modules": 3019,
+          "libs": 1564,
+          "rest-api-spec": 1160,
+          "test": 919,
+          "build-tools-internal": 545,
+          "plugins": 482,
+          "qa": 373,
+          "distribution": 238,
+          "benchmarks": 232,
+          ".buildkite": 208,
+          "build-tools": 126,
+          "client": 115,
+          "build-conventions": 33,
+          ".ci": 18,
+          ".github": 16,
+          "dev-tools": 11,
+          ".idea": 9
+        }
+      }
+    }
+  ],
+  "scope_warning": "Counts cover tracked paths; no production/generated/vendor exclusions or parser admission applied.",
+  "history_archive": {
+    "file": "elastic__elasticsearch.history.json.gz",
+    "sha256": "7f7191c87dd54b959fc30e5990198c2dc335929ebc2576a60e37395a5bf81105"
+  }
+}

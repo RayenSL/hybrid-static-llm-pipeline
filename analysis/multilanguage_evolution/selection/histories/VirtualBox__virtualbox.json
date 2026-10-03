@@ -1,0 +1,858 @@
+{
+  "schema_version": "history-audit/1",
+  "status": "inventory_only_not_measurement",
+  "repository": "https://github.com/VirtualBox/virtualbox.git",
+  "cutoff_utc": "2026-09-14T00:00:00+00:00",
+  "endpoint": {
+    "commit": "d29ee06e9971cb4cddcfc0ee37bde6d7b50e21af",
+    "committer_unix": 1788432079,
+    "committer_date": "2026-09-03T10:41:19+00:00"
+  },
+  "earliest_first_parent": {
+    "commit": "cf4168de6dc4d7ee00d10bf21b33660d66d483e8",
+    "committer_unix": 0,
+    "committer_date": "1970-01-01T00:00:00+00:00"
+  },
+  "earliest_source": {
+    "commit": "cf4168de6dc4d7ee00d10bf21b33660d66d483e8",
+    "committer_unix": 0,
+    "committer_date": "1970-01-01T00:00:00+00:00"
+  },
+  "undated_source_import": true,
+  "reachable_roots": [
+    "cf4168de6dc4d7ee00d10bf21b33660d66d483e8"
+  ],
+  "first_parent_commits": 113716,
+  "elapsed_years": 19.633819641389955,
+  "timestamp_reversals": 1,
+  "observations": [
+    {
+      "label": "undated-import",
+      "commit": "cf4168de6dc4d7ee00d10bf21b33660d66d483e8",
+      "committer_unix": 0,
+      "committer_date": "1970-01-01T00:00:00+00:00",
+      "inventory": {
+        "tracked_files": 4585,
+        "tracked_language_files": {
+          "c": 705,
+          "c_header": 1767,
+          "cpp": 817,
+          "csharp": 1,
+          "javascript": 6,
+          "other": 1286,
+          "typescript": 3
+        },
+        "top_level_paths": {
+          "src": 4414,
+          "include": 126,
+          "tools": 37,
+          ".gitignore": 1,
+          "COPYING": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Makefile": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "doc": 1
+        }
+      }
+    },
+    {
+      "label": "earliest-dated-2007",
+      "commit": "cc1f650b5a4b5512308e6fdde3db51cc1d0ebe37",
+      "committer_unix": 1168848575,
+      "committer_date": "2007-01-15T08:09:35+00:00",
+      "inventory": {
+        "tracked_files": 4586,
+        "tracked_language_files": {
+          "c": 705,
+          "c_header": 1767,
+          "cpp": 818,
+          "csharp": 1,
+          "javascript": 6,
+          "other": 1286,
+          "typescript": 3
+        },
+        "top_level_paths": {
+          "src": 4415,
+          "include": 126,
+          "tools": 37,
+          ".gitignore": 1,
+          "COPYING": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Makefile": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "doc": 1
+        }
+      }
+    },
+    {
+      "label": "2008",
+      "commit": "df737ba615c85f32c09c79abed734f4742f6b3e5",
+      "committer_unix": 1230722409,
+      "committer_date": "2008-12-31T11:20:09+00:00",
+      "inventory": {
+        "tracked_files": 7919,
+        "tracked_language_files": {
+          "c": 1128,
+          "c_header": 2526,
+          "cpp": 1290,
+          "csharp": 1,
+          "javascript": 9,
+          "other": 2698,
+          "python": 156,
+          "typescript": 111
+        },
+        "top_level_paths": {
+          "src": 7620,
+          "include": 190,
+          "tools": 82,
+          "debian": 14,
+          "doc": 4,
+          ".gitignore": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Makefile.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2009",
+      "commit": "41198d6b02f5ccf896341444d0a7bed549531ec6",
+      "committer_unix": 1262271965,
+      "committer_date": "2009-12-31T15:06:05+00:00",
+      "inventory": {
+        "tracked_files": 11064,
+        "tracked_language_files": {
+          "c": 1361,
+          "c_header": 5075,
+          "cpp": 1465,
+          "cpp_header": 115,
+          "csharp": 1,
+          "java": 3,
+          "javascript": 9,
+          "other": 2796,
+          "python": 170,
+          "typescript": 69
+        },
+        "top_level_paths": {
+          "src": 10727,
+          "include": 221,
+          "tools": 88,
+          "debian": 14,
+          "doc": 5,
+          ".gitignore": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Makefile.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2010",
+      "commit": "9585e403b29fa83bbe989436bb68d5050defc7e5",
+      "committer_unix": 1293821452,
+      "committer_date": "2010-12-31T18:50:52+00:00",
+      "inventory": {
+        "tracked_files": 12886,
+        "tracked_language_files": {
+          "c": 1457,
+          "c_header": 5859,
+          "cpp": 1838,
+          "cpp_header": 117,
+          "csharp": 1,
+          "java": 26,
+          "javascript": 9,
+          "other": 3334,
+          "python": 172,
+          "typescript": 73
+        },
+        "top_level_paths": {
+          "src": 12411,
+          "include": 271,
+          "doc": 91,
+          "tools": 88,
+          "debian": 15,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Makefile.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2011",
+      "commit": "c0fef96d3316a23b0fe64a242749e68c89ac3077",
+      "committer_unix": 1325251249,
+      "committer_date": "2011-12-30T13:20:49+00:00",
+      "inventory": {
+        "tracked_files": 13791,
+        "tracked_language_files": {
+          "c": 1462,
+          "c_header": 6503,
+          "cpp": 1952,
+          "cpp_header": 117,
+          "csharp": 1,
+          "java": 23,
+          "javascript": 9,
+          "other": 3479,
+          "python": 172,
+          "typescript": 73
+        },
+        "top_level_paths": {
+          "src": 13282,
+          "include": 301,
+          "doc": 94,
+          "tools": 90,
+          "debian": 14,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Makefile.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2012",
+      "commit": "44ae33c0d8da71adf6ed5c9aec7b7b7d6c20df11",
+      "committer_unix": 1356956992,
+      "committer_date": "2012-12-31T12:29:52+00:00",
+      "inventory": {
+        "tracked_files": 14913,
+        "tracked_language_files": {
+          "c": 1454,
+          "c_header": 7546,
+          "cpp": 2113,
+          "cpp_header": 117,
+          "csharp": 10,
+          "java": 23,
+          "javascript": 8,
+          "other": 3404,
+          "python": 167,
+          "typescript": 71
+        },
+        "top_level_paths": {
+          "src": 14408,
+          "include": 319,
+          "doc": 98,
+          "tools": 64,
+          "debian": 14,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Makefile.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2013",
+      "commit": "d549ea62cc4efb9df285748cdf9c77a1b441cc79",
+      "committer_unix": 1388469726,
+      "committer_date": "2013-12-31T06:02:06+00:00",
+      "inventory": {
+        "tracked_files": 21610,
+        "tracked_language_files": {
+          "c": 3874,
+          "c_header": 10022,
+          "cpp": 2228,
+          "csharp": 10,
+          "java": 24,
+          "javascript": 8,
+          "other": 4958,
+          "python": 413,
+          "typescript": 73
+        },
+        "top_level_paths": {
+          "src": 21083,
+          "include": 334,
+          "doc": 102,
+          "tools": 67,
+          "debian": 14,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Makefile.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2014",
+      "commit": "877bc7fbea34baf9acd60de26b11c479358c502a",
+      "committer_unix": 1420040276,
+      "committer_date": "2014-12-31T15:37:56+00:00",
+      "inventory": {
+        "tracked_files": 25143,
+        "tracked_language_files": {
+          "c": 3878,
+          "c_header": 12089,
+          "cpp": 2421,
+          "csharp": 10,
+          "java": 24,
+          "javascript": 11,
+          "other": 6096,
+          "python": 541,
+          "typescript": 73
+        },
+        "top_level_paths": {
+          "src": 24579,
+          "include": 367,
+          "doc": 104,
+          "tools": 67,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2015",
+      "commit": "3e4964d1a80772015038f328aa13766928b748c6",
+      "committer_unix": 1451598469,
+      "committer_date": "2015-12-31T21:47:49+00:00",
+      "inventory": {
+        "tracked_files": 33877,
+        "tracked_language_files": {
+          "c": 5961,
+          "c_header": 14170,
+          "cpp": 2513,
+          "csharp": 10,
+          "java": 39,
+          "javascript": 11,
+          "other": 10280,
+          "python": 819,
+          "typescript": 74
+        },
+        "top_level_paths": {
+          "src": 33283,
+          "include": 384,
+          "doc": 117,
+          "tools": 67,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2016",
+      "commit": "6c2c3b103e83d7138c1eff9657dac3c1f24a7fb9",
+      "committer_unix": 1483157882,
+      "committer_date": "2016-12-31T04:18:02+00:00",
+      "inventory": {
+        "tracked_files": 29083,
+        "tracked_language_files": {
+          "c": 4195,
+          "c_header": 12482,
+          "cpp": 2555,
+          "csharp": 11,
+          "java": 39,
+          "javascript": 11,
+          "other": 9125,
+          "python": 587,
+          "typescript": 78
+        },
+        "top_level_paths": {
+          "src": 28448,
+          "include": 422,
+          "doc": 117,
+          "tools": 70,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2017",
+      "commit": "3477660547c9a021713a5ece785f52552c145e28",
+      "committer_unix": 1514662055,
+      "committer_date": "2017-12-30T19:27:35+00:00",
+      "inventory": {
+        "tracked_files": 29956,
+        "tracked_language_files": {
+          "c": 4212,
+          "c_header": 12529,
+          "cpp": 2658,
+          "csharp": 11,
+          "java": 39,
+          "javascript": 11,
+          "other": 9821,
+          "python": 595,
+          "typescript": 80
+        },
+        "top_level_paths": {
+          "src": 29226,
+          "include": 445,
+          "tools": 136,
+          "doc": 121,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "README.GuestAdditionsPackaging": 1,
+          "Version.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2018",
+      "commit": "6ccaa7f40c4751247ab95bae34e6c6109ca0ac5f",
+      "committer_unix": 1546261021,
+      "committer_date": "2018-12-31T12:57:01+00:00",
+      "inventory": {
+        "tracked_files": 38080,
+        "tracked_language_files": {
+          "c": 6422,
+          "c_header": 14456,
+          "cpp": 3195,
+          "cpp_header": 52,
+          "csharp": 20,
+          "java": 39,
+          "javascript": 11,
+          "other": 13099,
+          "python": 704,
+          "typescript": 82
+        },
+        "top_level_paths": {
+          "src": 37305,
+          "include": 477,
+          "tools": 139,
+          "doc": 131,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "README.GuestAdditionsPackaging": 1,
+          "Version.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2019",
+      "commit": "8e3879f0dcea7f6a277c7b7a52f4a72612754b14",
+      "committer_unix": 1577814783,
+      "committer_date": "2019-12-31T17:53:03+00:00",
+      "inventory": {
+        "tracked_files": 37301,
+        "tracked_language_files": {
+          "c": 5955,
+          "c_header": 14360,
+          "cpp": 3240,
+          "cpp_header": 52,
+          "csharp": 11,
+          "java": 39,
+          "javascript": 11,
+          "other": 12868,
+          "python": 683,
+          "typescript": 82
+        },
+        "top_level_paths": {
+          "src": 36468,
+          "include": 476,
+          "doc": 186,
+          "tools": 143,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "README.GuestAdditionsPackaging": 1,
+          "Version.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2020",
+      "commit": "8c3bd67a89c3dba395e75fe741e15aee739629ad",
+      "committer_unix": 1609426543,
+      "committer_date": "2020-12-31T14:55:43+00:00",
+      "inventory": {
+        "tracked_files": 41148,
+        "tracked_language_files": {
+          "c": 6979,
+          "c_header": 14878,
+          "cpp": 3341,
+          "cpp_header": 52,
+          "csharp": 11,
+          "java": 39,
+          "javascript": 12,
+          "other": 15043,
+          "python": 711,
+          "typescript": 82
+        },
+        "top_level_paths": {
+          "src": 40284,
+          "include": 497,
+          "doc": 197,
+          "tools": 142,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "README.GuestAdditionsPackaging": 1,
+          "Version.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2021",
+      "commit": "89a8789fcbd6d163cde8bb23197e61f0ea0c2628",
+      "committer_unix": 1640994170,
+      "committer_date": "2021-12-31T23:42:50+00:00",
+      "inventory": {
+        "tracked_files": 43645,
+        "tracked_language_files": {
+          "c": 7398,
+          "c_header": 15362,
+          "cpp": 3426,
+          "cpp_header": 52,
+          "csharp": 11,
+          "java": 39,
+          "javascript": 12,
+          "other": 16540,
+          "python": 721,
+          "typescript": 84
+        },
+        "top_level_paths": {
+          "src": 42768,
+          "include": 515,
+          "doc": 199,
+          "tools": 136,
+          "debian": 13,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "README.GuestAdditionsPackaging": 1,
+          "Version.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2022",
+      "commit": "c84ab41e3149eaf41a63f79fa134962d82a1de1f",
+      "committer_unix": 1672524624,
+      "committer_date": "2022-12-31T22:10:24+00:00",
+      "inventory": {
+        "tracked_files": 55814,
+        "tracked_language_files": {
+          "c": 9597,
+          "c_header": 16920,
+          "cpp": 4087,
+          "cpp_header": 56,
+          "csharp": 2,
+          "java": 39,
+          "javascript": 12,
+          "other": 24210,
+          "python": 805,
+          "typescript": 86
+        },
+        "top_level_paths": {
+          "src": 54727,
+          "include": 565,
+          "tools": 266,
+          "doc": 228,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "README.GuestAdditionsPackaging": 1,
+          "Version.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2023",
+      "commit": "986895772410cf181b4f649f6ebf0d78c7359ece",
+      "committer_unix": 1704053027,
+      "committer_date": "2023-12-31T20:03:47+00:00",
+      "inventory": {
+        "tracked_files": 57349,
+        "tracked_language_files": {
+          "c": 10222,
+          "c_header": 17203,
+          "cpp": 3996,
+          "cpp_header": 56,
+          "csharp": 2,
+          "java": 39,
+          "javascript": 5,
+          "other": 24896,
+          "python": 845,
+          "typescript": 85
+        },
+        "top_level_paths": {
+          "src": 55665,
+          "doc": 746,
+          "include": 590,
+          "tools": 320,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "README.GuestAdditionsPackaging": 1,
+          "Version.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2024",
+      "commit": "19da41f42b03db49fc0d7ca674fca86995ae42dc",
+      "committer_unix": 1735576888,
+      "committer_date": "2024-12-30T16:41:28+00:00",
+      "inventory": {
+        "tracked_files": 63754,
+        "tracked_language_files": {
+          "c": 13391,
+          "c_header": 20026,
+          "cpp": 4624,
+          "cpp_header": 115,
+          "csharp": 6,
+          "java": 39,
+          "javascript": 5,
+          "other": 24323,
+          "python": 1139,
+          "typescript": 86
+        },
+        "top_level_paths": {
+          "src": 61949,
+          "doc": 813,
+          "include": 610,
+          "tools": 354,
+          "debian": 14,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".scm-settings": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "README.GuestAdditionsPackaging": 1,
+          "Version.kmk": 1,
+          "configure": 1,
+          "configure.vbs": 1,
+          "kBuild": 1
+        }
+      }
+    },
+    {
+      "label": "2025",
+      "commit": "5b7749e78255f76694dda564477901820f39476a",
+      "committer_unix": 1766969649,
+      "committer_date": "2025-12-29T00:54:09+00:00",
+      "inventory": {
+        "tracked_files": 58870,
+        "tracked_language_files": {
+          "c": 11118,
+          "c_header": 18549,
+          "cpp": 4469,
+          "cpp_header": 167,
+          "csharp": 6,
+          "java": 53,
+          "javascript": 53,
+          "other": 23377,
+          "python": 993,
+          "typescript": 85
+        },
+        "top_level_paths": {
+          "src": 57109,
+          "doc": 760,
+          "include": 615,
+          "tools": 347,
+          "debian": 14,
+          ".github": 3,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          ".scm-settings": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "LICENSE.txt": 1,
+          "Maintenance.kmk": 1,
+          "Makefile.kmk": 1,
+          "README.GuestAdditionsPackaging": 1,
+          "README.md": 1
+        }
+      }
+    },
+    {
+      "label": "endpoint-2026",
+      "commit": "d29ee06e9971cb4cddcfc0ee37bde6d7b50e21af",
+      "committer_unix": 1788432079,
+      "committer_date": "2026-09-03T10:41:19+00:00",
+      "inventory": {
+        "tracked_files": 66153,
+        "tracked_language_files": {
+          "c": 13357,
+          "c_header": 19364,
+          "cpp": 4536,
+          "cpp_header": 169,
+          "csharp": 15,
+          "java": 55,
+          "javascript": 54,
+          "other": 27518,
+          "python": 1000,
+          "typescript": 85
+        },
+        "top_level_paths": {
+          "src": 64130,
+          "doc": 931,
+          "include": 619,
+          "tools": 347,
+          "webtools": 83,
+          "debian": 14,
+          ".github": 5,
+          ".dir-locals.el": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          ".scm-settings": 1,
+          "AGENTS.md": 1,
+          "CONTRIBUTING.md": 1,
+          "COPYING": 1,
+          "COPYING.CDDL": 1,
+          "COPYING.LIB": 1,
+          "Config.kmk": 1,
+          "Doxyfile.Core": 1,
+          "LICENSE.txt": 1,
+          "Maintenance.kmk": 1
+        }
+      }
+    }
+  ],
+  "scope_warning": "Counts cover tracked paths; no production/generated/vendor exclusions or parser admission applied.",
+  "history_archive": {
+    "file": "VirtualBox__virtualbox.history.json.gz",
+    "sha256": "7fec2525b92e62e5bfbc57e2ce66b5812e8bc52a0ef4018bda1dc960ba50823d"
+  }
+}

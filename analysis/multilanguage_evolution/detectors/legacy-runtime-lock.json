@@ -1,0 +1,7 @@
+{
+  "source": "https://www.python.org/ftp/python/3.12.3/Python-3.12.3.tar.xz",
+  "archive_sha256": "56bfef1fdfc1221ce6720e43a661e3eb41785dd914ce99698d8c7896af4bdaa1",
+  "subtree": "Lib/lib2to3",
+  "version": "CPython 3.12.3",
+  "reason": "The host Python distribution omits lib2to3; use the official matching source module in the isolated runtime."
+}

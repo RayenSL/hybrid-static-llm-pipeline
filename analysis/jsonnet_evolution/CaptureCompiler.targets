@@ -1,0 +1,6 @@
+<Project>
+  <Target Name="CaptureStudyCompilerCommand" AfterTargets="CoreCompile" Condition="'$(StudyCapturePath)' != ''">
+    <Error Condition="'@(CscCommandLineArgs)' == ''" Text="No Csc command was exported; cannot measure this snapshot." />
+    <WriteLinesToFile File="$(StudyCapturePath)" Lines="@(CscCommandLineArgs)" Overwrite="true" Encoding="UTF-8" />
+  </Target>
+</Project>

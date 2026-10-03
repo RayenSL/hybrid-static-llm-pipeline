@@ -73,3 +73,10 @@ appsettings.*.local.json
 Thumbs.db
 desktop.ini
 __pycache__/
+
+# Generated analysis artifacts; retain source, tests, protocols and input selections
+/analysis/**/results/
+/analysis/**/*_results/
+/analysis/**/figures/
+/analysis/**/logs/
+/analysis/*/SHA256SUMS.json

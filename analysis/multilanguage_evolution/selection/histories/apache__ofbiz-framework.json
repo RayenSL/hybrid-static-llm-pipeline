@@ -1,0 +1,792 @@
+{
+  "schema_version": "history-audit/1",
+  "status": "inventory_only_not_measurement",
+  "repository": "https://github.com/apache/ofbiz-framework.git",
+  "cutoff_utc": "2026-09-14T00:00:00+00:00",
+  "endpoint": {
+    "commit": "7e4b510dc277d2f7e32aecdda863dd359331696a",
+    "committer_unix": 1789325787,
+    "committer_date": "2026-09-14T00:26:27+05:30"
+  },
+  "earliest_first_parent": {
+    "commit": "94fe6d1cdaa176365cce77422f7ce2a8b1ad0534",
+    "committer_unix": 1151780720,
+    "committer_date": "2006-07-01T19:05:20+00:00"
+  },
+  "earliest_source": {
+    "commit": "94fe6d1cdaa176365cce77422f7ce2a8b1ad0534",
+    "committer_unix": 1151780720,
+    "committer_date": "2006-07-01T19:05:20+00:00"
+  },
+  "undated_source_import": false,
+  "reachable_roots": [
+    "94fe6d1cdaa176365cce77422f7ce2a8b1ad0534"
+  ],
+  "first_parent_commits": 30124,
+  "elapsed_years": 20.202998914470573,
+  "timestamp_reversals": 1,
+  "observations": [
+    {
+      "label": "earliest-2006",
+      "commit": "94fe6d1cdaa176365cce77422f7ce2a8b1ad0534",
+      "committer_unix": 1151780720,
+      "committer_date": "2006-07-01T19:05:20+00:00",
+      "inventory": {
+        "tracked_files": 3259,
+        "tracked_language_files": {
+          "java": 947,
+          "javascript": 9,
+          "other": 2303
+        },
+        "top_level_paths": {
+          "applications": 1909,
+          "framework": 1337,
+          ".classpath": 1,
+          ".project": 1,
+          "APACHE2_HEADER": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "build.xml": 1,
+          "hot-deploy": 1,
+          "ij.ofbiz": 1,
+          "rc.ofbiz": 1,
+          "startofbiz.bat": 1,
+          "startofbiz.sh": 1,
+          "stopofbiz.sh": 1
+        }
+      }
+    },
+    {
+      "label": "2007",
+      "commit": "708c353436532521530bf0391ae463a9f105babf",
+      "committer_unix": 1199134961,
+      "committer_date": "2007-12-31T21:02:41+00:00",
+      "inventory": {
+        "tracked_files": 4490,
+        "tracked_language_files": {
+          "java": 1044,
+          "javascript": 431,
+          "other": 3015
+        },
+        "top_level_paths": {
+          "framework": 2271,
+          "applications": 1833,
+          "specialpurpose": 364,
+          "runtime": 5,
+          ".classpath": 1,
+          ".project": 1,
+          "APACHE2_HEADER": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "build.xml": 1,
+          "hot-deploy": 1,
+          "ij.ofbiz": 1,
+          "rc.ofbiz": 1,
+          "startofbiz.bat": 1,
+          "startofbiz.sh": 1
+        }
+      }
+    },
+    {
+      "label": "2008",
+      "commit": "01d65d10994409b41c4b805e70e9ed2c49ee993c",
+      "committer_unix": 1230759775,
+      "committer_date": "2008-12-31T21:42:55+00:00",
+      "inventory": {
+        "tracked_files": 4631,
+        "tracked_language_files": {
+          "java": 1098,
+          "javascript": 440,
+          "other": 3093
+        },
+        "top_level_paths": {
+          "framework": 2188,
+          "applications": 1767,
+          "specialpurpose": 630,
+          "debian": 21,
+          "runtime": 5,
+          ".classpath": 1,
+          ".hgignore": 1,
+          ".project": 1,
+          "APACHE2_HEADER": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "build.xml": 1,
+          "common.xml": 1,
+          "hot-deploy": 1,
+          "ij.ofbiz": 1
+        }
+      }
+    },
+    {
+      "label": "2009",
+      "commit": "db93ea2417022000b2db7294c01c5d3d7de5f24a",
+      "committer_unix": 1262303314,
+      "committer_date": "2009-12-31T23:48:34+00:00",
+      "inventory": {
+        "tracked_files": 7388,
+        "tracked_language_files": {
+          "java": 1315,
+          "javascript": 483,
+          "other": 5590
+        },
+        "top_level_paths": {
+          "applications": 3205,
+          "framework": 2812,
+          "specialpurpose": 1129,
+          "themes": 182,
+          "debian": 28,
+          "runtime": 5,
+          "tools": 2,
+          ".classpath": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".project": 1,
+          "APACHE2_HEADER": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2010",
+      "commit": "0dbdf4a204fac7076b3be10c90ce1357c28eed26",
+      "committer_unix": 1293822719,
+      "committer_date": "2010-12-31T19:11:59+00:00",
+      "inventory": {
+        "tracked_files": 7457,
+        "tracked_language_files": {
+          "java": 1406,
+          "javascript": 261,
+          "other": 5789,
+          "python": 1
+        },
+        "top_level_paths": {
+          "applications": 3328,
+          "framework": 2493,
+          "specialpurpose": 1210,
+          "themes": 361,
+          "debian": 31,
+          "runtime": 5,
+          "tools": 2,
+          ".classpath": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".project": 1,
+          "APACHE2_HEADER": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "build.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2011",
+      "commit": "912bc9761bdf4b3f4f137635d10f2e0867b3c898",
+      "committer_unix": 1325339000,
+      "committer_date": "2011-12-31T13:43:20+00:00",
+      "inventory": {
+        "tracked_files": 9303,
+        "tracked_language_files": {
+          "java": 1430,
+          "javascript": 600,
+          "other": 7271,
+          "python": 2
+        },
+        "top_level_paths": {
+          "framework": 4030,
+          "applications": 3394,
+          "specialpurpose": 1433,
+          "themes": 376,
+          "debian": 31,
+          "runtime": 5,
+          "tools": 2,
+          ".classpath": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".project": 1,
+          "APACHE2_HEADER": 1,
+          "KEYS": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "applyOfbizPatchesAndHotDeploy.sh": 1
+        }
+      }
+    },
+    {
+      "label": "2012",
+      "commit": "7fbfa59de1291070d9fb3efb0329781c63cff0f6",
+      "committer_unix": 1356991144,
+      "committer_date": "2012-12-31T21:59:04+00:00",
+      "inventory": {
+        "tracked_files": 9484,
+        "tracked_language_files": {
+          "java": 1286,
+          "javascript": 764,
+          "other": 7431,
+          "python": 3
+        },
+        "top_level_paths": {
+          "applications": 3789,
+          "framework": 3766,
+          "specialpurpose": 1500,
+          "themes": 389,
+          "tools": 17,
+          "runtime": 5,
+          ".classpath": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".project": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "build.xml": 1,
+          "common.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2013",
+      "commit": "c28edba6d89d3ebf1c4c8b63aef72a19f6b6fd9f",
+      "committer_unix": 1388503341,
+      "committer_date": "2013-12-31T15:22:21+00:00",
+      "inventory": {
+        "tracked_files": 9532,
+        "tracked_language_files": {
+          "java": 1323,
+          "javascript": 765,
+          "other": 7441,
+          "python": 3
+        },
+        "top_level_paths": {
+          "framework": 3852,
+          "specialpurpose": 3121,
+          "applications": 2130,
+          "themes": 389,
+          "tools": 17,
+          "runtime": 5,
+          ".classpath": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".project": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "build.xml": 1,
+          "common.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2014",
+      "commit": "9ce782f90bddf063437c3a529738cff4cf2aaed1",
+      "committer_unix": 1420047076,
+      "committer_date": "2014-12-31T17:31:16+00:00",
+      "inventory": {
+        "tracked_files": 9443,
+        "tracked_language_files": {
+          "java": 1190,
+          "javascript": 646,
+          "other": 7604,
+          "python": 3
+        },
+        "top_level_paths": {
+          "framework": 3637,
+          "specialpurpose": 3248,
+          "applications": 2115,
+          "themes": 389,
+          "tools": 27,
+          "runtime": 10,
+          ".classpath": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".project": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "build.xml": 1,
+          "common.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2015",
+      "commit": "f037b221f9bd12ff062b1171176ec1dffba69ba3",
+      "committer_unix": 1451494800,
+      "committer_date": "2015-12-30T17:00:00+00:00",
+      "inventory": {
+        "tracked_files": 9998,
+        "tracked_language_files": {
+          "java": 1238,
+          "javascript": 686,
+          "other": 8071,
+          "python": 3
+        },
+        "top_level_paths": {
+          "specialpurpose": 3708,
+          "framework": 3678,
+          "applications": 2154,
+          "themes": 389,
+          "tools": 40,
+          "runtime": 11,
+          ".classpath": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".project": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README": 1,
+          "ant": 1,
+          "ant.bat": 1,
+          "build.xml": 1,
+          "common.xml": 1
+        }
+      }
+    },
+    {
+      "label": "2016",
+      "commit": "7edd9deefa6414651fd6cc48747afd07cf98a094",
+      "committer_unix": 1483134387,
+      "committer_date": "2016-12-30T21:46:27+00:00",
+      "inventory": {
+        "tracked_files": 9891,
+        "tracked_language_files": {
+          "java": 1160,
+          "javascript": 688,
+          "other": 8040,
+          "python": 3
+        },
+        "top_level_paths": {
+          "framework": 3533,
+          "specialpurpose": 3309,
+          "applications": 2145,
+          "themes": 835,
+          "tools": 41,
+          "runtime": 11,
+          "gradle": 2,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README.md": 1,
+          "build.gradle": 1,
+          "common.gradle": 1,
+          "gradlew": 1,
+          "gradlew.bat": 1,
+          "hot-deploy": 1
+        }
+      }
+    },
+    {
+      "label": "2017",
+      "commit": "297371b526265acb40c75ccd3a0c6b250be89916",
+      "committer_unix": 1514718706,
+      "committer_date": "2017-12-31T11:11:46+00:00",
+      "inventory": {
+        "tracked_files": 6316,
+        "tracked_language_files": {
+          "java": 1077,
+          "javascript": 639,
+          "other": 4600
+        },
+        "top_level_paths": {
+          "themes": 2907,
+          "applications": 2124,
+          "framework": 1258,
+          "runtime": 11,
+          "gradle": 2,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README.md": 1,
+          "build.gradle": 1,
+          "common.gradle": 1,
+          "gradlew": 1,
+          "gradlew.bat": 1,
+          "lib": 1,
+          "settings.gradle": 1
+        }
+      }
+    },
+    {
+      "label": "2018",
+      "commit": "1c8ecdb9cfa40a6c9f610967e17dc822ca7fa74b",
+      "committer_unix": 1546260878,
+      "committer_date": "2018-12-31T12:54:38+00:00",
+      "inventory": {
+        "tracked_files": 6432,
+        "tracked_language_files": {
+          "java": 1091,
+          "javascript": 696,
+          "other": 4645
+        },
+        "top_level_paths": {
+          "themes": 2977,
+          "applications": 2127,
+          "framework": 1292,
+          "runtime": 11,
+          "docs": 8,
+          "gradle": 2,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README.adoc": 1,
+          "VERSION": 1,
+          "build.gradle": 1,
+          "common.gradle": 1,
+          "gradlew": 1,
+          "gradlew.bat": 1,
+          "lib": 1
+        }
+      }
+    },
+    {
+      "label": "2019",
+      "commit": "7508917a0af0311694c37cf1ddd4231a0c8b3529",
+      "committer_unix": 1577696064,
+      "committer_date": "2019-12-30T09:54:24+01:00",
+      "inventory": {
+        "tracked_files": 6445,
+        "tracked_language_files": {
+          "java": 1101,
+          "javascript": 696,
+          "other": 4648
+        },
+        "top_level_paths": {
+          "themes": 2960,
+          "applications": 2139,
+          "framework": 1302,
+          "runtime": 11,
+          "docs": 8,
+          "gradle": 4,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".sonarcloud.properties": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "CONTRIBUTING.adoc": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README.adoc": 1,
+          "VERSION": 1,
+          "build.gradle": 1,
+          "common.gradle": 1
+        }
+      }
+    },
+    {
+      "label": "2020",
+      "commit": "66decd89f790494adca16c66183585156f1bfa22",
+      "committer_unix": 1609237696,
+      "committer_date": "2020-12-29T11:28:16+01:00",
+      "inventory": {
+        "tracked_files": 6348,
+        "tracked_language_files": {
+          "java": 1126,
+          "javascript": 694,
+          "other": 4528
+        },
+        "top_level_paths": {
+          "themes": 2963,
+          "applications": 2004,
+          "framework": 1323,
+          "docs": 17,
+          "runtime": 11,
+          "gradle": 4,
+          ".github": 2,
+          ".asf.yaml": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".sonarcloud.properties": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "CHANGELOG.adoc": 1,
+          "CONTRIBUTING.adoc": 1,
+          "INSTALL": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1
+        }
+      }
+    },
+    {
+      "label": "2021",
+      "commit": "f4fcc63cc436fa1454c4851a051b2f99f163c2f6",
+      "committer_unix": 1640978692,
+      "committer_date": "2021-12-31T20:24:52+01:00",
+      "inventory": {
+        "tracked_files": 6855,
+        "tracked_language_files": {
+          "java": 1145,
+          "javascript": 552,
+          "other": 5158
+        },
+        "top_level_paths": {
+          "themes": 3398,
+          "applications": 2044,
+          "framework": 1351,
+          "docs": 17,
+          "runtime": 11,
+          "gradle": 6,
+          ".github": 3,
+          ".asf.yaml": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".sonarcloud.properties": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "CHANGELOG.adoc": 1,
+          "CONTRIBUTING.adoc": 1,
+          "INSTALL": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1
+        }
+      }
+    },
+    {
+      "label": "2022",
+      "commit": "6de4615a8735d2f19095ea936c6fe68ed1613d9d",
+      "committer_unix": 1672333526,
+      "committer_date": "2022-12-29T18:05:26+01:00",
+      "inventory": {
+        "tracked_files": 6614,
+        "tracked_language_files": {
+          "java": 1152,
+          "javascript": 399,
+          "other": 5063
+        },
+        "top_level_paths": {
+          "themes": 3145,
+          "applications": 2049,
+          "framework": 1359,
+          "docs": 17,
+          "runtime": 10,
+          "gradle": 6,
+          ".github": 4,
+          ".asf.yaml": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".sonarcloud.properties": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "CONTRIBUTING.adoc": 1,
+          "INSTALL": 1,
+          "LICENSE": 1,
+          "NOTICE": 1,
+          "OPTIONAL_LIBRARIES": 1,
+          "README.adoc": 1
+        }
+      }
+    },
+    {
+      "label": "2023",
+      "commit": "fd52ae3fe0bcc5edebff6f3fba939475f83c4a41",
+      "committer_unix": 1704013266,
+      "committer_date": "2023-12-31T10:01:06+01:00",
+      "inventory": {
+        "tracked_files": 6636,
+        "tracked_language_files": {
+          "java": 1147,
+          "javascript": 398,
+          "other": 5091
+        },
+        "top_level_paths": {
+          "themes": 3145,
+          "applications": 2050,
+          "framework": 1360,
+          "docs": 17,
+          "runtime": 10,
+          "docker": 9,
+          ".github": 5,
+          "gradle": 5,
+          "buildSrc": 2,
+          "config": 2,
+          ".asf.yaml": 1,
+          ".dockerignore": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".sonarcloud.properties": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "CONTRIBUTING.adoc": 1,
+          "DOCKER.md": 1
+        }
+      }
+    },
+    {
+      "label": "2024",
+      "commit": "eefff0f1973d6d1e46f446d5cd6ee43fd79e3bda",
+      "committer_unix": 1735658674,
+      "committer_date": "2024-12-31T16:24:34+01:00",
+      "inventory": {
+        "tracked_files": 6651,
+        "tracked_language_files": {
+          "java": 1149,
+          "javascript": 398,
+          "other": 5104
+        },
+        "top_level_paths": {
+          "themes": 3145,
+          "applications": 2055,
+          "framework": 1366,
+          "docs": 17,
+          "runtime": 10,
+          "docker": 9,
+          ".github": 7,
+          "gradle": 4,
+          "buildSrc": 2,
+          "config": 2,
+          ".asf.yaml": 1,
+          ".devcontainer": 1,
+          ".dockerignore": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".pre-commit-config.yaml": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "CONTRIBUTING.adoc": 1
+        }
+      }
+    },
+    {
+      "label": "2025",
+      "commit": "1100016a3a336ae9b226fed33903b49d75d40904",
+      "committer_unix": 1766648831,
+      "committer_date": "2025-12-25T08:47:11+01:00",
+      "inventory": {
+        "tracked_files": 6652,
+        "tracked_language_files": {
+          "java": 1150,
+          "javascript": 396,
+          "other": 5106
+        },
+        "top_level_paths": {
+          "themes": 3143,
+          "applications": 2057,
+          "framework": 1367,
+          "docs": 17,
+          "runtime": 10,
+          "docker": 9,
+          ".github": 7,
+          "gradle": 4,
+          "buildSrc": 2,
+          "config": 2,
+          ".asf.yaml": 1,
+          ".devcontainer": 1,
+          ".dockerignore": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".pre-commit-config.yaml": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "CONTRIBUTING.adoc": 1
+        }
+      }
+    },
+    {
+      "label": "endpoint-2026",
+      "commit": "7e4b510dc277d2f7e32aecdda863dd359331696a",
+      "committer_unix": 1789325787,
+      "committer_date": "2026-09-14T00:26:27+05:30",
+      "inventory": {
+        "tracked_files": 6533,
+        "tracked_language_files": {
+          "java": 1257,
+          "javascript": 111,
+          "other": 5165
+        },
+        "top_level_paths": {
+          "themes": 2827,
+          "applications": 2028,
+          "framework": 1589,
+          "docs": 17,
+          ".github": 9,
+          "docker": 9,
+          "runtime": 9,
+          "gradle": 4,
+          "buildSrc": 2,
+          "config": 2,
+          ".asf.yaml": 1,
+          ".devcontainer": 1,
+          ".dockerignore": 1,
+          ".gitattributes": 1,
+          ".gitignore": 1,
+          ".hgignore": 1,
+          ".pre-commit-config.yaml": 1,
+          ".xmlcatalog.xml": 1,
+          "APACHE2_HEADER": 1,
+          "CONTRIBUTING.adoc": 1
+        }
+      }
+    }
+  ],
+  "scope_warning": "Counts cover tracked paths; no production/generated/vendor exclusions or parser admission applied.",
+  "history_archive": {
+    "file": "apache__ofbiz-framework.history.json.gz",
+    "sha256": "6e3088124ac90278ad74f8acc2e1c9658a6465d48bf57d6426018efb1c0a94e4"
+  }
+}

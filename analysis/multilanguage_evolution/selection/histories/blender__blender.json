@@ -1,0 +1,912 @@
+{
+  "schema_version": "history-audit/1",
+  "status": "inventory_only_not_measurement",
+  "repository": "https://github.com/blender/blender.git",
+  "cutoff_utc": "2026-09-14T00:00:00+00:00",
+  "endpoint": {
+    "commit": "022568b3a2fa9e188b51063eed6b9b9616af6dd5",
+    "committer_unix": 1789333003,
+    "committer_date": "2026-09-13T22:56:43+02:00"
+  },
+  "earliest_first_parent": {
+    "commit": "12315f4d0e0ae993805f141f64cb8c73c5297311",
+    "committer_unix": 1034422658,
+    "committer_date": "2002-10-12T11:37:38+00:00"
+  },
+  "earliest_source": {
+    "commit": "12315f4d0e0ae993805f141f64cb8c73c5297311",
+    "committer_unix": 1034422658,
+    "committer_date": "2002-10-12T11:37:38+00:00"
+  },
+  "undated_source_import": false,
+  "reachable_roots": [
+    "0de103c1cdf1e4c40cfad4e233a42a6d1165953d",
+    "12315f4d0e0ae993805f141f64cb8c73c5297311"
+  ],
+  "first_parent_commits": 137259,
+  "elapsed_years": 23.9221565187918,
+  "timestamp_reversals": 194,
+  "observations": [
+    {
+      "label": "earliest-2002",
+      "commit": "12315f4d0e0ae993805f141f64cb8c73c5297311",
+      "committer_unix": 1034422658,
+      "committer_date": "2002-10-12T11:37:38+00:00",
+      "inventory": {
+        "tracked_files": 1699,
+        "tracked_language_files": {
+          "c": 272,
+          "c_header": 722,
+          "cpp": 302,
+          "other": 304,
+          "python": 99
+        },
+        "top_level_paths": {
+          "source": 1120,
+          "intern": 505,
+          "projectfiles": 74
+        }
+      }
+    },
+    {
+      "label": "2003",
+      "commit": "4b6bc29bf27c49f3545eac13d922d1ef03c655a7",
+      "committer_unix": 1072910666,
+      "committer_date": "2003-12-31T22:44:26+00:00",
+      "inventory": {
+        "tracked_files": 2106,
+        "tracked_language_files": {
+          "c": 345,
+          "c_header": 852,
+          "cpp": 347,
+          "other": 533,
+          "python": 29
+        },
+        "top_level_paths": {
+          "source": 1238,
+          "intern": 428,
+          "extern": 244,
+          "make": 72,
+          "projectfiles": 63,
+          "release": 46,
+          "doc": 8,
+          "bin": 2,
+          "COPYING": 1,
+          "Makefile": 1,
+          "README": 1,
+          "blender.sln": 1,
+          "po": 1
+        }
+      }
+    },
+    {
+      "label": "2004",
+      "commit": "7b3768138c3c38add07327623210ed23ff3c7518",
+      "committer_unix": 1104490122,
+      "committer_date": "2004-12-31T10:48:42+00:00",
+      "inventory": {
+        "tracked_files": 2362,
+        "tracked_language_files": {
+          "c": 381,
+          "c_header": 892,
+          "cpp": 363,
+          "other": 562,
+          "python": 164
+        },
+        "top_level_paths": {
+          "source": 1333,
+          "intern": 535,
+          "extern": 253,
+          "release": 117,
+          "projectfiles": 54,
+          "projectfiles_vc7": 43,
+          "tools": 12,
+          "doc": 8,
+          "bin": 2,
+          "COPYING": 1,
+          "Makefile": 1,
+          "README": 1,
+          "SConstruct": 1,
+          "po": 1
+        }
+      }
+    },
+    {
+      "label": "2005",
+      "commit": "bab1b90edc55251ceb5e3033d588347b48cceca4",
+      "committer_unix": 1136066396,
+      "committer_date": "2005-12-31T21:59:56+00:00",
+      "inventory": {
+        "tracked_files": 2819,
+        "tracked_language_files": {
+          "c": 408,
+          "c_header": 1089,
+          "cpp": 500,
+          "other": 627,
+          "python": 195
+        },
+        "top_level_paths": {
+          "source": 1409,
+          "intern": 639,
+          "extern": 501,
+          "release": 142,
+          "projectfiles": 54,
+          "projectfiles_vc7": 47,
+          "tools": 12,
+          "doc": 8,
+          "bin": 2,
+          "COPYING": 1,
+          "Makefile": 1,
+          "README": 1,
+          "SConstruct": 1,
+          "po": 1
+        }
+      }
+    },
+    {
+      "label": "2006",
+      "commit": "a8cb4a7860490e1a05b5f03d02b04ca73a7be79e",
+      "committer_unix": 1167603501,
+      "committer_date": "2006-12-31T22:18:21+00:00",
+      "inventory": {
+        "tracked_files": 3093,
+        "tracked_language_files": {
+          "c": 506,
+          "c_header": 1141,
+          "cpp": 497,
+          "other": 704,
+          "python": 245
+        },
+        "top_level_paths": {
+          "source": 1548,
+          "intern": 613,
+          "extern": 598,
+          "release": 199,
+          "projectfiles": 54,
+          "projectfiles_vc7": 47,
+          "doc": 11,
+          "config": 7,
+          "tools": 6,
+          "bin": 2,
+          "CMake": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "Makefile": 1,
+          "README": 1,
+          "SConstruct": 1,
+          "blenderplayer": 1,
+          "po": 1
+        }
+      }
+    },
+    {
+      "label": "2007",
+      "commit": "8208d5d0beb20871ef93b89b959567871b5187b6",
+      "committer_unix": 1199139484,
+      "committer_date": "2007-12-31T22:18:04+00:00",
+      "inventory": {
+        "tracked_files": 3198,
+        "tracked_language_files": {
+          "c": 598,
+          "c_header": 1151,
+          "cpp": 495,
+          "other": 692,
+          "python": 262
+        },
+        "top_level_paths": {
+          "source": 1707,
+          "extern": 604,
+          "intern": 539,
+          "release": 212,
+          "projectfiles": 54,
+          "projectfiles_vc7": 48,
+          "doc": 11,
+          "config": 7,
+          "tools": 6,
+          "bin": 2,
+          "CMake": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "Makefile": 1,
+          "README": 1,
+          "SConstruct": 1,
+          "blenderplayer": 1,
+          "po": 1
+        }
+      }
+    },
+    {
+      "label": "2008",
+      "commit": "2dfd34994fb2a5d7d8ca57a7ce1fa18e7047463e",
+      "committer_unix": 1230755720,
+      "committer_date": "2008-12-31T20:35:20+00:00",
+      "inventory": {
+        "tracked_files": 3644,
+        "tracked_language_files": {
+          "c": 673,
+          "c_header": 1316,
+          "cpp": 569,
+          "other": 790,
+          "python": 296
+        },
+        "top_level_paths": {
+          "source": 1873,
+          "extern": 782,
+          "intern": 574,
+          "release": 235,
+          "projectfiles": 54,
+          "projectfiles_vc7": 49,
+          "projectfiles_vc9": 42,
+          "doc": 11,
+          "config": 8,
+          "tools": 6,
+          "bin": 2,
+          "CMake": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "Makefile": 1,
+          "README": 1,
+          "SConstruct": 1,
+          "blenderplayer": 1,
+          "po": 1
+        }
+      }
+    },
+    {
+      "label": "2009",
+      "commit": "3fa927a42e893709ac78f7d9419c22979b05bf3f",
+      "committer_unix": 1262303805,
+      "committer_date": "2009-12-31T23:56:45+00:00",
+      "inventory": {
+        "tracked_files": 3598,
+        "tracked_language_files": {
+          "c": 739,
+          "c_header": 1334,
+          "cpp": 568,
+          "cpp_header": 38,
+          "javascript": 1,
+          "other": 765,
+          "python": 153
+        },
+        "top_level_paths": {
+          "source": 1933,
+          "intern": 767,
+          "extern": 529,
+          "release": 181,
+          "projectfiles": 54,
+          "projectfiles_vc9": 50,
+          "projectfiles_vc7": 49,
+          "doc": 11,
+          "config": 9,
+          "tools": 6,
+          "bin": 2,
+          "CMake": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "Makefile": 1,
+          "README": 1,
+          "SConstruct": 1,
+          "po": 1
+        }
+      }
+    },
+    {
+      "label": "2010",
+      "commit": "2840e7b7645130f79cb92c5b899228c5ab826bd5",
+      "committer_unix": 1293835457,
+      "committer_date": "2010-12-31T22:44:17+00:00",
+      "inventory": {
+        "tracked_files": 3645,
+        "tracked_language_files": {
+          "c": 822,
+          "c_header": 1350,
+          "cpp": 598,
+          "cpp_header": 38,
+          "javascript": 2,
+          "other": 620,
+          "python": 215
+        },
+        "top_level_paths": {
+          "source": 2049,
+          "intern": 741,
+          "extern": 517,
+          "release": 251,
+          "doc": 47,
+          "build_files": 35,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "Makefile": 1,
+          "SConstruct": 1,
+          "po": 1
+        }
+      }
+    },
+    {
+      "label": "2011",
+      "commit": "28e658a3862c0e21e0b8a2cf14184065dfa97112",
+      "committer_unix": 1325351747,
+      "committer_date": "2011-12-31T17:15:47+00:00",
+      "inventory": {
+        "tracked_files": 4465,
+        "tracked_language_files": {
+          "c": 927,
+          "c_header": 1781,
+          "cpp": 784,
+          "cpp_header": 38,
+          "javascript": 1,
+          "other": 604,
+          "python": 330
+        },
+        "top_level_paths": {
+          "source": 2085,
+          "intern": 1075,
+          "extern": 840,
+          "release": 301,
+          "doc": 90,
+          "build_files": 70,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "SConstruct": 1
+        }
+      }
+    },
+    {
+      "label": "2012",
+      "commit": "d0981c279b9705e076045c7af7faf6e90937cd96",
+      "committer_unix": 1356989566,
+      "committer_date": "2012-12-31T21:32:46+00:00",
+      "inventory": {
+        "tracked_files": 5655,
+        "tracked_language_files": {
+          "c": 1025,
+          "c_header": 2263,
+          "cpp": 1151,
+          "cpp_header": 116,
+          "javascript": 1,
+          "other": 712,
+          "python": 387
+        },
+        "top_level_paths": {
+          "source": 2795,
+          "extern": 1219,
+          "intern": 1074,
+          "release": 378,
+          "doc": 100,
+          "build_files": 85,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "SConstruct": 1
+        }
+      }
+    },
+    {
+      "label": "2013",
+      "commit": "ead6d397fda12d8287dff7d6a6fff6ea1948cd69",
+      "committer_unix": 1388509830,
+      "committer_date": "2013-12-31T18:10:30+01:00",
+      "inventory": {
+        "tracked_files": 6527,
+        "tracked_language_files": {
+          "c": 1115,
+          "c_header": 2574,
+          "cpp": 1377,
+          "cpp_header": 115,
+          "javascript": 1,
+          "other": 892,
+          "python": 453
+        },
+        "top_level_paths": {
+          "source": 3310,
+          "extern": 1299,
+          "intern": 1106,
+          "release": 533,
+          "doc": 187,
+          "build_files": 84,
+          ".arcconfig": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "SConstruct": 1,
+          "scons": 1
+        }
+      }
+    },
+    {
+      "label": "2014",
+      "commit": "c24b6949860ea74fc306022b7d7190579f5b1418",
+      "committer_unix": 1420069800,
+      "committer_date": "2015-01-01T12:50:00+13:00",
+      "inventory": {
+        "tracked_files": 7877,
+        "tracked_language_files": {
+          "c": 1154,
+          "c_header": 2779,
+          "cpp": 1459,
+          "cpp_header": 116,
+          "javascript": 1,
+          "other": 1881,
+          "python": 487
+        },
+        "top_level_paths": {
+          "source": 3344,
+          "extern": 1569,
+          "release": 1506,
+          "intern": 1137,
+          "doc": 188,
+          "build_files": 89,
+          "tests": 36,
+          ".arcconfig": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "SConstruct": 1,
+          "scons": 1
+        }
+      }
+    },
+    {
+      "label": "2015",
+      "commit": "b519a733269793a0c3735c6ca6a4ba49004446ba",
+      "committer_unix": 1451587474,
+      "committer_date": "2016-01-01T05:44:34+11:00",
+      "inventory": {
+        "tracked_files": 8023,
+        "tracked_language_files": {
+          "c": 1175,
+          "c_header": 2826,
+          "cpp": 1484,
+          "cpp_header": 116,
+          "javascript": 1,
+          "other": 1929,
+          "python": 492
+        },
+        "top_level_paths": {
+          "source": 3486,
+          "extern": 1555,
+          "release": 1533,
+          "intern": 1117,
+          "doc": 188,
+          "build_files": 92,
+          "tests": 43,
+          ".arcconfig": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "SConstruct": 1,
+          "make.bat": 1,
+          "scons": 1
+        }
+      }
+    },
+    {
+      "label": "2016",
+      "commit": "fb20cbe04cf4277c40d2a395d0d4cc3aee3707ed",
+      "committer_unix": 1483096401,
+      "committer_date": "2016-12-30T12:13:21+01:00",
+      "inventory": {
+        "tracked_files": 8205,
+        "tracked_language_files": {
+          "c": 1228,
+          "c_header": 2967,
+          "cpp": 1547,
+          "cpp_header": 116,
+          "javascript": 1,
+          "other": 1864,
+          "python": 482
+        },
+        "top_level_paths": {
+          "source": 3580,
+          "release": 1547,
+          "extern": 1416,
+          "intern": 1335,
+          "doc": 189,
+          "build_files": 85,
+          "tests": 46,
+          ".arcconfig": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "make.bat": 1
+        }
+      }
+    },
+    {
+      "label": "2017",
+      "commit": "bbbdb27d658d7bad950376d12edee126c59f3628",
+      "committer_unix": 1514561908,
+      "committer_date": "2017-12-29T13:38:28-02:00",
+      "inventory": {
+        "tracked_files": 9088,
+        "tracked_language_files": {
+          "c": 1368,
+          "c_header": 3160,
+          "cpp": 1634,
+          "cpp_header": 116,
+          "javascript": 1,
+          "other": 2173,
+          "python": 636
+        },
+        "top_level_paths": {
+          "source": 3900,
+          "extern": 1737,
+          "release": 1592,
+          "intern": 1286,
+          "build_files": 196,
+          "doc": 190,
+          "tests": 180,
+          ".arcconfig": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "make.bat": 1
+        }
+      }
+    },
+    {
+      "label": "2018",
+      "commit": "4d795cee4938f080f83aa367272d1ad25bba1fbd",
+      "committer_unix": 1546271120,
+      "committer_date": "2018-12-31T13:45:20-02:00",
+      "inventory": {
+        "tracked_files": 8925,
+        "tracked_language_files": {
+          "c": 1457,
+          "c_header": 2884,
+          "cpp": 1382,
+          "cpp_header": 38,
+          "other": 2497,
+          "python": 667
+        },
+        "top_level_paths": {
+          "source": 3649,
+          "release": 1932,
+          "extern": 1525,
+          "intern": 1287,
+          "build_files": 216,
+          "tests": 200,
+          "doc": 108,
+          ".arcconfig": 1,
+          ".editorconfig": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "make.bat": 1
+        }
+      }
+    },
+    {
+      "label": "2019",
+      "commit": "86a2ffc3ab321f00317aa05fb423c4df6f68aced",
+      "committer_unix": 1577808297,
+      "committer_date": "2019-12-31T13:04:57-03:00",
+      "inventory": {
+        "tracked_files": 10112,
+        "tracked_language_files": {
+          "c": 1533,
+          "c_header": 3354,
+          "cpp": 1695,
+          "cpp_header": 56,
+          "other": 2771,
+          "python": 703
+        },
+        "top_level_paths": {
+          "source": 3928,
+          "extern": 2295,
+          "release": 2050,
+          "intern": 1238,
+          "build_files": 252,
+          "tests": 223,
+          "doc": 115,
+          ".arcconfig": 1,
+          ".clang-format": 1,
+          ".editorconfig": 1,
+          ".github": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "make.bat": 1,
+          "readme.rst": 1
+        }
+      }
+    },
+    {
+      "label": "2020",
+      "commit": "0da1fc2fc4173e8d2f4b694d8996a7873c0b1ea3",
+      "committer_unix": 1609455689,
+      "committer_date": "2020-12-31T17:01:29-06:00",
+      "inventory": {
+        "tracked_files": 10940,
+        "tracked_language_files": {
+          "c": 1665,
+          "c_header": 3551,
+          "cpp": 1928,
+          "cpp_header": 56,
+          "other": 2996,
+          "python": 744
+        },
+        "top_level_paths": {
+          "source": 4555,
+          "extern": 2360,
+          "release": 2150,
+          "intern": 1294,
+          "build_files": 256,
+          "tests": 193,
+          "doc": 119,
+          ".arcconfig": 1,
+          ".clang-format": 1,
+          ".clang-tidy": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".github": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "make.bat": 1,
+          "readme.rst": 1
+        }
+      }
+    },
+    {
+      "label": "2021",
+      "commit": "6844304dda497b245f63934b3c5d8c52f4f6bb19",
+      "committer_unix": 1640982762,
+      "committer_date": "2021-12-31T20:32:42+00:00",
+      "inventory": {
+        "tracked_files": 11801,
+        "tracked_language_files": {
+          "c": 1540,
+          "c_header": 3699,
+          "cpp": 2503,
+          "cpp_header": 57,
+          "other": 3263,
+          "python": 739
+        },
+        "top_level_paths": {
+          "source": 5165,
+          "extern": 2392,
+          "release": 2281,
+          "intern": 1365,
+          "build_files": 251,
+          "tests": 213,
+          "doc": 120,
+          ".github": 2,
+          ".arcconfig": 1,
+          ".clang-format": 1,
+          ".clang-tidy": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "make.bat": 1,
+          "readme.rst": 1
+        }
+      }
+    },
+    {
+      "label": "2022",
+      "commit": "614704f90c32e7649d3d725495b9964af35e88e5",
+      "committer_unix": 1672500399,
+      "committer_date": "2022-12-31T16:26:39+01:00",
+      "inventory": {
+        "tracked_files": 12841,
+        "tracked_language_files": {
+          "c": 1299,
+          "c_header": 3811,
+          "cpp": 3026,
+          "cpp_header": 57,
+          "javascript": 1,
+          "other": 3891,
+          "python": 756
+        },
+        "top_level_paths": {
+          "source": 5977,
+          "extern": 2403,
+          "release": 2348,
+          "intern": 1456,
+          "build_files": 288,
+          "tests": 219,
+          "doc": 135,
+          ".github": 2,
+          ".arcconfig": 1,
+          ".clang-format": 1,
+          ".clang-tidy": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1,
+          "GNUmakefile": 1,
+          "make.bat": 1,
+          "pyproject.toml": 1
+        }
+      }
+    },
+    {
+      "label": "2023",
+      "commit": "86d008d1124c873708f4c4461c7958b1978dc596",
+      "committer_unix": 1704061744,
+      "committer_date": "2024-01-01T11:29:04+13:00",
+      "inventory": {
+        "tracked_files": 13881,
+        "tracked_language_files": {
+          "c": 130,
+          "c_header": 3422,
+          "cpp": 4532,
+          "cpp_header": 57,
+          "javascript": 1,
+          "other": 4870,
+          "python": 869
+        },
+        "top_level_paths": {
+          "source": 6769,
+          "extern": 2400,
+          "release": 1953,
+          "intern": 1483,
+          "scripts": 419,
+          "build_files": 311,
+          "tests": 243,
+          "doc": 142,
+          "tools": 94,
+          "locale": 45,
+          ".gitea": 8,
+          ".github": 2,
+          ".clang-format": 1,
+          ".clang-tidy": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitignore": 1,
+          "AUTHORS": 1,
+          "CMakeLists.txt": 1,
+          "COPYING": 1
+        }
+      }
+    },
+    {
+      "label": "2024",
+      "commit": "95be928c5ef2ff1a68265ce4937fe1fac84f0a09",
+      "committer_unix": 1735684760,
+      "committer_date": "2024-12-31T23:39:20+01:00",
+      "inventory": {
+        "tracked_files": 13327,
+        "tracked_language_files": {
+          "c": 100,
+          "c_header": 2791,
+          "cpp": 4484,
+          "cpp_header": 56,
+          "javascript": 1,
+          "other": 4679,
+          "python": 1216
+        },
+        "top_level_paths": {
+          "source": 6544,
+          "extern": 2348,
+          "intern": 1515,
+          "release": 1244,
+          "scripts": 750,
+          "build_files": 324,
+          "tests": 256,
+          "doc": 159,
+          "tools": 108,
+          "locale": 50,
+          ".gitea": 8,
+          "lib": 5,
+          ".github": 3,
+          ".clang-format": 1,
+          ".clang-tidy": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitignore": 1,
+          ".gitmodules": 1,
+          "AUTHORS": 1
+        }
+      }
+    },
+    {
+      "label": "2025",
+      "commit": "626bfbf39d947710f0714177028251d3bc1d26f6",
+      "committer_unix": 1767201317,
+      "committer_date": "2025-12-31T18:15:17+01:00",
+      "inventory": {
+        "tracked_files": 20603,
+        "tracked_language_files": {
+          "c": 32,
+          "c_header": 2695,
+          "cpp": 4750,
+          "cpp_header": 57,
+          "javascript": 1,
+          "other": 11730,
+          "python": 1338
+        },
+        "top_level_paths": {
+          "source": 6978,
+          "tests": 6927,
+          "extern": 2366,
+          "intern": 1507,
+          "release": 1302,
+          "scripts": 805,
+          "build_files": 331,
+          "doc": 165,
+          "tools": 114,
+          "locale": 49,
+          "assets": 15,
+          "\"tests": 12,
+          ".gitea": 8,
+          "lib": 5,
+          ".github": 4,
+          ".clang-format": 1,
+          ".clang-tidy": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitattributes": 1
+        }
+      }
+    },
+    {
+      "label": "endpoint-2026",
+      "commit": "022568b3a2fa9e188b51063eed6b9b9616af6dd5",
+      "committer_unix": 1789333003,
+      "committer_date": "2026-09-13T22:56:43+02:00",
+      "inventory": {
+        "tracked_files": 20548,
+        "tracked_language_files": {
+          "c": 32,
+          "c_header": 1961,
+          "cpp": 4751,
+          "cpp_header": 58,
+          "javascript": 1,
+          "other": 12301,
+          "python": 1444
+        },
+        "top_level_paths": {
+          "tests": 7447,
+          "source": 7235,
+          "intern": 1589,
+          "extern": 1409,
+          "release": 1307,
+          "scripts": 837,
+          "build_files": 322,
+          "doc": 174,
+          "tools": 116,
+          "locale": 50,
+          "assets": 17,
+          "\"tests": 12,
+          ".gitea": 10,
+          "lib": 5,
+          ".github": 3,
+          ".clang-format": 1,
+          ".clang-tidy": 1,
+          ".editorconfig": 1,
+          ".git-blame-ignore-revs": 1,
+          ".gitattributes": 1
+        }
+      }
+    }
+  ],
+  "scope_warning": "Counts cover tracked paths; no production/generated/vendor exclusions or parser admission applied.",
+  "history_archive": {
+    "file": "blender__blender.history.json.gz",
+    "sha256": "ec057c6d010cf38750bc4d1d1caa4ca2ad39fc762de3e4ab1e7f0e6f6087ff46"
+  }
+}
