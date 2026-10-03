@@ -20,7 +20,7 @@ public sealed class FactorialSingleShotRunner(
     Func<GeneratedTestSource, string, int, CancellationToken, Task<GeneratedTestExecutionResult>>? executeVisibleTest = null,
     IReadOnlyList<string>? workingCopySkipDirectories = null)
 {
-    public static readonly string[] DefaultSkipDirs = ["bin", "obj", ".git", ".vs", ".idea"];
+    public static readonly string[] DefaultSkipDirs = WorkingCopy.DefaultSkipDirectories;
 
     private readonly string[] _skipDirs = workingCopySkipDirectories is { Count: > 0 } declared
         ? [.. declared] : DefaultSkipDirs;
@@ -97,7 +97,7 @@ public sealed class FactorialSingleShotRunner(
             : promptProfile.BuildUserPrompt(
                 relative.Replace('\\', '/'), original, targetDescriptor, contextBlock, visiblePrompt);
 
-        CopyTree(corpusRoot, workingRoot);
+        WorkingCopy.Create(corpusRoot, workingRoot, _skipDirs);
         var stopwatch = Stopwatch.StartNew();
         LlmResponse? response = null;
         ParsedRepair? parsed = null;
@@ -200,7 +200,7 @@ public sealed class FactorialSingleShotRunner(
         finally
         {
             stopwatch.Stop();
-            TryDeleteTree(workingRoot);
+            WorkingCopy.TryDelete(workingRoot);
         }
 
         var recovered = grounded || (parsed?.Findings.Any(f => Matches(f, instance)) ?? false);
@@ -307,23 +307,4 @@ public sealed class FactorialSingleShotRunner(
     private static string Tail(string value, int maxChars) =>
         string.IsNullOrEmpty(value) || value.Length <= maxChars ? value : value[^maxChars..];
 
-    private void CopyTree(string source, string destination)
-    {
-        Directory.CreateDirectory(destination);
-        foreach (var file in Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories))
-        {
-            var relative = Path.GetRelativePath(source, file);
-            if (relative.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries)
-                .Any(part => _skipDirs.Contains(part, StringComparer.OrdinalIgnoreCase))) continue;
-            var target = Path.Combine(destination, relative);
-            Directory.CreateDirectory(Path.GetDirectoryName(target)!);
-            File.Copy(file, target, overwrite: true);
-        }
-    }
-
-    private static void TryDeleteTree(string path)
-    {
-        try { if (Directory.Exists(path)) Directory.Delete(path, recursive: true); }
-        catch { }
-    }
 }

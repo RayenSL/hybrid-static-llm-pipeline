@@ -79,7 +79,7 @@ public sealed record FactorialCampaignAssignment
 }
 
 /// <summary>Crash-safe ledger row written after one frozen assignment succeeds or fails.</summary>
-public sealed record FactorialCampaignExecutionRecord
+public sealed record FactorialCampaignExecutionRecord : ICampaignExecutionRecord
 {
     public required string CampaignId { get; init; }
     public required string AssignmentId { get; init; }

@@ -15,6 +15,8 @@ src/
 └── HybridLens.Tests            # Unit and integration tests
 ```
 
+See [pipeline modules and experimental invariants](src/HybridLens.Pipeline/README.md) for the execution boundaries and extension points.
+
 ## Research material
 
 The revised [thesis](Static_Analysis_and_LLMs_for_Verified_Anti_Pattern_Repair.pdf)
@@ -109,16 +111,20 @@ assignment. An incomplete trace must be quarantined before resuming, which the c
 
 These have their own denominators and are never pooled with the confirmatory factorial.
 
-**Four-level context supplement** — Minimal, Structural, Relational and Full context through the
-suggestion-plus-applier mechanism, where a non-evaluated applier materialises each recommendation
-under a strict-literal contract.
+**Four-level direct-edit context comparison** — Minimal, Structural, Relational and Full
+context use the same single-shot direct-edit runner, with visible tests disabled. The frozen
+manifest carries the ladder version and hash, source hashes and matched assignments.
 
 ```bash
-dotnet run --project src/HybridLens.CLI -- grounding-campaign     --manifest <grounding-manifest>.json --out <campaign-dir> --preflight-only
+dotnet run --project src/HybridLens.CLI -- context-ladder-campaign --manifest <context-manifest>.json --out <campaign-dir> --preflight-only
 ```
 
-The applier must be a different model from the evaluated one, so it never scores code it wrote
-itself. Configure it alongside the evaluated model in `appsettings.local.json`.
+Remove `--preflight-only` to execute; use `--stop-after N` for a bounded invocation. Completed
+assignments are skipped on resume after their traces and hashes have been checked. Corpus and
+industrial campaigns have separate manifests and denominators.
+
+The older suggestion-plus-applier experiment remains available through `grounding-campaign`
+for historical reruns. It is separate from the final direct-edit context comparison.
 
 **Iterative arms** — `agentic` is ungrounded and `grounded-iterative` differs from it only in that
 the opening message carries the analyser's Structural finding. Both grant the compiler as the sole

@@ -123,7 +123,7 @@ public sealed class ExternalOracleEvaluator(
         var stopwatch = Stopwatch.StartNew();
         try
         {
-            CopyTree(productRoot, workingRoot);
+            WorkingCopy.Create(productRoot, workingRoot, _skipDirs);
             var workingTarget = Path.Combine(workingRoot, relative);
             Directory.CreateDirectory(Path.GetDirectoryName(workingTarget)!);
             await File.WriteAllTextAsync(workingTarget, artifact.FinalSource, new UTF8Encoding(false), cancellationToken);
@@ -155,7 +155,7 @@ public sealed class ExternalOracleEvaluator(
         finally
         {
             stopwatch.Stop();
-            TryDeleteTree(workingRoot);
+            WorkingCopy.TryDelete(workingRoot);
         }
     }
 
@@ -229,27 +229,7 @@ public sealed class ExternalOracleEvaluator(
     private static int CountLines(string output, string prefix) =>
         output.Split('\n').Count(line => line.TrimStart().StartsWith(prefix, StringComparison.Ordinal));
 
-    private void CopyTree(string source, string destination)
-    {
-        Directory.CreateDirectory(destination);
-        foreach (var file in Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories))
-        {
-            var relative = Path.GetRelativePath(source, file);
-            if (relative.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                .Any(segment => _skipDirs.Contains(segment, StringComparer.OrdinalIgnoreCase)))
-                continue;
-            var target = Path.Combine(destination, relative);
-            Directory.CreateDirectory(Path.GetDirectoryName(target)!);
-            File.Copy(file, target, overwrite: true);
-        }
-    }
-
     private static string Tail(string value, int maxChars) =>
         value.Length <= maxChars ? value : value[^maxChars..];
 
-    private static void TryDeleteTree(string path)
-    {
-        try { if (Directory.Exists(path)) Directory.Delete(path, recursive: true); }
-        catch { /* best effort */ }
-    }
 }

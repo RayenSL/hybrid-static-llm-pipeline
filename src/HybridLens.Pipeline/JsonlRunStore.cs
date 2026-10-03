@@ -10,7 +10,7 @@ namespace HybridLens.Pipeline;
 ///
 /// JSONL (one JSON object per line, no outer array) is preferred over a single
 /// JSON document because:
-///   1. Crashes never corrupt the file — partially written runs are simply truncated.
+///   1. Complete rows remain readable after a crash; an incomplete final row must be quarantined.
 ///   2. The file can be `tail -f`'d during long experiment campaigns.
 ///   3. pandas / R / DuckDB load it natively (<c>pd.read_json(..., lines=True)</c>).
 /// </summary>

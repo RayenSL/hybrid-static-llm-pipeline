@@ -3,7 +3,6 @@
     <ItemGroup>
       <ProjectReference Include="..\HybridLens.Core\HybridLens.Core.csproj" />
       <ProjectReference Include="..\HybridLens.ContextBuilder\HybridLens.ContextBuilder.csproj" />
-      <ProjectReference Include="..\HybridLens.LLM\HybridLens.LLM.csproj" />
     </ItemGroup>
 
     <PropertyGroup>

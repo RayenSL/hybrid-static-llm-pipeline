@@ -1,6 +1,4 @@
-using HybridLens.Core.Models;
-
-namespace HybridLens.CLI.Commands;
+namespace HybridLens.Core.Models;
 
 /// <summary>
 /// The frozen direct-edit context ladder manifest, shared by the command that writes it and the
@@ -8,7 +6,7 @@ namespace HybridLens.CLI.Commands;
 /// their own copy of a schema drift apart silently, which is the failure mode this experiment
 /// exists to correct.
 /// </summary>
-internal sealed record ContextLadderManifest
+public sealed record ContextLadderManifest
 {
     public required string SchemaVersion { get; init; }
     public required string CampaignId { get; init; }
@@ -35,7 +33,7 @@ internal sealed record ContextLadderManifest
     public required List<LadderAssignment> Assignments { get; init; }
 }
 
-internal sealed record LadderAssignment
+public sealed record LadderAssignment
 {
     public required int Order { get; init; }
     public required string AssignmentId { get; init; }
