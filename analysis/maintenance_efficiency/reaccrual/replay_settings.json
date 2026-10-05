@@ -1,0 +1,13 @@
+{
+ "schema_version": "reaccrual-replay-settings/0.2",
+ "live_execution_enabled": false,
+ "model_key": "gpt-5.6-sol",
+ "max_completion_tokens_per_call": 4096,
+ "branch_allocation_tokens": 160000,
+ "input_bound_tokens": 49152,
+ "context_window_confirmed_tokens": null,
+ "rate_limit_tokens_per_minute": 236000,
+ "organisational_approval_recorded": false,
+ "required_ceiling_tokens": 9000000,
+ "note": "rate_limit_tokens_per_minute is the deployment throughput limit (236,000 TPM, given by the user 2026-10-05); it is not the context window. Set context_window_confirmed_tokens from the deployment documentation and record organisational approval; replay_freeze.py then writes the freeze record. Enable live execution only after the freeze."
+}
