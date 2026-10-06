@@ -105,6 +105,17 @@ public static class FixtureChecks
                 Check(FileMetrics.Measure("class C { int x = 1; }").MaxCallableComplexity is null, "No callables gives null maximum");
                 var callables = FileMetrics.Measure("namespace N { class C { int M(int x) { if (x > 0) return 1; return 0; } int M(bool a, bool b) => a && b ? 1 : 2; void P() { System.Func<int, int> f = y => y > 0 ? y : 0; } } }").Callables;
                 Check(callables["C.M"] == 2 && callables["C.P"] == 0, "Owned decisions per Type.Method, the maximum over overloads, lambdas excluded");
+                var wmc = FileMetrics.Measure("namespace N { class C { int M(int x) { if (x > 0) return 1; return 0; } void P(string? s) { s ??= \"\"; System.Func<int, int> f = y => y > 0 ? y : 0; } } class D { } }").ClassWmc;
+                Check(wmc["C"] == 2 + 3 && wmc["D"] == 0, "Class WMC sums detector cyclomatic complexity of declared methods, nested lambdas included");
+            }),
+            ("history_facts", () => {
+                const string code = "namespace N { class C { public int Big(int x) {\n if (x>0) {} if (x>1) {} if (x>2) {} if (x>3) {} if (x>4) {} if (x>5) {} if (x>6) {} if (x>7) {} if (x>8) {} if (x>9) {} if (x>10) {}\n return 0; }\n int Small() => 1; } class D { int One() { return System.Linq.Enumerable.Range(0, 3).Any(y => y > 1 ? true : false) ? 1 : 0; } } }";
+                var facts = HistoryFacts.Measure(code);
+                var big = facts.Methods.Single(m => m.Symbol == "C.Big");
+                Check(big.Complexity == 12 && big.Lines == 3, "Detector complexity and line count of a long method");
+                Check(facts.Methods.Single(m => m.Symbol == "C.Small").Complexity == 1, "Expression-bodied method has complexity 1");
+                Check(facts.Methods.Single(m => m.Symbol == "D.One").Complexity == 3, "Lambda branches count towards the enclosing method, as in the detector");
+                Check(facts.Classes.Single(c => c.Symbol == "N.C").Wmc == 13 && facts.Classes.Single(c => c.Symbol == "N.D").Wmc == 3, "Class WMC with the namespace-qualified detector name");
             }),
             ("overload_ambiguity", () => {
                 var b=Facts("class C { int M()=>0; int M(int x)=>x; }"); Measured(b);

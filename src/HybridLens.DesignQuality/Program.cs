@@ -30,6 +30,13 @@ public static class Program
             Console.WriteLine(JsonSerializer.Serialize(metrics, JsonOptions));
             return 0;
         }
+        if (args.Length == 2 && args[0] == "--history-metrics")
+        {
+            var facts = Directory.GetFiles(args[1], "*.cs").Order(StringComparer.Ordinal)
+                .ToDictionary(f => Path.GetFileNameWithoutExtension(f), f => HistoryFacts.Measure(File.ReadAllText(f)));
+            Console.WriteLine(JsonSerializer.Serialize(facts, JsonOptions));
+            return 0;
+        }
         if (args.Length != 2)
         {
             Console.Error.WriteLine("Usage: HybridLens.DesignQuality <manifest.json> <output.jsonl> | --self-test");

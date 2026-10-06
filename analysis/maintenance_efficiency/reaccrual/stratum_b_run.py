@@ -33,12 +33,12 @@ def closure_files(original_text, supporting):
     return sorted(name for name, text in supporting.items() if used & set(DECLARATION.findall(text)))
 
 
-def render_prompt(requirement, current_text, path, context):
+def render_prompt(requirement, current_text, path, context, system=SYSTEM):
     parts = [f'Change request:\n{requirement}']
     if context:
         parts.append('Read-only context files:\n' + '\n\n'.join(f'// {name}\n{text}' for name, text in sorted(context.items())))
     parts.append(f'Editable file: {json.dumps(path)}\n' + rr.number_lines(current_text))
-    return [dict(role='system', content=SYSTEM), dict(role='user', content='\n\n'.join(parts))]
+    return [dict(role='system', content=system), dict(role='user', content='\n\n'.join(parts))]
 
 
 def cases(body):
@@ -95,10 +95,19 @@ def missing_api(previous_text, candidate_text):
                                          capture_output=True, text=True, check=True).stdout)['missing']
 
 
-def run_step(packet, k, bodies, superseded, helpers, baseline, path, previous_text, reference_text, context, provider, spent, step_dir):
-    requirement = (packet / 'steps' / f'S{k}' / 'requirement.md').read_text(encoding='utf-8').strip()
-    messages = render_prompt(requirement, previous_text, path, context)
+def gates(baseline, previous_text, candidate, bodies, k, superseded, helpers, within_allocation, built=None):
+    build_ok, errors = built if built else probe(baseline, candidate, HEADER + FOOTER)[:2]
     fail_to_pass, required = required_cases(bodies, k, superseded)
+    api = missing_api(previous_text, candidate) if build_ok else []
+    outcomes = probe(baseline, candidate, test_file(bodies, k, helpers))[2] if build_ok and not api else None
+    completed, stage = verdict(build_ok, api, outcomes, fail_to_pass, required, within_allocation)
+    return dict(completed=completed, stage=stage, api_missing=api, errors=errors[:5], outcomes=outcomes)
+
+
+def run_step(packet, k, bodies, superseded, helpers, baseline, path, previous_text, reference_text, context, provider, spent, step_dir,
+             system=SYSTEM):
+    requirement = (packet / 'steps' / f'S{k}' / 'requirement.md').read_text(encoding='utf-8').strip()
+    messages = render_prompt(requirement, previous_text, path, context, system)
     calls, result = [], None
     for attempt in (1, 2):
         reserve = core.reservation(messages)
@@ -123,10 +132,8 @@ def run_step(packet, k, bodies, superseded, helpers, baseline, path, previous_te
         if not build_ok and attempt == 1:
             messages = messages + [dict(role='assistant', content=text), dict(role='user', content=rr.compiler_feedback(errors))]
             continue
-        api = missing_api(previous_text, candidate) if build_ok else []
-        outcomes = probe(baseline, candidate, test_file(bodies, k, helpers))[2] if build_ok and not api else None
-        completed, stage = verdict(build_ok, api, outcomes, fail_to_pass, required, spent <= rr.ALLOCATION)
-        result = dict(completed=completed, stage=stage, api_missing=api, errors=errors[:5], outcomes=outcomes, state=candidate)
+        result = dict(gates(baseline, previous_text, candidate, bodies, k, superseded, helpers, spent <= rr.ALLOCATION, (build_ok, errors)),
+                      state=candidate)
         break
     result['calls'] = calls
     return result, spent

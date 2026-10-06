@@ -5,7 +5,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HybridLens.DesignQuality;
 
-public sealed record FileMetricsResult(int Tokens, int DecisionBurden, int? MaxCallableComplexity, int Bytes, IReadOnlyDictionary<string, int> Callables);
+public sealed record FileMetricsResult(int Tokens, int DecisionBurden, int? MaxCallableComplexity, int Bytes, IReadOnlyDictionary<string, int> Callables,
+    IReadOnlyDictionary<string, int> ClassWmc);
 
 /// <summary>Syntax-only per-file measures for replayed branch states, which need no compilation.</summary>
 public static class FileMetrics
@@ -29,6 +30,20 @@ public static class FileMetrics
         var named = callables.OfType<MethodDeclarationSyntax>().Where(m => m.Parent is BaseTypeDeclarationSyntax)
             .GroupBy(m => $"{((BaseTypeDeclarationSyntax)m.Parent!).Identifier.Text}.{m.Identifier.Text}")
             .ToDictionary(g => g.Key, g => g.Max(m => owned.GetValueOrDefault(m)));
-        return new FileMetricsResult(tokens, burden, max, Encoding.UTF8.GetByteCount(source), named);
+        var wmc = root.DescendantNodes().OfType<ClassDeclarationSyntax>().GroupBy(c => c.Identifier.Text)
+            .ToDictionary(g => g.Key, g => g.Sum(c => c.Members.OfType<MethodDeclarationSyntax>().Sum(DetectorComplexity)));
+        return new FileMetricsResult(tokens, burden, max, Encoding.UTF8.GetByteCount(source), named, wmc);
     }
+
+    // Mirrors HybridLens.StaticAnalysis CyclomaticComplexity, so class WMC matches the God Class detector.
+    internal static int DetectorComplexity(SyntaxNode node) => 1 + node.DescendantNodes().Count(n => n switch
+    {
+        IfStatementSyntax or ForStatementSyntax or ForEachStatementSyntax or WhileStatementSyntax or DoStatementSyntax
+            or CaseSwitchLabelSyntax or CasePatternSwitchLabelSyntax or SwitchExpressionArmSyntax or CatchClauseSyntax
+            or WhenClauseSyntax or ConditionalExpressionSyntax => true,
+        BinaryExpressionSyntax b => b.IsKind(SyntaxKind.LogicalAndExpression) || b.IsKind(SyntaxKind.LogicalOrExpression)
+            || b.IsKind(SyntaxKind.CoalesceExpression),
+        AssignmentExpressionSyntax a => a.IsKind(SyntaxKind.CoalesceAssignmentExpression),
+        _ => false
+    });
 }

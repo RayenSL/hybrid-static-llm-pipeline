@@ -139,19 +139,26 @@
    "recorded_tokens": 345764,
    "reserved_tokens": 0,
    "output": "z:\\rayen\\reaccrual\\stratum-b-runs\\validation-b1"
+  },
+  {
+   "experiment": "reaccrual-v04-validation-v04-1",
+   "status": "completed",
+   "recorded_tokens": 1036232,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\v04-runs\\validation-v04"
   }
  ],
- "remaining": 3418145,
+ "remaining": 2381913,
  "new_model_tokens_this_milestone": 55975,
  "rule": "Future runs must reserve against this cumulative allowance. New output directories do not reset authorisation.",
- "available_unreserved": 3418145,
+ "available_unreserved": 2381913,
  "legacy_expanded_milestone_tokens": 91739,
  "milestone": "maintenance-untouched-native-validation-20261004-v1",
  "last_milestone_token_breakdown": {
   "repair": 51713,
   "maintenance": 4262
  },
- "cumulative_recorded_tokens": 5581855,
+ "cumulative_recorded_tokens": 6618087,
  "ceiling_history": [
   {
    "date": "2026-10-05",
