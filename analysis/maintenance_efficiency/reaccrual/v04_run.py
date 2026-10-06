@@ -10,10 +10,12 @@ import json
 import time
 from pathlib import Path
 
+import messages_provider
 import stratum_b_run as b
 from stratum_b_run import rr, core, ledger, ROOT, HERE
 from stratum_b_analyze import scan
 
+REPO = HERE.parents[2]
 SEED = 'reaccrual-v0.4'
 TYPES = ('godClass', 'longMethod')
 GUIDANCE = ('Keep the design clean while you implement the change: keep methods short and focused on one task, keep each class '
@@ -96,15 +98,21 @@ def main():
     p.add_argument('--freeze', type=Path)
     p.add_argument('--write-freeze', type=Path)
     p.add_argument('--resume', action='store_true')
+    p.add_argument('--model-key', help='local CLI model entry (an Azure deployment); default is the model of replay_settings.json')
+    p.add_argument('--temperature', type=float, help='sampling temperature recorded in the freeze and applied to every call; default is the model entry')
+    p.add_argument('--api', choices=['chat', 'messages'], default='chat',
+                   help='chat: Azure chat completions (default); messages: the Anthropic-compatible route on the entry\'s own Azure host')
+    p.add_argument('--protocol', type=Path, default=HERE / 'PROTOCOL-v0.4.md')
     a = p.parse_args()
     from replay_freeze import hash_files, changed_files, CODE
     pairs = {x['target_id']: x for x in json.loads((ROOT / 'generated' / 'campaign.json').read_text(encoding='utf-8'))['pairs']}
     folders = b.selected_targets(a.packets, a.targets)
-    protocol = HERE / 'PROTOCOL-v0.4.md'
+    protocol = a.protocol
+    model_label = a.model_key or rr.SETTINGS['model_key']
     if a.write_freeze:
         if a.write_freeze.exists():
             raise SystemExit('Freeze record exists; a freeze is never overwritten')
-        record = dict(schema_version='reaccrual-v0.4-freeze/0.1', targets=[f.name for f in folders], arms=list(ARMS), seed=SEED,
+        record = dict(schema_version='reaccrual-v0.4-freeze/0.1', targets=[f.name for f in folders], arms=list(ARMS), seed=SEED, model_key=model_label, temperature=a.temperature, api=a.api,
                       settings=rr.SETTINGS, inputs=hash_files(b.packet_inputs(a.packets, folders, pairs) + [protocol]), code=hash_files(CODE))
         a.write_freeze.write_text(json.dumps(record, indent=1), encoding='utf-8')
         print(f'Frozen: {len(folders)} targets, {len(record["inputs"])} inputs, {len(record["code"])} code files')
@@ -124,13 +132,20 @@ def main():
             raise SystemExit('Live execution requires the v0.4 freeze record (--freeze)')
         frozen = json.loads(a.freeze.read_text(encoding='utf-8'))
         drift = changed_files(frozen['inputs']) + changed_files(frozen['code'])
-        if drift or frozen['targets'] != [f.name for f in folders]:
-            raise SystemExit(f'Frozen inputs, code or targets changed: {drift[:5]}')
+        frozen_run = (frozen.get('model_key', rr.SETTINGS['model_key']), frozen.get('temperature'), frozen.get('api', 'chat'))
+        if drift or frozen['targets'] != [f.name for f in folders] or frozen_run != (model_label, a.temperature, a.api):
+            raise SystemExit(f'Frozen inputs, code, targets or model changed: {drift[:5]}')
         ledger.recover_interrupted(ledger_path, f'interrupted {prefix} run, resumed', prefix=prefix)
         previous = sum(1 for e in json.loads(ledger_path.read_text(encoding='utf-8'))['entries'] if e['experiment'].startswith(prefix))
         experiment = f'{prefix}-{previous + 1}'
         ledger.open_entry(ledger_path, experiment, a.out)
-        provider = rr.live_provider(rr.SETTINGS, ledger_path, experiment)
+        overrides = dict(Temperature=a.temperature) if a.temperature is not None else None
+        if a.api == 'messages':
+            local = json.loads((REPO / 'src/HybridLens.CLI/appsettings.local.json').read_text(encoding='utf-8-sig'))['Llm']
+            provider = messages_provider.live_provider(rr.model_config(local, model_label, overrides), ledger_path, experiment, rr.MAX_OUTPUT,
+                                                       rr.SETTINGS['rate_limit_tokens_per_minute'])
+        else:
+            provider = rr.live_provider(dict(rr.SETTINGS, model_key=model_label), ledger_path, experiment, overrides)
     else:
         provider = rr.stub_provider('developer' if a.provider == 'reference' else 'noop')
     if moved:

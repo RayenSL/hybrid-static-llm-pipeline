@@ -29,5 +29,25 @@ class OracleTests(unittest.TestCase):
         self.assertEqual(pilot.yield_by_stratum(rows), {'a': dict(checked=2, with_oracle=1), 'b': dict(checked=1, with_oracle=1)})
 
 
+class PackageSourceTests(unittest.TestCase):
+    CONFIG = ('<configuration><packageSources><clear />'
+              '<add key="nuget" value="https://api.nuget.org/v3/index.json" />'
+              r'<add key="Local" value="C:\LocalPackages" />'
+              r'<add key="Share" value="\\server\feed" />'
+              '<add key="Here" value="." />'
+              '</packageSources></configuration>')
+
+    def test_only_absolute_local_drive_sources_that_do_not_exist_are_listed(self):
+        self.assertEqual(pilot.missing_local_sources(self.CONFIG, exists=lambda path: False), ['Local'])
+        self.assertEqual(pilot.missing_local_sources(self.CONFIG, exists=lambda path: True), [])
+
+    def test_missing_sources_are_added_as_disabled(self):
+        text = pilot.nuget_config_disabling(['Local', 'Other'])
+        self.assertIn('<add key="Local" value="true" />', text)
+        self.assertIn('<add key="Other" value="true" />', text)
+        self.assertIn('<add key="Infragistics" value="true" />', text)
+        self.assertEqual(text.count('<disabledPackageSources>'), 1)
+
+
 if __name__ == '__main__':
     unittest.main()

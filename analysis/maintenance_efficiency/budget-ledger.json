@@ -1,6 +1,6 @@
 {
  "schema_version": "maintenance-token-ledger/0.1",
- "authorised_ceiling": 9000000,
+ "authorised_ceiling": 11000000,
  "unit": "provider-reported input plus output tokens",
  "entries": [
   {
@@ -146,19 +146,70 @@
    "recorded_tokens": 1036232,
    "reserved_tokens": 0,
    "output": "z:\\rayen\\reaccrual\\v04-runs\\validation-v04"
+  },
+  {
+   "experiment": "reaccrual-v05-validation-v05-1",
+   "status": "completed",
+   "recorded_tokens": 418871,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\v05\\validation-v05"
+  },
+  {
+   "experiment": "reaccrual-v06-smoke",
+   "status": "completed",
+   "recorded_tokens": 3939,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\v06-smoke"
+  },
+  {
+   "experiment": "reaccrual-v06-access",
+   "status": "completed",
+   "recorded_tokens": 6123,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\v06-access"
+  },
+  {
+   "experiment": "reaccrual-v06-route-probe",
+   "status": "completed",
+   "recorded_tokens": 66,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\v06-access"
+  },
+  {
+   "experiment": "reaccrual-v06-access",
+   "status": "completed",
+   "recorded_tokens": 0,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\v06-access",
+   "note": "duplicate entry name from a second access-check script; the tokens are recorded on the first entry; outstanding reservation of 0 charged as an upper bound"
+  },
+  {
+   "experiment": "reaccrual-v04-validation-v06-opus-1",
+   "status": "completed",
+   "recorded_tokens": 725966,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\v06-runs\\validation-v06-opus",
+   "note": "first v0.6 run stopped for Amendment 0.6.1; outstanding reservation of 20682 charged as an upper bound"
+  },
+  {
+   "experiment": "reaccrual-v04-validation-v06-opus-2",
+   "status": "completed",
+   "recorded_tokens": 1498690,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\v06-runs\\validation-v06-opus"
   }
  ],
- "remaining": 2381913,
+ "remaining": 1728258,
  "new_model_tokens_this_milestone": 55975,
  "rule": "Future runs must reserve against this cumulative allowance. New output directories do not reset authorisation.",
- "available_unreserved": 2381913,
+ "available_unreserved": 1728258,
  "legacy_expanded_milestone_tokens": 91739,
  "milestone": "maintenance-untouched-native-validation-20261004-v1",
  "last_milestone_token_breakdown": {
   "repair": 51713,
   "maintenance": 4262
  },
- "cumulative_recorded_tokens": 6618087,
+ "cumulative_recorded_tokens": 9271742,
  "ceiling_history": [
   {
    "date": "2026-10-05",
@@ -166,6 +217,13 @@
    "to_tokens": 9000000,
    "authorised_by": "user (thesis author), in session",
    "purpose": "re-accrual study protocol v0.3: calibration, repair acquisition and validation replay"
+  },
+  {
+   "date": "2026-10-06",
+   "from_tokens": 9000000,
+   "to_tokens": 11000000,
+   "authorised_by": "user (thesis author), in session",
+   "purpose": "protocol v0.6: cross-model replication of v0.4 on claude-opus-5-5 (projected about 1.5M tokens, restarted after Amendment 0.6.1)"
   }
  ]
 }

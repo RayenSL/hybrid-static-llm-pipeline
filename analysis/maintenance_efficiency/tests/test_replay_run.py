@@ -60,5 +60,17 @@ class StubProviderTests(unittest.TestCase):
         return d
 
 
+class ModelConfigTests(unittest.TestCase):
+    LOCAL = dict(Temperature=0.1, MaxTokens=1024, ApiKey='shared', Models={'a': dict(Model='m1', Temperature=1), 'b': dict(Model='m2')})
+
+    def test_model_entry_overrides_the_shared_settings(self):
+        config = run.model_config(self.LOCAL, 'a')
+        self.assertEqual((config['Model'], config['Temperature'], config['ApiKey']), ('m1', 1, 'shared'))
+
+    def test_an_explicit_override_wins_over_both(self):
+        self.assertEqual(run.model_config(self.LOCAL, 'b', dict(Temperature=1))['Temperature'], 1)
+        self.assertEqual(run.model_config(self.LOCAL, 'b')['Temperature'], 0.1)
+
+
 if __name__ == '__main__':
     unittest.main()

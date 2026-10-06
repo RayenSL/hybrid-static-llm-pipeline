@@ -153,12 +153,17 @@ def stub_provider(kind):
     return provide
 
 
-def live_provider(settings, ledger_path, experiment):
+def model_config(local, key, overrides=None):
+    """The shared settings, then the model's own entry, then explicit run overrides (such as a recorded temperature)."""
+    return {**{k: v for k, v in local.items() if k != 'Models'}, **local['Models'][key], **(overrides or {})}
+
+
+def live_provider(settings, ledger_path, experiment, overrides=None):
     """Azure chat completions via the pilot's provider call, with ledger reservation before and reconciliation after."""
     import run_pilot
     from accounting import validate_call
     local = json.loads((REPO / 'src/HybridLens.CLI/appsettings.local.json').read_text(encoding='utf-8-sig'))['Llm']
-    model = {**{k: v for k, v in local.items() if k != 'Models'}, **local['Models'][settings['model_key']]}
+    model = model_config(local, settings['model_key'], overrides)
     if not model.get('ApiKey'):
         raise SystemExit('Existing API key unavailable')
 

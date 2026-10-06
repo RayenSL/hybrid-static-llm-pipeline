@@ -1,6 +1,6 @@
-# Shadow loop on industrial history: protocol v0.5 (draft)
+# Shadow loop on industrial history: protocol v0.5
 
-Version 0.5-draft, 6 October 2026. Status: **draft, not frozen; no v0.5 model call has been made.** The feasibility audit in Section 8 used no model calls. v0.3 (`PROTOCOL.md`) and v0.4 (`PROTOCOL-v0.4.md`) remain the records of the completed studies.
+Version 0.5, 6 October 2026. Status: **approved by the thesis author and frozen on 6 October 2026, before any v0.5 model call.** The feasibility audit in Section 8, the preparation and the stub checks used no model calls. v0.3 (`PROTOCOL.md`) and v0.4 (`PROTOCOL-v0.4.md`) remain the records of the completed studies. Decisions taken at approval: R2 reviews every accepted candidate (Section 7.2), and the WinForms UI test project stays excluded (Section 8.6).
 
 ## 1. Motivation and disclosure
 
@@ -17,12 +17,16 @@ Version 0.5-draft, 6 October 2026. Status: **draft, not frozen; no v0.5 model ca
 
 The primary result is an **estimate**: the proportion p of oracle units (Section 5) whose introduced Long Method findings are all removed with every gate passing (Section 4.3), reported with an exact Clopper-Pearson 95% interval.
 
-**Why there is no hypothesis test.** An earlier draft proposed a one-sided exact test of H0: p ≤ 0.75. The oracle pilot (Section 8.4) showed that only about 17 of the 48 frame candidates will have a test oracle (95% interval 6-31). With 17 units the exact test needs 100% observed success to reject, and its power is 0.17 if the true rate is 0.90 and 0.42 if it is 0.95. A confirmatory test would be uninformative, so none is registered. The interval is the result. The pre-specified reading is:
+**Why the primary result is not a hypothesis test.** An earlier draft proposed a one-sided exact test of H0: p ≤ 0.75. A first oracle pilot suggested that only about 17 of the 48 frame candidates would have an oracle, and with 17 units that test needs 100% observed success to reject (power 0.17 if the true rate is 0.90). The full oracle check (Section 8.4) later found 33 oracle units, because two environment problems had depressed the pilot, but the rule below had already been written. The interval stays the primary result. The pre-specified reading is:
 - the lower bound above 0.5 means that the fix usually works at introduction time;
 - the upper bound below 0.5 means that it usually does not;
 - anything else is inconclusive.
 
-Context for the reader: the v0.4 corpus accepted 19 of 19 restructurings, and late acquisition on Bouw Long Method targets accepted 5 of 6. If the oracle population reaches 30 units or more, a one-sided exact test of H0: p ≤ 0.75 is added as a pre-specified secondary analysis, and its p-value is reported without being used to claim support.
+Context for the reader: the v0.4 corpus accepted 19 of 19 restructurings, and late acquisition on Bouw Long Method targets accepted 5 of 6.
+
+**Secondary test.** The population has reached 30 units, so a one-sided exact test of H0: p ≤ 0.75 at α = 0.05 is added as a pre-specified secondary analysis. With 33 units it needs 30 successes (91%), and its power is 0.58 if the true rate is 0.90 and 0.25 if it is 0.85. Its p-value is reported but not used to claim support.
+
+**What success means.** Section 8.4 shows that none of the oracle test code mentions any type declared in the 33 unit files. The tests gate is therefore a regression check on dependent code, not evidence that the unit file's own behaviour is preserved. A success means that the candidate builds, keeps the API, removes the finding, adds no new debt and leaves the existing suites green; it does not mean that the behaviour is unchanged. Behaviour preservation is assessed only by the review in Section 7.2.
 
 ## 3. Design overview
 
@@ -51,7 +55,7 @@ The quality call of v0.4 Section 4.2, applied to the post-commit file:
 A unit **succeeds** when the candidate file passes every gate, in order:
 1. **Build.** The whole solution builds at the post-commit state with the candidate file substituted.
 2. **API.** The candidate preserves the assembly-visible API of the post-commit file, including the internal members used elsewhere.
-3. **Tests.** Every test that passes at the post-commit state in the oracle projects still passes. The oracle projects are the non-excluded test projects that reference the file's project; the database-integration, WinForms-dialog and end-to-end projects are excluded exactly as in v0.3.
+3. **Tests.** Every test that passes at the post-commit state in the oracle projects still passes. The oracle projects are the non-excluded test projects that reference the file's project; the database-integration, WinForms-dialog and end-to-end projects are excluded exactly as in v0.3. Test projects that target an older runtime are run with roll-forward to the installed runtime, identically at the post-commit state and for the candidate. This gate is a regression check on dependents (Section 2).
 4. **Resolved.** None of the unit's introduced symbols is still a Long Method finding in the candidate file, judged by the exact-symbol rule of v0.3 (not by the verifier's name-overlap matching).
 5. **No new debt.** The candidate file has no Long Method or God Class finding that the post-commit file did not have.
 
@@ -69,16 +73,16 @@ The frame is hash-ordered within strata (introduction subtype × complexity band
 - **Oracle units (population A)** pass filter 4 as well. This is the primary population, and the only one whose success includes the tests gate.
 - **Static-only units (population B)** pass filters 1-3 but have no oracle. Their success means only that the candidate builds, preserves the API, removes the finding and creates no new debt. It says nothing about behaviour, and is reported as a secondary result under that label.
 
-A unit that fails filter 3 is reported in the funnel, never replaced and never counted as a failure. The oracle pilot suggests about 31 units that pass filters 1-3, including those in population A (95% interval 17-42), so population B is the difference, about 14.
+A unit that fails filter 3 is reported in the funnel, never replaced and never counted as a failure. The full oracle check (Section 8.4) fixed the populations before any model call: 36 units pass filters 1-3, of which 33 are in population A and 3 in population B.
 
-The unit file lies in the UI layer for 28 of the 48 candidates, and in the business layer for 6, the data layer for 9 and elsewhere for 5. The UI test project is excluded as in v0.3 (it opens WinForms dialogs). The test projects that remain still reference many UI files transitively, so UI units can have an oracle; its power to detect a change in a UI file's behaviour is unknown.
+The unit file lies in the UI layer for 28 of the 48 candidates, and in the business layer for 6, the data layer for 9 and elsewhere for 5. The UI test project is excluded as in v0.3 (it opens WinForms dialogs). The test projects that remain reference most UI files transitively, so UI units have an oracle (20 of 22 that build), but Section 8.4 shows that this oracle does not test the unit files themselves.
 
 ## 6. Gates and implementation
 
 - **G-AUDIT.** The audit and the oracle pilot are complete (Section 8). The frame is fixed before any call.
-- **G-ORACLE.** Filters 3 and 4 are run for every frame candidate. This uses no model calls and fixes the final unit list before the freeze.
-- **G-INST.** The runner has unit tests. A stub run with an identity provider (returning the file unchanged) must pass the build, API and tests gates on every unit and fail the resolved gate on every unit. A second stub that removes a method body must fail at the build or API gate.
-- **G-LEDGER.** About 0.6-0.8M tokens are projected (about 31 units, a median input of 10-15k tokens, an output of 1-4k, and a retry allowance). A ceiling of 1.0M is reserved within the existing authorisation.
+- **G-ORACLE.** Filters 3 and 4 are run for every frame candidate. This uses no model calls and fixes the final unit list before the freeze. Done on 6 October 2026 (Section 8.4): 48 candidates, 36 in the study, 33 with a dependents' regression suite.
+- **G-INST.** The runner has unit tests. Three stub providers check the instrument on all 36 units, with no model calls: identity (the file returned unchanged) must pass the build, API and tests gates and fail the resolved gate; truncate (the closing line removed) must fail the build gate; revert (the parent version of the file) is a positive control that can succeed. Done on 6 October 2026 (Section 8.5): identity failed at `resolved` on all 35 eligible units with every earlier gate passing, which also shows that every unit's reference suites are stable across reruns; truncate failed at `build` on all 35; revert succeeded on 13 units, and failed at build on 16, at API on 2 and at no-new-debt on 4.
+- **G-LEDGER.** About 0.7-0.9M tokens are projected (36 units, a median input of 10-15k tokens, an output of 1-4k, and a retry allowance). A ceiling of 1.0M is reserved within the existing authorisation.
 - **G-FREEZE.** `freeze-v0.5.json` hashes the unit list, the post-commit file hashes, the commit messages, the oracle results, the prompt texts, the code, the settings and this protocol.
 
 ## 7. Endpoints and analysis
@@ -90,6 +94,8 @@ The success proportion over the oracle units (population A), with an exact (Clop
 ### 7.2 Secondary
 
 - The static-only success of population B (Section 5), and of A and B together, labelled as having no behavioural check.
+- **Behaviour-preservation review.** Because no test exercises the unit files (Section 8.4), the second corpus reviewer (R2) judges every accepted candidate from the diff against the post-commit file: behaviour-preserving restructuring, not behaviour-preserving, or cannot tell. The judgement uses the requirement-free diff only and is recorded before any other outcome is shown. The result is reported as the share of accepted candidates judged behaviour-preserving, with an exact 95% interval, and states that it rests on human review.
+- Whether a unit's oracle test code mentions a type declared in the unit file (0 of 33 in the audit; Section 8.4).
 - The gate flow: built, API preserved, tests passed, resolved, no new debt.
 - The failure stage per unit, and success by stratum (crossing versus new method; complexity band).
 - Tokens per unit and per success, calls per unit, and wall time.
@@ -105,6 +111,7 @@ The success proportion over the oracle units (population A), with an exact (Clop
 4. Complexity 11 versus 12 and above.
 5. Crossing versus new-method introductions.
 6. Success counted without gate 5 (new debt), to show how often a fix trades one finding for another.
+7. **One unit per file.** Units are not independent: the same file, and sometimes the same method, crosses the bound at several commits (Section 8.5). The primary interval treats units as independent, so the analysis is repeated with one unit per file, taking the first unit of each file in hash order, and with the file as the cluster in a bootstrap interval.
 
 ### 7.4 Comparison with late acquisition (descriptive only)
 
@@ -147,34 +154,57 @@ Of the 66 commits with a genuine introduction, 48 satisfy the 32,000-token bound
 
 By year they split 2022 (1), 2023 (16), 2024 (31). The run is therefore close to a census of recent, mid-complexity introductions, and says little about 2022 or about very complex Long Methods in older files.
 
-### 8.4 Oracle pilot
+### 8.4 Oracle check
 
-The first two candidates of each stratum (14 commits) were checked out at their post-commit state in a disposable clone. Each was built as a whole solution with the root-solution and local-cache package configuration of v0.3. The test projects that reference the unit's project were then run, with the database-integration and WinForms-dialog projects excluded.
+Every candidate was checked out at its post-commit state in a disposable clone and built as a whole solution with the root-solution and local-cache package configuration of v0.3. The test projects that reference the unit's project were then run, with the database-integration and WinForms-dialog projects excluded.
+
+**A first pass was invalid, for two environment reasons, and was redone.**
+- The older test projects target net6.0, but only runtimes 8 and later are installed. The test host could not start ("Test Run Aborted"), so 12 built units looked as if they had no tests. The oracle check now runs them with roll-forward to the installed runtime. A project that reported no tests then ran 228 tests, all passing.
+- Seven post-commit states failed to restore because the repository's configuration lists package feeds on a developer machine (`C:\LocalPackages` and one other drive path) that do not exist here. The check now disables a configured feed when its drive path does not exist.
+- A 14-unit pilot made before these fixes suggested 17 oracle units (95% interval 6-31); the corrected check found 33. The first pass is kept for the record.
+
+**Result (all 48 candidates, no model calls).**
 
 | Stage | Units |
 |---|---|
-| Checked | 14 |
-| Solution builds | 9 (64%) |
-| Oracle: at least 10 passing tests | 5 (36%, 95% interval 13-65%) |
+| Frame candidates | 48 |
+| Solution builds | 36 (75%, 95% interval 60-86%) |
+| Oracle: at least 10 passing tests | 33 (69%, 95% interval 54-81%) |
+| Built, but no test project references the project | 3 |
+| Does not build | 12 |
 
-- **Build failures (5).** Three post-commit states do not compile in this environment (missing types or an unimplemented interface member). Whether the developers' own builds were also broken at those commits, or whether a package version differs, is not known. One needs a package source that existed only on a developer machine, and one needs a strong-name key file that is not in the repository. The last two are environmental.
-- **No oracle although built (4).** In three units the only referencing test project discovered no tests at that commit, and in one unit no test project references the project.
-- **Layers.** In the pilot the oracle appeared for UI-layer files (through test projects that reference the UI project) as well as for data-layer files.
-- **Extrapolation to the frame.** About 31 of 48 units are expected to build (95% interval 17-42) and about 17 to have an oracle (95% interval 6-31). The pilot is small and stratified two per stratum, so these are rough.
-- **Not done.** The full oracle check (G-ORACLE) on all 48 candidates has not been run; it would fix the final population before the freeze.
+- **Build failures (12).** Nine post-commit states do not compile in this environment (missing types or an unimplemented interface member). Whether the developers' own builds were also broken at those commits is not known. One needs a strong-name key file that is not in the repository, and two failed with no compiler error recorded. These units stay in the funnel and are not counted as failures of the intervention.
+- **Oracle units (33).** 20 are UI-layer files, 4 business-layer, 6 data-layer and 3 elsewhere. They have between 212 and 756 passing tests in the referencing test projects (mostly 224-230 or 587 and more). 27 are from 2024 and 6 from 2023, so the study says little about 2022 or about the oldest legacy files.
+- **By stratum (units with an oracle / built / candidates).** crossing 11: 12/13/15; crossing 12-14: 8/8/10; crossing 15-19: 2/2/2; new method 11: 3/3/4; new method 12-14: 2/3/7; new method 15-19: 2/2/4; new method 20 and above: 4/5/6.
 
-### 8.5 Consequences for the design
+**The oracle does not test the unit files.** For each unit, the check looked for any type declared in the unit file as a whole word in the oracle projects' source at the post-commit state. This was true for none of the 33 oracle units: no test code in the oracle projects mentions a type declared in any of the 33 files. This holds in the business and data layers too, where direct tests would be expected. A spot check confirmed it: the types of two business-layer units appear in only two or three source files each, none in a test project. Indirect execution through other types is possible, but the audit cannot show it.
 
-1. The confirmatory test was dropped, and the primary result is an interval (Section 2).
-2. Two populations are reported, so that the larger static-only population is not mistaken for evidence of behavioural safety (Section 5).
-3. A decision remains for the thesis author: running the WinForms UI test project on this machine, as an additional oracle for UI units. It opens dialogs and was excluded in v0.3, so v0.5 keeps the exclusion unless that decision changes before the freeze.
+The oracle is therefore a regression suite for dependent code. It can detect a candidate that breaks something that depends on the unit file, but not that the unit file's own behaviour changed. The hidden-test and fail-to-pass machinery of v0.3 has no counterpart here.
+
+### 8.5 Preparation (no model calls)
+
+`v05_run.py prepare` captured, for each of the 36 units that build, the post-commit file, the parent file, the commit message, the reference test outcomes of the oracle projects, and a baseline scan of the whole solution with the CLI analyser.
+
+- **35 units are eligible**: the CLI analyser reports the introduced symbol at the post-commit state. One UI-layer unit is not reproduced (the symbol is not reported), and is ineligible by filter 3.
+- **32 of the 35 have an oracle** (the reference suites hold between 212 and 756 passing tests); 3 have none and form population B.
+- **Units are clustered.** The 36 units lie in 26 distinct files. Six files hold 16 units (one file holds five), and four methods cross the bound at more than one commit, which means that they went back under the bound and were pushed over it again. The exact interval of Section 7.1 assumes independence, so sensitivity analysis 7 repeats it with one unit per file.
+- **Instrument check results (Section 6).** Identity, truncate and revert behaved as specified on all 36 units (35 eligible); the revert control succeeded on 13 units.
+- **Case of folder names.** The scanner reports a folder as `UI`, while the history spells it `ui`, depending on which commit the clone last had checked out. Paths are matched without case. The first preparation run missed all UI units because of this, and was redone.
+
+### 8.6 Consequences for the design
+
+1. The primary result is an interval (Section 2). The secondary test applies, because the population reached 30.
+2. Success is defined by automatic gates and does not claim behaviour preservation (Sections 2 and 4.3).
+3. R2 reviews every accepted candidate for behaviour preservation (Section 7.2). This is the only behavioural evidence in the study.
+4. A decision remains for the thesis author: running the WinForms UI test project on this machine as an additional oracle for UI units. It opens dialogs and was excluded in v0.3, so v0.5 keeps the exclusion unless that decision changes before the freeze. Given that no oracle test mentions a UI-layer unit file, it is unlikely to help unless it tests the dialogs directly.
+5. A stronger oracle would need new characterisation tests written at the post-commit state. That is outside this protocol.
 
 ## 9. Limitations
 
 - One codebase, one model, and one prompt wording, over mostly 2023-2024 history.
 - The quality call sees only the unit file. Allowing context files, or a larger output budget, could raise success.
-- The tests are the only behavioural oracle. It is defined by test projects that reference the unit's project, not by tests that execute the unit file, so its coverage of the unit file is unknown. A fix that passes may still change behaviour that no test covers. Only 1 of the 72 introducing commits changed any test file.
-- The oracle population is small (about 17 units expected), so the primary interval will be wide.
+- The automatic oracle is a regression suite for dependents. None of its test code mentions a type declared in a unit file (Section 8.4), so a fix that passes may change the unit file's own behaviour. Only R2's review addresses that. Only 1 of the 72 introducing commits changed any test file.
+- The oracle population is 33 units, mostly from 2024 and mostly UI-layer files, so the primary interval is wide and the result says little about older code.
 - The syntax-only audit is exact for Long Method but cannot confirm God Class. The rename heuristic may discard a few real introductions.
 - The ordinary-commit bound and the 75% bar are design choices made after seeing the audit and the earlier results (Sections 1 and 2).
 - The 32,000-token bound removes 27% of the units, which are the large legacy files.
