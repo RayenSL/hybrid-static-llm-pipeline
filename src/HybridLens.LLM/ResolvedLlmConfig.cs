@@ -10,4 +10,6 @@ internal sealed record ResolvedLlmConfig(
     string? BaseUrl,
     float Temperature,
     int MaxTokens,
-    string? ApiKey);
+    string? ApiKey,
+    int? TimeoutSeconds = null,
+    int? MaxRetries = null);

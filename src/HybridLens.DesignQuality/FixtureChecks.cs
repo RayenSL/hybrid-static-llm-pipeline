@@ -103,6 +103,8 @@ public static class FixtureChecks
                 var formatted = FileMetrics.Measure("// header\nclass C\n{\n    int M(int x)\n    {\n        if (x > 0) return 1; /* note */\n        return 0;\n    }\n}\n");
                 Check(formatted.Tokens == m.Tokens && formatted.DecisionBurden == m.DecisionBurden, "Comments and layout are not code volume");
                 Check(FileMetrics.Measure("class C { int x = 1; }").MaxCallableComplexity is null, "No callables gives null maximum");
+                var callables = FileMetrics.Measure("namespace N { class C { int M(int x) { if (x > 0) return 1; return 0; } int M(bool a, bool b) => a && b ? 1 : 2; void P() { System.Func<int, int> f = y => y > 0 ? y : 0; } } }").Callables;
+                Check(callables["C.M"] == 2 && callables["C.P"] == 0, "Owned decisions per Type.Method, the maximum over overloads, lambdas excluded");
             }),
             ("overload_ambiguity", () => {
                 var b=Facts("class C { int M()=>0; int M(int x)=>x; }"); Measured(b);

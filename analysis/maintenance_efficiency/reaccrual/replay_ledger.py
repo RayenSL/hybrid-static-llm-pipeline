@@ -54,6 +54,24 @@ def reconcile(path, experiment, reserved, used):
         raise ValueError(f'Provider usage {used} exceeded the reservation {reserved}')
 
 
+def recover_interrupted(path, note, prefix=None):
+    """Close entries left running by an interrupted run, charging outstanding reservations as an upper bound."""
+    state = _load(path)
+    recovered = []
+    for entry in state['entries']:
+        if entry['status'] == 'running' and (prefix is None or entry['experiment'].startswith(prefix)):
+            outstanding = entry.get('reserved_tokens', 0)
+            entry['recorded_tokens'] += outstanding
+            state['cumulative_recorded_tokens'] += outstanding
+            entry['reserved_tokens'] = 0
+            entry['status'] = 'completed'
+            entry['note'] = f"{note}; outstanding reservation of {outstanding} charged as an upper bound"
+            recovered.append(entry['experiment'])
+    _refresh(state)
+    _save(path, state)
+    return recovered
+
+
 def close_entry(path, experiment):
     state = _load(path)
     entry = _entry(state, experiment)

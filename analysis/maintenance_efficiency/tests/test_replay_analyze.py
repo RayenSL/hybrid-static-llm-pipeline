@@ -51,6 +51,14 @@ class ConfirmatoryTests(unittest.TestCase):
         self.assertTrue(report['H1']['supported'])
         self.assertFalse(report['H2']['supported'])
 
+    def test_equivalence_needs_the_90_percent_interval_inside_the_sesoi(self):
+        report = analyze.confirmatory({'H1': [-5.0, 0.0, 5.0, 2.0, -2.0, 1.0], 'H2': [-3.0, 3.0, 0.0, 2.0, -2.0, 1.0]})
+        self.assertEqual(report['H1']['sesoi'], 25)
+        self.assertLess(report['H1']['ci90'][1] - report['H1']['ci90'][0], report['H1']['ci95'][1] - report['H1']['ci95'][0])
+        self.assertTrue(report['H1']['equivalent'])
+        self.assertFalse(report['H2']['equivalent'])
+        self.assertTrue(analyze.summarise([0.1, -0.1, 0.0], analyze.SESOI['H1b'])['equivalent'])
+
     def test_none_values_are_counted_not_used(self):
         report = analyze.confirmatory({'H1': [10.0, None, 12.0], 'H2': [1.0, 2.0, None]})
         self.assertEqual(report['H1']['targets'], 2)

@@ -1,0 +1,164 @@
+{
+ "schema_version": "maintenance-token-ledger/0.1",
+ "authorised_ceiling": 9000000,
+ "unit": "provider-reported input plus output tokens",
+ "entries": [
+  {
+   "experiment": "maintenance-efficiency-pilot-20261004",
+   "recorded_tokens": 42189,
+   "checksum_index_sha256": "035da3ca4582aac1cfc89cef7c83d12dd73f710405ddfb750d88180e86d06ac5",
+   "status": "completed"
+  },
+  {
+   "experiment": "maintenance-expanded-execution-20261004",
+   "recorded_tokens": 91739,
+   "reserved_tokens": 0,
+   "status": "completed",
+   "output": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\maintenance-expanded-execution-20261004",
+   "freeze_sha256": "01c7e6c1b69b7f997c3520b8d1d63fc188a5f662f626aed7752afbac647fb18c"
+  },
+  {
+   "experiment": "maintenance-natural-repair-execution-20261004-v1",
+   "recorded_tokens": 52425,
+   "reserved_tokens": 0,
+   "status": "completed",
+   "output": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\maintenance-natural-repair-execution-20261004-v1",
+   "freeze_sha256": "4fc05337b4b5b40283a558b6a9f76bdfed22ea5f6376b000d3b3389805743353",
+   "maintenance_planned_maximum": 294912
+  },
+  {
+   "experiment": "maintenance-native-development-repairs-20261004-v1",
+   "recorded_tokens": 77067,
+   "reserved_tokens": 0,
+   "status": "completed",
+   "output": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\maintenance-native-development-repairs-20261004-v1",
+   "freeze_sha256": "460fd13c4584790ccbd034ce5a0c0656af60c672e4625869168d3723e2a59f30",
+   "maintenance_planned_maximum": 294912
+  },
+  {
+   "experiment": "maintenance-native-development-maintenance-execution-20261004-v1",
+   "status": "completed",
+   "recorded_tokens": 10427,
+   "reserved_tokens": 0,
+   "output": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\maintenance-native-development-maintenance-execution-20261004-v1",
+   "freeze_sha256": "cda94994b6d8ea6cd20774ab84d1189a7e6c2a0e9f5c5927671b71d7973a4876"
+  },
+  {
+   "experiment": "maintenance-untouched-native-repairs-20261004-v1",
+   "status": "completed",
+   "recorded_tokens": 51713,
+   "reserved_tokens": 0,
+   "freeze_sha256": "64e7aa85b250d64d34c0d3bbcdf8c5acf29cfb7655a9dffb82d260daa74a11df",
+   "output": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\maintenance-untouched-native-repairs-20261004-v1"
+  },
+  {
+   "experiment": "maintenance-untouched-maintenance-execution-20261004-v1",
+   "status": "completed",
+   "recorded_tokens": 4262,
+   "reserved_tokens": 0,
+   "output": "Z:\\GitHub\\hybrid-static-llm-pipeline\\experiments\\maintenance-untouched-maintenance-execution-20261004-v1",
+   "freeze_sha256": "d14b5fdc829bf3b1cf52b405ad0211ea3290257e8bd2694fe84f221ebd989688"
+  },
+  {
+   "experiment": "reaccrual-replay-calibration-smoke-1",
+   "status": "completed",
+   "recorded_tokens": 37365,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\replay\\calibration-smoke-1"
+  },
+  {
+   "experiment": "reaccrual-replay-calibration-1",
+   "status": "completed",
+   "recorded_tokens": 76322,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\replay\\calibration-1",
+   "note": "Stopped deliberately after T08 O1 step 1 revealed a hidden-API instrument issue (amendment 0.3.2). The interrupted call T08/O3/S1/call1 had an intent record but no response; its usage is unknown and is charged at its full reservation (34,989) as an upper bound."
+  },
+  {
+   "experiment": "reaccrual-replay-calibration-2",
+   "status": "completed",
+   "recorded_tokens": 381578,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\replay\\calibration-2"
+  },
+  {
+   "experiment": "reaccrual-acquisition-acquisition-1",
+   "status": "completed",
+   "recorded_tokens": 111760,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\replay\\acquisition-1"
+  },
+  {
+   "experiment": "reaccrual-acquisition-acquisition-1-timeout-charge",
+   "status": "completed",
+   "recorded_tokens": 224720,
+   "reserved_tokens": 0,
+   "output": "z:/rayen/reaccrual/replay/acquisition-1/T04",
+   "note": "T04 acquisition attempt 1 timed out four times at the CLI client (100 s, SDK retries) without reported usage. Charged conservatively as 4 x (38,805 input + 17,375 output), the per-attempt size observed for this target. Cause fixed: gpt-5.6-sol now has TimeoutSeconds 600 and MaxRetries 0."
+  },
+  {
+   "experiment": "reaccrual-acquisition-acquisition-2-1",
+   "status": "completed",
+   "recorded_tokens": 23971,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\replay\\acquisition-2",
+   "note": "Stopped deliberately: the CLI working copy (solution folder only) cannot build the Bouw solution because projects reference the repository root. Recorded usage 15926 for 2 completed attempt(s); 1 possibly in-flight attempt(s) charged at the largest observed attempt (8045)."
+  },
+  {
+   "experiment": "reaccrual-acquisition-acquisition-2-2",
+   "status": "completed",
+   "recorded_tokens": 1134187,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\replay\\acquisition-2"
+  },
+  {
+   "experiment": "reaccrual-acquisition-acquisition-2-3",
+   "status": "completed",
+   "recorded_tokens": 244379,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\replay\\acquisition-2"
+  },
+  {
+   "experiment": "reaccrual-replay-validation-1-1",
+   "status": "completed",
+   "recorded_tokens": 2538944,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\replay\\validation-1"
+  },
+  {
+   "experiment": "reaccrual-stratum-b-validation-b1-1",
+   "status": "completed",
+   "recorded_tokens": 133043,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\stratum-b-runs\\validation-b1",
+   "note": "interrupted reaccrual-stratum-b-validation-b1 run, resumed; outstanding reservation of 20667 charged as an upper bound"
+  },
+  {
+   "experiment": "reaccrual-stratum-b-validation-b1-2",
+   "status": "completed",
+   "recorded_tokens": 345764,
+   "reserved_tokens": 0,
+   "output": "z:\\rayen\\reaccrual\\stratum-b-runs\\validation-b1"
+  }
+ ],
+ "remaining": 3418145,
+ "new_model_tokens_this_milestone": 55975,
+ "rule": "Future runs must reserve against this cumulative allowance. New output directories do not reset authorisation.",
+ "available_unreserved": 3418145,
+ "legacy_expanded_milestone_tokens": 91739,
+ "milestone": "maintenance-untouched-native-validation-20261004-v1",
+ "last_milestone_token_breakdown": {
+  "repair": 51713,
+  "maintenance": 4262
+ },
+ "cumulative_recorded_tokens": 5581855,
+ "ceiling_history": [
+  {
+   "date": "2026-10-05",
+   "from_tokens": 672000,
+   "to_tokens": 9000000,
+   "authorised_by": "user (thesis author), in session",
+   "purpose": "re-accrual study protocol v0.3: calibration, repair acquisition and validation replay"
+  }
+ ]
+}

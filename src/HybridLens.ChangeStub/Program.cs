@@ -153,7 +153,7 @@ public static class ApiChecker
     private static bool Exposed(SyntaxTokenList modifiers) =>
         modifiers.Any(m => m.IsKind(SyntaxKind.PublicKeyword) || m.IsKind(SyntaxKind.ProtectedKeyword) || m.IsKind(SyntaxKind.InternalKeyword));
 
-    private static bool Visible(SyntaxNode node)
+    internal static bool Visible(SyntaxNode node)
     {
         var declaration = node is VariableDeclaratorSyntax ? node.Ancestors().OfType<BaseFieldDeclarationSyntax>().First() : (MemberDeclarationSyntax)node;
         var exposed = declaration is BaseTypeDeclarationSyntax { Parent: not TypeDeclarationSyntax }
@@ -163,11 +163,80 @@ public static class ApiChecker
     }
 }
 
+public static class ApiSignatures
+{
+    public static string[] Added(string pre, string post)
+    {
+        var before = Signatures(pre);
+        return [.. Signatures(post).Where(kv => !before.TryGetValue(kv.Key, out var old) || old != kv.Value)
+            .Select(kv => kv.Value).OrderBy(v => v, StringComparer.Ordinal)];
+    }
+
+    private static Dictionary<string, string> Signatures(string source)
+    {
+        var result = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var node in CSharpSyntaxTree.ParseText(source).GetRoot().DescendantNodes())
+        {
+            if (node is BaseTypeDeclarationSyntax type && ApiChecker.Visible(type))
+                result.TryAdd("type:" + ChangeStubber.TypeChain(type), $"{ChangeStubber.TypeChain(type)}: {Header(type)}");
+            else if (node is not VariableDeclaratorSyntax && ChangeStubber.Key(node) is { } key && ApiChecker.Visible(node) && Declaration(node) is { } text)
+                result.TryAdd(key, $"{ChangeStubber.TypeChain(node.Parent!)}: {text}");
+            else if (node is VariableDeclaratorSyntax v && ChangeStubber.Key(node) is { } fieldKey && ApiChecker.Visible(node))
+            {
+                var field = v.Ancestors().OfType<BaseFieldDeclarationSyntax>().First();
+                result.TryAdd(fieldKey, $"{ChangeStubber.TypeChain(field.Parent!)}: {OneLine(string.Join(" ", field.Modifiers.Select(m => m.Text)) + " " + field.Declaration.Type + " " + v.Identifier.Text + ";")}");
+            }
+        }
+        return result;
+    }
+
+    private static string OneLine(string text) => System.Text.RegularExpressions.Regex.Replace(text, @"\s+", " ").Trim();
+
+    private static string Header(BaseTypeDeclarationSyntax type)
+    {
+        var keyword = type switch { TypeDeclarationSyntax t => t.Keyword.Text, EnumDeclarationSyntax => "enum", _ => "" };
+        var parameters = type is TypeDeclarationSyntax { TypeParameterList: { } tp } ? tp.ToString() : "";
+        var primary = type is TypeDeclarationSyntax { ParameterList: { } pl } ? pl.ToString() : "";
+        var bases = type.BaseList is { } b ? " " + b.ToString() : "";
+        var members = type is EnumDeclarationSyntax e ? " { " + string.Join(", ", e.Members.Select(m => m.Identifier.Text)) + " }" : "";
+        return OneLine($"{string.Join(" ", type.Modifiers.Select(m => m.Text))} {keyword} {type.Identifier.Text}{parameters}{primary}{bases}{members}");
+    }
+
+    private static AccessorListSyntax Bodiless(AccessorListSyntax list) => list.WithAccessors(SyntaxFactory.List(list.Accessors.Select(a =>
+        a.WithBody(null).WithExpressionBody(null).WithAttributeLists(default).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)))));
+
+    private static readonly AccessorListSyntax GetOnly = SyntaxFactory.AccessorList(SyntaxFactory.SingletonList(
+        SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))));
+
+    private static string? Declaration(SyntaxNode node)
+    {
+        SyntaxNode? shape = node switch
+        {
+            MethodDeclarationSyntax m => m.WithBody(null).WithExpressionBody(null).WithAttributeLists(default).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+            ConstructorDeclarationSyntax c => c.WithBody(null).WithExpressionBody(null).WithInitializer(null).WithAttributeLists(default).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+            OperatorDeclarationSyntax o => o.WithBody(null).WithExpressionBody(null).WithAttributeLists(default).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+            ConversionOperatorDeclarationSyntax c => c.WithBody(null).WithExpressionBody(null).WithAttributeLists(default).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+            PropertyDeclarationSyntax p => p.WithInitializer(null).WithSemicolonToken(default).WithAttributeLists(default)
+                .WithExpressionBody(null).WithAccessorList(p.AccessorList is { } l ? Bodiless(l) : GetOnly),
+            IndexerDeclarationSyntax i => i.WithAttributeLists(default).WithSemicolonToken(default)
+                .WithExpressionBody(null).WithAccessorList(i.AccessorList is { } l ? Bodiless(l) : GetOnly),
+            EventDeclarationSyntax e => e.WithAttributeLists(default).WithAccessorList(e.AccessorList is { } l ? Bodiless(l) : null),
+            _ => null
+        };
+        return shape is null ? null : OneLine(shape.NormalizeWhitespace().ToString());
+    }
+}
+
 public static class Program
 {
     public static int Main(string[] args)
     {
         if (args.Length == 1 && args[0] == "--self-test") return FixtureChecks.Run();
+        if (args.Length == 3 && args[0] == "--api-signatures")
+        {
+            Console.WriteLine(JsonSerializer.Serialize(new { added = ApiSignatures.Added(File.ReadAllText(args[1]), File.ReadAllText(args[2])) }));
+            return 0;
+        }
         if (args.Length == 3 && args[0] == "--missing-api")
         {
             Console.WriteLine(JsonSerializer.Serialize(new { missing = ApiChecker.Missing(File.ReadAllText(args[1]), File.ReadAllText(args[2])) }));
@@ -175,7 +244,7 @@ public static class Program
         }
         if (args.Length != 3)
         {
-            Console.Error.WriteLine("Usage: HybridLens.ChangeStub <pre.cs> <post.cs> <output.cs> | --missing-api <reference.cs> <candidate.cs> | --self-test");
+            Console.Error.WriteLine("Usage: HybridLens.ChangeStub <pre.cs> <post.cs> <output.cs> | --missing-api <reference.cs> <candidate.cs> | --api-signatures <pre.cs> <post.cs> | --self-test");
             return 2;
         }
         var result = ChangeStubber.Stub(File.ReadAllText(args[0]), File.ReadAllText(args[1]));

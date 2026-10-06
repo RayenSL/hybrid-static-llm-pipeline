@@ -19,9 +19,13 @@ internal sealed class AzureAIAdapter : ILlmAdapter
                 $"Model '{config.Model}' has no BaseUrl configured. " +
                 "Set it under Llm.Models.<name>.BaseUrl.");
 
+        var options = new AzureOpenAIClientOptions();
+        if (config.TimeoutSeconds is { } seconds) options.NetworkTimeout = TimeSpan.FromSeconds(seconds);
+        if (config.MaxRetries is { } retries) options.RetryPolicy = new System.ClientModel.Primitives.ClientRetryPolicy(retries);
         var client = new AzureOpenAIClient(
             new Uri(config.BaseUrl),
-            new AzureKeyCredential(config.ApiKey ?? string.Empty));
+            new AzureKeyCredential(config.ApiKey ?? string.Empty),
+            options);
 
         _chatClient = client.GetChatClient(config.Model);
     }

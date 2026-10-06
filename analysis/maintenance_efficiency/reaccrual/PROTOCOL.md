@@ -115,7 +115,34 @@ At t0, each target receives up to three independent repair attempts with the the
 - the assembly-visible API preserved, including internal members referenced from other files (later historical commits may use them);
 - every selected test project passing at t0.
 
+**Acquisition instrument fixes, 5 October 2026.** These were made before any repair was accepted. The first acquisition run, `acquisition-1`, target T04, produced no evaluable attempt, for two reasons:
+- **No attempt was ever compiled.** The CLI's working copy contains only the solution folder, while the projects sign with a key two levels above it.
+- **Attempt 1 timed out.** The CLI client's 100-second timeout was too short for a whole-file rewrite, and its three automatic retries resent billed requests without reported usage.
+
+The fixes:
+- The CLI receives a repository-root solution file listing the same projects, so its working copy mirrors the whole repository. This resolves the signing key, the `References` folder and the projects' references to folders above the solution. It replaced an interim fix that placed only the key, after `acquisition-2` (target T01) showed the remaining reference failures. The pristine solution was verified to build through this working copy before any further call.
+- Restore for T03's t0 and the shared t0 of T05, T06, T20 and T21 failed before compilation. A transitive internal package requires a third-party UI package at a version range whose lower bound only the vendor's licensed feed lists, and that feed answered HTTP 400. All three T03 attempts therefore failed at restore, and their code was never compiled. A clone-root `NuGet.Config` now adds the local package cache as a source and disables the licensed vendor feed. Restore then resolves the version the other packages pin exactly, so the package graph is unchanged. A first attempt used a `Directory.Build.rsp`, which `dotnet restore` honours but the implicit restore of `dotnet build` does not. T05 therefore also failed at restore. The configuration file was in place from T06 onwards. T03 and T05 are re-acquired with the same instrument, and their restore-failed attempts are reported, not counted as build failures.
+- The resolution gate is decided by the post-repair detector scan: the target's exact symbol must no longer be reported as a same-type finding in its file. The CLI verifier's matcher accepts simple-name substring overlaps, which was harmless on the seeded corpus's unique names. In Bouw, though, it let another long method in the same file whose name is a prefix of the target's name stand in for the target: a CC-37 method for T07's CC-17 target, and likewise for T06. The CLI verdict is kept as `cli_resolved`. Recorded attempts are re-gated without new model calls (`--regate`).
+- For gpt-5.6-sol the CLI client has a 600-second timeout and no automatic retries.
+- Any API failure is now charged at the full per-target reservation and halts acquisition.
+
+All `acquisition-1` tokens are charged, including a conservative estimate for the timed-out requests. These attempts count as instrument failures, not acquisition failures, and T04 is acquired again under the fixed instrument.
+
 Every attempt is charged. An acquisition flow table records selected, attempted, built, resolved, API-preserved, tests-passed and accepted. A target with no accepted repair keeps its H and O branches for H1. It is excluded from H2 and P1, and the exclusion is reported as an acquisition failure. Failed acquisition is never replaced by another target.
+
+**Acquisition result, 6 October 2026 (`acquisition-2`, before any validation call).** The 13 validation targets received 39 attempts in total. The flow was: built 25, resolved 16, no new same-type finding 16, API preserved 15, tests passed 15. Six targets have an accepted repair:
+- five of the six Long Method targets: T01, T07, T09, T13, T19;
+- one of the seven God Class targets: T20.
+
+The targets without a repair failed as follows:
+- T04, T18 and T21: attempts built, but the class stayed a God Class.
+- T05: one attempt built, but it was unresolved.
+- T03: the one resolved attempt removed assembly-visible API.
+- T06 and T11: no attempt compiled, because they used members that do not exist in the codebase.
+
+`acquisition-2` used 1,402,537 tokens, including the 236,158 spent on the restore-failed T03 and T05 attempts. These attempts are kept in `restore-failed.json`.
+
+H2 and P1 therefore rest on 6 targets, the minimum of Section 8.4. H2 can reach significance only if all six differences share a sign. The R arm is mostly Long Method, so H2 and P1 are reported as conditional on the targets the agent could repair. That is a selection on acquisition success, not a random sample of findings.
 
 ### 4.3 Steps
 
@@ -127,10 +154,13 @@ At step k:
 The agent receives:
 - the commit message, and any linked work-item title and description the commit references;
 - the commit's changes to non-test files other than the target file, as a diff;
+- the signatures, without bodies, of accessible members and types that the commit added or whose signature it changed in the target file (amendment 0.3.2, below);
 - the current branch target file;
 - the registered supporting files.
 
 The agent never receives the developers' target-file diff, any test file, future commits, the other branch or the branch label.
+
+Amendment 0.3.2 (5 October 2026, before any validation call). The first calibration step failed on a type that the commit added to the target file and that only the developers' tests used. The agent could not know its name, so the failure measured hidden information rather than maintenance. From now on, the agent receives the signatures of accessible declarations the commit added or changed (`HybridLens.ChangeStub --api-signatures`: declarations without bodies, initialisers or attributes; enum headers with their values). This is the information the API check already requires. It gives no implementation, and it is identical for every branch.
 
 A step is **completed** when all of the following hold:
 - the patch applies and the solution builds;
@@ -161,6 +191,15 @@ At least two steps come from F1 or F2. Requirements describe observable behaviou
 
 **Authorship.** Sequences, hidden tests, cumulative references and at least two deliberately faulty variants per step are written by the second corpus reviewer (R2). R2 works from the original source, its public API and the private oracle, and does not see the repairs. The thesis author may review tests for executability only, without changing requirement content.
 
+**Amendment 0.3.4 (6 October 2026; no stratum-B task material or agent call existed yet. Stratum-A results were known, and the amendment was decided after them).**
+- **Who drafts.** The sequences are drafted by Claude Sonnet subagents instead of R2. The model family differs from the maintenance agent's (gpt-5.6-sol).
+- **What the drafters see.** They follow STRATUM_B_TASK_SPEC.md unchanged and receive only the work package. They are instructed not to open repaired sources, factorial outputs or agent outputs.
+- **Self-checking.** Drafters may run the admission harness in `--author-check` mode. That mode never probes the repaired source and skips G1-repaired and G4.
+- **Official admission.** The full admission, including G1-repaired and G4, is run by the thesis author. A drafter whose step fails it receives the pass/fail gate output once.
+- **R2's role.** R2 reviews every admitted sequence and accepts, edits or rejects it, recording the decision per target. Only accepted or edited sequences enter the freeze.
+- **G4 per step.** The harness evaluates G4 step by step. Within each step, the original and the repair must give identical case results, or both must fail to compile that step's tests because a new public member is missing. At least one step must compile. Evaluating all four steps' cases in one file made G4 unsatisfiable whenever a requirement added a public member.
+- **Disclosure.** The thesis states that the tasks were LLM-drafted and human-reviewed. A possible bias toward LLM-friendly requirements is listed as a limitation; it applies equally to the O and R branches, so it cannot bias the paired H2 comparison.
+
 **Admission gates per step k:**
 - G1: the previous reference fails a step-k case (at step 1, so does the repair).
 - G2: the reference passes all current and retained cases.
@@ -179,7 +218,7 @@ Superseded obligations are listed explicitly.
 | Model | Existing `gpt-5.6-sol` deployment. The returned model identifier is recorded per call. |
 | Calls per step | At most 2: initial, plus one retry only after an invalid patch or a build failure, carrying compiler diagnostics. Never test results. |
 | Edit contract | Strict JSON line patches (`../natural_validation/patches.py`) restricted to the target file. New types and members inside the file are permitted. |
-| Output cap | 4,096 completion tokens per call, reasoning included. |
+| Output cap | 16,384 completion tokens per call, reasoning included. Amendment 0.3.1 (5 October 2026, before any validation call): raised from 4,096 after the first live calibration call, where the reasoning model spent all 4,096 tokens on reasoning over a ~15k-token Bouw prompt and returned no content. The model allows 128,000. |
 | Input bound | 49,152 tokens per call. The deployment's context limit must be confirmed to exceed input plus output before the freeze; if it does not, the bound and the eligible set (Section 4.1, item 4) are reduced before any agent call. Calibration validates the per-call reservation against provider-reported input usage. The reservation is serialised UTF-8 bytes divided by 3.5, plus 10% and 512 tokens of framing; it is revised only if calibration shows provider usage exceeding it. |
 | Context | As in Section 4.3 (A) or as the step-k requirement plus supporting files (B). Supporting files are chosen by the type-reference closure of the **original** target file, identical across branches. |
 | Instruction | Neutral: implement the requirement and keep the public API. No mention of design quality, anti-patterns or the repair. |
@@ -284,6 +323,15 @@ Calibration uses separate development material: the stratum-B development target
 - instrument health end to end: patch, build, tests, measurement and ledger;
 - context-bound exclusions.
 
+**Calibration result, 5 October 2026** (T08 and T10, three O trajectories each; ledger entries `calibration-smoke-1`, `calibration-1` stopped by design, and `calibration-2`):
+- **Floor met.** 3 of 6 trajectories completed step 1. All three T08 trajectories failed step 1 for genuine reasons: two failed the new parser's fail-to-pass tests, and one omitted a required class despite its listed signature. All three T10 trajectories completed steps 1–3.
+- **Instrument fixes made during calibration:**
+  - output cap raised (amendment 0.3.1);
+  - required signatures added to the prompt (amendment 0.3.2);
+  - branch allocation raised (amendment 0.3.3).
+- **Expected precision of H1.** On T10 the agent reproduced the developers' 2–3-line changes exactly in 7 of 9 steps (the other 2 differed only in member access), so V_O − V_H = 0.0 for all three trajectories. The stratum-A windows are mostly API-driven, near-mechanical changes. H1 and H2 are therefore expected to be close to zero there. The fixed SESOI (Section 8.2) makes an equivalence conclusion possible, and the growth hypotheses rest mainly on stratum B. The endpoints are unchanged.
+- **Cost.** 14 calls with median 29k input and 237 output tokens; 0.93 calls per step.
+
 Instrument defects found here are fixed before the freeze. Calibration outcomes are never used to select, rank or exclude validation targets, and calibration tokens are charged.
 
 ## 10. Feasibility audit (no model calls)
@@ -360,7 +408,8 @@ The shared cumulative maintenance ledger (`../budget-ledger.json`) currently aut
 | Stratum B, 21 targets × 2 branches × 4 steps | ~1.3M |
 
 Enforcement:
-- Each O and R branch has the same allocation A_branch: 160,000 tokens in stratum A and 100,000 in stratum B.
+- Each O and R branch has the same allocation A_branch: 320,000 tokens in stratum A and 100,000 in stratum B. Amendment 0.3.3 (5 October 2026, before any validation call): stratum A was raised from 160,000 after calibration showed all three T10 trajectories stopped before step 4 by the allocation, not by failure.
+- Repair acquisition reserves 300,000 tokens per target on the shared ledger before its CLI run and reconciles to the reported usage. Missing usage is charged at the full reservation and halts acquisition.
 - A call is made only if the branch's spent tokens plus the call's conservative reservation are within A_branch.
 - A target block starts only if the remaining ceiling covers both of its branches' allocations and any pending acquisition attempts.
 - Missing usage, a reservation violation or a context rejection stops the campaign until it is reconciled. No automatic retries.
@@ -387,6 +436,12 @@ Stub-provider instrument checks on the draft manifest (15 targets):
 - Live provider calls go through the shared ledger (reserve before each call, reconcile after) and are refused while `replay_settings.json` has `live_execution_enabled: false`.
 - Repair acquisition, the live path and the P1 detector stage have not been run end to end, because they need model calls or accepted repairs.
 
+Stratum-B implementation, 6 October 2026, before any stratum-B model call:
+- `stratum_b_run.py` runs branches O1 and R1 under the Section 6.1 contract. The context is the type-reference closure of the original file. The candidate is compiled alone for the build verdict, and only those diagnostics reach the retry. Hidden tests that do not compile against the candidate count as fail-to-pass, and their errors are never shown.
+- `stratum_b_analyze.py` computes the H2 replication and P1, using corpus detector scans of every R state.
+- **Instrument checks.** A no-op edit fails every first step on both branches. Writing each step's reference completes every O step. On R it fails the API gate at step 1 for 7 GC targets, because the reference, written from the original, drops public members the repair added. That is expected of the stub.
+- **Fix found by the reference check.** The runner wrote sources with text-mode newline translation, so CRLF sources became CR CR LF and patch coordinates shifted. It now writes bytes. Stratum A wrote bytes throughout and was not affected; this was verified on the R-branch prompts.
+
 | Gate | Condition |
 |---|---|
 | G-AUDIT | Feasibility audit complete; oracle tests admitted, reviewed and frozen (ORACLE_TEST_SPEC.md); go/no-go decided on the admitted windows; validation and calibration targets fixed. |
@@ -401,6 +456,12 @@ Stub-provider instrument checks on the draft manifest (15 targets):
 - Every departure from the frozen protocol is logged with a date, reason and whether outcomes had been seen. Outcome-dependent changes to targets, windows, tasks, thresholds, endpoints or allocations are not permitted.
 - Report every selected target, including acquisition failures, censored branches and excluded steps, and per-target trajectories of D, findings, L and tokens.
 - Development, calibration, stratum A and stratum B are reported separately.
+
+**Deviation 1, 6 October 2026 (`validation-1`; noticed during the run, after outcomes were seen).**
+- **Defect.** Two steps, T18 S2 and T19 S2, do not start from the previous step's file. Changes made on a side branch reach the target file through a merge between the two step commits. The developer's step commit builds on that merged file, but the replay starts the step from the previous step's file. Each of these steps therefore asks for changes that are invisible to the agent: in T18 a namespace moved to an external package, and in T19 a method signature changed.
+- **Effect.** All branches failed both steps: build for T18 and API for T19, including R1. The manifest check that found the defect does not depend on outcomes: it compares the file at each step's parent commit with the file at the previous step's commit. All other 31 steps of the 15 targets pass that check.
+- **Treatment.** Both steps are invalid. Their branches are censored after step 1, not counted as agent failures, and the treatment is identical on every branch. Accrual endpoints use completed steps only, so H1, H2 and H1b lose step 2 of the two targets but are otherwise unaffected. A sensitivity analysis reports the step-completion and P1 results with the two steps counted as failures.
+- **Prevention.** `replay_prepare.py` now ends a window at the first step whose parent file differs from the previous step's state. The minimum of two steps still applies, so under that rule T18 and T19 would have been excluded. `manifest-v2` is not rebuilt, because the run used it.
 
 ## 14. Remaining limitations
 

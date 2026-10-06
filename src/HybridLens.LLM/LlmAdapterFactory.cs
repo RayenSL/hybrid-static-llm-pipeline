@@ -25,7 +25,9 @@ public sealed class LlmAdapterFactory : ILlmAdapterFactory
             BaseUrl:     model.BaseUrl,
             Temperature: model.Temperature ?? defaults.Temperature,
             MaxTokens:   model.MaxTokens   ?? defaults.MaxTokens,
-            ApiKey:      model.ApiKey      ?? defaults.ApiKey);
+            ApiKey:      model.ApiKey      ?? defaults.ApiKey,
+            TimeoutSeconds: model.TimeoutSeconds,
+            MaxRetries:  model.MaxRetries);
 
         return resolved.Provider.ToLowerInvariant() switch
         {

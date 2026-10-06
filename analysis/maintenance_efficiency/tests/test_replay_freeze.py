@@ -52,5 +52,17 @@ class HashTests(unittest.TestCase):
         self.assertEqual(freeze.changed_files(record), [str(f)])
 
 
+class RepairInputTests(unittest.TestCase):
+    def test_accepted_repairs_and_the_acquisition_table_are_frozen(self):
+        import tempfile
+        d = Path(tempfile.mkdtemp())
+        for tid in ('T01', 'T04', 'T07'):
+            (d / tid).mkdir()
+        (d / 'T01' / 'repaired.cs').write_text('a')
+        (d / 'T07' / 'repaired.cs').write_text('b')
+        (d / 'acquisition.json').write_text('[]')
+        self.assertEqual(freeze.repair_inputs(d), [d / 'acquisition.json', d / 'T01' / 'repaired.cs', d / 'T07' / 'repaired.cs'])
+
+
 if __name__ == '__main__':
     unittest.main()

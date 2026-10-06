@@ -26,7 +26,7 @@ public static class Program
         if (args.Length == 2 && args[0] == "--file-metrics")
         {
             var metrics = Directory.GetFiles(args[1], "*.cs").Order(StringComparer.Ordinal)
-                .ToDictionary(Path.GetFileNameWithoutExtension, f => FileMetrics.Measure(File.ReadAllText(f)));
+                .ToDictionary(f => Path.GetFileNameWithoutExtension(f), f => FileMetrics.Measure(File.ReadAllText(f)));
             Console.WriteLine(JsonSerializer.Serialize(metrics, JsonOptions));
             return 0;
         }

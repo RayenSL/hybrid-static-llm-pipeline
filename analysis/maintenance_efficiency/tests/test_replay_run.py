@@ -22,6 +22,13 @@ class PromptTests(unittest.TestCase):
         self.assertIn('1| class C {}', user)
         self.assertIn('"Lib/C.cs"', user)
 
+    def test_required_signatures_are_listed_when_present(self):
+        step = dict(STEP, api_signatures=['Calc: public int Mul(int a, int b);', 'Pair: public sealed class Pair : Calc'])
+        user = run.render_prompt(step, 'class C {}\n', 'Lib/C.cs', '')[1]['content']
+        self.assertIn('- Calc: public int Mul(int a, int b);', user)
+        self.assertIn('- Pair: public sealed class Pair : Calc', user)
+        self.assertNotIn('signatures', run.render_prompt(STEP, 'class C {}\n', 'Lib/C.cs', '')[1]['content'].lower())
+
     def test_prompt_is_neutral_about_design_and_branch(self):
         text = json.dumps(run.render_prompt(STEP, 'class C {}\n', 'Lib/C.cs', '')).lower()
         for word in ['refactor', 'repair', 'anti-pattern', 'god class', 'long method', 'structural', 'design', 'branch', 'original']:

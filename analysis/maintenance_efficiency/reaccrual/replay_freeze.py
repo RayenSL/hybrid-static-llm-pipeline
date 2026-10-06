@@ -55,12 +55,17 @@ def changed_files(record):
     return [p for p, h in record.items() if not Path(p).exists() or sha(p) != h]
 
 
+def repair_inputs(repairs):
+    return [repairs / 'acquisition.json', *sorted(repairs.glob('T*/repaired.cs'))]
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--manifest', type=Path, required=True)
     p.add_argument('--oracle-dir', type=Path, required=True)
     p.add_argument('--out', type=Path, required=True)
     p.add_argument('--check', action='store_true')
+    p.add_argument('--repairs', type=Path)
     a = p.parse_args()
     manifest = json.loads((a.manifest / 'manifest.json').read_text(encoding='utf-8'))
     decisions = json.loads((a.oracle_dir / 'review-decisions.json').read_text(encoding='utf-8'))
@@ -74,7 +79,7 @@ def main():
         raise SystemExit('Freeze record exists; a freeze is never overwritten')
     inputs = [a.manifest / 'manifest.json', *sorted((a.manifest / 'diffs').glob('*.diff')),
               *[a.oracle_dir / sid / 'submission' / f'Step_{sid}.cs' for sid in used_oracles(manifest)],
-              a.oracle_dir / 'review-decisions.json']
+              a.oracle_dir / 'review-decisions.json', *(repair_inputs(a.repairs) if a.repairs else [])]
     record = dict(schema_version='reaccrual-freeze/0.1', manifest=str(a.manifest), seed=manifest['seed'],
                   pipeline_commit=subprocess.run(['git', '-C', str(REPO), 'rev-parse', 'HEAD'], capture_output=True, text=True).stdout.strip(),
                   dotnet_sdk=subprocess.run(['dotnet', '--version'], capture_output=True, text=True).stdout.strip(),

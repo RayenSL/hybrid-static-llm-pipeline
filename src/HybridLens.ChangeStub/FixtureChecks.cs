@@ -98,6 +98,27 @@ public static class FixtureChecks
         Check(ApiChecker.Missing(api, api.Replace("void Send(int x);", "")).SequenceEqual(["IPort.Send(int)"]), "removed interface member is reported");
         Check(ApiChecker.Missing(api, api.Replace("internal interface IPort { void Send(int x); }", "")).SequenceEqual(["IPort", "IPort.Send(int)"]), "removed type is reported");
 
+        const string sigPre = """
+            namespace N;
+            public class Calc
+            {
+                public int Add(int a) { return a; }
+                private int Helper() { return 1; }
+            }
+            """;
+        Check(ApiSignatures.Added(sigPre, sigPre).Length == 0, "identical source adds no signatures");
+        Check(ApiSignatures.Added(sigPre, sigPre.Replace("return a;", "return a + 1;")).Length == 0, "body change adds no signatures");
+        Check(ApiSignatures.Added(sigPre, sigPre.Replace("private int Helper() { return 1; }", "private int Helper() { return 1; }\n    private int More() => 2;")).Length == 0, "private addition is not API");
+        var sigAdded = ApiSignatures.Added(sigPre, sigPre.Replace("public int Add(int a) { return a; }", "public int Add(int a) { return a; }\n    public int Mul(int a, int b) => a * b;\n    public int Count { get { return 3; } }"));
+        Check(sigAdded.SequenceEqual(["Calc: public int Count { get; }", "Calc: public int Mul(int a, int b);"]), "added method and property signatures without bodies");
+        var typed = ApiSignatures.Added(sigPre, sigPre + "\npublic sealed class Pair : Calc\n{\n    public Pair(int x) { X = x; }\n    public int X { get; }\n}\n");
+        Check(typed.SequenceEqual(["Pair: public Pair(int x);", "Pair: public int X { get; }", "Pair: public sealed class Pair : Calc"]), "new type header and members");
+        var sigChanged = ApiSignatures.Added(sigPre, sigPre.Replace("public int Add(int a)", "public long Add(int a)"));
+        Check(sigChanged.SequenceEqual(["Calc: public long Add(int a);"]), "changed return type is reported");
+
+        Check(ApiSignatures.Added(sigPre, sigPre + "\npublic enum Mode { And, Or }\n").SequenceEqual(["Mode: public enum Mode { And, Or }"]), "enum header lists its values");
+        Check(ApiSignatures.Added(sigPre, sigPre + "\npublic record Point(int X, int Y);\n").SequenceEqual(["Point: public record Point(int X, int Y)"]), "primary constructor parameters are part of the header");
+
         foreach (var failure in Failures) Console.Error.WriteLine("FAIL: " + failure);
         Console.WriteLine(Failures.Count == 0 ? "All change-stub fixture checks passed." : $"{Failures.Count} fixture check(s) failed.");
         return Failures.Count == 0 ? 0 : 1;

@@ -26,8 +26,9 @@ from replay_prepare import qualified
 
 REPO = HERE.parents[2]
 STUBBER = REPO / 'src/HybridLens.ChangeStub/bin/Debug/net10.0/HybridLens.ChangeStub.dll'
-MAX_OUTPUT = 4096
-ALLOCATION = 160_000
+SETTINGS = json.loads((HERE / 'replay_settings.json').read_text(encoding='utf-8'))
+MAX_OUTPUT = SETTINGS['max_completion_tokens_per_call']
+ALLOCATION = SETTINGS['branch_allocation_tokens']
 SYSTEM = ('Implement the requested change in the supplied C# source file. Preserve public, protected and internal APIs '
           'and all other behaviour. No test, project or dependency changes. Lines of the editable file are numbered from 1; '
           'only that file may change. Return only JSON {"edits":[{"file":"relative/path.cs","start_line":1,"end_line":2,'
@@ -42,8 +43,12 @@ def number_lines(text):
 
 def render_prompt(step, current_text, path, diff_text):
     parts = [f'Change request:\n{step["message"]}',
-             'The same change already modified these other files (read-only diff):\n' + (diff_text.strip() or '(none)'),
-             f'Editable file: {json.dumps(path)}\n' + number_lines(current_text)]
+             'The same change already modified these other files (read-only diff):\n' + (diff_text.strip() or '(none)')]
+    if step.get('api_signatures'):
+        parts.append('The change must provide these accessible declarations in the editable file, with exactly these '
+                     'signatures (implement them; existing members not listed keep their signatures):\n'
+                     + '\n'.join(f'- {s}' for s in step['api_signatures']))
+    parts.append(f'Editable file: {json.dumps(path)}\n' + number_lines(current_text))
     return [dict(role='system', content=SYSTEM), dict(role='user', content='\n\n'.join(parts))]
 
 
@@ -187,6 +192,34 @@ def live_provider(settings, ledger_path, experiment):
     return provide
 
 
+def prepare_resume(out, target_ids):
+    """Targets with a completion marker are skipped; partial target folders from an interrupted run are moved aside."""
+    skip, moved = set(), []
+    for tid in target_ids:
+        folder = out / tid
+        if (folder / 'complete.json').exists():
+            skip.add(tid)
+        elif folder.exists():
+            destination = out / '_aborted' / f'{tid}-{time.strftime("%Y%m%d-%H%M%S")}'
+            destination.parent.mkdir(exist_ok=True)
+            folder.rename(destination)
+            moved.append(str(destination))
+    return skip, moved
+
+
+def initial_states(branches, original_text, repairs, target_id):
+    """O branches start from the original; R branches from the accepted repair, and are dropped without one."""
+    states = {}
+    for branch in branches:
+        if branch[0] == 'R':
+            repaired = repairs / target_id / 'repaired.cs' if repairs else None
+            if repaired and repaired.exists():
+                states[branch] = core.decode_source(repaired.read_bytes())
+        else:
+            states[branch] = original_text
+    return states
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--manifest', type=Path, required=True)
@@ -196,17 +229,21 @@ def main():
     p.add_argument('--provider', choices=['developer', 'noop', 'live'], required=True)
     p.add_argument('--targets', nargs='*')
     p.add_argument('--branches', nargs='*', default=['O1'])
+    p.add_argument('--repairs', type=Path)
     p.add_argument('--max-steps', type=int)
     p.add_argument('--freeze', type=Path)
+    p.add_argument('--resume', action='store_true')
     a = p.parse_args()
-    if a.out.exists():
-        raise SystemExit('Output exists: use a new run directory')
+    if a.out.exists() and not a.resume:
+        raise SystemExit('Output exists: use a new run directory, or --resume to continue it')
     manifest = json.loads((a.manifest / 'manifest.json').read_text(encoding='utf-8'))
+    selected = [t for t in manifest['targets'] if not a.targets or t['target_id'] in a.targets]
     ledger_path = HERE.parent / 'budget-ledger.json'
+    prefix = f'reaccrual-replay-{a.out.name}'
+    skip, moved = prepare_resume(a.out, [t['target_id'] for t in selected]) if a.out.exists() else (set(), [])
     experiment = None
     if a.provider == 'live':
-        settings = json.loads((HERE / 'replay_settings.json').read_text(encoding='utf-8'))
-        if not settings['live_execution_enabled']:
+        if not SETTINGS['live_execution_enabled']:
             raise SystemExit('Live execution is not enabled: freeze, ceiling authorisation and review gates are pending.')
         from replay_freeze import changed_files
         if not a.freeze or not a.freeze.exists():
@@ -215,19 +252,30 @@ def main():
         drift = changed_files(frozen['inputs']) + changed_files(frozen['code'])
         if drift or Path(frozen['manifest']).resolve() != a.manifest.resolve():
             raise SystemExit(f'Frozen inputs or code changed: {drift[:5]}')
-        experiment = f'reaccrual-replay-{a.out.name}'
+        recovered = ledger.recover_interrupted(ledger_path, f'interrupted {prefix} run, resumed', prefix=prefix)
+        previous = sum(1 for e in json.loads(ledger_path.read_text(encoding='utf-8'))['entries'] if e['experiment'].startswith(prefix))
+        experiment = f'{prefix}-{previous + 1}'
         ledger.open_entry(ledger_path, experiment, a.out)
-        provider = live_provider(settings, ledger_path, experiment)
+        provider = live_provider(SETTINGS, ledger_path, experiment)
+        if recovered:
+            print(json.dumps(dict(recovered_ledger_entries=recovered)), flush=True)
     else:
         provider = stub_provider(a.provider)
+    if moved:
+        print(json.dumps(dict(moved_partial_targets=moved)), flush=True)
+    (a.out / '_trx').mkdir(parents=True, exist_ok=True)
     workspace = Workspace(a.clone, a.oracle_dir, a.out / '_trx')
-    (a.out / '_trx').mkdir(parents=True)
-    selected = [t for t in manifest['targets'] if not a.targets or t['target_id'] in a.targets]
-    summary = []
+    summary_path = a.out / 'summary.json'
+    summary = json.loads(summary_path.read_text(encoding='utf-8')) if summary_path.exists() else []
+    summary = [r for r in summary if r['target'] in skip]
     for target in selected:
+        if target['target_id'] in skip:
+            continue
         path = target['path']
-        branches = core.branch_order(manifest['seed'], target['target_id'], [(b[0], int(b[1:])) for b in a.branches])
-        states = {b: core.decode_source(git(a.clone, 'show', f"{target['t0']}:{path}")) for b in branches}
+        requested = core.branch_order(manifest['seed'], target['target_id'], [(b[0], int(b[1:])) for b in a.branches])
+        original = core.decode_source(git(a.clone, 'show', f"{target['t0']}:{path}"))
+        states = initial_states(requested, original, a.repairs, target['target_id'])
+        branches = [b for b in requested if b in states]
         spent = {b: 0 for b in branches}
         active = set(branches)
         for step in target['steps'][:a.max_steps]:
@@ -250,8 +298,13 @@ def main():
                 (step_dir / 'result.json').write_text(json.dumps(result, indent=1), encoding='utf-8')
                 summary.append(dict(target=target['target_id'], branch=f'{b[0]}{b[1]}', step=step['step'],
                                     completed=result['completed'], stage=result.get('stage'), seconds=result['seconds']))
+                summary_path.write_text(json.dumps(summary, indent=1), encoding='utf-8')
                 print(json.dumps(summary[-1]), flush=True)
-    (a.out / 'summary.json').write_text(json.dumps(summary, indent=1), encoding='utf-8')
+        dropped = [f'{b[0]}{b[1]}' for b in requested if b not in states]
+        (a.out / target['target_id']).mkdir(parents=True, exist_ok=True)
+        (a.out / target['target_id'] / 'complete.json').write_text(
+            json.dumps(dict(branches=[f'{b[0]}{b[1]}' for b in branches], dropped_without_accepted_repair=dropped)), encoding='utf-8')
+    summary_path.write_text(json.dumps(summary, indent=1), encoding='utf-8')
     if experiment:
         ledger.close_entry(ledger_path, experiment)
 

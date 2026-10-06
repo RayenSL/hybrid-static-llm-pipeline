@@ -38,18 +38,23 @@ def h2_difference(series):
     return core.accrual(series['O1']['decisions'], j) - core.accrual(series['R1']['decisions'], j)
 
 
-def summarise(values):
+SESOI = {'H1': 25, 'H1b': 1, 'H2': 1}
+
+
+def summarise(values, sesoi):
     used = [v for v in values if v is not None]
     result = dict(targets=len(used), without_completed_steps=len(values) - len(used))
     if len(used) >= 2:
         low, high = core.t_interval(used, 0.95)
-        result.update(mean=sum(used) / len(used), ci95=[low, high], p_one_sided=core.sign_flip_greater(used))
+        low90, high90 = core.t_interval(used, 0.90)
+        result.update(mean=sum(used) / len(used), ci95=[low, high], p_one_sided=core.sign_flip_greater(used),
+                      ci90=[low90, high90], sesoi=sesoi, equivalent=bool(-sesoi < low90 and high90 < sesoi))
     return result
 
 
 def confirmatory(differences):
     """differences: {'H1': [...], 'H2': [...]} per validation target, oriented so that the hypothesis predicts > 0."""
-    report = {name: summarise(values) for name, values in differences.items()}
+    report = {name: summarise(values, SESOI[name]) for name, values in differences.items()}
     names = [n for n in ('H1', 'H2') if 'p_one_sided' in report.get(n, {})]
     for name, adjusted in zip(names, core.holm([report[n]['p_one_sided'] for n in names])):
         report[name]['p_holm'] = adjusted
@@ -119,7 +124,7 @@ def main():
         for name in differences:
             differences[name].append(row[name])
     report = dict(confirmatory=confirmatory({'H1': differences['H1'], 'H2': differences['H2']}),
-                  secondary=dict(H1b=summarise(differences['H1b'])), per_target=per_target)
+                  secondary=dict(H1b=summarise(differences['H1b'], SESOI['H1b'])), per_target=per_target)
     a.out.write_text(json.dumps(report, indent=1), encoding='utf-8')
     print(json.dumps(report['confirmatory'], indent=1))
 

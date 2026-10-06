@@ -8,9 +8,21 @@ import argparse
 import hashlib
 import json
 import subprocess
+import tempfile
 from pathlib import Path
 
 QUALIFYING = {'test', 'stub'}
+STUBBER = Path(__file__).resolve().parents[3] / 'src/HybridLens.ChangeStub/bin/Debug/net10.0/HybridLens.ChangeStub.dll'
+
+
+def api_signatures(pre_bytes, post_bytes):
+    """Accessible declarations the commit added or changed in the target file (amendment 0.3.2), bodies omitted."""
+    with tempfile.TemporaryDirectory() as tmp:
+        pre, post = Path(tmp, 'pre.cs'), Path(tmp, 'post.cs')
+        pre.write_bytes(pre_bytes)
+        post.write_bytes(post_bytes)
+        output = subprocess.run(['dotnet', str(STUBBER), '--api-signatures', str(pre), str(post)], capture_output=True, text=True, check=True).stdout
+    return json.loads(output)['added']
 
 
 def project_name(key):
@@ -45,6 +57,16 @@ def qualifying_prefix(kinds, admitted):
     count = 0
     for kind, oracle in zip(kinds, admitted):
         if not (kind in QUALIFYING or (kind == 'unchecked' and oracle)):
+            break
+        count += 1
+    return count
+
+
+# A merge between two step commits can change the file, so the developer's next step builds on content the agent never saw.
+def contiguous_prefix(parent_states, previous_states):
+    count = 0
+    for parent, previous in zip(parent_states, previous_states):
+        if parent != previous:
             break
         count += 1
     return count
@@ -107,6 +129,9 @@ def main():
         target_id, path = f'T{index:02d}', t['path']
         admitted = [(h, path) in oracles for h, _ in t['steps']]
         k = qualifying_prefix(t['f2p_kinds'], admitted)
+        window = [h for h, _ in t['steps'][:k]]
+        k = contiguous_prefix([git(a.repo, 'show', f'{h}^:{path}') for h in window],
+                              [git(a.repo, 'show', f'{h}:{path}') for h in [t['t0'], *window[:-1]]])
         if k < 2:
             excluded_targets.append(dict(target_id=target_id, reason='fewer than two qualifying steps', k=k))
             continue
@@ -137,9 +162,10 @@ def main():
                         reference[f'oracle/{sid}'] = dict(later['outcomes'])
                         installed.append(dict(step_id=sid, test_project=oracle['step']['test_project'], own=False))
             message = git(a.repo, 'log', '-1', '--format=%B', commit).decode('utf-8', errors='replace').strip()
+            signatures = api_signatures(git(a.repo, 'show', f'{commit}^:{path}'), git(a.repo, 'show', f'{commit}:{path}'))
             steps.append(dict(step=number, commit=commit, kind=kind if kind != 'unchecked' else 'oracle', message=message,
                               other_files=others, diff=diff_path.name, test_projects=projects, reference_outcomes=reference,
-                              fail_to_pass=sorted(set(fail_to_pass)), oracle_classes=installed))
+                              fail_to_pass=sorted(set(fail_to_pass)), oracle_classes=installed, api_signatures=signatures))
         targets.append(dict(target_id=target_id, path=path, symbol=t['symbol'], type=t['type'], band=t['band'], metrics=t['metrics'],
                             t0=t['t0'], k=k, approx_tokens_t0=t['approx_tokens_t0'], steps=steps))
     calibration = select_calibration(targets, a.seed, 2)

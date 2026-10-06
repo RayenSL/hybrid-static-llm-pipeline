@@ -1,10 +1,11 @@
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HybridLens.DesignQuality;
 
-public sealed record FileMetricsResult(int Tokens, int DecisionBurden, int? MaxCallableComplexity, int Bytes);
+public sealed record FileMetricsResult(int Tokens, int DecisionBurden, int? MaxCallableComplexity, int Bytes, IReadOnlyDictionary<string, int> Callables);
 
 /// <summary>Syntax-only per-file measures for replayed branch states, which need no compilation.</summary>
 public static class FileMetrics
@@ -24,6 +25,10 @@ public static class FileMetrics
         var callables = root.DescendantNodes().Where(StructuralFacts.IsCallable).ToList();
         int? max = callables.Count == 0 ? null : 1 + callables.Max(c => owned.GetValueOrDefault(c));
         var tokens = root.DescendantTokens().Count(t => !t.IsKind(SyntaxKind.EndOfFileToken));
-        return new FileMetricsResult(tokens, burden, max, Encoding.UTF8.GetByteCount(source));
+        // Keyed like detector symbols (Type.Method); overloads share a key, so the largest one stands for the name.
+        var named = callables.OfType<MethodDeclarationSyntax>().Where(m => m.Parent is BaseTypeDeclarationSyntax)
+            .GroupBy(m => $"{((BaseTypeDeclarationSyntax)m.Parent!).Identifier.Text}.{m.Identifier.Text}")
+            .ToDictionary(g => g.Key, g => g.Max(m => owned.GetValueOrDefault(m)));
+        return new FileMetricsResult(tokens, burden, max, Encoding.UTF8.GetByteCount(source), named);
     }
 }

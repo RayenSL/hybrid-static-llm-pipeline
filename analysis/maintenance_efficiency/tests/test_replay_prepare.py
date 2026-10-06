@@ -35,6 +35,11 @@ class PrepareTests(unittest.TestCase):
         self.assertEqual(prep.qualifying_prefix(['stub', 'unchecked', 'stub'], [False, False, False]), 1)
         self.assertEqual(prep.qualifying_prefix(['unchecked', 'stub'], [False, False]), 0)
 
+    def test_contiguous_prefix_ends_where_a_step_parent_differs_from_the_previous_state(self):
+        self.assertEqual(prep.contiguous_prefix(['t0', 's1', 'merged'], ['t0', 's1', 's2']), 2)
+        self.assertEqual(prep.contiguous_prefix(['t0', 's1'], ['t0', 's1']), 2)
+        self.assertEqual(prep.contiguous_prefix(['x'], ['t0']), 0)
+
     def test_calibration_draws_god_class_targets_by_hash(self):
         targets = [dict(target_id=f'T{i:02d}', type='godClass' if i % 2 else 'longMethod') for i in range(1, 9)]
         chosen = prep.select_calibration(targets, 'seed', 2)
