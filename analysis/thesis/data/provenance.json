@@ -1,0 +1,28 @@
+[
+  {
+    "source": "analysis/multilanguage_evolution/results/three-rule-annual-coverage.csv",
+    "retained": "evolution/three-rule-annual-coverage.csv",
+    "sha256": "ce41de39dc55fb38987f07c2c7afe277ffc0c3a4a7d3b8c28e99d08e075f317a"
+  },
+  {
+    "source": "analysis/maintenance_associations/results/final-automated-analysis-v0.7/models.csv",
+    "retained": "god-class/models.csv",
+    "sha256": "add46b0bb8f71dfa85f653c30adf6b16309814292027a3f68bd83ffdc89d7598"
+  },
+  {
+    "source": "analysis/god_class_change_categories/results/v1.1/comparison-file-counts.csv",
+    "retained": "categories/comparison-file-counts.csv",
+    "sha256": "028f25f05b0ff5027d31b9f5d568c70cbd484b5727b039526be858666c137629"
+  },
+  {
+    "source": "analysis/god_class_change_categories/results/v1.1/SHA256SUMS.json",
+    "retained": "categories/SHA256SUMS.json",
+    "sha256": "5471ecdbf47995db9edf4c24c8c21a0c5276cf3e874280501dc1907f33ec6100"
+  },
+  {
+    "source": "Static_Analysis_and_LLMs_for_Verified_Anti_Pattern_Repair.pdf",
+    "version": "22 October 2026",
+    "pages": 124,
+    "sha256": "d30f976924f1c0f85da4fb7787131bc8d668dcac8f06ba0d6e22884dadaa847f"
+  }
+]

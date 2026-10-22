@@ -15,10 +15,14 @@ ROOT = BASE.parents[2]
 INPUT = ROOT/'analysis/god_class_change_categories/results/v1.1/comparison-file-counts.csv'
 UPSTREAM = ROOT/'analysis/god_class_change_categories/results/v1.1/SHA256SUMS.json'
 P = argparse.ArgumentParser()
-P.add_argument('--packages', type=Path, required=True)
+P.add_argument('--packages', type=Path)
+P.add_argument('--input', type=Path, default=INPUT)
+P.add_argument('--seal', type=Path, default=UPSTREAM)
 P.add_argument('--output', type=Path, required=True)
 a = P.parse_args()
-sys.path.insert(0, str(a.packages.resolve()))
+INPUT, UPSTREAM = a.input.resolve(), a.seal.resolve()
+if a.packages:
+    sys.path.insert(0, str(a.packages.resolve()))
 import numpy as np
 import pandas as pd
 import patsy
@@ -196,24 +200,7 @@ fig.savefig(OUT/'god-class-change-categories.png', dpi=220,
             metadata={'Software': 'matplotlib'})
 plt.close(fig)
 
-tex = r'''\begin{figure}[tbp]
-    \centering
-    \includegraphics[width=\linewidth]{figures/god-class-change-categories.pdf}
-    \caption{Subsequent changes to files with and without a detected God Class, classified by commit-title cues. Points are adjusted mean count ratios for the following 365 days within Jenkins (1,070 file observations) and Apache Tomcat (4,297 file observations); horizontal bars are 95\% intervals clustered by file lineage and calendar year, without multiplicity adjustment. The common horizontal axis is logarithmic; the dashed line denotes equal adjusted means. Issue-linked and other fix-labelled titles have been combined and refitted as one outcome. Categories are mutually exclusive and exhaustive; ``Sparse'' denotes a comparison below the prespecified support threshold. Counts refer to changes to files, not distinct defects or developer time.}
-    \label{fig:god-class-change-categories}
-\end{figure}
-'''
-(OUT/'figure-insertion.tex').write_text(tex, encoding='utf8')
-jen_fix = next(r for r in models if r['repository'] == 'jenkinsci__jenkins' and r['category'] == 'fix_labelled')
-tom_fix = next(r for r in models if r['repository'] == 'apache__tomcat' and r['category'] == 'fix_labelled')
-thesis = rf'''\paragraph{{God Class and the types of subsequent changes.}}
-We classified the recorded changes in the God Class comparison by cues in their commit titles. Issue-linked and other fix-labelled titles were combined before fitting a new count model with the same file-size, prior-activity and calendar-year adjustment as the total-change analysis. Figure~\ref{{fig:god-class-change-categories}} gives the repository-specific estimates. In Jenkins, flagged files received more fix-labelled changes than comparable unflagged files (adjusted mean count ratio {jen_fix['ratio']:.3f}, 95\% interval {jen_fix['ci_low']:.3f}--{jen_fix['ci_high']:.3f}; Holm-adjusted $p={jen_fix['holm_p_value']:.3f}$ across the fitted category comparisons). The corresponding Tomcat ratio was {tom_fix['ratio']:.3f} ({tom_fix['ci_low']:.3f}--{tom_fix['ci_high']:.3f}; Holm-adjusted $p={tom_fix['holm_p_value']:.3f}$). The Jenkins association is therefore present for a documentary fix proxy, whereas the Tomcat category comparison is less conclusive under the declared family of tests. Fix-labelled changes made up 15.9\% of all changes to flagged Jenkins files and 17.9\% of changes to unflagged comparison files; the corresponding Tomcat shares were 25.5\% and 24.6\%. The higher Jenkins count therefore does not imply a higher proportion of fix-labelled work.
-
-This category analysis was chosen after the overall change-count results and remains exploratory. These labels describe commit wording rather than verified defect corrections. Unclassified titles account for 55.3\% of Jenkins and 39.7\% of Tomcat comparison file-change observations; changes to the containing file need not modify the flagged class. The results cannot establish that the God Class condition caused a defect or increased developer time. They indicate where validated issue and patch analysis would be most informative.
-
-'''+tex
-(OUT/'thesis-insertion.tex').write_text(thesis, encoding='utf8')
-dump('provenance.json', {'source': str(INPUT.relative_to(ROOT)), 'source_sha256': sha(INPUT),
+dump('provenance.json', {'source': str(INPUT), 'source_sha256': sha(INPUT),
                          'upstream_manifest_sha256': sha(UPSTREAM),
                          'protocol_sha256': sha(BASE/'PROTOCOL.md'),
                          'script_sha256': sha(Path(__file__)),

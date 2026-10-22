@@ -1,3 +1,7 @@
 # Shell scripts must check out with LF regardless of core.autocrlf: bash rejects a
 # shebang terminated by CR, so a CRLF checkout of run_experiment.sh fails to start.
 *.sh text eol=lf
+
+# Retained thesis evidence has byte-level provenance hashes. Preserve its exact
+# contents on every platform, including checkouts with core.autocrlf enabled.
+analysis/thesis/data/** -text

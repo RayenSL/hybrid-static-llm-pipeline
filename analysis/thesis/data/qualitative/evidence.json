@@ -1,0 +1,301 @@
+{
+  "pdf_reviewed_sha256": "f78b53d26c67f91087ff0a91411ef9002833ae847b413b707e5cf34947e8f513",
+  "selection": "Retrospective illustrative selection from public constructed-corpus cases; no additional model experiments.",
+  "source_provenance": {
+    "rq1_before_method.cs": {
+      "source": "/mnt/z/github/hybrid-static-llm-pipeline/experiments/confirmatory-v2-gpt56-sol-20260812/baseline.jsonl",
+      "selector": {
+        "symbol_name": "AccessDecisionEngine.Decide"
+      },
+      "field": "snippet",
+      "copied_content_sha256": "d3807142f03a6aa08ad82dd02c0035c6add990308ed819156f2e3b905896d8cd"
+    },
+    "rq1_after.cs": {
+      "source": "/mnt/z/github/hybrid-static-llm-pipeline/experiments/confirmatory-v2-gpt56-sol-20260812/campaign/final-sources/src_AccessControl_AccessDecisionEngine.cs--run1--442834b6a5b14c7eb6c038edf9e71b67.json",
+      "field": "final_source",
+      "copied_content_sha256": "34b017b9f177a4314e50e2493da07f79e4a9b2a4529f1c8bdf10ce0b429b4199",
+      "source_file_sha256": "e3bbfda2eb9c15d8f3be1caa16e3a9dd324c70868ab4dc3cef2be25f4f17d695"
+    },
+    "rq2_ungrounded.cs": {
+      "source": "/mnt/z/github/hybrid-static-llm-pipeline/experiments/confirmatory-v2-gpt56-sol-20260812/campaign/final-sources/src_Scheduling_SlotFinder.cs--run1--fea380624fca405c90a5e3428a5c5173.json",
+      "field": "final_source",
+      "copied_content_sha256": "f08b22ff8e4098833813dceb17d17fb47eb61004eb7527e0909fb7fd4e9acad1",
+      "source_file_sha256": "66fd94c0897d9d7d9ebef96a7c4e616a620b8b878b5d11f02fb6a26c188e66b5"
+    },
+    "rq2_grounded.cs": {
+      "source": "/mnt/z/github/hybrid-static-llm-pipeline/experiments/confirmatory-v2-gpt56-sol-20260812/campaign/final-sources/src_Scheduling_SlotFinder.cs--run1--023a1b64a77549f3a37251383399398b.json",
+      "field": "final_source",
+      "copied_content_sha256": "6706d6d2cf788c7123a74a9cbe983d338a684c7c7bc93da466b3ed5541521566",
+      "source_file_sha256": "ab1c59fa69925d513cdad021a377ef59891b94eae420f82328ad843a97658e7e"
+    },
+    "rq3_original_S2.cs": {
+      "source": "/mnt/z/rayen/reaccrual/stratum-b-runs/validation-b1/LM-06/O1/S2/state.cs",
+      "field": null,
+      "copied_content_sha256": "29d4f3906cb91e767abab9d4568e6fa9295d788ad9a3345bf82d2ddf0a0c2e26",
+      "source_file_sha256": "29d4f3906cb91e767abab9d4568e6fa9295d788ad9a3345bf82d2ddf0a0c2e26"
+    },
+    "rq3_repaired_S2.cs": {
+      "source": "/mnt/z/rayen/reaccrual/stratum-b-runs/validation-b1/LM-06/R1/S2/state.cs",
+      "field": null,
+      "copied_content_sha256": "b515b0c04e6a14a7837eae77fa296d29edb09a5dfeacc88ece1a145fd587e7ad",
+      "source_file_sha256": "b515b0c04e6a14a7837eae77fa296d29edb09a5dfeacc88ece1a145fd587e7ad"
+    },
+    "rq4_neutral_S3.cs": {
+      "source": "/mnt/z/rayen/reaccrual/v04-runs/validation-v04/LM-06/R-N/S3/state.cs",
+      "field": null,
+      "copied_content_sha256": "38832b1641960dd1864f8d10892407fc22a26e24fe86d85a49d29b7da782a661",
+      "source_file_sha256": "38832b1641960dd1864f8d10892407fc22a26e24fe86d85a49d29b7da782a661"
+    },
+    "rq4_feedback_S3.cs": {
+      "source": "/mnt/z/rayen/reaccrual/v04-runs/validation-v04/LM-06/R-L/S3/state.cs",
+      "field": null,
+      "copied_content_sha256": "81b3ee326162e8917879a0e92b0ee1b8a755b6cb47f7472ca833d310aa2d5053",
+      "source_file_sha256": "81b3ee326162e8917879a0e92b0ee1b8a755b6cb47f7472ca833d310aa2d5053"
+    },
+    "rq3_S2_requirement.md": {
+      "source": "/mnt/z/rayen/reaccrual/stratum-b/LM-06/steps/S2/requirement.md",
+      "field": null,
+      "copied_content_sha256": "702a2df628342eafaee5f2585eabe0bdbfce91550085f9037344dd5d90a9c9af",
+      "source_file_sha256": "702a2df628342eafaee5f2585eabe0bdbfce91550085f9037344dd5d90a9c9af"
+    },
+    "rq4_S3_requirement.md": {
+      "source": "/mnt/z/rayen/reaccrual/stratum-b/LM-06/steps/S3/requirement.md",
+      "field": null,
+      "copied_content_sha256": "d32f2dbcb467040d46d1d74db61c387cda4367538c678d43579cacc32b7c6e01",
+      "source_file_sha256": "d32f2dbcb467040d46d1d74db61c387cda4367538c678d43579cacc32b7c6e01"
+    }
+  },
+  "initial_repair_attempts": [
+    {
+      "run_id": "7de0b967049541bea3ca6b70f3a0e204",
+      "grounding_enabled": false,
+      "control_structure": "single_shot",
+      "visible_tests_enabled": false,
+      "build_passed": true,
+      "metric_resolved": false,
+      "private_test_passed": true,
+      "strict_success": false,
+      "total_tokens": 677,
+      "llm_calls": 1
+    },
+    {
+      "run_id": "da60415ee001437995b8b26a227a9dcb",
+      "grounding_enabled": true,
+      "control_structure": "single_shot",
+      "visible_tests_enabled": false,
+      "build_passed": true,
+      "metric_resolved": true,
+      "private_test_passed": true,
+      "strict_success": true,
+      "total_tokens": 1449,
+      "llm_calls": 1
+    },
+    {
+      "run_id": "0dfd909eb7c8458d983a82279f0b7275",
+      "grounding_enabled": true,
+      "control_structure": "iterative",
+      "visible_tests_enabled": true,
+      "build_passed": true,
+      "metric_resolved": true,
+      "private_test_passed": true,
+      "strict_success": true,
+      "total_tokens": 9727,
+      "llm_calls": 2
+    }
+  ],
+  "maintenance_checks": {
+    "stratum-b-runs/validation-b1/O1/S1": {
+      "completed": true,
+      "test_count": 7,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "3a0a66fdf392a0f18df394f34d4d71e7ce48c4b95ce65aca177d2300e64dd85b"
+    },
+    "stratum-b-runs/validation-b1/O1/S2": {
+      "completed": true,
+      "test_count": 14,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "74eabea9eb61517340fce3e4a64bb2676fbe1bcd871a92d76f01fd8cf5afbe45"
+    },
+    "stratum-b-runs/validation-b1/O1/S3": {
+      "completed": true,
+      "test_count": 22,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "9a38d24cd2c9b702eaed7fe034fbbbef536cbe82c7ef38dc5b9d9ba7696036fd"
+    },
+    "stratum-b-runs/validation-b1/O1/S4": {
+      "completed": true,
+      "test_count": 30,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "ea78ff3165a20af5610cc12f7e2f0a382dc302a7197903a636c2d06f6351a55d"
+    },
+    "stratum-b-runs/validation-b1/R1/S1": {
+      "completed": true,
+      "test_count": 7,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "719bafe7df24160def1b7cb2a97f7116ff84e621ffbccf83da4e28111762c8b8"
+    },
+    "stratum-b-runs/validation-b1/R1/S2": {
+      "completed": true,
+      "test_count": 14,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "029984c70edee83dd219260918a544e98ea0ce057b926074dd9a31d94127dcd2"
+    },
+    "stratum-b-runs/validation-b1/R1/S3": {
+      "completed": true,
+      "test_count": 22,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "808b927d807730cb8a8297e2bcd46f19006e08e75ea0eddb74962ccd07a09d20"
+    },
+    "stratum-b-runs/validation-b1/R1/S4": {
+      "completed": true,
+      "test_count": 30,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "f1ae408d720358f087ba11c590ed20e34231951ec4f4d2d8006bf9fc35079561"
+    },
+    "v04-runs/validation-v04/R-N/S1": {
+      "completed": true,
+      "test_count": 7,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "03c36035361e2d541f498cb84c5ad8a76b63294498947ea8fe9a8d885d780e95"
+    },
+    "v04-runs/validation-v04/R-N/S2": {
+      "completed": true,
+      "test_count": 14,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "23667359b2c77c74ef6a935a6c873dda70679d022b7ef90b9661ffc3c6959ddf"
+    },
+    "v04-runs/validation-v04/R-N/S3": {
+      "completed": true,
+      "test_count": 22,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "37e4c1caddadc5e192bf73e24fb5cd5cc91cceea51758ceaee4b98e3e3de769a"
+    },
+    "v04-runs/validation-v04/R-N/S4": {
+      "completed": true,
+      "test_count": 30,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": null,
+      "source_file_sha256": "cef218149dfe49c27653b08d2e5177eadf474bd59fb11e3923382a679540db05"
+    },
+    "v04-runs/validation-v04/R-L/S1": {
+      "completed": true,
+      "test_count": 7,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": {
+        "triggered": false
+      },
+      "source_file_sha256": "2bcc00e710d9c8ea5fb52619335680bbf55d8ff535324772ca7a9b3c6892e571"
+    },
+    "v04-runs/validation-v04/R-L/S2": {
+      "completed": true,
+      "test_count": 14,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": {
+        "triggered": false
+      },
+      "source_file_sha256": "590ba3775ac66bd22e9c114791976ccc255d3a22741eb036d78cacf00be11e9c"
+    },
+    "v04-runs/validation-v04/R-L/S3": {
+      "completed": true,
+      "test_count": 22,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": {
+        "triggered": true,
+        "findings": [
+          "longMethod:AllocationCalculator.Allocate"
+        ],
+        "accepted": true,
+        "stage": null,
+        "call": {
+          "call_id": "quality",
+          "model": "gpt-5.6-sol",
+          "outcome": "completed",
+          "elapsed_seconds": 14.036539299995638,
+          "input_tokens": 1012,
+          "output_tokens": 1121,
+          "cached_input_tokens": 0,
+          "reasoning_output_tokens": 661,
+          "returned_model": "gpt-5.6-sol-2026-07-09",
+          "finish_reason": "stop"
+        }
+      },
+      "source_file_sha256": "57afcadcfe2b59ee318b792f97a8641481f1b53ae5f4432b53bf08dac4aec362"
+    },
+    "v04-runs/validation-v04/R-L/S4": {
+      "completed": true,
+      "test_count": 30,
+      "all_tests_passed": true,
+      "api_missing": [],
+      "quality": {
+        "triggered": false
+      },
+      "source_file_sha256": "cada3f9ccfeefbd3a2aee85abe5bc74f30b195be7617b65afed540efba3415fe"
+    }
+  },
+  "metric_note": "Initial RQ1 final-method and LM-06 method-complexity values were checked from retained source with the existing metric implementation. They are retrospective measurements, not new model outcomes. RQ2 post-repair numerical complexity is deliberately omitted because its trace remeasured_metrics field is null.",
+  "rq3_allocate_cc": {
+    "original": [
+      11,
+      12,
+      12,
+      15,
+      16
+    ],
+    "repaired": [
+      9,
+      10,
+      11,
+      14,
+      15
+    ]
+  },
+  "rq3_final_findings": {
+    "original": {
+      "total": 1,
+      "new": 0
+    },
+    "repaired": {
+      "total": 1,
+      "new": 1
+    }
+  },
+  "rq4_s3": {
+    "neutral_allocate_cc": 14,
+    "feedback_before_quality_allocate_cc": 14,
+    "feedback_after_quality_method_cc": {
+      "Allocate": 8,
+      "AllocateToZone": 7,
+      "CalculatePlacement": 3
+    },
+    "feedback_decision_burden_before": 15,
+    "feedback_decision_burden_after": 15,
+    "additional_quality_tokens": 2133
+  },
+  "verification_scope": "Original experimental outcomes read from retained summaries and step records; original test suites were not rerun for this editorial change."
+}

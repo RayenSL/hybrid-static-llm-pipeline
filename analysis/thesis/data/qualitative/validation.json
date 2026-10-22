@@ -1,0 +1,19 @@
+{
+  "source_excerpts_verified": [
+    "01_rq1.tex:left",
+    "01_rq1.tex:right",
+    "02_rq2.tex:left",
+    "02_rq2.tex:right",
+    "03_rq3.tex:left",
+    "03_rq3.tex:right",
+    "04_rq4.tex:left",
+    "04_rq4.tex:right"
+  ],
+  "unique_labels": 6,
+  "resolved_references": 6,
+  "historical_repair_assignments_checked": 3,
+  "historical_maintenance_steps_checked": 16,
+  "latex_compilation": "unavailable: desktop compiler requires Windows sandbox setup",
+  "comparison_figures": 4,
+  "layout": "Two top-aligned shaded panels per figure, with condition-specific headings and excerpt-local line numbers."
+}

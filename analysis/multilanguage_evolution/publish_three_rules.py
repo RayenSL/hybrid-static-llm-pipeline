@@ -69,7 +69,7 @@ def main():
     if a.bundle:
         archive=a.results/'three-rule-evidence.tar.gz'
         code=[p for directory in ['detectors','contracts','ingest','protocols','tests'] for p in (HERE/directory).rglob('*') if p.is_file() and p.suffix in {'.py','.java','.json','.txt','.md'}]
-        code.extend(HERE/name for name in ['README.md','run_three_rules.py','prepare_linux_runtime.py','prepare_semantic_runtime.py','audit_history.py','export_sources.py','publish_three_rules.py','plot_rule_coverage.py','plot_three_rule_trajectories.py','assemble_three_rule_campaign.py'])
+        code.extend(HERE/name for name in ['README.md','run_three_rules.py','prepare_linux_runtime.py','prepare_semantic_runtime.py','audit_history.py','export_sources.py','publish_three_rules.py','plot_three_rule_trajectories.py','assemble_three_rule_campaign.py'])
         code.extend(HERE/'selection/histories'/name for repo in CASES for name in [repo+'.json',repo+'.history.json.gz'])
         with archive.open('wb') as f,gzip.GzipFile(filename='',fileobj=f,mode='wb',mtime=0) as gz,tarfile.open(fileobj=gz,mode='w|') as tar:
             for p,name in [(p,'raw/'+p.name) for p in sorted(rawfiles)]+[(p,'code/'+str(p.relative_to(HERE))) for p in sorted(code)]:

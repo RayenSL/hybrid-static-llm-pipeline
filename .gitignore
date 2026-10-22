@@ -80,3 +80,27 @@ __pycache__/
 /analysis/**/figures/
 /analysis/**/logs/
 /analysis/*/SHA256SUMS.json
+
+# Thesis typesetting belongs outside this code repository.
+*.tex
+*.bib
+*.sty
+*.cls
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+# Historical writing bundles and local document review exports.
+/docs/*overleaf*/
+/docs/*overleaf*.zip
+/analysis/maintenance_efficiency/reaccrual/thesis_revision/
+/analysis/maintenance_efficiency/thesis_integration/
+
+# Non-code thesis/reference documents and presentation drafts stay outside Git.
+/*.pdf
+/presentations/
+/CHECK_*_REVIEW.md
+/THESIS_*_REVIEW*.md
+/LITERATURE_SELECTION*

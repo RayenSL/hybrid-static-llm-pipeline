@@ -1,0 +1,2076 @@
+{
+  "schema": "thesis-aggregate-check/1",
+  "sources": {
+    "industrial_replay": {
+      "relative_report": "replay/validation-1-report.json",
+      "sha256": "1851ccfce948256b2d6ff97e5ebeb5fa6312c46e0928357e710520f3944e8d0a"
+    },
+    "industrial_recurrence": {
+      "relative_report": "replay/validation-1-p1.json",
+      "sha256": "7e8539ef72849e46ca7132b91577c20f7c04c4469ea773c772bf95806a5de46b"
+    },
+    "corpus_replay": {
+      "relative_report": "stratum-b-runs/validation-b1-report.json",
+      "sha256": "e75056d95ec957e1fd02f662ac2fd52db06441593466d42fb70fa28aaa448ad2"
+    },
+    "corpus_introductions": {
+      "relative_report": "stratum-b-runs/validation-b1-introduced.json",
+      "sha256": "8922dc721035a3bb7ea381cd28db4d15115d534101402e25820847e7e4eeb93b"
+    },
+    "gpt": {
+      "relative_report": "v04-runs/validation-v04-report.json",
+      "sha256": "cfdf209f3fb46f0c17be7b9220a8d8469bc83d9570a0f77f7da19fe71e64ea0a"
+    },
+    "opus": {
+      "relative_report": "v06-runs/validation-v06-opus-report.json",
+      "sha256": "2c19e51eff5c8a8d28a6fbdd5e48fb23c2c1ed2788517ffa17046c34db92da1c"
+    },
+    "shadow": {
+      "relative_report": "v05/analysis/report.json",
+      "sha256": "2d693a47874101188e5a9a85ca076c6fa9091e80b6e0a42e42fc37f71fe5fb5c"
+    },
+    "industrial_history": {
+      "archive": "private; location omitted",
+      "sha256": "b4ef2e5d7fa176a2343936621d103c7d684738fb118023f8a6df8d08f4ea2759"
+    },
+    "context_frame": {
+      "archive": "private; location omitted",
+      "sha256": "3cebb9400db83b8ec119c9f598e64c5bbd0254eaff386f6ca047aba5c0475b75"
+    },
+    "oracle_funnel": {
+      "archive": "private; location omitted",
+      "sha256": "b114fb7e1e85861030b7d461d716a67448d622d882138264c47fdf2b714cdbc5"
+    },
+    "industrial_acquisition": {
+      "archive": "private; location omitted",
+      "sha256": "6b9adedbfbdcfcb82c18de704198970dc1fef72ef538e788f3e82733272d2bb0"
+    }
+  },
+  "results": {
+    "industrial_replay": {
+      "confirmatory": {
+        "H1": {
+          "without_completed_steps": 1,
+          "mean": 2.7638888888888893,
+          "ci95": [
+            -8.012777682113843,
+            13.540555459891621
+          ],
+          "p_one_sided": 0.314453125,
+          "ci90": [
+            -6.0292880220782745,
+            11.557065799856053
+          ],
+          "sesoi": 25,
+          "equivalent": true,
+          "p_holm": 0.62890625,
+          "supported": false
+        },
+        "H2": {
+          "without_completed_steps": 7,
+          "mean": -0.25,
+          "ci95": [
+            -0.8926454589090788,
+            0.39264545890907876
+          ],
+          "p_one_sided": 1.0,
+          "ci90": [
+            -0.7537620933332558,
+            0.25376209333325583
+          ],
+          "sesoi": 1,
+          "equivalent": true,
+          "p_holm": 1.0,
+          "supported": false
+        }
+      },
+      "secondary": {
+        "H1b": {
+          "without_completed_steps": 1,
+          "mean": -0.22222222222222224,
+          "ci95": [
+            -1.1479660222813477,
+            0.7035215778369033
+          ],
+          "p_one_sided": 0.5625,
+          "ci90": [
+            -0.9775790809056104,
+            0.533134636461166
+          ],
+          "sesoi": 1,
+          "equivalent": true
+        }
+      }
+    },
+    "industrial_recurrence": {
+      "crude": {
+        "recurred": 0,
+        "completed_window": 5,
+        "clopper_pearson_95": [
+          0.0,
+          0.5218237501049814
+        ]
+      }
+    },
+    "corpus_replay": {
+      "H2_replication": {
+        "without_completed_steps": 0,
+        "mean": -0.3174603174603175,
+        "ci95": [
+          -0.5533220171408332,
+          -0.08159861777980182
+        ],
+        "p_one_sided": 0.99652099609375,
+        "ci90": [
+          -0.5124757079641578,
+          -0.12244492695647718
+        ],
+        "sesoi": 1,
+        "equivalent": true
+      },
+      "recurrence": {
+        "recurred": 3,
+        "completed_window": 21,
+        "clopper_pearson_95": [
+          0.03048896762151556,
+          0.363423987016981
+        ]
+      },
+      "independent_targets": 21,
+      "completed_steps": 167
+    },
+    "corpus_introductions": {
+      "R_minus_O_new_findings": {
+        "without_completed_steps": 0,
+        "mean": -0.19047619047619047,
+        "ci95": [
+          -0.6811380635146334,
+          0.3001856825622524
+        ],
+        "p_one_sided": 0.8125,
+        "ci90": [
+          -0.5961656979526018,
+          0.2152133170002209
+        ],
+        "sesoi": 1,
+        "equivalent": true,
+        "p_two_sided": 0.625
+      },
+      "targets_with_new": {
+        "O": 11,
+        "R": 13,
+        "n": 21
+      }
+    },
+    "gpt": {
+      "confirmatory": {
+        "H3": {
+          "without_completed_steps": 0,
+          "mean": 1.0476190476190477,
+          "ci95": [
+            0.4633330903574975,
+            1.6319050048805979
+          ],
+          "ci90": [
+            0.5645191875077444,
+            1.530718907730351
+          ],
+          "p_one_sided": 0.00048828125,
+          "sesoi": 0.5,
+          "equivalent": false,
+          "p_holm": 0.0009765625,
+          "supported": true
+        },
+        "H4": {
+          "without_completed_steps": 0,
+          "mean": 0.2857142857142857,
+          "ci95": [
+            0.030526803516913448,
+            0.5409017679116579
+          ],
+          "ci90": [
+            0.07471993368586505,
+            0.49670863774270635
+          ],
+          "p_one_sided": 0.03515625,
+          "sesoi": 0.5,
+          "equivalent": true,
+          "p_holm": 0.03515625,
+          "supported": true
+        }
+      },
+      "secondary": {
+        "new_findings_per_arm": {
+          "O-N": {
+            "mean": 1.2380952380952381,
+            "targets_with_new": 11
+          },
+          "R-N": {
+            "mean": 1.0952380952380953,
+            "targets_with_new": 12
+          },
+          "R-D": {
+            "mean": 0.7619047619047619,
+            "targets_with_new": 10
+          },
+          "R-L": {
+            "mean": 0.0,
+            "targets_with_new": 0
+          }
+        },
+        "recurrence": {
+          "R-N": {
+            "recurred": 2,
+            "long_method_targets": 10
+          },
+          "R-D": {
+            "recurred": 2,
+            "long_method_targets": 10
+          },
+          "R-L": {
+            "recurred": 0,
+            "long_method_targets": 10
+          }
+        },
+        "completion": {
+          "O-N": 1.0,
+          "R-N": 1.0,
+          "R-D": 0.9761904761904762,
+          "R-L": 0.9761904761904762
+        },
+        "tokens_per_completed_step": {
+          "O-N": 2369.0476190476193,
+          "R-N": 2864.1428571428573,
+          "R-D": 3401.6341463414633,
+          "R-L": 3874.512195121951
+        },
+        "loop": {
+          "triggers": 19,
+          "accepted": 19,
+          "quality_tokens": 66531
+        },
+        "A_RL_minus_RN": {
+          "without_completed_steps": 0,
+          "mean": 0.0,
+          "ci95": [
+            -0.29456046489150883,
+            0.29456046489150883
+          ],
+          "ci90": [
+            -0.24354875830039535,
+            0.24354875830039535
+          ],
+          "p_one_sided": 0.531005859375,
+          "sesoi": 1,
+          "equivalent": true
+        },
+        "A_RD_minus_RN": {
+          "without_completed_steps": 0,
+          "mean": -0.11904761904761904,
+          "ci95": [
+            -0.4010222346060749,
+            0.16292699651083684
+          ],
+          "ci90": [
+            -0.35219013366439617,
+            0.11409489556915808
+          ],
+          "p_one_sided": 0.8160247802734375,
+          "sesoi": 1,
+          "equivalent": true
+        },
+        "V_RL_minus_RN": {
+          "without_completed_steps": 0,
+          "mean": 15.880952380952381,
+          "ci95": [
+            6.152691855085166,
+            25.609212906819597
+          ],
+          "ci90": [
+            7.837422939992397,
+            23.924481821912366
+          ],
+          "p_one_sided": 0.00017023086547851562,
+          "sesoi": 25,
+          "equivalent": true
+        },
+        "V_RD_minus_RN": {
+          "without_completed_steps": 0,
+          "mean": 17.396825396825395,
+          "ci95": [
+            10.33741677428032,
+            24.45623401937047
+          ],
+          "ci90": [
+            11.559958575647592,
+            23.2336922180032
+          ],
+          "p_one_sided": 7.62939453125e-06,
+          "sesoi": 25,
+          "equivalent": true
+        },
+        "replication": {
+          "N_RN_minus_ON": {
+            "without_completed_steps": 0,
+            "mean": -0.14285714285714285,
+            "ci95": [
+              -0.5313947977880121,
+              0.24568051207372643
+            ],
+            "ci90": [
+              -0.4641082090727451,
+              0.17839392335845938
+            ],
+            "p_one_sided": 0.8125,
+            "sesoi": 1,
+            "equivalent": true
+          },
+          "A_ON_minus_RN": {
+            "without_completed_steps": 0,
+            "mean": -0.21428571428571427,
+            "ci95": [
+              -0.5265291685897556,
+              0.09795774001832705
+            ],
+            "ci90": [
+              -0.4724551383840385,
+              0.043883709812609945
+            ],
+            "p_one_sided": 0.927001953125,
+            "sesoi": 1,
+            "equivalent": true
+          }
+        }
+      },
+      "threshold_gaming": {
+        "near_threshold_callable_increase_RL_vs_RN": -0.01675617980940109,
+        "near_threshold_class_increase_RL_vs_RN": 0.047619047619047616,
+        "A_RL_minus_RN_ci90_upper": 0.24354875830039535,
+        "H3_reading": "debt_prevention"
+      },
+      "sensitivity": {
+        "1_without_GC-03": {
+          "H3": {
+            "without_completed_steps": 0,
+            "mean": 1.05,
+            "ci95": [
+              0.43367450849423506,
+              1.666325491505765
+            ],
+            "ci90": [
+              0.5408282933036215,
+              1.5591717066963786
+            ],
+            "p_one_sided": 0.0009765625,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.001953125,
+            "supported": true
+          },
+          "H4": {
+            "without_completed_steps": 0,
+            "mean": 0.25,
+            "ci95": [
+              -0.007463900029069048,
+              0.507463900029069
+            ],
+            "ci90": [
+              0.037298537546729627,
+              0.4627014624532704
+            ],
+            "p_one_sided": 0.0625,
+            "sesoi": 0.5,
+            "equivalent": true,
+            "p_holm": 0.0625,
+            "supported": false
+          }
+        },
+        "2_without_GC-12_LM-13": {
+          "H3": {
+            "without_completed_steps": 0,
+            "mean": 0.9473684210526315,
+            "ci95": [
+              0.4031624177630968,
+              1.4915744243421662
+            ],
+            "ci90": [
+              0.4981904854930152,
+              1.3965463566122478
+            ],
+            "p_one_sided": 0.0009765625,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.001953125,
+            "supported": true
+          },
+          "H4": {
+            "without_completed_steps": 0,
+            "mean": 0.3684210526315789,
+            "ci95": [
+              0.1295520882390847,
+              0.6072900170240731
+            ],
+            "ci90": [
+              0.17126286685904912,
+              0.5655792384041087
+            ],
+            "p_one_sided": 0.0078125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.0078125,
+            "supported": true
+          }
+        },
+        "3_by_type": {
+          "godClass": {
+            "H3": {
+              "without_completed_steps": 0,
+              "mean": 1.8181818181818181,
+              "ci95": [
+                0.926006033940519,
+                2.7103576024231173
+              ],
+              "ci90": [
+                1.0924488046356169,
+                2.5439148317280194
+              ],
+              "p_one_sided": 0.001953125,
+              "sesoi": 0.5,
+              "equivalent": false,
+              "p_holm": 0.00390625,
+              "supported": true
+            },
+            "H4": {
+              "without_completed_steps": 0,
+              "mean": 0.5454545454545454,
+              "ci95": [
+                0.194613663821962,
+                0.8962954270871288
+              ],
+              "ci90": [
+                0.26006593168607667,
+                0.8308431592230141
+              ],
+              "p_one_sided": 0.015625,
+              "sesoi": 0.5,
+              "equivalent": false,
+              "p_holm": 0.015625,
+              "supported": true
+            }
+          },
+          "longMethod": {
+            "H3": {
+              "without_completed_steps": 0,
+              "mean": 0.2,
+              "ci95": [
+                -0.10162095503976065,
+                0.5016209550397607
+              ],
+              "ci90": [
+                -0.04441505768749823,
+                0.4444150576874982
+              ],
+              "p_one_sided": 0.25,
+              "sesoi": 0.5,
+              "equivalent": true,
+              "p_holm": 0.5,
+              "supported": false
+            },
+            "H4": {
+              "without_completed_steps": 0,
+              "mean": 0.0,
+              "ci95": [
+                -0.3372224794536563,
+                0.3372224794536563
+              ],
+              "ci90": [
+                -0.2732643418568893,
+                0.2732643418568893
+              ],
+              "p_one_sided": 0.75,
+              "sesoi": 0.5,
+              "equivalent": true,
+              "p_holm": 0.75,
+              "supported": false
+            }
+          }
+        },
+        "4_without_retried": {
+          "H3": {
+            "without_completed_steps": 0,
+            "mean": 1.0,
+            "ci95": [
+              0.30222144819709795,
+              1.697778551802902
+            ],
+            "ci90": [
+              0.42921116832818607,
+              1.570788831671814
+            ],
+            "p_one_sided": 0.0078125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.015625,
+            "supported": true
+          },
+          "H4": {
+            "without_completed_steps": 0,
+            "mean": 0.3076923076923077,
+            "ci95": [
+              0.017398882987188224,
+              0.5979857323974271
+            ],
+            "ci90": [
+              0.07022979999366438,
+              0.545154815390951
+            ],
+            "p_one_sided": 0.0625,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.0625,
+            "supported": false
+          }
+        },
+        "5_step_4_all_arms_complete": {
+          "H3": {
+            "without_completed_steps": 0,
+            "mean": 1.0555555555555556,
+            "ci95": [
+              0.4294920363549075,
+              1.6816190747562036
+            ],
+            "ci90": [
+              0.5393472573543743,
+              1.5717638537567369
+            ],
+            "p_one_sided": 0.0009765625,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.001953125,
+            "supported": true
+          },
+          "H4": {
+            "without_completed_steps": 0,
+            "mean": 0.2777777777777778,
+            "ci95": [
+              -0.00792089030316473,
+              0.5634764458587203
+            ],
+            "ci90": [
+              0.04221058894571075,
+              0.5133449666098449
+            ],
+            "p_one_sided": 0.0625,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.0625,
+            "supported": false
+          }
+        }
+      },
+      "derived": {
+        "loop_token_increase_percent": 35.27649940572426,
+        "completed_steps": {
+          "O-N": 84,
+          "R-N": 84,
+          "R-D": 82,
+          "R-L": 82
+        },
+        "assigned_steps_per_arm": 84,
+        "quality_tokens_per_completed_loop_step": 811.3536585365854
+      },
+      "corpus_plot_data": [
+        {
+          "target_id": "GC-02",
+          "type": "godClass",
+          "H3": 1,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 1,
+            "R-N": 1,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-03",
+          "type": "godClass",
+          "H3": 1,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 3,
+            "R-N": 1,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-04",
+          "type": "godClass",
+          "H3": 1,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 1,
+            "R-N": 1,
+            "R-D": 1,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-05",
+          "type": "godClass",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 3,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 3,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-07",
+          "type": "godClass",
+          "H3": 2,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 2,
+            "R-N": 2,
+            "R-D": 2,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-08",
+          "type": "godClass",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 1,
+            "R-N": 1,
+            "R-D": 1,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 2
+          }
+        },
+        {
+          "target_id": "GC-09",
+          "type": "godClass",
+          "H3": 3,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 3,
+            "R-N": 3,
+            "R-D": 2,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-10",
+          "type": "godClass",
+          "H3": 3,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 3,
+            "R-N": 3,
+            "R-D": 1,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 3,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-11",
+          "type": "godClass",
+          "H3": 2,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 2,
+            "R-N": 2,
+            "R-D": 1,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-12",
+          "type": "godClass",
+          "H3": 4,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-13",
+          "type": "godClass",
+          "H3": 3,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 3,
+            "R-N": 3,
+            "R-D": 2,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-01",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-03",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-06",
+          "type": "longMethod",
+          "H3": 1,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 1,
+            "R-D": 1,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-07",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-08",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-09",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-10",
+          "type": "longMethod",
+          "H3": 1,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 1,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-11",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-12",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-13",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": -1,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 1,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        }
+      ]
+    },
+    "opus": {
+      "confirmatory": {
+        "H3": {
+          "without_completed_steps": 0,
+          "mean": 0.8571428571428571,
+          "ci95": [
+            0.39549133188239405,
+            1.3187943824033201
+          ],
+          "ci90": [
+            0.4754397124724385,
+            1.2388460018132756
+          ],
+          "p_one_sided": 0.000244140625,
+          "sesoi": 0.5,
+          "equivalent": false,
+          "p_holm": 0.00048828125,
+          "supported": true
+        },
+        "H4": {
+          "without_completed_steps": 0,
+          "mean": 0.8571428571428571,
+          "ci95": [
+            0.44279793264408857,
+            1.2714877816416257
+          ],
+          "ci90": [
+            0.5145538002342389,
+            1.1997319140514753
+          ],
+          "p_one_sided": 0.000244140625,
+          "sesoi": 0.5,
+          "equivalent": false,
+          "p_holm": 0.00048828125,
+          "supported": true
+        }
+      },
+      "secondary": {
+        "new_findings_per_arm": {
+          "O-N": {
+            "mean": 1.2380952380952381,
+            "targets_with_new": 14
+          },
+          "R-N": {
+            "mean": 1.0,
+            "targets_with_new": 12
+          },
+          "R-D": {
+            "mean": 0.14285714285714285,
+            "targets_with_new": 3
+          },
+          "R-L": {
+            "mean": 0.14285714285714285,
+            "targets_with_new": 3
+          }
+        },
+        "recurrence": {
+          "R-N": {
+            "recurred": 2,
+            "long_method_targets": 10
+          },
+          "R-D": {
+            "recurred": 1,
+            "long_method_targets": 10
+          },
+          "R-L": {
+            "recurred": 0,
+            "long_method_targets": 10
+          }
+        },
+        "completion": {
+          "O-N": 1.0,
+          "R-N": 1.0,
+          "R-D": 0.9880952380952381,
+          "R-L": 1.0
+        },
+        "tokens_per_completed_step": {
+          "O-N": 3481.3928571428573,
+          "R-N": 4089.8333333333335,
+          "R-D": 4900.903614457831,
+          "R-L": 5427.761904761905
+        },
+        "loop": {
+          "triggers": 21,
+          "accepted": 18,
+          "quality_tokens": 106942
+        },
+        "A_RL_minus_RN": {
+          "without_completed_steps": 0,
+          "mean": 0.19047619047619047,
+          "ci95": [
+            -0.1411150729253513,
+            0.5220674538777322
+          ],
+          "ci90": [
+            -0.08369040718466497,
+            0.4646427881370459
+          ],
+          "p_one_sided": 0.1414794921875,
+          "sesoi": 1,
+          "equivalent": true
+        },
+        "A_RD_minus_RN": {
+          "without_completed_steps": 0,
+          "mean": -0.46825396825396826,
+          "ci95": [
+            -0.7861840377697074,
+            -0.15032389873822916
+          ],
+          "ci90": [
+            -0.7311252048451918,
+            -0.20538273166274468
+          ],
+          "p_one_sided": 0.9979248046875,
+          "sesoi": 1,
+          "equivalent": true
+        },
+        "V_RL_minus_RN": {
+          "without_completed_steps": 0,
+          "mean": 14.226190476190476,
+          "ci95": [
+            4.633167660885952,
+            23.819213291495
+          ],
+          "ci90": [
+            6.294478405206003,
+            22.15790254717495
+          ],
+          "p_one_sided": 0.0007343292236328125,
+          "sesoi": 25,
+          "equivalent": true
+        },
+        "V_RD_minus_RN": {
+          "without_completed_steps": 0,
+          "mean": 33.61507936507936,
+          "ci95": [
+            27.956128557349963,
+            39.27403017280876
+          ],
+          "ci90": [
+            28.93614038047008,
+            38.29401834968864
+          ],
+          "p_one_sided": 4.76837158203125e-07,
+          "sesoi": 25,
+          "equivalent": false
+        },
+        "replication": {
+          "N_RN_minus_ON": {
+            "without_completed_steps": 0,
+            "mean": -0.23809523809523808,
+            "ci95": [
+              -0.5568862083732873,
+              0.08069573218281106
+            ],
+            "ci90": [
+              -0.5016782854576651,
+              0.025487809267188966
+            ],
+            "p_one_sided": 0.96875,
+            "sesoi": 1,
+            "equivalent": true
+          },
+          "A_ON_minus_RN": {
+            "without_completed_steps": 0,
+            "mean": -0.08333333333333333,
+            "ci95": [
+              -0.2847708480928127,
+              0.11810418142614605
+            ],
+            "ci90": [
+              -0.24988608715539928,
+              0.08321942048873261
+            ],
+            "p_one_sided": 0.8297882080078125,
+            "sesoi": 1,
+            "equivalent": true
+          }
+        }
+      },
+      "threshold_gaming": {
+        "near_threshold_callable_increase_RL_vs_RN": -0.030500725024534544,
+        "near_threshold_class_increase_RL_vs_RN": 0.047619047619047616,
+        "A_RL_minus_RN_ci90_upper": 0.4646427881370459,
+        "H3_reading": "debt_prevention"
+      },
+      "sensitivity": {
+        "1_without_GC-03": {
+          "H3": {
+            "without_completed_steps": 0,
+            "mean": 0.85,
+            "ci95": [
+              0.36326975433425357,
+              1.3367302456657464
+            ],
+            "ci90": [
+              0.4478922285351269,
+              1.252107771464873
+            ],
+            "p_one_sided": 0.00048828125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.0009765625,
+            "supported": true
+          },
+          "H4": {
+            "without_completed_steps": 0,
+            "mean": 0.85,
+            "ci95": [
+              0.4132012163596221,
+              1.2867987836403778
+            ],
+            "ci90": [
+              0.48914265235775484,
+              1.210857347642245
+            ],
+            "p_one_sided": 0.00048828125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.0009765625,
+            "supported": true
+          }
+        },
+        "2_without_GC-12_LM-13": {
+          "H3": {
+            "without_completed_steps": 0,
+            "mean": 0.7368421052631579,
+            "ci95": [
+              0.38330988952244055,
+              1.0903743210038752
+            ],
+            "ci90": [
+              0.44504291550716707,
+              1.0286412950191486
+            ],
+            "p_one_sided": 0.00048828125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.0009765625,
+            "supported": true
+          },
+          "H4": {
+            "without_completed_steps": 0,
+            "mean": 0.7894736842105263,
+            "ci95": [
+              0.4099944512040432,
+              1.1689529172170094
+            ],
+            "ci90": [
+              0.47625828886526045,
+              1.1026890795557922
+            ],
+            "p_one_sided": 0.00048828125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.0009765625,
+            "supported": true
+          }
+        },
+        "3_by_type": {
+          "godClass": {
+            "H3": {
+              "without_completed_steps": 0,
+              "mean": 1.4545454545454546,
+              "ci95": [
+                0.7587356084304414,
+                2.150355300660468
+              ],
+              "ci90": [
+                0.8885446894545344,
+                2.020546219636375
+              ],
+              "p_one_sided": 0.0009765625,
+              "sesoi": 0.5,
+              "equivalent": false,
+              "p_holm": 0.001953125,
+              "supported": true
+            },
+            "H4": {
+              "without_completed_steps": 0,
+              "mean": 1.4545454545454546,
+              "ci95": [
+                0.903527911188019,
+                2.0055629979028904
+              ],
+              "ci90": [
+                1.0063247907244994,
+                1.9027661183664097
+              ],
+              "p_one_sided": 0.0009765625,
+              "sesoi": 0.5,
+              "equivalent": false,
+              "p_holm": 0.001953125,
+              "supported": true
+            }
+          },
+          "longMethod": {
+            "H3": {
+              "without_completed_steps": 0,
+              "mean": 0.2,
+              "ci95": [
+                -0.10162095503976065,
+                0.5016209550397607
+              ],
+              "ci90": [
+                -0.04441505768749823,
+                0.4444150576874982
+              ],
+              "p_one_sided": 0.25,
+              "sesoi": 0.5,
+              "equivalent": true,
+              "p_holm": 0.5,
+              "supported": false
+            },
+            "H4": {
+              "without_completed_steps": 0,
+              "mean": 0.2,
+              "ci95": [
+                -0.10162095503976065,
+                0.5016209550397607
+              ],
+              "ci90": [
+                -0.04441505768749823,
+                0.4444150576874982
+              ],
+              "p_one_sided": 0.25,
+              "sesoi": 0.5,
+              "equivalent": true,
+              "p_holm": 0.5,
+              "supported": false
+            }
+          }
+        },
+        "4_without_retried": {
+          "H3": {
+            "without_completed_steps": 0,
+            "mean": 1.0,
+            "ci95": [
+              0.3594512838643579,
+              1.6405487161356422
+            ],
+            "ci90": [
+              0.47491873214896296,
+              1.525081267851037
+            ],
+            "p_one_sided": 0.001953125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.00390625,
+            "supported": true
+          },
+          "H4": {
+            "without_completed_steps": 0,
+            "mean": 0.9285714285714286,
+            "ci95": [
+              0.39918369835393464,
+              1.4579591587889227
+            ],
+            "ci90": [
+              0.49461289651104834,
+              1.3625299606318089
+            ],
+            "p_one_sided": 0.001953125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.00390625,
+            "supported": true
+          }
+        },
+        "5_step_4_all_arms_complete": {
+          "H3": {
+            "without_completed_steps": 0,
+            "mean": 0.85,
+            "ci95": [
+              0.36326975433425357,
+              1.3367302456657464
+            ],
+            "ci90": [
+              0.4478922285351269,
+              1.252107771464873
+            ],
+            "p_one_sided": 0.00048828125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.0009765625,
+            "supported": true
+          },
+          "H4": {
+            "without_completed_steps": 0,
+            "mean": 0.85,
+            "ci95": [
+              0.4132012163596221,
+              1.2867987836403778
+            ],
+            "ci90": [
+              0.48914265235775484,
+              1.210857347642245
+            ],
+            "p_one_sided": 0.00048828125,
+            "sesoi": 0.5,
+            "equivalent": false,
+            "p_holm": 0.0009765625,
+            "supported": true
+          }
+        }
+      },
+      "derived": {
+        "loop_token_increase_percent": 32.71352307987867,
+        "completed_steps": {
+          "O-N": 84,
+          "R-N": 84,
+          "R-D": 83,
+          "R-L": 84
+        },
+        "assigned_steps_per_arm": 84,
+        "quality_tokens_per_completed_loop_step": 1273.1190476190477
+      },
+      "corpus_plot_data": [
+        {
+          "target_id": "GC-02",
+          "type": "godClass",
+          "H3": 1,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 1,
+            "R-N": 1,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 3,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-03",
+          "type": "godClass",
+          "H3": 1,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 3,
+            "R-N": 1,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-04",
+          "type": "godClass",
+          "H3": 1,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 1,
+            "R-N": 1,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-05",
+          "type": "godClass",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 2,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-07",
+          "type": "godClass",
+          "H3": 2,
+          "H4": 2,
+          "new_findings": {
+            "O-N": 2,
+            "R-N": 2,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-08",
+          "type": "godClass",
+          "H3": 1,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 1,
+            "R-N": 1,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-09",
+          "type": "godClass",
+          "H3": 2,
+          "H4": 2,
+          "new_findings": {
+            "O-N": 3,
+            "R-N": 3,
+            "R-D": 1,
+            "R-L": 1
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-10",
+          "type": "godClass",
+          "H3": 1,
+          "H4": 2,
+          "new_findings": {
+            "O-N": 2,
+            "R-N": 2,
+            "R-D": 0,
+            "R-L": 1
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-11",
+          "type": "godClass",
+          "H3": 1,
+          "H4": 2,
+          "new_findings": {
+            "O-N": 2,
+            "R-N": 2,
+            "R-D": 0,
+            "R-L": 1
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-12",
+          "type": "godClass",
+          "H3": 4,
+          "H4": 3,
+          "new_findings": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 1,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "GC-13",
+          "type": "godClass",
+          "H3": 2,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 2,
+            "R-N": 2,
+            "R-D": 1,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-01",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-03",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-06",
+          "type": "longMethod",
+          "H3": 1,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 1,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-07",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-08",
+          "type": "longMethod",
+          "H3": 1,
+          "H4": 1,
+          "new_findings": {
+            "O-N": 1,
+            "R-N": 1,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-09",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-10",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-11",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 1,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-12",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 0,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        },
+        {
+          "target_id": "LM-13",
+          "type": "longMethod",
+          "H3": 0,
+          "H4": 0,
+          "new_findings": {
+            "O-N": 1,
+            "R-N": 0,
+            "R-D": 0,
+            "R-L": 0
+          },
+          "completed": {
+            "O-N": 4,
+            "R-N": 4,
+            "R-D": 4,
+            "R-L": 4
+          }
+        }
+      ]
+    },
+    "shadow": {
+      "primary_oracle_units": {
+        "successes": 32,
+        "n": 32,
+        "proportion": 1.0,
+        "ci95": [
+          0.8911188393206472,
+          1.0
+        ],
+        "reading": "fixes usually work",
+        "secondary_test": {
+          "null": "p <= 0.75",
+          "p_one_sided": 0.00010045242572063337
+        }
+      },
+      "static_only_units": {
+        "successes": 3,
+        "n": 3,
+        "proportion": 1.0,
+        "ci95": [
+          0.29240177382128674,
+          1.0
+        ]
+      },
+      "all_eligible": {
+        "successes": 35,
+        "n": 35,
+        "proportion": 1.0,
+        "ci95": [
+          0.8999675644278949,
+          1.0
+        ]
+      },
+      "gate_flow": {
+        "eligible": 35,
+        "build": 35,
+        "api": 35,
+        "tests": 35,
+        "resolved": 35,
+        "no_new_debt": 35
+      },
+      "sensitivity": {
+        "1_first_call_only": {
+          "successes": 31,
+          "n": 32,
+          "proportion": 0.96875,
+          "ci95": [
+            0.8378290058184885,
+            0.9992091314020475
+          ]
+        },
+        "2_at_most_3_files": {
+          "successes": 17,
+          "n": 17,
+          "proportion": 1.0,
+          "ci95": [
+            0.8049356770309068,
+            1.0
+          ]
+        },
+        "2_at_most_30_files": {
+          "successes": 32,
+          "n": 32,
+          "proportion": 1.0,
+          "ci95": [
+            0.8911188393206472,
+            1.0
+          ]
+        },
+        "3_without_units_whose_commit_changed_tests": {
+          "successes": 32,
+          "n": 32,
+          "proportion": 1.0,
+          "ci95": [
+            0.8911188393206472,
+            1.0
+          ]
+        },
+        "4_complexity_11": {
+          "successes": 15,
+          "n": 15,
+          "proportion": 1.0,
+          "ci95": [
+            0.781980639089466,
+            1.0
+          ]
+        },
+        "4_complexity_12_and_above": {
+          "successes": 17,
+          "n": 17,
+          "proportion": 1.0,
+          "ci95": [
+            0.8049356770309068,
+            1.0
+          ]
+        },
+        "5_crossing": {
+          "successes": 22,
+          "n": 22,
+          "proportion": 1.0,
+          "ci95": [
+            0.8456274871844255,
+            1.0
+          ]
+        },
+        "5_new_method": {
+          "successes": 10,
+          "n": 10,
+          "proportion": 1.0,
+          "ci95": [
+            0.6915028921812392,
+            1.0
+          ]
+        },
+        "6_without_the_new_debt_gate": {
+          "successes": 32,
+          "n": 32,
+          "proportion": 1.0,
+          "ci95": [
+            0.8911188393206472,
+            1.0
+          ]
+        },
+        "7_one_unit_per_file": {
+          "successes": 24,
+          "n": 24,
+          "proportion": 1.0,
+          "ci95": [
+            0.8575264022774743,
+            1.0
+          ]
+        },
+        "7_file_clustered_bootstrap": {
+          "files": 24,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "gaming_checks": {
+        "unit_symbol_complexity_after": {
+          "8 or less": 38
+        },
+        "unit_symbols_no_longer_present": 0,
+        "new_methods_per_unit": {
+          "mean": 4.2,
+          "max": 17
+        },
+        "new_method_max_complexity": {
+          "4": 14,
+          "6": 7,
+          "5": 6,
+          "7": 2,
+          "3": 2,
+          "9": 1,
+          "null": 2,
+          "8": 1
+        },
+        "decision_burden_delta": {
+          "mean": -1.8,
+          "median": 0,
+          "units_increased": 3,
+          "units_decreased": 9
+        },
+        "near_threshold_methods": {
+          "before": 51,
+          "after": 56,
+          "units_increased": 4
+        }
+      },
+      "cost": {
+        "tokens_total": 418871,
+        "tokens_per_unit": {
+          "mean": 11967.742857142857,
+          "median": 11936,
+          "max": 29795
+        },
+        "calls": {
+          "1": 34,
+          "2": 1
+        },
+        "seconds_per_unit": 78.95142857142856,
+        "edit_footprint": {
+          "added_mean": 57.25714285714286,
+          "removed_mean": 46.857142857142854
+        },
+        "tokens_delta_mean": 61.2
+      },
+      "persistence_in_the_developers_own_history": {
+        "units_whose_method_is_still_long_at_head": 19,
+        "units": 35
+      },
+      "review_status": {
+        "units": 35,
+        "recorded_judgements": 0
+      }
+    },
+    "industrial_acquisition": {
+      "assessed": 13,
+      "accepted": 6
+    },
+    "industrial_history": {
+      "production_commits": 1617,
+      "ordinary_commits": 1358,
+      "introductions": {
+        "raw": 122,
+        "genuine": 72,
+        "genuine_commits": 66,
+        "still_long_at_head": 38
+      },
+      "context_frame": {
+        "within_context_bound": 48,
+        "oversize": 18
+      },
+      "oracle_funnel": {
+        "checked": 48,
+        "built": 36,
+        "oracle": 33
+      }
+    },
+    "original": {
+      "population": {
+        "itt_assignments": 624,
+        "independent_targets": 26,
+        "factorial_cells": 8,
+        "repetitions_per_cell": 3,
+        "strict_successes": 586,
+        "materialised_repairs": 623,
+        "private_passes": 612,
+        "private_regressions": 11,
+        "private_unavailable": 1
+      },
+      "principal_results": {
+        "visible_test_main": {
+          "risk_difference": 0.02564102564102564,
+          "ci95": [
+            -0.010945901677082925,
+            0.062227952959134206
+          ],
+          "exact_p": 0.3125,
+          "interpretation": "no statistically persuasive strict-success benefit"
+        },
+        "grounding_main": {
+          "risk_difference": 0.07692307692307694,
+          "ci95": [
+            0.016021135190345898,
+            0.13782501865580798
+          ],
+          "exact_p": 0.015625,
+          "interpretation": "positive planned secondary average effect"
+        },
+        "iteration_main": {
+          "risk_difference": 0.025641025641025644,
+          "ci95": [
+            -0.03946588868844558,
+            0.09074793997049688
+          ],
+          "exact_p": 0.5625,
+          "interpretation": "no clear average effect"
+        },
+        "visible_test_token_cost": {
+          "complete_targets": 25,
+          "mean_additional_tokens": 1611.833333333333,
+          "ci95": [
+            1361.872213190583,
+            1861.7944534760832
+          ],
+          "exact_p": 1.1920928955078125e-07
+        },
+        "holm_adjusted_test_interactions": {
+          "grounding_x_test": 0.75,
+          "control_x_test": 0.75,
+          "grounding_x_control_x_test": 0.75
+        }
+      }
+    },
+    "ledger": {
+      "authorised_ceiling": 11000000,
+      "cumulative_recorded_tokens": 9271742,
+      "remaining": 1728258
+    },
+    "measurement_record_audit": {
+      "scope": "baseline plus campaign/traces; includes intermediate snapshots and records without a repair verdict",
+      "records": 1127,
+      "unresolved_records": 31,
+      "LM13_unresolved_records": 12,
+      "LM13_all_visible_test_records": false,
+      "GC03_records": 43,
+      "GC03_resolved_records": 36,
+      "boundary": "Counts reproduce archived verdicts only. They do not independently establish helper relocation, baseline non-detection or corrected success rates."
+    }
+  },
+  "checks": [
+    {
+      "model": "gpt",
+      "comparison": "R-N minus O-N new findings",
+      "implemented_margin": 1,
+      "ci90": [
+        -0.4641082090727451,
+        0.17839392335845938
+      ],
+      "equivalent_at_margin_0_5": true
+    },
+    {
+      "model": "opus",
+      "comparison": "R-N minus O-N new findings",
+      "implemented_margin": 1,
+      "ci90": [
+        -0.5016782854576651,
+        0.025487809267188966
+      ],
+      "equivalent_at_margin_0_5": false
+    }
+  ]
+}

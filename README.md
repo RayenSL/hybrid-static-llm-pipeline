@@ -17,14 +17,12 @@ src/
 
 See [pipeline modules and experimental invariants](src/HybridLens.Pipeline/README.md) for the execution boundaries and extension points.
 
-## Research material
+## Research evidence
 
-The revised [thesis](Static_Analysis_and_LLMs_for_Verified_Anti_Pattern_Repair.pdf)
-is the reference for the reported experiments. See [analysis/README.md](analysis/README.md)
-for the current repair analyses, the Appendix B studies and their reproduction dependencies.
-Experiment records remain under `experiments/`; operational protocols and qualitative
-repair evidence remain under `docs/`. Slides and speaker notes are in
-[presentations/](presentations/).
+The code and retained data support the 22 October 2026 thesis. The
+[figure and table inventory](analysis/thesis/README.md) maps its final outputs to
+source code and records the PDF fingerprint. Experiment records, source snapshots,
+oracles, frozen protocols and required analysis inputs are retained.
 
 ## Prerequisites
 
@@ -46,147 +44,115 @@ dotnet build src/HybridLens.CLI
 
 ## Run
 
-### Analyse a solution or project
-
-Static analysis only, no model call. This is also how a campaign baseline is produced.
-
-```bash
-dotnet run --project src/HybridLens.CLI -- analyse --target path/to/Solution.sln --dry-run     --severity Warning --format json --output baseline.jsonl
-```
-
-`--target` accepts a `.sln` or a `.csproj`. Add `--config path/to/hybridlens.json` to override
-detector thresholds. Drop `--dry-run` to send each finding to the configured models.
-
-### The confirmatory experiment, end to end
+All thesis studies use **`run_experiment.sh`**. It resolves the repository root, so it
+also works when invoked from another directory. Set `PYTHON` to select an interpreter.
+Install the analysis dependencies first:
 
 ```bash
-bash run_experiment.sh                    # every stage, in protocol order
-bash run_experiment.sh --dry-run          # print the commands, execute nothing
-bash run_experiment.sh --stage campaign   # one stage
-bash run_experiment.sh --from oracle      # that stage and everything after
+python -m pip install -r analysis/requirements.txt
 bash run_experiment.sh --help
+bash run_experiment.sh --list
+bash run_experiment.sh --dry-run
+bash run_experiment.sh --out output/thesis-reproduction
 ```
 
-Six stages, in an order the protocol fixes rather than one chosen for convenience:
+The default study, `thesis`, regenerates the final quantitative tables and Python-generated
+figures from retained evidence. It makes no model calls and needs no .NET SDK or credentials.
+Outputs go to a fresh timestamped directory under `output/` unless `--out` or `OUT` is set.
+Existing table/model output directories are rejected to protect prior results.
+Use `--stage tables`, `--stage figures`, or `--stage appendix-b` to run one part;
+`--from figures` runs that part and the following parts. `--dry-run` prints commands
+without checking external inputs or creating output directories.
 
-| stage | what it does | model calls |
+### Initial repair and context campaigns
+
+```bash
+CORPUS=/path/to/Corpus.sln bash run_experiment.sh --study factorial --out experiments/my-run
+bash run_experiment.sh --study factorial --out experiments/my-run --stage campaign
+bash run_experiment.sh --study factorial --out experiments/my-run --from oracle
+CORPUS=/path/to/Corpus.sln bash run_experiment.sh --study context-corpus --out experiments/my-context
+```
+
+| Study | Ordered stages |
+|---|---|
+| `factorial` | baseline, tests, manifest, campaign, oracle, quality, analyse |
+| `context-corpus` | baseline, manifest, campaign, oracle, quality, analyse |
+| `context-industrial` | baseline, manifest, campaign, oracle, quality, analyse |
+
+`baseline` runs static analysis. `tests` attempts one diagnosis-blind test-generation
+workflow per target (planning, implementation and at most a compile correction).
+`manifest` freezes the assignments. `campaign` executes repairs and supports the
+underlying runner's ledger-based resume. Private evaluation checks that every frozen
+assignment has completed. `quality` measures the sealed sources. `analyse` actually
+executes summaries and statistics; the factorial also exports its final tables.
+Detector and private-oracle results never feed back into initial repair calls.
+
+Campaigns require .NET 10, the matching corpus and configured models in
+`src/HybridLens.CLI/appsettings.local.json`. Parameters include `MODEL` (default
+`gpt-5.6-sol`), `RUNS` (3), `BUDGET` (6), `SEED` (503999552),
+`BUILD_TIMEOUT` (180), `MAX_INPUT_TOKENS` (120000), `CLI`, and `DOTNET`.
+Use one explicit output path when resuming. Fresh executions may differ from the sealed
+results because model responses and environments can change. The old `MAX_TARGETS`
+setting did not restrict the manifest and is now rejected; a bounded pilot needs an
+explicitly filtered baseline before manifest creation.
+
+The industrial context study additionally requires `INDUSTRIAL_TARGET`, `ADMITTED`,
+`HARNESS` and `GOLDEN`. Its external evaluator uses `--no-restore`, preserves `obj`,
+and passes `ProductRoot={WORKING_ROOT}` to the harness. Restore the industrial
+solution's dependencies before running. Its population stays separate from the corpus.
+
+### Maintenance studies
+
+These studies retain their native arguments, freezes and resume rules. Pass native
+options **after `--`**; use native `--out` there rather than the wrapper's output flag.
+Select a single stage because preparation, execution and analysis consume different inputs.
+
+| Study | Evidence | Stages |
 |---|---|---|
-| `baseline` | detector over the pristine solution | none |
-| `tests` | one diagnosis-blind five-case characterisation suite per target | two per target, plus at most one compile-only correction |
-| `manifest` | freezes the randomised assignment schedule | none |
-| `campaign` | executes the assignments, sealing one final source each | one per assignment, or up to the budget when iterative |
-| `oracle` | private Layer-3 behavioural measurement | none |
-| `analyse` | summary, statistics, figures | none |
-
-Two properties matter more than the stage list. Behavioural measurement happens only in `oracle`,
-after every repair condition has terminated, so no repair can be tuned to the oracle that scores it.
-And detector re-measurement and private results are withheld from every model call, so the only
-feedback an iterative condition receives is the compiler and, where assigned, a visible test.
-
-Environment overrides; the defaults reproduce the reported run.
+| `replay` | Industrial historical replay, RQ3 | prepare, freeze, campaign, analyse, recurrence, sensitivity |
+| `durability` | Cumulative corpus maintenance, RQ3 | prepare, freeze, campaign, analyse, introductions |
+| `interventions` | Controlled maintenance, RQ4 | freeze, campaign, analyse |
+| `introduction` | Industrial introduction-point intervention, RQ4 | prepare, freeze, campaign, analyse |
+| `replication` | Second-model controlled maintenance, RQ4 | freeze, campaign, analyse |
+| `maintenance-export` | Anonymous aggregate export from private reports | analyse |
 
 ```bash
-MODEL=gpt-5.6-sol RUNS=3 BUDGET=6 SEED=503999552 CORPUS=path/to/Corpus.sln bash run_experiment.sh
+bash run_experiment.sh --study replay --stage prepare -- --help
+bash run_experiment.sh --study durability --stage campaign -- --help
+bash run_experiment.sh --study interventions --stage freeze -- --packets /path/to/packets --write-freeze /path/to/freeze.json
+bash run_experiment.sh --study interventions --stage campaign -- --packets /path/to/packets --out /path/to/run --provider live --freeze /path/to/freeze.json
+bash run_experiment.sh --study interventions --stage analyse -- --run /path/to/run --out /path/to/report.json
+bash run_experiment.sh --study introduction --stage prepare -- --help
+bash run_experiment.sh --study replication --stage campaign -- --help
+bash run_experiment.sh --study maintenance-export -- --private-root /path/to/reaccrual --out /path/to/maintenance_aggregates.json
 ```
 
-A cheap orchestration pilot over one target and one repetition:
+The replication profile selects the recorded `claude-opus-5-5` deployment, Messages
+API, temperature 1 and v0.6 protocol. `--model-key` can select the corresponding local
+configuration entry. Freeze and execute with the same options. Maintenance defaults
+are enforced by the underlying protocols and runners; no wrapper stage selects a live
+provider on the user's behalf. Private sources, matching packets, admitted starting
+states and oracles are needed for execution. Retained anonymous aggregates suffice for
+thesis output regeneration.
+
+### Appendix B and direct CLI use
 
 ```bash
-RUNS=1 MAX_TARGETS=1 bash run_experiment.sh
+bash run_experiment.sh --study appendix-b --stage figures --out output/evolution
+bash run_experiment.sh --study appendix-b --stage scan -- --help
+bash run_experiment.sh --study appendix-b --stage models -- --help
+bash run_experiment.sh --study appendix-b --stage categories -- --help
 ```
 
-### Inspect a manifest before spending model calls
+Rendering uses retained final inputs. Rebuilding those inputs requires upstream source
+archives, detector runtimes and corrected cohorts described in
+[analysis/README.md](analysis/README.md). Native inputs and output flags follow `--`.
 
-`--dry-run` validates the manifest, the target solution, the frozen baseline hash and every pristine
-source hash, then prints the plan and stops.
-
-```bash
-dotnet run --project src/HybridLens.CLI -- factorial-campaign     --manifest <manifest>.json --out <campaign-dir> --dry-run
-```
-
-The campaign is crash-safe: an interrupted run resumes from its ledger and never repeats a committed
-assignment. An incomplete trace must be quarantined before resuming, which the command enforces.
-
-### Other experiments
-
-These have their own denominators and are never pooled with the confirmatory factorial.
-
-**Four-level direct-edit context comparison** — Minimal, Structural, Relational and Full
-context use the same single-shot direct-edit runner, with visible tests disabled. The frozen
-manifest carries the ladder version and hash, source hashes and matched assignments.
+The CLI remains available for individual instrumentation operations:
 
 ```bash
-dotnet run --project src/HybridLens.CLI -- context-ladder-campaign --manifest <context-manifest>.json --out <campaign-dir> --preflight-only
-```
-
-Remove `--preflight-only` to execute; use `--stop-after N` for a bounded invocation. Completed
-assignments are skipped on resume after their traces and hashes have been checked. Corpus and
-industrial campaigns have separate manifests and denominators.
-
-The older suggestion-plus-applier experiment remains available through `grounding-campaign`
-for historical reruns. It is separate from the final direct-edit context comparison.
-
-**Iterative arms** — `agentic` is ungrounded and `grounded-iterative` differs from it only in that
-the opening message carries the analyser's Structural finding. Both grant the compiler as the sole
-external check and share the frozen build-attempt budget; keeping the budget equal is what holds the
-control structure fixed between them.
-
-```bash
-dotnet run --project src/HybridLens.CLI -- agentic     --from <structural-trace>.jsonl --target path/to/Corpus.sln     --model gpt-5.6-sol --runs 3 --budget 6
-```
-
-By default the agent sees only files holding a target. `--sweep-corpus` widens it to every `.cs`
-file so a detection on a clean file scores as spurious, which is what makes precision measurable
-over known-clean code rather than within target files alone.
-
-**Repair verification for the suggestion-plus-applier mechanism** — applies each recommendation
-strict-literally, rebuilds, and re-measures the triggering condition, scoring the ladder
-`unapplicable < build_fails < builds_unresolved < resolved`. The iterative arms do not pass through
-here: they edit the source themselves and are scored in their own runner.
-
-```bash
-dotnet run --project src/HybridLens.CLI -- verify-repair     --from <runs>.jsonl --target path/to/Corpus.sln     --applier DeepSeek-V4-Pro --out verified.jsonl
-```
-
-**Transfer probe on an arbitrary solution** — a manifest may declare a reduced design through
-`condition_signatures`, and extra `build_arguments` for a solution that cannot restore in the
-execution environment. Behaviour is then measured by an external golden-master harness rather than
-the corpus oracle.
-
-```bash
-dotnet run --project src/HybridLens.CLI -- external-oracle     --artifacts <campaign-dir>/final-sources --target path/to/Solution.sln     --harness path/to/Harness.csproj --golden path/to/golden     --harness-prop -p:ProductRoot={WORKING_ROOT}     --build-arg --no-restore --build-arg -p:NuGetAudit=false     --working-copy-skip bin --working-copy-skip .git --working-copy-skip .vs --working-copy-skip .idea
-```
-
-Building with `--no-restore` obliges the working copy to keep `obj`, because that is where
-`project.assets.json` lives and nothing else can regenerate it. Omit it and MSBuild stops at
-NETSDK1004 before the repaired file is ever compiled, so every assignment records a build failure the
-model never caused — hence `--working-copy-skip` above, and `working_copy_skip_directories` in a
-manifest. Both paths refuse the unsafe combination at preflight rather than produce that data.
-
-Each artefact is evaluated in its own copy of the pristine tree with exactly one file replaced, so
-no artefact can observe another. `{WORKING_ROOT}` is substituted with that copy, which is what makes
-the harness measure the repaired tree rather than the pristine one. Outcomes are three-valued:
-`behaviour_preserved`, `behavioural_change`, and `public_contract_change` for a harness that no
-longer compiles because a repair moved members — that last is not a regression and is left for
-adjudication.
-
-### Analysis
-
-```bash
-python analysis/analyse_results.py --input "runs/*.jsonl" --output output
-python analysis/extraction_vs_simplification.py --campaign experiments/<run>
-python analysis/factorial_glmm.py --help
-```
-
-`extraction_vs_simplification.py` classifies every archived repair from its diff as an extraction or
-a branch simplification. It is what turns the Goodhart concern about a metric-resolved outcome from
-a caveat into a measurement.
-
-### Help
-
-```bash
+dotnet run --project src/HybridLens.CLI -- analyse --target path/to/Solution.sln --dry-run --severity Warning --format json --output baseline.jsonl
 dotnet run --project src/HybridLens.CLI -- --help
-dotnet run --project src/HybridLens.CLI -- <command> --help
 ```
 
 ## Configuration

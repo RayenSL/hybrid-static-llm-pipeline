@@ -79,10 +79,11 @@ def validate_model_ready_data(data) -> tuple[int, int]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", required=True, type=Path)
-    parser.add_argument("--stats-path", required=True, type=Path)
+    parser.add_argument("--stats-path", type=Path, help="Optional directory for a pinned statistics runtime")
     parser.add_argument("--out", required=True, type=Path)
     args = parser.parse_args()
-    sys.path.insert(0, str(args.stats_path))
+    if args.stats_path:
+        sys.path.insert(0, str(args.stats_path))
 
     import numpy as np
     import pandas as pd

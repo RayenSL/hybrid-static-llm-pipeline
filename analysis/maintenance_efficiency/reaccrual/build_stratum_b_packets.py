@@ -2,6 +2,7 @@
 
 Usage: python build_stratum_b_packets.py <output-dir>
 """
+import argparse
 import json
 import shutil
 import sys
@@ -24,7 +25,9 @@ def oracle_material(project, stem):
 
 
 def main():
-    out = Path(sys.argv[1])
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("out", type=Path, help="New authoring-packet directory")
+    out = parser.parse_args().out
     if out.exists():
         raise SystemExit('Output exists: packets are built once')
     pairs = {p['target_id']: p for p in json.loads((ROOT / 'generated' / 'campaign.json').read_text(encoding='utf-8'))['pairs']}

@@ -26,7 +26,7 @@ def save(fig,dest,stem):
         fig.savefig(dest/f'{stem}.{ext}',dpi=180,metadata=metadata)
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--packages',type=Path);ap.add_argument('--csv',type=Path,default=HERE/'results/three-rule-annual-coverage.csv');args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--packages',type=Path);ap.add_argument('--csv',type=Path,default=HERE/'results/three-rule-annual-coverage.csv');ap.add_argument('--out',type=Path,default=HERE/'figures');args=ap.parse_args()
     if args.packages:sys.path.insert(0,str(args.packages.resolve()))
     import matplotlib
     matplotlib.use('Agg')
@@ -35,7 +35,7 @@ def main():
     rows=list(csv.DictReader(args.csv.open()))
     if len(rows)!=189:raise ValueError('Expected all 189 scheduled rule observations')
     plt.rcParams.update({'font.family':'DejaVu Sans','font.size':8.5,'pdf.fonttype':42,'svg.hashsalt':'three-rule-trajectories-v1'})
-    years=list(range(2006,2027));dest=HERE/'figures';dest.mkdir(exist_ok=True)
+    years=list(range(2006,2027));dest=args.out;dest.mkdir(parents=True,exist_ok=True)
 
     fig,axes=plt.subplots(4,3,figsize=(11.7,9.0),sharex=True,layout='constrained')
     for column,project in enumerate(PROJECTS):
