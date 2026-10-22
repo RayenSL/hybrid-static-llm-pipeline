@@ -9,9 +9,6 @@ import numpy as np,pandas as pd,patsy,statsmodels.api as sm
 from scipy import stats
 from statsmodels.stats.sandwich_covariance import cov_cluster_2groups
 from statsmodels.stats.multitest import multipletests
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 OUT=a.output
 if OUT.exists():raise FileExistsError('Preserve previous results; use a fresh output directory')
 OUT.mkdir(parents=True)
@@ -122,23 +119,7 @@ if primary:
  for r,p in zip(primary,adjusted):r['holm_p_value']=float(p)
 for name,rows in [('models',models),('descriptive',descriptive),('support',support),('sensitivity',sensitivity),('calendar-blocks',block_results)]:
  (OUT/(name+'.json')).write_text(json.dumps(rows,indent=2,allow_nan=False)+'\n');pd.DataFrame(rows).to_csv(OUT/(name+'.csv'),index=False)
-# Vector figures: independent repository comparisons, no cross-project pooled estimate.
-plt.rcParams.update({'font.family':'DejaVu Sans','font.size':9,'pdf.fonttype':42,'svg.fonttype':'none'})
-for endpoint,filename,label,null in [('binary','adjusted-change-probability','Adjusted difference in change probability (percentage points)',0),('count','adjusted-change-count','Adjusted mean change-count ratio',1)]:
- fig,axes=plt.subplots(1,3,figsize=(11.4,3.5),layout='constrained')
- for ax,rule in zip(axes,RULES):
-  ax.axvline(null,color='0.6',linewidth=.8,linestyle='--')
-  for i,rid in enumerate(NAMES):
-   r=next(r for r in models if r['repository']==rid and r['rule']==rule and r['endpoint']==endpoint)
-   if r['status']=='fitted':
-    value=r['effect'];lo=r.get('ci_low');hi=r.get('ci_high')
-    if lo is not None and np.isfinite([lo,hi]).all():ax.errorbar(value,i,xerr=[[value-lo],[hi-value]],fmt='o',color='#245b78',capsize=3,markersize=5)
-    else:ax.plot(value,i,'o',color='#245b78')
-   else:ax.text(.98,i,'Descriptive only',ha='right',va='center',transform=ax.get_yaxis_transform(),fontsize=8,color='0.45')
-  if endpoint=='count':ax.set_xscale('log')
-  ax.set_yticks(range(3),list(NAMES.values()));ax.set_ylim(2.6,-.6);ax.set_title({'LongMethod':'Long Method','GodClass':'God Class','ObsoleteApiUsage':'Source-declared obsolete API'}[rule]);ax.grid(axis='x',alpha=.15);ax.spines[['top','right']].set_visible(False)
- fig.supxlabel(label);fig.savefig(OUT/(filename+'.pdf'));fig.savefig(OUT/(filename+'.png'),dpi=180);plt.close(fig)
 seal(BASE/'protocols/final-automated-analysis-v0.7.md');seal(BASE/'protocols/statistics-runtime-lock.json');seal(Path(__file__))
 (OUT/'input-seals.json').write_text(json.dumps(inputs,indent=2)+'\n')
-(OUT/'execution.json').write_text(json.dumps({'protocol':'0.7','evidence_basis':'automated','human_validation_requirement_waived_by_user':True,'independent_validation_performed':False,'corrective_outcomes_estimated':False,'file_change_associations_estimated':True,'input_rows':len(all_data),'main_contrasts_with_intervals':len(primary),'packages':{x:__import__(x).__version__ for x in ['numpy','scipy','pandas','statsmodels','patsy','matplotlib']}},indent=2)+'\n')
+(OUT/'execution.json').write_text(json.dumps({'protocol':'0.7','evidence_basis':'automated','human_validation_requirement_waived_by_user':True,'independent_validation_performed':False,'corrective_outcomes_estimated':False,'file_change_associations_estimated':True,'input_rows':len(all_data),'main_contrasts_with_intervals':len(primary),'packages':{x:__import__(x).__version__ for x in ['numpy','scipy','pandas','statsmodels','patsy']}},indent=2)+'\n')
 print('Analysis completed:',OUT,flush=True)

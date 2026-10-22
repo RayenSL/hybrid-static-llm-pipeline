@@ -1,0 +1,17 @@
+{
+ "schema_version": "reaccrual-replay-settings/0.2",
+ "live_execution_enabled": true,
+ "model_key": "gpt-5.6-sol",
+ "max_completion_tokens_per_call": 16384,
+ "branch_allocation_tokens": 320000,
+ "input_bound_tokens": 49152,
+ "context_window_confirmed_tokens": 922000,
+ "context_window_source": "OpenAI model documentation for gpt-5.6-sol (https://developers.openai.com/api/docs/models/gpt-5.6-sol), checked 2026-10-05: 922,000 max input and 128,000 max output tokens; prompts above 272,000 input tokens are priced higher. The Azure deployment is assumed not to lower this limit; override if it does.",
+ "rate_limit_tokens_per_minute": 236000,
+ "organisational_approval_recorded": true,
+ "organisational_approval_note": "Approval for sending Bouw source to the gpt-5.6-sol deployment confirmed by the user (thesis author) in session on 2026-10-05.",
+ "required_ceiling_tokens": 9000000,
+ "note": "rate_limit_tokens_per_minute is the deployment throughput limit (236,000 TPM, given by the user 2026-10-05); it is not the context window. Set context_window_confirmed_tokens from the deployment documentation and record organisational approval; replay_freeze.py then writes the freeze record. Enable live execution only after the freeze.",
+ "output_cap_amendment": "Raised from 4,096 to 16,384 on 2026-10-05 after the live smoke call (T08, calibration target): the reasoning model used all 4,096 completion tokens on reasoning for a ~15k-token prompt and returned no content. Amendment 0.3.1, before any validation call.",
+ "allocation_amendment": "Raised from 160,000 to 320,000 on 2026-10-05 after calibration: all three T10 trajectories were stopped before step 4 by the per-branch allocation (about 97k spent plus a conservative reservation of about 63k), not by failure. Amendment 0.3.3, before any validation call."
+}

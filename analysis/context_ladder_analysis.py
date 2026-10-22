@@ -12,9 +12,9 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 try:
-    from analysis.grounding_context_analysis import cochran_q, exact_mcnemar, holm_adjust
+    from analysis.matched_statistics import cochran_q, exact_mcnemar, holm_adjust
 except ModuleNotFoundError:  # Direct execution: python analysis/context_ladder_analysis.py
-    from grounding_context_analysis import cochran_q, exact_mcnemar, holm_adjust
+    from matched_statistics import cochran_q, exact_mcnemar, holm_adjust
 
 LEVELS = ["minimal", "structural", "relational", "full"]
 SUCCESSOR_TARGETS = {"EmailClient", "LabelPrinter", "ReminderSender", "SmsClient"}

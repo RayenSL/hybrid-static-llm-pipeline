@@ -1,0 +1,5 @@
+context,assigned,verified,build_failures,preserved,changed,truncated
+minimal,27,26,1,24,2,0
+structural,27,24,3,24,0,0
+relational,27,26,1,24,2,0
+full,27,24,3,20,4,12
